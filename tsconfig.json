@@ -1,0 +1,21 @@
+{
+  "files": ["src","test"],
+  "compileOnSave": true,
+    "compilerOptions": {
+      "alwaysStrict": true,
+      "moduleResolution": "node",
+      "module": "commonjs",
+      "noImplicitAny": true,
+      "noFallthroughCasesInSwitch": true,
+      "noImplicitReturns": true,
+      "noImplicitThis": true,
+      "noUnusedLocals":false,
+      "noUnusedParameters": false,
+      "outDir": "dist",
+      "pretty": true,
+      "strict": true,
+      "sourceMap": true,
+      "lib": ["es6"],
+      "target": "es6"
+    }
+}

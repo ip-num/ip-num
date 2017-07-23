@@ -1,0 +1,8 @@
+# Created by .ignore support plugin (hsz.mobi)
+.idea
+*.iml
+node_modules
+
+
+/spec/support/jasmine.json
+/src/*.js

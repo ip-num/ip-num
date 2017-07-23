@@ -1,0 +1,34 @@
+{
+  "name": "ip-math-js",
+  "version": "1.0.0",
+  "description": "A javascript library that represents various internet resources also providing an API to perform various IP related operations like parsing, validating etc.",
+  "main": "./dist/main.js",
+  "scripts": {
+    "prepublish": "tsc --module commonjs",
+    "test": "jasmine-ts spec/**/*.ts",
+    "test:watch": "npm run test -- -w"
+  },
+  "keywords": [
+    "ip",
+    "ip-maths",
+    "Ipv4",
+    "Ipv6",
+    "Asn"
+  ],
+  "author": "Dadepo Aderemi",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/jasmine": "2.5.47",
+    "@types/node": "7.0.18",
+    "big-integer": "1.6.23",
+    "jasmine-node": "1.14.5",
+    "jasmine-spec-reporter": "4.1.0",
+    "jasmine-ts": "0.1.2",
+    "karma": "1.6.0",
+    "tsunit.external": "2.0.11"
+  },
+  "dependencies": {
+    "@types/es6-shim": "0.31.34",
+    "big-integer": "1.6.23"
+  }
+}
