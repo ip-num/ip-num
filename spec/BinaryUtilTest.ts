@@ -1,6 +1,4 @@
-/**
- * Created by daderemi on 06/11/16.
- */
+
 
 import * as BinaryUtils from "../src/BinaryUtils";
 import * as bigInt from "big-integer/BigInteger";
