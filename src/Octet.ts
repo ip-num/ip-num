@@ -16,7 +16,7 @@ export class Octet {
             octetValue = givenValue;
         }
 
-        if (!Validator.isValidIpv4Octet(octetValue)) {
+        if (!Validator.isValidIPv4Octet(octetValue)) {
             throw Error(Validator.invalidOctetRangeMessage);
         }
         this.value = octetValue;

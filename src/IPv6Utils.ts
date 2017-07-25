@@ -1,7 +1,7 @@
 'use strict';
 import {leftPadWithZeroBit} from "./BinaryUtils";
 
-export let expandIpv6Address = (ipv6String:string):string => {
+export let expandIPv6Address = (ipv6String:string):string => {
     let expandWithZero = (hexadecimalArray: string[]): string => {
         let paddedArray = hexadecimalArray.map((hexadecimal) => {
             if (hexadecimal === "") {
@@ -50,7 +50,7 @@ export let expandIpv6Address = (ipv6String:string):string => {
 };
 
 
-export let collapseIpv6Address = (ipv6String:string):string => {
+export let collapseIPv6Address = (ipv6String:string):string => {
     let hexadecimals: string[] = ipv6String.split(":");
     let hexadecimalsWithoutLeadingZeros = hexadecimals.map((hexidecimal) => {
        let withoutLeadingZero = hexidecimal.replace(/^0+/, '');

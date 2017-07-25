@@ -1,18 +1,18 @@
 'use strict';
 
-import {IPv4} from "./Ipv4";
-import {Ipv4Prefix} from "./Prefix";
+import {IPv4} from "./IPv4";
+import {IPv4Prefix} from "./Prefix";
 import * as bigInt from "big-integer/BigInteger";
 import {leftPadWithZeroBit} from "./BinaryUtils";
 import {binaryToDecimal} from "./BinaryUtils";
 import {Validator} from "./Validator";
 
 /**
- * Represents a continuous segment of Ipv4 addresses
+ * Represents a continuous segment of IPv4 addresses
  */
 export class IPv4Range implements IterableIterator<IPv4> {
     private readonly bitValue: number = 32;
-    private readonly cidrPrefix: Ipv4Prefix;
+    private readonly cidrPrefix: IPv4Prefix;
     private readonly ipv4: IPv4;
     private internalCounterValue: IPv4;
 
@@ -24,10 +24,10 @@ export class IPv4Range implements IterableIterator<IPv4> {
         let cidrComponents: Array<string> = rangeIncidrNotation.split("/");
         let ipString = cidrComponents[0];
         let prefix = parseInt(cidrComponents[1]);
-        return new IPv4Range(IPv4.fromDecimalDottedString(ipString), Ipv4Prefix.of(prefix));
+        return new IPv4Range(IPv4.fromDecimalDottedString(ipString), IPv4Prefix.of(prefix));
     };
 
-    constructor(ipv4: IPv4, prefix: Ipv4Prefix) {
+    constructor(ipv4: IPv4, prefix: IPv4Prefix) {
         this.ipv4 = ipv4;
         this.cidrPrefix = prefix;
         this.internalCounterValue = this.getFirst();
@@ -106,15 +106,15 @@ export class IPv4Range implements IterableIterator<IPv4> {
 
     public take(count: number): Array<IPv4> {
         let ipv4s: Array<IPv4>  = [this.getFirst()];
-        let iteratingIpv4 = this.getFirst();
+        let iteratingIPv4 = this.getFirst();
 
         if (count > this.getSize()) {
             throw new Error(`${count} is greater than ${this.getSize()}, the size of the range`);
         }
 
         for (var counter = 0; counter < count - 1; counter++) {
-            ipv4s.push(iteratingIpv4.nextIPv4());
-            iteratingIpv4 = iteratingIpv4.nextIPv4();
+            ipv4s.push(iteratingIPv4.nextIPv4());
+            iteratingIPv4 = iteratingIPv4.nextIPv4();
         }
         return ipv4s;
     }
@@ -122,13 +122,13 @@ export class IPv4Range implements IterableIterator<IPv4> {
     public split() : Array<IPv4Range> {
         let prefixToSplit = this.cidrPrefix.getValue();
         if (prefixToSplit === 32) {
-            throw new Error("Cannot split an IP range with a single Ip address");
+            throw new Error("Cannot split an IP range with a single IP address");
         }
-        let splitCidr = Ipv4Prefix.of(prefixToSplit + 1);
-        let firstIpOfFirstRange = this.getFirst();
-        let firstRange = new IPv4Range(firstIpOfFirstRange, splitCidr);
-        let firstIpOfSecondRange = firstRange.getLast().nextIPv4();
-        let secondRange = new IPv4Range(firstIpOfSecondRange, splitCidr);
+        let splitCidr = IPv4Prefix.of(prefixToSplit + 1);
+        let firstIPOfFirstRange = this.getFirst();
+        let firstRange = new IPv4Range(firstIPOfFirstRange, splitCidr);
+        let firstIPOfSecondRange = firstRange.getLast().nextIPv4();
+        let secondRange = new IPv4Range(firstIPOfSecondRange, splitCidr);
         return [firstRange, secondRange];
     }
 

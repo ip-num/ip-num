@@ -2,16 +2,16 @@
  * Created by daderemi on 07/11/16.
  */
 
-import {IPv4} from "../src/Ipv4";
+import {IPv4} from "../src/IPv4";
 import {Validator} from "../src/Validator";
 import * as bigInt from "big-integer";
 
-describe('Ipv4: ', () => {
+describe('IPv4: ', () => {
     it('should instantiate by calling constructor', () => {
         expect(new IPv4("111.222.90.45").toString()).toEqual("111.222.90.45");
     });
 
-    it('should instantiate by passing big integer value of Ipv4 number to constructor', () => {
+    it('should instantiate by passing big integer value of IPv4 number to constructor', () => {
         expect(IPv4.fromBigInteger(bigInt("1876843053")).toString()).toEqual("111.222.90.45");
     });
 
@@ -71,33 +71,33 @@ describe('Ipv4: ', () => {
         }).toThrowError(Error, Validator.invalidOctetRangeMessage);
     });
 
-    it('should return next Ipv4 value', () => {
+    it('should return next IPv4 value', () => {
         let value = new IPv4("111.222.90.255");
         expect(value.nextIPv4().toString()).toEqual("111.222.91.0");
     });
 
-    it('should correctly tell if there is a next value for an Ipv4', () => {
+    it('should correctly tell if there is a next value for an IPv4', () => {
         let value = new IPv4("255.255.255.254");
         expect(value.hasNext()).toBe(true);
         expect(value.nextIPv4().hasNext()).toBe(false);
     });
 
-    it('should correctly tell if there is a previous value for an Ipv4', () => {
+    it('should correctly tell if there is a previous value for an IPv4', () => {
         let value = new IPv4("0.0.0.1");
         expect(value.hasPrevious()).toBe(true);
         expect(value.previousIPv4().hasPrevious()).toBe(false);
     });
 
-    it('should return previous Ipv4 value', () => {
+    it('should return previous IPv4 value', () => {
         let value = new IPv4("111.222.91.0");
         expect(value.previousIPv4().toString()).toEqual("111.222.90.255");
     });
 
-    it('should throw exception when calling next leads to an invalid Ipv4', () => {
+    it('should throw exception when calling next leads to an invalid IPv4', () => {
         let value = new IPv4("255.255.255.255");
         expect(() => {
             value.nextIPv4();
-        }).toThrowError(Error, Validator.invalidIpv4NumberMessage);
+        }).toThrowError(Error, Validator.invalidIPv4NumberMessage);
     });
 
 });

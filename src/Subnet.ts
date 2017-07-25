@@ -14,11 +14,11 @@ export class Subnet implements InetNumber {
         return new Subnet(rawValue);
     };
 
-    // TODO similar code as in constructor of Ipv4, reuse?
+    // TODO similar code as in constructor of IPv4, reuse?
     constructor(ipString: string) {
         let isValid: boolean;
         let message: string;
-        [isValid, message] = Validator.isValidIpv4Subnet(ipString);
+        [isValid, message] = Validator.isValidIPv4Subnet(ipString);
 
         if (!isValid) {
             throw new Error(message);

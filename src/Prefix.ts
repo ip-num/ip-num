@@ -6,13 +6,13 @@ import {binaryToDecimal} from "./BinaryUtils";
 
 /**
  * TODO
- * maybe add a constuctor to create using string...eg Ipv4Prefix.of("/24")
+ * maybe add a constuctor to create using string...eg IPv4Prefix.of("/24")
  */
-class Ipv4Prefix {
+class IPv4Prefix {
     value: number;
 
-    static of(rawValue:number):Ipv4Prefix {
-        return new Ipv4Prefix(rawValue);
+    static of(rawValue:number):IPv4Prefix {
+        return new IPv4Prefix(rawValue);
     };
 
     constructor(rawValue: number) {
@@ -44,4 +44,4 @@ class Ipv4Prefix {
     }
 }
 
-export {Ipv4Prefix}
+export {IPv4Prefix}

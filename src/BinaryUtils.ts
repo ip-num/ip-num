@@ -41,10 +41,10 @@ export let binaryToDecimal = (num:string): bigInt.BigInteger => {
 };
 
 /**
- * Given an Ipv4 number in dot-decimal notated string, e.g 192.168.0.1 converts it to
+ * Given an IPv4 number in dot-decimal notated string, e.g 192.168.0.1 converts it to
  * binary string, e.g. '11000000101010000000000000000001'
  *
- * @param dottedDecimal Ipv4 string in dot-decimal notation
+ * @param dottedDecimal IPv4 string in dot-decimal notation
  * @returns {string} the binary value of the given ipv4 number in string
  */
 export let dottedDecimalToBinary = (dottedDecimal: string): string => {

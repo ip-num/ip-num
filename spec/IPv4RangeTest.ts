@@ -1,32 +1,32 @@
-import {IPv4Range} from "../src/Ipv4Range";
-import {IPv4} from "../src/Ipv4";
-import {Ipv4Prefix} from "../src/Prefix";
+import {IPv4Range} from "../src/IPv4Range";
+import {IPv4} from "../src/IPv4";
+import {IPv4Prefix} from "../src/Prefix";
 import * as bigInt from "big-integer/BigInteger";
 
 
-describe('Ipv4Range: ', () => {
-    it('should instantiate by calling constructor with Ipv4 and prefix', () => {
-        let ipv4Range = new IPv4Range(new IPv4("192.198.0.0"), new Ipv4Prefix(24));
+describe('IPv4Range: ', () => {
+    it('should instantiate by calling constructor with IPv4 and prefix', () => {
+        let ipv4Range = new IPv4Range(new IPv4("192.198.0.0"), new IPv4Prefix(24));
         expect(ipv4Range.toCidrString()).toEqual("192.198.0.0/24");
     });
     it('should instantiate from string in cidr notation', () => {
         let ipv4Range = IPv4Range.of("192.198.0.0/24");
         expect(ipv4Range.toCidrString()).toEqual("192.198.0.0/24");
     });
-    it('should return the first Ipv4 address in range', () => {
-        let ipv4Range = new IPv4Range(new IPv4("192.198.0.0"), new Ipv4Prefix(24));
+    it('should return the first IPv4 address in range', () => {
+        let ipv4Range = new IPv4Range(new IPv4("192.198.0.0"), new IPv4Prefix(24));
         expect(ipv4Range.getFirst().toString()).toEqual("192.198.0.0");
     });
-    it('should return the last Ipv4 address in range', () => {
-        let ipv4Range = new IPv4Range(new IPv4("192.198.0.0"), new Ipv4Prefix(24));
+    it('should return the last IPv4 address in range', () => {
+        let ipv4Range = new IPv4Range(new IPv4("192.198.0.0"), new IPv4Prefix(24));
         expect(ipv4Range.getLast().toString()).toEqual("192.198.0.255");
     });
     it('should convert to string with range dash format', () => {
-        let ipv4Range = new IPv4Range(new IPv4("192.198.0.0"), new Ipv4Prefix(24));
+        let ipv4Range = new IPv4Range(new IPv4("192.198.0.0"), new IPv4Prefix(24));
         expect(ipv4Range.toRangeString()).toEqual("192.198.0.0-192.198.0.255");
     });
-    it('should return the correct list of Ipv4 address when take is called', () => {
-        let ipv4Range = new IPv4Range(new IPv4("192.198.0.0"), new Ipv4Prefix(24));
+    it('should return the correct list of IPv4 address when take is called', () => {
+        let ipv4Range = new IPv4Range(new IPv4("192.198.0.0"), new IPv4Prefix(24));
         let take = ipv4Range.take(3);
         expect(take[0].toString()).toBe("192.198.0.0");
         expect(take[1].toString()).toBe("192.198.0.1");
@@ -91,7 +91,7 @@ describe('Ipv4Range: ', () => {
 
     });
     it('should be able to use for in construct on range', () => {
-        let ipv4Range = new IPv4Range(new IPv4("192.198.0.0"), new Ipv4Prefix(30));
+        let ipv4Range = new IPv4Range(new IPv4("192.198.0.0"), new IPv4Prefix(30));
         let expectedValue = ipv4Range.take(4);
         let expectedIndex = 0;
         for (let value of ipv4Range) {

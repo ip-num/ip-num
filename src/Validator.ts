@@ -13,12 +13,12 @@ export class Validator {
     static EIGHT_BIT_SIZE: number = Math.pow(2, 8) - 1;
 
     static invalidAsnRangeMessage = "ASN number given less than zero or is greater than 32bit";
-    static invalidIpv4NumberMessage = "Ipv4 number given less than zero or is greater than 32bit";
+    static invalidIPv4NumberMessage = "IPv4 number given less than zero or is greater than 32bit";
     static invalidOctetRangeMessage = "The value given is less than zero or is greater than 8bit";
     static invalidOctetCountMessage = "An IP4 number cannot have less or greater than 4 octets";
     static invalidSubnetMessage = "The Subnet is invalid";
     static invalidPrefixValueMessage = "A Prefix value cannot be less than 0 or greater than 32 octets";
-    static invalidCidrNotationString = "A Cidr notation string should contain an Ip address and prefix eg 9.9.9.9/24";
+    static invalidCidrNotationString = "A Cidr notation string should contain an IP address and prefix eg 9.9.9.9/24";
     /**
      * Checks if the number given is within the value considered valid for an ASN number
      *
@@ -30,27 +30,27 @@ export class Validator {
     }
 
     /**
-     * Checks if the number given is within the value considered valid for an Ipv4 number
+     * Checks if the number given is within the value considered valid for an IPv4 number
      *
      * @param ipv4Number the asn number to validate
      * @returns {boolean} true if is valid value, false otherwise
      */
-    static isValidIpv4Number(ipv4Number: bigInt.BigInteger): [boolean, string]  {
+    static isValidIPv4Number(ipv4Number: bigInt.BigInteger): [boolean, string]  {
         let isValid = this.isWithinRange(ipv4Number.valueOf(), 0, this.THIRTY_TWO_BIT_SIZE);
-        return isValid ? [isValid, "valid"]: [isValid, Validator.invalidIpv4NumberMessage];
+        return isValid ? [isValid, "valid"]: [isValid, Validator.invalidIPv4NumberMessage];
     }
 
     /**
-     * Checks if the number given is valid for an Ipv4 octet
+     * Checks if the number given is valid for an IPv4 octet
      * @param octetNumber the octet value
      * @returns {boolean} true if valid octet, false otherwise
      */
     // TODO change this to return a tuple of is error and error message
-    static isValidIpv4Octet(octetNumber: number): boolean {
+    static isValidIPv4Octet(octetNumber: number): boolean {
         return this.isWithinRange(octetNumber, 0, this.EIGHT_BIT_SIZE);
     }
 
-    static isValidIpv4DecimalNotationString(ipv4Number: string): [boolean, string] {
+    static isValidIPv4DecimalNotationString(ipv4Number: string): [boolean, string] {
         let rawOctets = ipv4Number.split(".");
 
         if (rawOctets.length != 4) {
@@ -58,7 +58,7 @@ export class Validator {
         }
 
         rawOctets.forEach(function (octet) {
-            if(!Validator.isValidIpv4Octet(parseInt(octet))) {
+            if(!Validator.isValidIPv4Octet(parseInt(octet))) {
                 return [false, Validator.invalidOctetRangeMessage]
             }
 
@@ -90,7 +90,7 @@ export class Validator {
         return ipNumber >= lowerBound && ipNumber <= upperBound;
     }
 
-    static isValidIpv4Subnet(ipv4Number: string) : [boolean, string] {
+    static isValidIPv4Subnet(ipv4Number: string) : [boolean, string] {
         let ipv4InBinary = dottedDecimalToBinary(ipv4Number);
         let isValid = Validator.SUBNET_BIT_PATTERN.test(ipv4InBinary);
         return isValid ? [isValid, "valid"]: [isValid, Validator.invalidSubnetMessage];
