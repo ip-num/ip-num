@@ -17,6 +17,7 @@ export class Validator {
     static invalidAsnRangeMessage = "ASN number given less than zero or is greater than 32bit";
     static invalidIPv4NumberMessage = "IPv4 number given less than zero or is greater than 32bit";
     static invalidOctetRangeMessage = "The value given is less than zero or is greater than 8bit";
+    static invalidHexadecatetMessage = "The value given is less than zero or is greater than 16bit";
     static invalidOctetCountMessage = "An IP4 number cannot have less or greater than 4 octets";
     static invalidSubnetMessage = "The Subnet is invalid";
     static invalidPrefixValueMessage = "A Prefix value cannot be less than 0 or greater than 32 octets";
@@ -56,6 +57,10 @@ export class Validator {
         return this.isWithinRange(octetNumber, bigInt.zero, this.EIGHT_BIT_SIZE);
     }
 
+    static isValidIPv6Hexadecatet(hexadecatetNum: bigInt.BigInteger): [boolean, string] {
+        let isValid = this.isWithinRange(hexadecatetNum, bigInt.zero, this.SIXTEEN_BIT_SIZE);
+        return isValid ? [isValid, "valid"]: [isValid, Validator.invalidHexadecatetMessage];
+    }
 
     static isValidIPv4DecimalNotationString(ipv4Number: string): [boolean, string] {
         let rawOctets = ipv4Number.split(".");

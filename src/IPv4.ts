@@ -29,6 +29,7 @@ export class IPv4 implements InetNumber {
     }
 
     static fromDecimalDottedString(ipString: string) : IPv4 {
+        // TODO revisit, as octets is unused
         let [value, octets] = IPv4.constructFromDecimalDottedString(ipString);
         return new IPv4(value);
     }
@@ -72,7 +73,7 @@ export class IPv4 implements InetNumber {
     }
 
     hasNext():boolean {
-        return this.value.valueOf() < Validator.THIRTY_TWO_BIT_SIZE;
+        return this.value < Validator.THIRTY_TWO_BIT_SIZE;
     }
 
     hasPrevious():boolean {
