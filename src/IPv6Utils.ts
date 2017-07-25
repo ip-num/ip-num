@@ -50,6 +50,20 @@ export let expandIpv6Address = (ipv6String:string):string => {
 };
 
 
-export let contractIpv6Address = (ipv6String:string):string => {
-    return ""
+export let collapseIpv6Address = (ipv6String:string):string => {
+    let hexadecimals: string[] = ipv6String.split(":");
+    let hexadecimalsWithoutLeadingZeros = hexadecimals.map((hexidecimal) => {
+       let withoutLeadingZero = hexidecimal.replace(/^0+/, '');
+       if (withoutLeadingZero !== '') {
+           return withoutLeadingZero;
+       } else {
+           return "0";
+       }
+
+    });
+    let contracted = hexadecimalsWithoutLeadingZeros.join(":").replace(/(^0)?(:0){2,}/, ':');
+    if (contracted.slice(-1) === ":") {
+        return `${contracted}:`;
+    }
+    return contracted;
 };
