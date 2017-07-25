@@ -1,6 +1,7 @@
 'use strict';
 
 import {Validator} from "./Validator"
+import bigInt = require("big-integer");
 export class Octet {
     private readonly value: number;
 
@@ -16,7 +17,7 @@ export class Octet {
             octetValue = givenValue;
         }
 
-        if (!Validator.isValidIPv4Octet(octetValue)) {
+        if (!Validator.isValidIPv4Octet(bigInt(octetValue))) {
             throw Error(Validator.invalidOctetRangeMessage);
         }
         this.value = octetValue;
