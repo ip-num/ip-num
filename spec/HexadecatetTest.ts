@@ -4,12 +4,12 @@ import {Hexadecatet} from "../src/Hexadecatet";
 
 describe('Hexadecatet: ', () => {
     it('should instantiate by calling constructor', () => {
-        expect(new Hexadecatet(234).getValue()).toEqual(234);
-        expect(new Hexadecatet("234").getValue()).toEqual(234);
+        expect(new Hexadecatet(234).getValue()).toEqual(564);
+        expect(new Hexadecatet("234").getValue()).toEqual(564);
     });
     it('should instantiate by passing number or string to static method', () => {
-        expect(Hexadecatet.of(234).getValue()).toEqual(234);
-        expect(Hexadecatet.of("234").getValue()).toEqual(234);
+        expect(Hexadecatet.of(234).getValue()).toEqual(564);
+        expect(Hexadecatet.of("0234").getValue()).toEqual(564);
     });
     it('should instantiate by passing hexadecimal string to static method', () => {
         expect(Hexadecatet.of("FFFF").getValue()).toEqual(65535);

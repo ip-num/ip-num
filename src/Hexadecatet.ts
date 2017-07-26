@@ -14,7 +14,7 @@ export class Hexadecatet {
         if (typeof givenValue === 'string') {
             hexadecatetValue = parseInt(givenValue, 16);
         } else {
-            hexadecatetValue = givenValue;
+            hexadecatetValue = parseInt(String(givenValue), 16);
         }
 
         let [isValid, message] = Validator.isValidIPv6Hexadecatet(bigInt(hexadecatetValue));
