@@ -11,6 +11,9 @@ describe('Hexadecatet: ', () => {
         expect(Hexadecatet.of(234).getValue()).toEqual(234);
         expect(Hexadecatet.of("234").getValue()).toEqual(234);
     });
+    it('should instantiate by passing hexadecimal string to static method', () => {
+        expect(Hexadecatet.of("FFFF").getValue()).toEqual(65535);
+    });
     it('should throw an exception when invalid octet number is given', () => {
         expect(() => {
             Hexadecatet.of(65536);

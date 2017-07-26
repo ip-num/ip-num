@@ -12,7 +12,7 @@ export class Hexadecatet {
     constructor(givenValue: string | number) {
         let hexadecatetValue: number;
         if (typeof givenValue === 'string') {
-            hexadecatetValue = parseInt(givenValue);
+            hexadecatetValue = parseInt(givenValue, 16);
         } else {
             hexadecatetValue = givenValue;
         }
