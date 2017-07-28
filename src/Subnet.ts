@@ -4,7 +4,7 @@ import {Octet} from "./Octet";
 import {Validator} from "./Validator";
 import {InetNumber} from "./interface/InetNumber";
 import * as bigInt from "big-integer"
-import {dottedDecimalToBinary} from "./BinaryUtils";
+import {dottedDecimalNotationToBinary} from "./BinaryUtils";
 
 export class Subnet implements InetNumber {
     readonly octets: Array<Octet> = [];
@@ -30,7 +30,7 @@ export class Subnet implements InetNumber {
             return Octet.of(rawOctet)
         });
 
-        this.value = bigInt(dottedDecimalToBinary(ipString), 2);
+        this.value = bigInt(dottedDecimalNotationToBinary(ipString), 2);
     }
 
     public getValue():bigInt.BigInteger {

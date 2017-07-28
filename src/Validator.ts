@@ -1,5 +1,5 @@
 'use strict';
-import {dottedDecimalToBinary} from "./BinaryUtils";
+import {dottedDecimalNotationToBinary} from "./BinaryUtils";
 import * as bigInt from "big-integer";
 import {BigInteger} from "big-integer";
 
@@ -8,17 +8,18 @@ export class Validator {
     static IPV4_RANGE_PATTERN: RegExp = new RegExp(/^(0?[0-9]?[0-9]|1[0-9][0-9]|2[0-5][0-5])\.(0?[0-9]?[0-9]|1[0-9][0-9]|2[0-5][0-5])\.(0?[0-9]?[0-9]|1[0-9][0-9]|2[0-5][0-5])\.(0?[0-9]?[0-9]|1[0-9][0-9]|2[0-5][0-5])(\/)([1-9]|[1-2][0-9]|3[0-2])$/);
     static SUBNET_BIT_PATTERN: RegExp = new RegExp(/^(1){0,32}(0){0,32}$/);
 
-    // TODO check if the valye of bigInteger constructed via the bigInt is valud
-    // NOTE it is safe to use native javascript number here since they are less than Number.MAX_SAFE_INTEGER
-    static THIRTY_TWO_BIT_SIZE: bigInt.BigInteger = bigInt(Math.pow(2, 32) - 1);
-    static SIXTEEN_BIT_SIZE: bigInt.BigInteger = bigInt(Math.pow(2, 16) - 1);
-    static EIGHT_BIT_SIZE: bigInt.BigInteger = bigInt(Math.pow(2, 8) - 1);
+    static EIGHT_BIT_SIZE: bigInt.BigInteger = bigInt("1".repeat(8), 2);
+    static SIXTEEN_BIT_SIZE: bigInt.BigInteger = bigInt("1".repeat(16), 2);
+    static THIRTY_TWO_BIT_SIZE: bigInt.BigInteger = bigInt("1".repeat(32), 2);
+    static ONE_HUNDRED_AND_TWENTY_EIGHT_BIT_SIZE: bigInt.BigInteger = bigInt("1".repeat(128), 2);
 
     static invalidAsnRangeMessage = "ASN number given less than zero or is greater than 32bit";
     static invalidIPv4NumberMessage = "IPv4 number given less than zero or is greater than 32bit";
+    static invalidIPv6NumberMessage = "IPv6 number given less than zero or is greater than 128bit";
     static invalidOctetRangeMessage = "The value given is less than zero or is greater than 8bit";
     static invalidHexadecatetMessage = "The value given is less than zero or is greater than 16bit";
     static invalidOctetCountMessage = "An IP4 number cannot have less or greater than 4 octets";
+    static invalidHexadecatetCountMessage = "An IP6 number cannot have less or greater than 8 octets";
     static invalidSubnetMessage = "The Subnet is invalid";
     static invalidPrefixValueMessage = "A Prefix value cannot be less than 0 or greater than 32 octets";
     static invalidCidrNotationString = "A Cidr notation string should contain an IP address and prefix eg 9.9.9.9/24";
@@ -47,6 +48,11 @@ export class Validator {
         return isValid ? [isValid, "valid"]: [isValid, Validator.invalidIPv4NumberMessage];
     }
 
+    static isValidIPv6Number(ipv6Number: bigInt.BigInteger): [boolean, string] {
+        let isValid = this.isWithinRange(ipv6Number, bigInt.zero, this.ONE_HUNDRED_AND_TWENTY_EIGHT_BIT_SIZE);
+        return isValid ? [isValid, "valid"]: [isValid, Validator.invalidIPv6NumberMessage];
+    }
+
     /**
      * Checks if the number given is valid for an IPv4 octet
      * @param octetNumber the octet value
@@ -62,8 +68,8 @@ export class Validator {
         return isValid ? [isValid, "valid"]: [isValid, Validator.invalidHexadecatetMessage];
     }
 
-    static isValidIPv4DecimalNotationString(ipv4Number: string): [boolean, string] {
-        let rawOctets = ipv4Number.split(".");
+    static isValidIPv4DecimalNotationString(ipv4String: string): [boolean, string] {
+        let rawOctets = ipv4String.split(".");
 
         if (rawOctets.length != 4) {
             return [false, Validator.invalidOctetCountMessage];
@@ -76,9 +82,24 @@ export class Validator {
 
         });
 
-        return [true, "valid"]
+        return [true, "valid"];
     }
 
+    static isValidIPv6NotationString(ipv6String: string): [boolean, string] {
+        let hexadecimals = ipv6String.split(":");
+        if (hexadecimals.length != 8) {
+            return [false, Validator.invalidHexadecatetCountMessage]
+        }
+
+        hexadecimals.forEach(function (hexadecimal) {
+            let numberValue = parseInt(hexadecimal, 16);
+            if (!Validator.isValidIPv6Hexadecatet(bigInt(numberValue))) {
+                return [false, Validator.invalidHexadecatetMessage]
+            }
+        });
+
+        return [true, "valid"];
+    }
 
     /**
      * Checks if given value is a valid prefix value
@@ -103,7 +124,7 @@ export class Validator {
     }
 
     static isValidIPv4Subnet(ipv4Number: string) : [boolean, string] {
-        let ipv4InBinary = dottedDecimalToBinary(ipv4Number);
+        let ipv4InBinary = dottedDecimalNotationToBinary(ipv4Number);
         let isValid = Validator.SUBNET_BIT_PATTERN.test(ipv4InBinary);
         return isValid ? [isValid, "valid"]: [isValid, Validator.invalidSubnetMessage];
     }

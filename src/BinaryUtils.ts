@@ -47,7 +47,7 @@ export let binaryToDecimal = (num:string): bigInt.BigInteger => {
  * @param dottedDecimal IPv4 string in dot-decimal notation
  * @returns {string} the binary value of the given ipv4 number in string
  */
-export let dottedDecimalToBinary = (dottedDecimal: string): string => {
+export let dottedDecimalNotationToBinary = (dottedDecimal: string): string => {
     let stringOctets = dottedDecimal.split(".");
     let binaryStringValue = stringOctets.reduce((binaryAsString, octet) => {
         return binaryAsString.concat(decimalNumberToBinaryOctet(parseInt(octet)));

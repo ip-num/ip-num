@@ -28,6 +28,6 @@ export class Octet {
     }
 
     public toString(): string {
-        return this.value.toString();
+        return this.value.toString(10);
     }
 }

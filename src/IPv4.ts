@@ -4,7 +4,7 @@ import {Octet} from "./Octet";
 import {Validator} from "./Validator";
 import {InetNumber} from "./interface/InetNumber";
 import * as bigInt from "big-integer"
-import {dottedDecimalToBinary} from "./BinaryUtils";
+import {dottedDecimalNotationToBinary} from "./BinaryUtils";
 import {bigIntegerNumberToBinaryString} from "./BinaryUtils";
 import {binaryToDecimal} from "./BinaryUtils";
 import {leftPadWithZeroBit} from "./BinaryUtils";
@@ -29,9 +29,7 @@ export class IPv4 implements InetNumber {
     }
 
     static fromDecimalDottedString(ipString: string) : IPv4 {
-        // TODO revisit, as octets is unused
-        let [value, octets] = IPv4.constructFromDecimalDottedString(ipString);
-        return new IPv4(value);
+        return new IPv4(ipString);
     }
 
     static of(rawValue:string):IPv4
@@ -42,7 +40,7 @@ export class IPv4 implements InetNumber {
 
     constructor(ipValue: string | bigInt.BigInteger) {
         if (typeof ipValue === "string" ) {
-            let [value, octets] = IPv4.constructFromDecimalDottedString(ipValue);
+            let [value, octets] = this.constructFromDecimalDottedString(ipValue);
             this.value = value;
             this.octets = octets
         } else {
@@ -100,7 +98,7 @@ export class IPv4 implements InetNumber {
         return this.value.greaterOrEquals(anotherIPv4.value);
     }
 
-    private static constructFromDecimalDottedString(ipString: string): [bigInt.BigInteger, Array<Octet>] {
+    private constructFromDecimalDottedString(ipString: string): [bigInt.BigInteger, Array<Octet>] {
         let octets;
         let value;
         let [isValid, message] = Validator.isValidIPv4DecimalNotationString(ipString);
@@ -111,7 +109,7 @@ export class IPv4 implements InetNumber {
         octets = stringOctets.map((rawOctet) => {
             return Octet.of(rawOctet)
         });
-        value = bigInt(dottedDecimalToBinary(ipString), 2);
+        value = bigInt(dottedDecimalNotationToBinary(ipString), 2);
         return [value, octets]
     }
 
