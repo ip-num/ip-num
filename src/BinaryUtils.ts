@@ -49,10 +49,9 @@ export let binaryToDecimal = (num:string): bigInt.BigInteger => {
  */
 export let dottedDecimalNotationToBinary = (dottedDecimal: string): string => {
     let stringOctets = dottedDecimal.split(".");
-    let binaryStringValue = stringOctets.reduce((binaryAsString, octet) => {
+    return stringOctets.reduce((binaryAsString, octet) => {
         return binaryAsString.concat(decimalNumberToBinaryOctet(parseInt(octet)));
     }, '');
-    return binaryStringValue;
 };
 
 

@@ -13,10 +13,9 @@ export let bigIntegerNumberToHexadecimalString = (num: bigInt.BigInteger): strin
 
 export let hexadecimalNotationToBinary = (hexadecimalString: string): string => {
     let hexadecimals = hexadecimalString.split(":");
-    let binaryStringValue = hexadecimals.reduce((hexidecimalAsString, hexavalue) => {
+    return hexadecimals.reduce((hexidecimalAsString, hexavalue) => {
         return hexidecimalAsString.concat(hexadecimalStringToBinaryString(hexavalue));
     }, '');
-    return binaryStringValue;
 };
 
 export let hexadecimalStringToBinaryString = (hexadeciamlString: string) : string => {
