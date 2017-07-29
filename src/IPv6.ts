@@ -16,6 +16,10 @@ export class IPv6 implements InetNumber {
     value: bigInt.BigInteger;
     readonly hexadecatet: Array<Hexadecatet> = [];
 
+    static fromBigInteger(bigIntValue: bigInt.BigInteger): IPv6 {
+        return new IPv6(bigIntValue);
+    }
+
     constructor(ipValue: string | bigInt.BigInteger) {
         if (typeof ipValue === "string" ) {
             let expandedIPv6 = expandIPv6Address(ipValue);
@@ -31,11 +35,52 @@ export class IPv6 implements InetNumber {
     }
 
     getValue(): bigInt.BigInteger {
-        throw new Error("Method not implemented.");
+        return this.value;
     }
 
     public toString(): string {
         return this.hexadecatet.map((value) => { return value.toString()}).join(":");
+    }
+
+    //TODO maybe rename to something like getSegments? so it can be same with getOctet
+    public getHexadecatet():Array<Hexadecatet> {
+        return this.hexadecatet;
+    }
+
+    public nextIPv6(): IPv6 {
+        return IPv6.fromBigInteger(this.getValue().add(1))
+    }
+
+    public previousIPv6(): IPv6 {
+        return IPv6.fromBigInteger(this.getValue().minus(1))
+    }
+
+    hasNext():boolean {
+        return this.value < Validator.ONE_HUNDRED_AND_TWENTY_EIGHT_BIT_SIZE;
+    }
+
+    hasPrevious():boolean {
+        return this.value.valueOf() > 0;
+    }
+
+    public isEquals(anotherIPv6: IPv6): boolean {
+        return this.value.equals(anotherIPv6.value);
+    }
+
+    public isLessThan(anotherIPv6: IPv6): boolean {
+        return this.value.lt(anotherIPv6.value);
+    }
+
+    public isGreaterThan(anotherIPv6: IPv6): boolean {
+        return this.value.gt(anotherIPv6.value);
+    }
+
+    public isLessThanOrEquals(anotherIPv6: IPv6): boolean {
+        return this.value.lesserOrEquals(anotherIPv6.value);
+    }
+
+    public isGreaterThanOrEquals(anotherIPv6: IPv6): boolean {
+        return this.value.greaterOrEquals(anotherIPv6.value);
     }
 
     private constructFromBigIntegerValue(ipv6Number: bigInt.BigInteger): [bigInt.BigInteger, Array<Hexadecatet>]  {
