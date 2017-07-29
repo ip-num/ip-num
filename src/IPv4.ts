@@ -122,17 +122,13 @@ export class IPv4 implements InetNumber {
         return [ipv4Number, this.binaryStringToDecimalOctets(binaryString)]
     }
 
-    private binaryStringToDecimalOctets(ipv4String: string): Array<Octet> {
-        let Octets: Array<Octet> = [];
-
-        if (ipv4String.length < 32) {
-            ipv4String = leftPadWithZeroBit(ipv4String, 32);
+    private binaryStringToDecimalOctets(ipv4BinaryString: string): Array<Octet> {
+        if (ipv4BinaryString.length < 32) {
+            ipv4BinaryString = leftPadWithZeroBit(ipv4BinaryString, 32);
         }
-
-        Octets.push(Octet.of(binaryToDecimal(ipv4String.substr(0,8)).toString()));
-        Octets.push(Octet.of(binaryToDecimal(ipv4String.substr(8,8)).toString()));
-        Octets.push(Octet.of(binaryToDecimal(ipv4String.substr(16,8)).toString()));
-        Octets.push(Octet.of(binaryToDecimal(ipv4String.substr(24,8)).toString()));
-        return Octets;
+        let octets: string[] = ipv4BinaryString.match(/.{1,8}/g);
+        return octets.map((octet) => {
+            return Octet.of(binaryToDecimal(octet).toString())
+        });
     }
 }
