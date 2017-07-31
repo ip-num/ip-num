@@ -157,6 +157,7 @@ export class IPv4Range implements IterableIterator<IPv4> {
         }
     }
 
+    // TODO read up on what this method does and decide to implement or remove
     throw?(e?: any): IteratorResult<IPv4> {
         throw new Error("Method not implemented.");
     }

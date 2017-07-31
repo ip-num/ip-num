@@ -20,6 +20,10 @@ export class IPv6 implements InetNumber {
         return new IPv6(bigIntValue);
     }
 
+    static fromHexadecimal(ipString: string) : IPv6 {
+        return new IPv6(ipString);
+    }
+
     constructor(ipValue: string | bigInt.BigInteger) {
         if (typeof ipValue === "string" ) {
             let expandedIPv6 = expandIPv6Address(ipValue);
