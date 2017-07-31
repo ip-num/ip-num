@@ -120,7 +120,7 @@ export class Validator {
      * @returns {boolean} true if ipNumber is between lower and upper bound
      */
     static isWithinRange(ipNumber: bigInt.BigInteger, lowerBound: bigInt.BigInteger, upperBound: bigInt.BigInteger) : boolean {
-        return ipNumber >= lowerBound && ipNumber <= upperBound;
+        return ipNumber.greaterOrEquals(lowerBound) && ipNumber.lesserOrEquals(upperBound);
     }
 
     static isValidIPv4Subnet(ipv4Number: string) : [boolean, string] {

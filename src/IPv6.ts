@@ -51,11 +51,12 @@ export class IPv6 implements InetNumber {
         return this.hexadecatet;
     }
 
-    public nextIPv6(): IPv6 {
-        return IPv6.fromBigInteger(this.getValue().add(1))
+    public nextIPAddress(): IPv6 {
+        let iPv6 = IPv6.fromBigInteger(this.getValue().add(1));
+        return iPv6
     }
 
-    public previousIPv6(): IPv6 {
+    public previousIPAddress(): IPv6 {
         return IPv6.fromBigInteger(this.getValue().minus(1))
     }
 

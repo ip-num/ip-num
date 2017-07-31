@@ -38,4 +38,34 @@ describe('IPv6: ', () => {
             expect(hexadecatet.toString()).toEqual("ffff");
         })
     });
+
+    it('should correctly return the right value', () => {
+        let bigIntegerValue = bigInt("1".repeat(128), 2);
+        let iPv6 = IPv6.fromBigInteger(bigIntegerValue);
+        expect(iPv6.getValue()).toEqual(bigIntegerValue);
+    });
+
+    it('should correctly return the next value when nextIPAddress is called', () => {
+        let iPv6 = IPv6.fromHexadecimal("ffff:ffff:ffff:ffff:ffff:ffff:ffff:fffe");
+        expect(iPv6.nextIPAddress().toString()).toEqual("ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff");
+    });
+
+    it('should correctly return the previous value when previousIPAddress is called', () => {
+        let iPv6 = IPv6.fromHexadecimal("ffff:ffff:ffff:ffff:ffff:ffff:ffff:fffe");
+        expect(iPv6.previousIPAddress().toString()).toEqual("ffff:ffff:ffff:ffff:ffff:ffff:ffff:fffd");
+    });
+
+    it('should throw exception when calling next leads to an invalid IPv4', () => {
+        let value = IPv6.fromHexadecimal("ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff");
+        expect(() => {
+            value.nextIPAddress();
+        }).toThrowError(Error, Validator.invalidIPv6NumberMessage);
+    });
+
+    it('should throw exception when calling previous leads to an invalid IPv4', () => {
+        let value = IPv6.fromHexadecimal("::000");
+        expect(() => {
+            value.previousIPAddress();
+        }).toThrowError(Error, Validator.invalidIPv6NumberMessage);
+    });
 });
