@@ -2,19 +2,17 @@
   "include": ["src/*","spec/*"],
   "compileOnSave": true,
     "compilerOptions": {
-      "alwaysStrict": true,
+      "strict": true,
       "moduleResolution": "node",
       "module": "commonjs",
-      "noImplicitAny": true,
       "noFallthroughCasesInSwitch": true,
       "noImplicitReturns": true,
-      "noImplicitThis": true,
       "noUnusedLocals":false,
       "noUnusedParameters": false,
       "outDir": "dist",
       "pretty": true,
-      "strict": true,
       "sourceMap": true,
+      "typeRoots": [ "./node_modules/@types" ],
       "lib": ["es6"],
       "target": "es6"
     }

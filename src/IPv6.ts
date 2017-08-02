@@ -112,7 +112,7 @@ export class IPv6 implements InetNumber {
     }
 
     private hexadecimalStringToHexadecatets(binaryString: string) {
-        let hexadecatetAsBinary: string[] = binaryString.match(/.{1,16}/g);
+        let hexadecatetAsBinary: string[] = binaryString.match(/.{1,16}/g)!;
         return hexadecatetAsBinary.map((hexadecatetBinary)=> {
             return Hexadecatet.of(binaryStringToHexadecimalString(hexadecatetBinary));
         });

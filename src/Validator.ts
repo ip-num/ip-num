@@ -75,14 +75,9 @@ export class Validator {
             return [false, Validator.invalidOctetCountMessage];
         }
 
-        rawOctets.forEach(function (octet) {
-            if(!Validator.isValidIPv4Octet(bigInt(parseInt(octet)))) {
-                return [false, Validator.invalidOctetRangeMessage]
-            }
+        let isValid = rawOctets.every(octet => Validator.isValidIPv4Octet(bigInt(parseInt(octet))));
 
-        });
-
-        return [true, "valid"];
+        return [isValid, isValid ? "valid": Validator.invalidOctetRangeMessage];
     }
 
     static isValidIPv6NotationString(ipv6String: string): [boolean, string] {
@@ -91,14 +86,12 @@ export class Validator {
             return [false, Validator.invalidHexadecatetCountMessage]
         }
 
-        hexadecimals.forEach(function (hexadecimal) {
+        let isValid = hexadecimals.every(hexadecimal => {
             let numberValue = parseInt(hexadecimal, 16);
-            if (!Validator.isValidIPv6Hexadecatet(bigInt(numberValue))) {
-                return [false, Validator.invalidHexadecatetMessage]
-            }
+            return Validator.isValidIPv6Hexadecatet(bigInt(numberValue))[0];
         });
 
-        return [true, "valid"];
+        return [isValid, isValid? "valid": Validator.invalidHexadecatetMessage];
     }
 
     /**

@@ -126,7 +126,7 @@ export class IPv4 implements InetNumber {
         if (ipv4BinaryString.length < 32) {
             ipv4BinaryString = leftPadWithZeroBit(ipv4BinaryString, 32);
         }
-        let octets: string[] = ipv4BinaryString.match(/.{1,8}/g);
+        let octets: string[] = ipv4BinaryString.match(/.{1,8}/g)!;
         return octets.map((octet) => {
             return Octet.of(binaryToDecimal(octet).toString())
         });
