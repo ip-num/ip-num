@@ -12,8 +12,6 @@ import {Validator} from "./Validator";
  */
 export class IPv4Range implements IterableIterator<IPv4> {
     private readonly bitValue: number = 32;
-    private readonly cidrPrefix: IPv4Prefix;
-    private readonly ipv4: IPv4;
     private internalCounterValue: IPv4;
 
     static of(rangeIncidrNotation:string):IPv4Range {
@@ -27,9 +25,7 @@ export class IPv4Range implements IterableIterator<IPv4> {
         return new IPv4Range(IPv4.fromDecimalDottedString(ipString), IPv4Prefix.of(prefix));
     };
 
-    constructor(ipv4: IPv4, prefix: IPv4Prefix) {
-        this.ipv4 = ipv4;
-        this.cidrPrefix = prefix;
+    constructor(private readonly ipv4: IPv4, private readonly cidrPrefix: IPv4Prefix) {
         this.internalCounterValue = this.getFirst();
     }
 
