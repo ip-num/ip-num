@@ -1,12 +1,6 @@
-/**
- * Created by daderemi on 07/11/16.
- */
 
-import {IPv4} from "../src/IPv4";
 import {Validator} from "../src/Validator";
 import * as bigInt from "big-integer";
-import {bigIntegerNumberToHexadecimalString} from "../src/HexadecimalUtils";
-import {bigIntegerNumberToBinaryString} from "../src/BinaryUtils";
 import {IPv6} from "../src/IPv6";
 
 describe('IPv6: ', () => {
@@ -67,5 +61,17 @@ describe('IPv6: ', () => {
         expect(() => {
             value.previousIPAddress();
         }).toThrowError(Error, Validator.invalidIPv6NumberMessage);
+    });
+
+    it('should correctly tell if there is a next value for an IPv6', () => {
+        let value: IPv6 = IPv6.fromHexadecimal("ffff:ffff:ffff:ffff:ffff:ffff:ffff:fffe");
+        expect(value.hasNext()).toBe(true);
+        expect(value.nextIPAddress().hasNext()).toBe(false);
+    });
+
+    it('should correctly tell if there is a previous value for an IPv6', () => {
+        let value = IPv6.fromHexadecimal("::001");
+        expect(value.hasPrevious()).toBe(true);
+        expect(value.previousIPAddress().hasPrevious()).toBe(false);
     });
 });

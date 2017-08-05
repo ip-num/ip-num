@@ -52,8 +52,7 @@ export class IPv6 implements InetNumber {
     }
 
     public nextIPAddress(): IPv6 {
-        let iPv6 = IPv6.fromBigInteger(this.getValue().add(1));
-        return iPv6
+        return IPv6.fromBigInteger(this.getValue().add(1))
     }
 
     public previousIPAddress(): IPv6 {
@@ -61,11 +60,11 @@ export class IPv6 implements InetNumber {
     }
 
     hasNext():boolean {
-        return this.value < Validator.ONE_HUNDRED_AND_TWENTY_EIGHT_BIT_SIZE;
+         return this.value.lesser(Validator.ONE_HUNDRED_AND_TWENTY_EIGHT_BIT_SIZE);
     }
 
     hasPrevious():boolean {
-        return this.value.valueOf() > 0;
+        return this.value.greater(bigInt.zero);
     }
 
     public isEquals(anotherIPv6: IPv6): boolean {
