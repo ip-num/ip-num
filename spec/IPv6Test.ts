@@ -74,4 +74,25 @@ describe('IPv6: ', () => {
         expect(value.hasPrevious()).toBe(true);
         expect(value.previousIPAddress().hasPrevious()).toBe(false);
     });
+
+    it('should correctly check equality related operations', () => {
+        expect(IPv6.fromBigInteger(bigInt("100")).isLessThan(IPv6.fromBigInteger(bigInt("200")))).toEqual(true);
+        expect(IPv6.fromBigInteger(bigInt("200")).isLessThan(IPv6.fromBigInteger(bigInt("100")))).toEqual(false);
+        expect(IPv6.fromBigInteger(bigInt("200")).isLessThan(IPv6.fromBigInteger(bigInt("200")))).toEqual(false);
+
+        expect(IPv6.fromBigInteger(bigInt("1234")).isLessThanOrEquals(IPv6.fromBigInteger(bigInt("12345")))).toEqual(true);
+        expect(IPv6.fromBigInteger(bigInt("12345")).isLessThanOrEquals(IPv6.fromBigInteger(bigInt("1234")))).toEqual(false);
+        expect(IPv6.fromBigInteger(bigInt("12345")).isLessThanOrEquals(IPv6.fromBigInteger(bigInt("12345")))).toEqual(true);
+
+        expect(IPv6.fromBigInteger(bigInt("1234")).isEquals(IPv6.fromBigInteger(bigInt("1234")))).toEqual(true);
+        expect(IPv6.fromBigInteger(bigInt("1234")).isEquals(IPv6.fromBigInteger(bigInt("12345")))).toEqual(false);
+
+        expect(IPv6.fromBigInteger(bigInt("1234")).isGreaterThan(IPv6.fromBigInteger(bigInt("12345")))).toEqual(false);
+        expect(IPv6.fromBigInteger(bigInt("12345")).isGreaterThan(IPv6.fromBigInteger(bigInt("1234")))).toEqual(true);
+        expect(IPv6.fromBigInteger(bigInt("12345")).isGreaterThan(IPv6.fromBigInteger(bigInt("12345")))).toEqual(false);
+
+        expect(IPv6.fromBigInteger(bigInt("12345")).isGreaterThanOrEquals(IPv6.fromBigInteger(bigInt("1234")))).toEqual(true);
+        expect(IPv6.fromBigInteger(bigInt("1234")).isGreaterThanOrEquals(IPv6.fromBigInteger(bigInt("12345")))).toEqual(false);
+        expect(IPv6.fromBigInteger(bigInt("12345")).isGreaterThanOrEquals(IPv6.fromBigInteger(bigInt("12345")))).toEqual(true);
+    });
 });
