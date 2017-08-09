@@ -1,12 +1,14 @@
 'use strict';
-import {dottedDecimalNotationToBinary} from "./BinaryUtils";
+import {dottedDecimalNotationToBinaryString} from "./BinaryUtils";
 import * as bigInt from "big-integer";
-import {BigInteger} from "big-integer";
+import {InetNumType} from "./InetNumType";
+import {hexadectetNotationToBinaryString} from "./HexadecimalUtils";
 
 export class Validator {
     static IPV4_PATTERN: RegExp = new RegExp(/^(0?[0-9]?[0-9]|1[0-9][0-9]|2[0-5][0-5])\.(0?[0-9]?[0-9]|1[0-9][0-9]|2[0-5][0-5])\.(0?[0-9]?[0-9]|1[0-9][0-9]|2[0-5][0-5])\.(0?[0-9]?[0-9]|1[0-9][0-9]|2[0-5][0-5])$/);
     static IPV4_RANGE_PATTERN: RegExp = new RegExp(/^(0?[0-9]?[0-9]|1[0-9][0-9]|2[0-5][0-5])\.(0?[0-9]?[0-9]|1[0-9][0-9]|2[0-5][0-5])\.(0?[0-9]?[0-9]|1[0-9][0-9]|2[0-5][0-5])\.(0?[0-9]?[0-9]|1[0-9][0-9]|2[0-5][0-5])(\/)([1-9]|[1-2][0-9]|3[0-2])$/);
-    static SUBNET_BIT_PATTERN: RegExp = new RegExp(/^(1){0,32}(0){0,32}$/);
+    static IPV4_SUBNET_BIT_PATTERN: RegExp = new RegExp(/^(1){0,32}(0){0,32}$/);
+    static IPV6_SUBNET_BIT_PATTERN: RegExp = new RegExp(/^(1){0,128}(0){0,128}$/);
 
     static EIGHT_BIT_SIZE: bigInt.BigInteger = bigInt("1".repeat(8), 2);
     static SIXTEEN_BIT_SIZE: bigInt.BigInteger = bigInt("1".repeat(16), 2);
@@ -99,10 +101,16 @@ export class Validator {
      * @param prefix value to check
      * @returns {(boolean|string)[]} a tuple representing if valid or not and corresponding message
      */
-    static isValidPrefixValue(prefixValue: number): [boolean, string] {
-        // TODO this will need to be revisited when working with ipv6
-        let withinRange = Validator.isWithinRange(bigInt(prefixValue), bigInt.zero, bigInt(32));
-        return [withinRange, withinRange ? "valid": Validator.invalidPrefixValueMessage];
+    static isValidPrefixValue(prefixValue: number, type: InetNumType): [boolean, string] {
+        if (InetNumType.IPv4 === type) {
+            let withinRange = Validator.isWithinRange(bigInt(prefixValue), bigInt.zero, bigInt(32));
+            return [withinRange, withinRange ? "valid": Validator.invalidPrefixValueMessage];
+        }
+        if (InetNumType.IPv6 === type) {
+            let withinRange = Validator.isWithinRange(bigInt(prefixValue), bigInt.zero, bigInt(128));
+            return [withinRange, withinRange ? "valid": Validator.invalidPrefixValueMessage];
+        }
+        return [false, "Given type must be either InetNumType.IPv4 or InetNumType.IPv6"]
     }
 
     /**
@@ -117,8 +125,14 @@ export class Validator {
     }
 
     static isValidIPv4Subnet(ipv4Number: string) : [boolean, string] {
-        let ipv4InBinary = dottedDecimalNotationToBinary(ipv4Number);
-        let isValid = Validator.SUBNET_BIT_PATTERN.test(ipv4InBinary);
+        let ipv4InBinary = dottedDecimalNotationToBinaryString(ipv4Number);
+        let isValid = Validator.IPV4_SUBNET_BIT_PATTERN.test(ipv4InBinary);
+        return isValid ? [isValid, "valid"]: [isValid, Validator.invalidSubnetMessage];
+    }
+
+    static isValidIPv6Subnet(ipv6Number: string) : [boolean, string] {
+        let ipv6InBinary = hexadectetNotationToBinaryString(ipv6Number);
+        let isValid = Validator.IPV6_SUBNET_BIT_PATTERN.test(ipv6InBinary);
         return isValid ? [isValid, "valid"]: [isValid, Validator.invalidSubnetMessage];
     }
 

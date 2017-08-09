@@ -117,9 +117,9 @@ export class Asn implements InetNumber {
     }
 
     private parseFromDotNotation(rawValue: string): number {
-        let dotPosition = rawValue.indexOf(".");
-        let high = parseInt(rawValue.substring(0, dotPosition));
-        let low = parseInt(rawValue.substring(dotPosition + 1));
+        let values: string[] = rawValue.split(".");
+        let high = parseInt(values[0]);
+        let low = parseInt(values[1]);
         return (high * 65535) + (low + high);
     }
 }

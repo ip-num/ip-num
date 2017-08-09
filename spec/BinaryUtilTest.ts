@@ -8,7 +8,7 @@ describe('Binary Utils', () => {
         expect(BinaryUtils.decimalNumberToBinaryString(1234) === '10011010010').toEqual(true);
     });
     it('Should correctly convert binary to decimal', () => {
-        expect(BinaryUtils.binaryToDecimal('10011010010').valueOf() === 1234).toEqual(true);
+        expect(BinaryUtils.binaryToBigInteger('10011010010').valueOf() === 1234).toEqual(true);
     });
     it('Should correctly convert a big integer number to binary string', () => {
         expect(BinaryUtils.bigIntegerNumberToBinaryString(bigInt(1234))).toBe('10011010010');
@@ -16,7 +16,7 @@ describe('Binary Utils', () => {
     });
     it('Should correctly convert binary to decimal and back to binary', () => {
         let originalBinary = '10011010010';
-        let decimal = BinaryUtils.binaryToDecimal(originalBinary).valueOf();
+        let decimal = BinaryUtils.binaryToBigInteger(originalBinary).valueOf();
         let finalBinary = BinaryUtils.decimalNumberToBinaryString(decimal);
         expect(originalBinary.toString() === finalBinary).toEqual(true);
     });

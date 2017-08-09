@@ -4,7 +4,7 @@ import {Validator} from "./Validator";
 import {bigIntegerNumberToBinaryString} from "./BinaryUtils";
 import {binaryStringToHexadecimalString} from "./HexadecimalUtils";
 import {expandIPv6Address} from "./IPv6Utils";
-import {hexadecimalNotationToBinary} from "./HexadecimalUtils";
+import {hexadectetNotationToBinaryString} from "./HexadecimalUtils";
 import * as bigInt from "big-integer/BigInteger";
 
 
@@ -106,16 +106,14 @@ export class IPv6 implements InetNumber {
         let hexadecatet: Hexadecatet[]  = stringHexadecimals.map((stringHexadecatet) => {
             return Hexadecatet.of(stringHexadecatet);
         });
-        let value = bigInt(hexadecimalNotationToBinary(expandedIPv6), 2);
+        let value = bigInt(hexadectetNotationToBinaryString(expandedIPv6), 2);
         return [value, hexadecatet];
     }
 
-    private hexadecimalStringToHexadecatets(binaryString: string) {
+    private hexadecimalStringToHexadecatets(binaryString: string): Hexadecatet[] {
         let hexadecatetAsBinary: string[] = binaryString.match(/.{1,16}/g)!;
         return hexadecatetAsBinary.map((hexadecatetBinary)=> {
             return Hexadecatet.of(binaryStringToHexadecimalString(hexadecatetBinary));
         });
     }
-
-
 }

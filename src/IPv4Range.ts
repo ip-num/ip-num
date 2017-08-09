@@ -2,9 +2,8 @@
 
 import {IPv4} from "./IPv4";
 import {IPv4Prefix} from "./Prefix";
-import * as bigInt from "big-integer/BigInteger";
 import {leftPadWithZeroBit} from "./BinaryUtils";
-import {binaryToDecimal} from "./BinaryUtils";
+import {binaryToBigInteger} from "./BinaryUtils";
 import {Validator} from "./Validator";
 
 /**
@@ -53,7 +52,7 @@ export class IPv4Range implements IterableIterator<IPv4> {
 
     public getLast(): IPv4 {
         let invertedSubnet = leftPadWithZeroBit(this.cidrPrefix.toSubnet().getValue().xor('4294967295').toString(2), 32);
-        return IPv4.fromBigInteger(this.ipv4.getValue().or(binaryToDecimal(invertedSubnet)));
+        return IPv4.fromBigInteger(this.ipv4.getValue().or(binaryToBigInteger(invertedSubnet)));
     }
 
     public isConsecutive(otherRange: IPv4Range): boolean {

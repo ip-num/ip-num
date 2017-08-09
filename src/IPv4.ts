@@ -4,9 +4,9 @@ import {Octet} from "./Octet";
 import {Validator} from "./Validator";
 import {InetNumber} from "./interface/InetNumber";
 import * as bigInt from "big-integer"
-import {dottedDecimalNotationToBinary} from "./BinaryUtils";
+import {dottedDecimalNotationToBinaryString} from "./BinaryUtils";
 import {bigIntegerNumberToBinaryString} from "./BinaryUtils";
-import {binaryToDecimal} from "./BinaryUtils";
+import {binaryToBigInteger} from "./BinaryUtils";
 import {leftPadWithZeroBit} from "./BinaryUtils";
 
 /**
@@ -109,7 +109,7 @@ export class IPv4 implements InetNumber {
         octets = stringOctets.map((rawOctet) => {
             return Octet.of(rawOctet)
         });
-        value = bigInt(dottedDecimalNotationToBinary(ipString), 2);
+        value = bigInt(dottedDecimalNotationToBinaryString(ipString), 2);
         return [value, octets]
     }
 
@@ -128,7 +128,7 @@ export class IPv4 implements InetNumber {
         }
         let octets: string[] = ipv4BinaryString.match(/.{1,8}/g)!;
         return octets.map((octet) => {
-            return Octet.of(binaryToDecimal(octet).toString())
+            return Octet.of(binaryToBigInteger(octet).toString())
         });
     }
 }
