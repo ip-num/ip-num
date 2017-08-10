@@ -54,7 +54,9 @@ export class IPv4Range implements IterableIterator<IPv4> {
     }
 
     public getLast(): IPv4 {
-        let invertedSubnet = leftPadWithZeroBit(this.cidrPrefix.toSubnet().getValue().xor('4294967295').toString(2), 32);
+        let onMask = bigInt("1".repeat(32), 2);
+        let subnetAsBigInteger = this.cidrPrefix.toSubnet().getValue();
+        let invertedSubnet = leftPadWithZeroBit(subnetAsBigInteger.xor(onMask).toString(2), 32);
         return IPv4.fromBigInteger(this.ipv4.getValue().or(binaryToBigInteger(invertedSubnet)));
     }
 
