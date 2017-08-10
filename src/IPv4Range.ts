@@ -5,12 +5,15 @@ import {IPv4Prefix} from "./Prefix";
 import {leftPadWithZeroBit} from "./BinaryUtils";
 import {binaryToBigInteger} from "./BinaryUtils";
 import {Validator} from "./Validator";
+//TODO why these two
+import {BigInteger} from "big-integer";
+import bigInt = require("big-integer");
 
 /**
  * Represents a continuous segment of IPv4 addresses
  */
 export class IPv4Range implements IterableIterator<IPv4> {
-    private readonly bitValue: number = 32;
+    private readonly bitValue: BigInteger = bigInt(32);
     private internalCounterValue: IPv4;
 
     static of(rangeIncidrNotation:string):IPv4Range {
@@ -28,14 +31,14 @@ export class IPv4Range implements IterableIterator<IPv4> {
         this.internalCounterValue = this.getFirst();
     }
 
-    public getSize(): number {
+    public getSize(): BigInteger {
         /**
          * Using bitwise shit operation this will be
          * 1 << (this.bitValue - this.prefix.getValue())
          * Since left shift a number by x is equivalent to multiplying the number by the power x raised to 2
          * 2 << 4 = 2 * (2 raised to 4)
           */
-       return Math.pow(2, (this.bitValue - this.cidrPrefix.getValue()));
+        return bigInt(2).pow(this.bitValue.minus(bigInt(this.cidrPrefix.getValue())));
     }
 
     public toCidrString(): string {
@@ -103,7 +106,7 @@ export class IPv4Range implements IterableIterator<IPv4> {
         let ipv4s: Array<IPv4>  = [this.getFirst()];
         let iteratingIPv4 = this.getFirst();
 
-        if (count > this.getSize()) {
+        if (bigInt(count).greater(this.getSize())) {
             throw new Error(`${count} is greater than ${this.getSize()}, the size of the range`);
         }
 
