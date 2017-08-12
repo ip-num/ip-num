@@ -7,6 +7,7 @@ import {hexadectetNotationToBinaryString} from "./HexadecimalUtils";
 export class Validator {
     static IPV4_PATTERN: RegExp = new RegExp(/^(0?[0-9]?[0-9]|1[0-9][0-9]|2[0-5][0-5])\.(0?[0-9]?[0-9]|1[0-9][0-9]|2[0-5][0-5])\.(0?[0-9]?[0-9]|1[0-9][0-9]|2[0-5][0-5])\.(0?[0-9]?[0-9]|1[0-9][0-9]|2[0-5][0-5])$/);
     static IPV4_RANGE_PATTERN: RegExp = new RegExp(/^(0?[0-9]?[0-9]|1[0-9][0-9]|2[0-5][0-5])\.(0?[0-9]?[0-9]|1[0-9][0-9]|2[0-5][0-5])\.(0?[0-9]?[0-9]|1[0-9][0-9]|2[0-5][0-5])\.(0?[0-9]?[0-9]|1[0-9][0-9]|2[0-5][0-5])(\/)([1-9]|[1-2][0-9]|3[0-2])$/);
+    static IPV6_RANGE_PATTERN: RegExp = new RegExp(/^s*((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:)))(%.+)?s*(\/([0-9]|[1-9][0-9]|1[0-1][0-9]|12[0-8]))?$/);
     static IPV4_SUBNET_BIT_PATTERN: RegExp = new RegExp(/^(1){0,32}(0){0,32}$/);
     static IPV6_SUBNET_BIT_PATTERN: RegExp = new RegExp(/^(1){0,128}(0){0,128}$/);
 
@@ -24,7 +25,8 @@ export class Validator {
     static invalidHexadecatetCountMessage = "An IP6 number cannot have less or greater than 8 octets";
     static invalidSubnetMessage = "The Subnet is invalid";
     static invalidPrefixValueMessage = "A Prefix value cannot be less than 0 or greater than 32 octets";
-    static invalidCidrNotationString = "A Cidr notation string should contain an IP address and prefix eg 9.9.9.9/24";
+    static invalidIPv4CidrNotationString = "A Cidr notation string should contain an IPv4 address and prefix";
+    static invalidIPv6CidrNotationString = "A Cidr notation string should contain an IPv6 address and prefix";
     /**
      * Checks if the number given is within the value considered valid for an ASN number
      *
@@ -138,9 +140,15 @@ export class Validator {
 
     // TODO maybe switch to a non-regex, manual validation? the benefit of that is it would be possible
     // to actually report why the given string is an invalid cidr notation
-    static isValidCidrNotation(ipv4Range: string): [boolean, string] {
+    static isValidIPv4CidrNotation(ipv4Range: string): [boolean, string] {
         let isValid = Validator.IPV4_RANGE_PATTERN.test(ipv4Range);
-        return isValid ? [isValid, "valid"]: [isValid, Validator.invalidCidrNotationString];
+        return isValid ? [isValid, "valid"]: [isValid, Validator.invalidIPv4CidrNotationString];
     }
+
+    static isValidIPv6CidrNotation(ipv6Range: string): [boolean, string] {
+        let isValid = Validator.IPV6_RANGE_PATTERN.test(ipv6Range);
+        return isValid ? [isValid, "valid"]: [isValid, Validator.invalidIPv6CidrNotationString];
+    }
+
 }
 

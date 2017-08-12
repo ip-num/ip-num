@@ -4,10 +4,26 @@ import {BigInteger} from "big-integer";
 import bigInt = require("big-integer");
 import {leftPadWithZeroBit} from "./BinaryUtils";
 import {binaryToBigInteger} from "./BinaryUtils";
+import {Validator} from "./Validator";
+import {bigIntegerNumberToBinaryString} from "./BinaryUtils";
+import {hexadecimalStringToBinaryString} from "./HexadecimalUtils";
+import {hexadectetNotationToBinaryString} from "./HexadecimalUtils";
 
 export class IPv6Range implements IterableIterator<IPv6> {
     private readonly bitValue: BigInteger = bigInt(128);
     private internalCounterValue: IPv6;
+
+    static of(rangeIncidrNotation:string):IPv6Range {
+        let [isValid, message] = Validator.isValidIPv6CidrNotation(rangeIncidrNotation);
+        if (!isValid) {
+            throw new Error(message);
+        }
+        let cidrComponents: Array<string> = rangeIncidrNotation.split("/");
+        let ipString = cidrComponents[0];
+        let prefix = parseInt(cidrComponents[1]);
+
+        return new IPv6Range(IPv6.fromHexadecimalString(ipString), IPv6Prefix.of(prefix));
+    };
 
     constructor(private readonly ipv6: IPv6, private readonly cidrPrefix: IPv6Prefix) {
         this.internalCounterValue = this.getFirst();
@@ -38,7 +54,7 @@ export class IPv6Range implements IterableIterator<IPv6> {
     public getLast(): IPv6 {
         let onMask = bigInt("1".repeat(128), 2);
         let subnetAsBigInteger = this.cidrPrefix.toSubnet().getValue();
-        let invertedSubnet = leftPadWithZeroBit(subnetAsBigInteger.xor(onMask).toString(2), 32);
+        let invertedSubnet = leftPadWithZeroBit(subnetAsBigInteger.xor(onMask).toString(2), 128);
         return IPv6.fromBigInteger(this.ipv6.getValue().or(binaryToBigInteger(invertedSubnet)));
     }
 

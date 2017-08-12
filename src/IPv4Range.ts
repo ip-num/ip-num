@@ -17,7 +17,7 @@ export class IPv4Range implements IterableIterator<IPv4> {
     private internalCounterValue: IPv4;
 
     static of(rangeIncidrNotation:string):IPv4Range {
-        let [isValid, message] = Validator.isValidCidrNotation(rangeIncidrNotation);
+        let [isValid, message] = Validator.isValidIPv4CidrNotation(rangeIncidrNotation);
         if (!isValid) {
             throw new Error(message);
         }

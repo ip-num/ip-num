@@ -75,7 +75,7 @@ class IPv6Prefix {
 
     public toSubnet(): IPv6Subnet {
         let onBits = '1'.repeat(this.value);
-        let offBits = '0'.repeat(32 - this.value);
+        let offBits = '0'.repeat(128 - this.value);
         return IPv6Subnet.of(this.toHexadecatetNotation(`${onBits}${offBits}`));
     }
 

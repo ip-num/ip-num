@@ -20,7 +20,7 @@ export class IPv6 implements InetNumber {
         return new IPv6(bigIntValue);
     }
 
-    static fromHexadecimal(ipString: string) : IPv6 {
+    static fromHexadecimalString(ipString: string) : IPv6 {
         return new IPv6(ipString);
     }
 
@@ -92,6 +92,7 @@ export class IPv6 implements InetNumber {
         if (!isValid) {
             throw new Error(message);
         }
+
         let binaryString = bigIntegerNumberToBinaryString(ipv6Number);
         return [ipv6Number, this.hexadecimalStringToHexadecatets(binaryString)]
     }
@@ -111,9 +112,10 @@ export class IPv6 implements InetNumber {
     }
 
     private hexadecimalStringToHexadecatets(binaryString: string): Hexadecatet[] {
-        let hexadecatetAsBinary: string[] = binaryString.match(/.{1,16}/g)!;
-        return hexadecatetAsBinary.map((hexadecatetBinary)=> {
-            return Hexadecatet.of(binaryStringToHexadecimalString(hexadecatetBinary));
+        let hexadecimalString = binaryStringToHexadecimalString(binaryString);
+        let hexadecimalStrings: string[] = hexadecimalString.match(/.{1,4}/g)!;
+        return hexadecimalStrings.map((stringHexadecatet)=> {
+            return Hexadecatet.of(stringHexadecatet);
         });
     }
 }
