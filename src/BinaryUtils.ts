@@ -37,7 +37,7 @@ export let bigIntegerNumberToBinaryString = (num: bigInt.BigInteger): string => 
  * @returns {number}
  */
 export let binaryToBigInteger = (num:string): bigInt.BigInteger => {
-    return bigInt(parseInt(Number(num).toString(), 2));
+    return bigInt(num, 2);
 };
 
 /**

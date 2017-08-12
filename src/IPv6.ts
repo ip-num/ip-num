@@ -94,7 +94,7 @@ export class IPv6 implements InetNumber {
         }
 
         let binaryString = bigIntegerNumberToBinaryString(ipv6Number);
-        return [ipv6Number, this.hexadecimalStringToHexadecatets(binaryString)]
+        return [ipv6Number, this.binaryStringToHexadecatets(binaryString)]
     }
 
     private constructFromHexadecimalDottedString(expandedIPv6: string): [bigInt.BigInteger, Array<Hexadecatet>] {
@@ -111,7 +111,7 @@ export class IPv6 implements InetNumber {
         return [value, hexadecatet];
     }
 
-    private hexadecimalStringToHexadecatets(binaryString: string): Hexadecatet[] {
+    private binaryStringToHexadecatets(binaryString: string): Hexadecatet[] {
         let hexadecimalString = binaryStringToHexadecimalString(binaryString);
         let hexadecimalStrings: string[] = hexadecimalString.match(/.{1,4}/g)!;
         return hexadecimalStrings.map((stringHexadecatet)=> {
