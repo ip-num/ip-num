@@ -161,7 +161,6 @@ export class IPv6Range implements IterableIterator<IPv6> {
         throw new Error("Method not implemented.");
     }
 
-
     [Symbol.iterator](): IterableIterator<IPv6> {
         return this;
     }
