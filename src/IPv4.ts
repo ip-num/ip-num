@@ -58,6 +58,10 @@ export class IPv4 implements InetNumber {
         return this.octets.map((value) => { return value.toString()}).join(".");
     }
 
+    public toBinaryString(): string {
+        return leftPadWithZeroBit(this.value.toString(2), 32);
+    }
+
     public getOctets(): Array<Octet> {
         return this.octets;
     }

@@ -115,4 +115,13 @@ describe('IPv6: ', () => {
         expect(IPv6.fromBigInteger(bigInt("1234")).isGreaterThanOrEquals(IPv6.fromBigInteger(bigInt("12345")))).toEqual(false);
         expect(IPv6.fromBigInteger(bigInt("12345")).isGreaterThanOrEquals(IPv6.fromBigInteger(bigInt("12345")))).toEqual(true);
     });
+
+    it('should correctly return address as binary string', () => {
+        let value = new IPv6("2001:db8::");
+        expect(value.toBinaryString()).toEqual("00100000000000010000110110111000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000");
+        let lastValue = new IPv6("ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff");
+        expect(lastValue.toBinaryString()).toEqual("11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111");
+        let firstValue = new IPv6("::");
+        expect(firstValue.toBinaryString()).toEqual("00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000");
+    });
 });

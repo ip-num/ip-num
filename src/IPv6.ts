@@ -6,6 +6,7 @@ import {binaryStringToHexadecimalString} from "./HexadecimalUtils";
 import {expandIPv6Address} from "./IPv6Utils";
 import {hexadectetNotationToBinaryString} from "./HexadecimalUtils";
 import * as bigInt from "big-integer/BigInteger";
+import {leftPadWithZeroBit} from "./BinaryUtils";
 
 
 /**
@@ -44,6 +45,10 @@ export class IPv6 implements InetNumber {
 
     public toString(): string {
         return this.hexadecatet.map((value) => { return value.toString()}).join(":");
+    }
+
+    public toBinaryString() : string {
+        return leftPadWithZeroBit(this.value.toString(2),128);
     }
 
     //TODO maybe rename to something like getSegments? so it can be same with getOctet

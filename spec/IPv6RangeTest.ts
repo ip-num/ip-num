@@ -1,7 +1,6 @@
 import {IPv6} from "../src/IPv6";
 import {IPv6Prefix} from "../src/Prefix";
 import {IPv6Range} from "../src/IPv6Range";
-import {hexadectetNotationToBinaryString} from "../src/HexadecimalUtils";
 
 
 describe('IPv6Range: ', () => {

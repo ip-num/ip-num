@@ -100,4 +100,12 @@ describe('IPv4: ', () => {
         }).toThrowError(Error, Validator.invalidIPv4NumberMessage);
     });
 
+    it('should correctly return address as binary string', () => {
+        let value = new IPv4("74.125.43.99");
+        expect(value.toBinaryString()).toEqual("01001010011111010010101101100011");
+        let lastValue = new IPv4("255.255.255.255");
+        expect(lastValue.toBinaryString()).toEqual("11111111111111111111111111111111");
+        let firstValue = new IPv4("0.0.0.0");
+        expect(firstValue.toBinaryString()).toEqual("00000000000000000000000000000000");
+    });
 });
