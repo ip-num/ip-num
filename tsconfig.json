@@ -4,7 +4,7 @@
     "compilerOptions": {
       "strict": true,
       "moduleResolution": "node",
-      "module": "commonjs",
+      "module": "umd",
       "noFallthroughCasesInSwitch": true,
       "noImplicitReturns": true,
       "noUnusedLocals":false,
