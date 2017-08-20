@@ -3,7 +3,7 @@
 import {IPv4} from "./IPv4";
 import {IPv4Prefix} from "./Prefix";
 import {leftPadWithZeroBit} from "./BinaryUtils";
-import {binaryToBigInteger} from "./BinaryUtils";
+import {parseBinaryStringToBigInteger} from "./BinaryUtils";
 import {Validator} from "./Validator";
 //TODO why these two
 import {BigInteger} from "big-integer";
@@ -57,7 +57,7 @@ export class IPv4Range implements IterableIterator<IPv4> {
         let onMask = bigInt("1".repeat(32), 2);
         let subnetAsBigInteger = this.cidrPrefix.toSubnet().getValue();
         let invertedSubnet = leftPadWithZeroBit(subnetAsBigInteger.xor(onMask).toString(2), 32);
-        return IPv4.fromBigInteger(this.ipv4.getValue().or(binaryToBigInteger(invertedSubnet)));
+        return IPv4.fromBigInteger(this.ipv4.getValue().or(parseBinaryStringToBigInteger(invertedSubnet)));
     }
 
     public isConsecutive(otherRange: IPv4Range): boolean {

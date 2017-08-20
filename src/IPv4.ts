@@ -6,7 +6,7 @@ import {InetNumber} from "./interface/InetNumber";
 import * as bigInt from "big-integer"
 import {dottedDecimalNotationToBinaryString} from "./BinaryUtils";
 import {bigIntegerNumberToBinaryString} from "./BinaryUtils";
-import {binaryToBigInteger} from "./BinaryUtils";
+import {parseBinaryStringToBigInteger} from "./BinaryUtils";
 import {leftPadWithZeroBit} from "./BinaryUtils";
 
 /**
@@ -132,7 +132,7 @@ export class IPv4 implements InetNumber {
         }
         let octets: string[] = ipv4BinaryString.match(/.{1,8}/g)!;
         return octets.map((octet) => {
-            return Octet.of(binaryToBigInteger(octet).toString())
+            return Octet.of(parseBinaryStringToBigInteger(octet).toString())
         });
     }
 }

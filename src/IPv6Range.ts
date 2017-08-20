@@ -3,7 +3,7 @@ import {IPv6} from "./IPv6";
 import {BigInteger} from "big-integer";
 import bigInt = require("big-integer");
 import {leftPadWithZeroBit} from "./BinaryUtils";
-import {binaryToBigInteger} from "./BinaryUtils";
+import {parseBinaryStringToBigInteger} from "./BinaryUtils";
 import {Validator} from "./Validator";
 import {bigIntegerNumberToBinaryString} from "./BinaryUtils";
 import {hexadecimalStringToBinaryString} from "./HexadecimalUtils";
@@ -55,7 +55,7 @@ export class IPv6Range implements IterableIterator<IPv6> {
         let onMask = bigInt("1".repeat(128), 2);
         let subnetAsBigInteger = this.cidrPrefix.toSubnet().getValue();
         let invertedSubnet = leftPadWithZeroBit(subnetAsBigInteger.xor(onMask).toString(2), 128);
-        return IPv6.fromBigInteger(this.ipv6.getValue().or(binaryToBigInteger(invertedSubnet)));
+        return IPv6.fromBigInteger(this.ipv6.getValue().or(parseBinaryStringToBigInteger(invertedSubnet)));
     }
 
     public isConsecutive(otherRange: IPv6Range): boolean {

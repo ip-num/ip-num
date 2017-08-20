@@ -2,7 +2,7 @@ import * as bigInt from "big-integer/BigInteger";
 
 'use strict';
 /**
- * Converts a number to binary string
+ * Converts a decimal number to binary string
  *
  * @param num number to parse
  * @returns {string} the binary string representation of number
@@ -10,15 +10,6 @@ import * as bigInt from "big-integer/BigInteger";
 
 export let decimalNumberToBinaryString = (num:number):string => {
     return Number(num).toString(2);
-};
-
-export let decimalNumberToBinaryOctet = (num:number): string => {
-    let binaryString = decimalNumberToBinaryString(num);
-    let length = binaryString.length;
-    if (length > 8) {
-        throw new Error("Given decimal in binary contains digits greater than an octet")
-    }
-    return leftPadWithZeroBit(binaryString, 8);
 };
 
 /**
@@ -30,13 +21,30 @@ export let bigIntegerNumberToBinaryString = (num: bigInt.BigInteger): string => 
     return num.toString(2);
 };
 
+
 /**
- * Converts a string binary number to number in BigInteger
+ * Converts a decimal number to binary octet (8 bit) string. If needed the octet will be padded with zeros
+ * to make it up to 8 bits
  *
- * @param num binary number in string to convert
- * @returns {number}
+ * @param {number} num to convert to octet string
+ * @returns {string} the octet string representation of given number
  */
-export let binaryToBigInteger = (num:string): bigInt.BigInteger => {
+export let decimalNumberToOctetString = (num:number): string => {
+    let binaryString = decimalNumberToBinaryString(num);
+    let length = binaryString.length;
+    if (length > 8) {
+        throw new Error("Given decimal in binary contains digits greater than an octet")
+    }
+    return leftPadWithZeroBit(binaryString, 8);
+};
+
+/**
+ * Parses number in binary to number in BigInteger
+ *
+ * @param num binary number in string to parse
+ * @returns {number} binary number in BigInteger
+ */
+export let parseBinaryStringToBigInteger = (num:string): bigInt.BigInteger => {
     return bigInt(num, 2);
 };
 
@@ -50,7 +58,7 @@ export let binaryToBigInteger = (num:string): bigInt.BigInteger => {
 export let dottedDecimalNotationToBinaryString = (dottedDecimal: string): string => {
     let stringOctets = dottedDecimal.split(".");
     return stringOctets.reduce((binaryAsString, octet) => {
-        return binaryAsString.concat(decimalNumberToBinaryOctet(parseInt(octet)));
+        return binaryAsString.concat(decimalNumberToOctetString(parseInt(octet)));
     }, '');
 };
 
@@ -61,8 +69,8 @@ export let dottedDecimalNotationToBinaryString = (dottedDecimal: string): string
  * @returns {string}
  */
 export let leftPadWithZeroBit = (binaryString: string, finalStringLength: number): string => {
-    if (binaryString.length >= finalStringLength) {
-        return binaryString;
+    if (binaryString.length > finalStringLength) {
+        throw new Error(`Given string is already longer than ${finalStringLength}`);
     }
     return "0".repeat(finalStringLength - binaryString.length).concat(binaryString);
 };

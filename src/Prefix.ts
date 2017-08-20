@@ -2,7 +2,7 @@
 
 import {Validator} from "./Validator";
 import {IPv4Subnet} from "./Subnet";
-import {binaryToBigInteger} from "./BinaryUtils";
+import {parseBinaryStringToBigInteger} from "./BinaryUtils";
 import {InetNumType} from "./InetNumType";
 import {IPv6Subnet} from "./Subnet";
 import {binaryStringToHexadecimalString} from "./HexadecimalUtils";
@@ -44,7 +44,7 @@ class IPv4Prefix {
     }
 
     private toDecimalNotation(bits:string): string {
-        return `${binaryToBigInteger(bits.substr(0,8))}.${binaryToBigInteger(bits.substr(8,8))}.${binaryToBigInteger(bits.substr(16,8))}.${binaryToBigInteger(bits.substr(24,8))}`
+        return `${parseBinaryStringToBigInteger(bits.substr(0,8))}.${parseBinaryStringToBigInteger(bits.substr(8,8))}.${parseBinaryStringToBigInteger(bits.substr(16,8))}.${parseBinaryStringToBigInteger(bits.substr(24,8))}`
     }
 }
 
