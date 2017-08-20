@@ -26,18 +26,18 @@ describe('Binary Utils', () => {
     it('Should correctly convert decimal number to octets', () => {
         let decimalValue = 10;
         let octet = BinaryUtils.decimalNumberToOctetString(decimalValue);
-        expect(octet).toEqual("00001010")
+        expect(octet).toEqual('00001010')
     });
     it('Should throw an exception when converting to octet and value is larger than an octet', () => {
         expect(() => {
             BinaryUtils.decimalNumberToOctetString(122222222222);
-        }).toThrowError(Error, "Given decimal in binary contains digits greater than an octet");
+        }).toThrowError(Error, 'Given decimal in binary contains digits greater than an octet');
     });
     it('Should correctly convert IP address in dotted decimal notation to binary string', () => {
-        expect(BinaryUtils.dottedDecimalNotationToBinaryString("2.16.217.69")).toEqual("00000010000100001101100101000101");
-        expect(BinaryUtils.dottedDecimalNotationToBinaryString("0.0.0.0")).toEqual("00000000000000000000000000000000");
-        expect(BinaryUtils.dottedDecimalNotationToBinaryString("255.255.255.255")).toEqual("11111111111111111111111111111111");
-        expect(BinaryUtils.dottedDecimalNotationToBinaryString("254.198.20.255")).toEqual("11111110110001100001010011111111");
+        expect(BinaryUtils.dottedDecimalNotationToBinaryString('2.16.217.69')).toEqual('00000010000100001101100101000101');
+        expect(BinaryUtils.dottedDecimalNotationToBinaryString('0.0.0.0')).toEqual('00000000000000000000000000000000');
+        expect(BinaryUtils.dottedDecimalNotationToBinaryString('255.255.255.255')).toEqual('11111111111111111111111111111111');
+        expect(BinaryUtils.dottedDecimalNotationToBinaryString('254.198.20.255')).toEqual('11111110110001100001010011111111');
     });
     it('Should pad given string with zeros to become given length', () => {
         expect(BinaryUtils.leftPadWithZeroBit('10', 5)).toEqual('00010');
@@ -46,6 +46,6 @@ describe('Binary Utils', () => {
     it('Should throw an exception if given string is already greater than required final length after padding', () => {
         expect(()=> {
             BinaryUtils.leftPadWithZeroBit('111111110', 5)
-        }).toThrowError(Error, "Given string is already longer than 5");
+        }).toThrowError(Error, 'Given string is already longer than 5');
     })
 });
