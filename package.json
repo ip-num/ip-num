@@ -1,7 +1,7 @@
 {
-  "name": "ip-math-js",
+  "name": "ip-num",
   "version": "1.0.0",
-  "description": "A javascript library that represents various internet resources also providing an API to perform various IP related operations like parsing, validating etc.",
+  "description": "A TypeScript library that represents various internet protocol numbers. It provides ability to perform various IP related operations like parsing, validating etc.",
   "main": "./dist/main.js",
   "scripts": {
     "compile": "tsc -p tsconfig.json",
@@ -11,7 +11,9 @@
   },
   "keywords": [
     "ip",
-    "ip-maths",
+    "ip-num",
+    "IP address",
+    "Internet Protocol",
     "Ipv4",
     "Ipv6",
     "Asn"
