@@ -2,7 +2,7 @@
 import {dottedDecimalNotationToBinaryString} from "./BinaryUtils";
 import * as bigInt from "big-integer";
 import {InetNumType} from "./InetNumType";
-import {hexadectetNotationToBinaryString} from "./HexadecimalUtils";
+import {hexadectetNotationToBinaryString} from "./IPv6Utils";
 
 export class Validator {
     static IPV4_PATTERN: RegExp = new RegExp(/^(0?[0-9]?[0-9]|1[0-9][0-9]|2[0-5][0-5])\.(0?[0-9]?[0-9]|1[0-9][0-9]|2[0-5][0-5])\.(0?[0-9]?[0-9]|1[0-9][0-9]|2[0-5][0-5])\.(0?[0-9]?[0-9]|1[0-9][0-9]|2[0-5][0-5])$/);

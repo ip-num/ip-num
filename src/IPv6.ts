@@ -4,7 +4,7 @@ import {Validator} from "./Validator";
 import {bigIntegerNumberToBinaryString} from "./BinaryUtils";
 import {binaryStringToHexadecimalString} from "./HexadecimalUtils";
 import {expandIPv6Address} from "./IPv6Utils";
-import {hexadectetNotationToBinaryString} from "./HexadecimalUtils";
+import {hexadectetNotationToBinaryString} from "./IPv6Utils";
 import * as bigInt from "big-integer/BigInteger";
 import {leftPadWithZeroBit} from "./BinaryUtils";
 

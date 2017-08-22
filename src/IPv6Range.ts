@@ -5,9 +5,6 @@ import bigInt = require("big-integer");
 import {leftPadWithZeroBit} from "./BinaryUtils";
 import {parseBinaryStringToBigInteger} from "./BinaryUtils";
 import {Validator} from "./Validator";
-import {bigIntegerNumberToBinaryString} from "./BinaryUtils";
-import {hexadecimalStringToBinaryString} from "./HexadecimalUtils";
-import {hexadectetNotationToBinaryString} from "./HexadecimalUtils";
 
 export class IPv6Range implements IterableIterator<IPv6> {
     private readonly bitValue: BigInteger = bigInt(128);

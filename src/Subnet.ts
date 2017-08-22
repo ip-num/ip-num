@@ -6,7 +6,7 @@ import {InetNumber} from "./interface/InetNumber";
 import * as bigInt from "big-integer"
 import {dottedDecimalNotationToBinaryString} from "./BinaryUtils";
 import {Hexadecatet} from "./Hexadecatet";
-import {hexadectetNotationToBinaryString} from "./HexadecimalUtils";
+import {hexadectetNotationToBinaryString} from "./IPv6Utils";
 
 export class IPv4Subnet implements InetNumber {
     readonly octets: Array<Octet> = [];

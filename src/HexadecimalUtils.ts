@@ -1,7 +1,6 @@
 import * as bigInt from "big-integer/BigInteger";
 
 'use strict';
-import {leftPadWithZeroBit} from "./BinaryUtils";
 
 /**
  * Converts a given BigInteger number to a hexadecimal string
@@ -10,18 +9,6 @@ import {leftPadWithZeroBit} from "./BinaryUtils";
  */
 export let bigIntegerNumberToHexadecimalString = (num: bigInt.BigInteger): string => {
     return num.toString(16);
-};
-
-/**
- * Converts a given IPv6 address expressed in the hexadecimal string notation into a 16 bit binary number in string
- * @param {string} hexadectetString the IPv6 number
- * @returns {string} the IPv6 number converted to binary string
- */
-export let hexadectetNotationToBinaryString = (hexadectetString: string): string => {
-    let hexadecimals = hexadectetString.split(":");
-    return hexadecimals.reduce((hexadecimalAsString, hexavalue) => {
-        return hexadecimalAsString.concat(leftPadWithZeroBit(hexadecimalStringToBinaryString(hexavalue),16));
-    }, '');
 };
 
 export let hexadecimalStringToBinaryString = (hexadeciamlString: string) : string => {
