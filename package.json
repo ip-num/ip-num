@@ -7,7 +7,13 @@
     "compile": "tsc -p tsconfig.json",
     "prepublish": "tsc --module commonjs",
     "test": "jasmine-ts spec/**/*.ts",
-    "test:watch": "npm run test -- -w"
+    "test:watch": "npm run test -- -w",
+    "test:coverage": "nyc -e .ts -x *.spec.ts jasmine-ts spec/**/*.ts"
+  },
+  "nyc": {
+    "reporter": [
+      "html"
+    ]
   },
   "keywords": [
     "ip",
@@ -27,6 +33,7 @@
     "jasmine-node": "1.14.5",
     "jasmine-spec-reporter": "4.1.0",
     "jasmine-ts": "0.2.0",
+    "nyc": "11.1.0",
     "tsunit.external": "2.0.11"
   }
 }

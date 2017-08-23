@@ -1,8 +1,9 @@
 # Created by .ignore support plugin (hsz.mobi)
 .idea
+.nyc_output
+coverage
 *.iml
 node_modules
-
 
 /spec/support/jasmine.json
 /src/*.js
