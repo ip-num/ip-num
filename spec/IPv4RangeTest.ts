@@ -1,7 +1,6 @@
 import {IPv4Range} from "../src/IPv4Range";
 import {IPv4} from "../src/IPv4";
 import {IPv4Prefix} from "../src/Prefix";
-import * as bigInt from "big-integer/BigInteger";
 
 
 describe('IPv4Range: ', () => {
