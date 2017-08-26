@@ -19,13 +19,13 @@ export class Validator {
     static invalidAsnRangeMessage = "ASN number given less than zero or is greater than 32bit";
     static invalidIPv4NumberMessage = "IPv4 number given less than zero or is greater than 32bit";
     static invalidIPv6NumberMessage = "IPv6 number given less than zero or is greater than 128bit";
-    static invalidOctetRangeMessage = "The value given is less than zero or is greater than 8bit";
+    static invalidOctetRangeMessage = "Value given contains an invalid Octet; Value is less than zero or is greater than 8bit";
     static invalidHexadecatetMessage = "The value given is less than zero or is greater than 16bit";
     static invalidOctetCountMessage = "An IP4 number cannot have less or greater than 4 octets";
     static invalidHexadecatetCountMessage = "An IP6 number cannot have less or greater than 8 octets";
     static invalidSubnetMessage = "The Subnet is invalid";
-    static invalidPrefixValueMessage = "A Prefix value cannot be less than 0 or greater than 32 octets";
-    static invalidIPv4CidrNotationString = "A Cidr notation string should contain an IPv4 address and prefix";
+    static invalidPrefixValueMessage = "A Prefix value cannot be less than 0 or greater than 32";
+    static invalidIPv4CidrNotationMessage = "Cidr notation should be in the form [ip address]/[range]";
     static invalidIPv6CidrNotationString = "A Cidr notation string should contain an IPv6 address and prefix";
     /**
      * Checks if the number given is within the value considered valid for an ASN number
@@ -138,11 +138,30 @@ export class Validator {
         return isValid ? [isValid, "valid"]: [isValid, Validator.invalidSubnetMessage];
     }
 
-    // TODO maybe switch to a non-regex, manual validation? the benefit of that is it would be possible
-    // to actually report why the given string is an invalid cidr notation
-    static isValidIPv4CidrNotation(ipv4Range: string): [boolean, string] {
-        let isValid = Validator.IPV4_RANGE_PATTERN.test(ipv4Range);
-        return isValid ? [isValid, "valid"]: [isValid, Validator.invalidIPv4CidrNotationString];
+
+    static isValidIPv4CidrNotation(ipv4Range: string): [boolean, string[]] {
+        let cidrComponents = ipv4Range.split("/");
+        if(cidrComponents.length !== 2 || (cidrComponents[0].length === 0 || cidrComponents[1].length === 0)) {
+            return [false, [Validator.invalidIPv4CidrNotationMessage]];
+        }
+
+        let ip = cidrComponents[0];
+        let range = cidrComponents[1];
+
+
+        let [validIpv4, invalidIpv4Message] = Validator.isValidIPv4DecimalNotationString(ip);
+        let [validPrefix, invalidPrefixMessage] = Validator.isValidPrefixValue(parseInt(range), InetNumType.IPv4);
+
+        let isValid = validIpv4 && validPrefix;
+        if (invalidIpv4Message === 'valid') {
+            invalidIpv4Message = '';
+        }
+        if (invalidPrefixMessage === 'valid') {
+            invalidPrefixMessage = '';
+        }
+        let invalidMessage = [invalidIpv4Message, invalidPrefixMessage];
+
+        return isValid ? [isValid, []]: [isValid, invalidMessage];
     }
 
     static isValidIPv6CidrNotation(ipv6Range: string): [boolean, string] {

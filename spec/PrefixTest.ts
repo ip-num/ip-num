@@ -1,6 +1,3 @@
-/**
- * Created by daderemi on 24/04/17.
- */
 
 import {IPv4Prefix} from "../src/Prefix";
 import {Validator} from "../src/Validator";
