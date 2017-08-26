@@ -1,6 +1,7 @@
 import {IPv4Range} from "../src/IPv4Range";
 import {IPv4} from "../src/IPv4";
 import {IPv4Prefix} from "../src/Prefix";
+import {Validator} from "../src/Validator";
 
 
 describe('IPv4Range: ', () => {
@@ -12,6 +13,17 @@ describe('IPv4Range: ', () => {
         let ipv4Range = IPv4Range.of("192.198.0.0/24");
         expect(ipv4Range.toCidrString()).toEqual("192.198.0.0/24");
     });
+
+    it('should throw exception when passed in a malformed range', () => {
+        let errorMessages = [Validator.invalidOctetRangeMessage, Validator.invalidPrefixValueMessage];
+        let errorMessage = errorMessages.filter(message => {return message !== ''}).join(" and ");
+        expect(() => {
+            IPv4Range.of("192.198.333.0/66");
+
+        }).toThrowError(Error, errorMessage);
+    });
+
+
     it('should return the first IPv4 address in range', () => {
         let ipv4Range = new IPv4Range(new IPv4("192.198.0.0"), new IPv4Prefix(24));
         expect(ipv4Range.getFirst().toString()).toEqual("192.198.0.0");

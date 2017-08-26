@@ -19,7 +19,8 @@ export class IPv4Range implements IterableIterator<IPv4> {
     static of(rangeIncidrNotation:string):IPv4Range {
         let [isValid, errorMessages] = Validator.isValidIPv4CidrNotation(rangeIncidrNotation);
         if (!isValid) {
-            throw new Error(errorMessages.join(","));
+            let messages = errorMessages.filter(message => {return message !== ''});
+            throw new Error(messages.join(' and '));
         }
         let cidrComponents: Array<string> = rangeIncidrNotation.split("/");
         let ipString = cidrComponents[0];
