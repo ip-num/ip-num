@@ -99,11 +99,11 @@ describe('IPv4Range: ', () => {
         }
     });
     it('should split IP range correctly', () => {
-        let ipv4Range = IPv4Range.of("192.168.0.0/24");
+        let ipv4Range = IPv4Range.of("192.168.208.0/24");
         let splitRanges: Array<IPv4Range> = ipv4Range.split();
         let firstRange = splitRanges[0];
         let secondRange = splitRanges[1];
-        expect(firstRange.toCidrString()).toBe("192.168.0.0/25");
-        expect(secondRange.toCidrString()).toBe("192.168.0.128/25");
-    })
+        expect(firstRange.toCidrString()).toBe("192.168.208.0/25");
+        expect(secondRange.toCidrString()).toBe("192.168.208.128/25");
+    });
 });
