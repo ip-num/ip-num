@@ -105,7 +105,7 @@ export class IPv4 implements InetNumber {
     private constructFromDecimalDottedString(ipString: string): [bigInt.BigInteger, Array<Octet>] {
         let octets;
         let value;
-        let [isValid, message] = Validator.isValidIPv4DecimalNotationString(ipString);
+        let [isValid, message] = Validator.isValidIPv4String(ipString);
         if (!isValid) {
             throw new Error(message);
         }

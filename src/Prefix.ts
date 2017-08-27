@@ -3,7 +3,7 @@
 import {Validator} from "./Validator";
 import {IPv4Subnet} from "./Subnet";
 import {parseBinaryStringToBigInteger} from "./BinaryUtils";
-import {InetNumType} from "./InetNumType";
+import {IPNumType} from "./InetNumType";
 import {IPv6Subnet} from "./Subnet";
 import {binaryStringToHexadecimalString} from "./HexadecimalUtils";
 import {Hexadecatet} from "./Hexadecatet";
@@ -22,7 +22,7 @@ class IPv4Prefix {
     constructor(rawValue: number) {
         let isValid: boolean;
         let message: string;
-        [isValid, message] = Validator.isValidPrefixValue(rawValue, InetNumType.IPv4);
+        [isValid, message] = Validator.isValidPrefixValue(rawValue, IPNumType.IPv4);
         if (!isValid) {
             throw new Error(message);
         }
@@ -58,7 +58,7 @@ class IPv6Prefix {
     constructor(rawValue: number) {
         let isValid: boolean;
         let message: string;
-        [isValid, message] = Validator.isValidPrefixValue(rawValue, InetNumType.IPv6);
+        [isValid, message] = Validator.isValidPrefixValue(rawValue, IPNumType.IPv6);
         if (!isValid) {
             throw new Error(message);
         }

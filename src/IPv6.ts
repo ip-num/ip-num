@@ -103,7 +103,7 @@ export class IPv6 implements InetNumber {
     }
 
     private constructFromHexadecimalDottedString(expandedIPv6: string): [bigInt.BigInteger, Array<Hexadecatet>] {
-        let [isValid, message] = Validator.isValidIPv6NotationString(expandedIPv6);
+        let [isValid, message] = Validator.isValidIPv6String(expandedIPv6);
         if (!isValid) {
             throw new Error(message);
         }
