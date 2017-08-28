@@ -20,7 +20,7 @@ export class Hexadecatet {
         let [isValid, message] = Validator.isValidIPv6Hexadecatet(bigInt(hexadecatetValue));
 
         if (!isValid) {
-            throw Error(message);
+            throw Error(message.filter(msg => {return msg !== '';}).toString());
         }
         this.value = hexadecatetValue;
     }

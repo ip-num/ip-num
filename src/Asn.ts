@@ -31,8 +31,9 @@ export class Asn implements InetNumber {
         }
         if (typeof rawValue === 'number') {
             let valueAsBigInt = bigInt(rawValue);
-            if (!Validator.isValidAsnNumber(valueAsBigInt)) {
-                throw Error(Validator.invalidAsnRangeMessage);
+            let [isValid, message] = Validator.isValidAsnNumber(valueAsBigInt);
+            if (!isValid) {
+                throw Error(message.filter(msg => {return msg !== '';}).toString());
             }
             this.value = valueAsBigInt;
         }
@@ -69,7 +70,8 @@ export class Asn implements InetNumber {
     }
 
     is16Bit():boolean {
-        return Validator.isValid16BitAsnNumber(this.value);
+        let [valid16BitAsnNumber,] = Validator.isValid16BitAsnNumber(this.value);
+        return valid16BitAsnNumber;
     }
 
     is32Bit():boolean {

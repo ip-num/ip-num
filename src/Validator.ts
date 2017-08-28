@@ -17,6 +17,7 @@ export class Validator {
     static ONE_HUNDRED_AND_TWENTY_EIGHT_BIT_SIZE: bigInt.BigInteger = bigInt("1".repeat(128), 2);
 
     static invalidAsnRangeMessage = "ASN number given less than zero or is greater than 32bit";
+    static invalid16BitAsnRangeMessage = "ASN number given less than zero or is greater than 16bit";
     static invalidIPv4NumberMessage = "IPv4 number given less than zero or is greater than 32bit";
     static invalidIPv6NumberMessage = "IPv6 number given less than zero or is greater than 128bit";
     static invalidOctetRangeMessage = "Value given contains an invalid Octet; Value is less than zero or is greater than 8bit";
@@ -27,132 +28,6 @@ export class Validator {
     static invalidPrefixValueMessage = "A Prefix value cannot be less than 0 or greater than 32";
     static invalidIPv4CidrNotationMessage = "Cidr notation should be in the form [ip address]/[range]";
     static invalidIPv6CidrNotationString = "A Cidr notation string should contain an IPv6 address and prefix";
-    /**
-     * Checks if the number given is within the value considered valid for an ASN number
-     *
-     * @param asnNumber the asn number to validate
-     * @returns {boolean} true if is valid value, false otherwise
-     */
-    static isValidAsnNumber(asnNumber: bigInt.BigInteger): boolean {
-        return this.isWithinRange(asnNumber, bigInt.zero, this.THIRTY_TWO_BIT_SIZE);
-    }
-
-    /**
-     * Checks if the given ASN number is a 16bit ASN number
-     *
-     * @param {bigInt.BigInteger} asnNumber to check if 16bit or not
-     * @returns {boolean} true if ASN is 16 bit
-     */
-    static isValid16BitAsnNumber(asnNumber: bigInt.BigInteger): boolean {
-        return Validator.isWithinRange(asnNumber, bigInt.zero, Validator.SIXTEEN_BIT_SIZE);
-    }
-
-    /**
-     * Checks if the number given is within the value considered valid for an IPv4 number
-     *
-     * @param ipv4Number the asn number to validate
-     * @returns {[boolean , string]} first value is true if valid IPv4 number, false otherwise. Second value contains
-     * "valid" or an error message when value is invalid
-     */
-    static isValidIPv4Number(ipv4Number: bigInt.BigInteger): [boolean, string]  {
-        let isValid = this.isWithinRange(ipv4Number, bigInt.zero, this.THIRTY_TWO_BIT_SIZE);
-        return isValid ? [isValid, "valid"]: [isValid, Validator.invalidIPv4NumberMessage];
-    }
-
-    /**
-     * Checks if the number given is within the value considered valid for an IPv6 number
-     *
-     * @param ipv6Number the asn number to validate
-     * @returns {[boolean , string]} first value is true if valid IPv6 number, false otherwise. Second value contains
-     * "valid" or an error message when value is invalid
-     */
-    static isValidIPv6Number(ipv6Number: bigInt.BigInteger): [boolean, string] {
-        let isValid = this.isWithinRange(ipv6Number, bigInt.zero, this.ONE_HUNDRED_AND_TWENTY_EIGHT_BIT_SIZE);
-        return isValid ? [isValid, "valid"]: [isValid, Validator.invalidIPv6NumberMessage];
-    }
-
-    /**
-     * Checks if the number given is valid for an IPv4 octet
-     *
-     * @param octetNumber the octet value
-     * @returns {boolean} true if valid octet, false otherwise
-     */
-    // TODO change this to return a tuple of is error and error message
-    static isValidIPv4Octet(octetNumber: bigInt.BigInteger): boolean {
-        return this.isWithinRange(octetNumber, bigInt.zero, this.EIGHT_BIT_SIZE);
-    }
-
-    /**
-     * Checks if the number given is valid for an IPv6 hexadecatet
-     *
-     * @param {bigInt.BigInteger} hexadecatetNum the hexadecatet value
-     * @returns {[boolean , string]} first value is true if valid hexadecatet, false otherwise. Second value contains
-     * "valid" or an error message when value is invalid
-     */
-    // TODO change this to return a tuple of is error and error message
-    static isValidIPv6Hexadecatet(hexadecatetNum: bigInt.BigInteger): [boolean, string] {
-        let isValid = this.isWithinRange(hexadecatetNum, bigInt.zero, this.SIXTEEN_BIT_SIZE);
-        return isValid ? [isValid, "valid"]: [isValid, Validator.invalidHexadecatetMessage];
-    }
-
-    /**
-     * Checks if given string is a valid IPv4 value.
-     *
-     * @param {string} ipv4String the IPv4 string to validate
-     * @returns {[boolean , string]} result of validation, first value represents if is valid IPv4, second value
-     * contains error message if invalid IPv4
-     */
-    static isValidIPv4String(ipv4String: string): [boolean, string] {
-        let rawOctets = ipv4String.split(".");
-
-        if (rawOctets.length != 4) {
-            return [false, Validator.invalidOctetCountMessage];
-        }
-
-        let isValid = rawOctets.every(octet => Validator.isValidIPv4Octet(bigInt(parseInt(octet))));
-
-        return [isValid, isValid ? "valid": Validator.invalidOctetRangeMessage];
-    }
-
-    /**
-     * Checks if given string is a valid IPv6 value.
-     *
-     * @param {string} ipv6String the IPv6 string to validate
-     * @returns {[boolean , string]} result of validation, first value represents if is valid IPv6, second value
-     * contains error message if invalid IPv6
-     */
-    static isValidIPv6String(ipv6String: string): [boolean, string] {
-        let hexadecimals = ipv6String.split(":");
-        if (hexadecimals.length != 8) {
-            return [false, Validator.invalidHexadecatetCountMessage]
-        }
-
-        let isValid = hexadecimals.every(hexadecimal => {
-            let numberValue = parseInt(hexadecimal, 16);
-            return Validator.isValidIPv6Hexadecatet(bigInt(numberValue))[0];
-        });
-
-        return [isValid, isValid? "valid": Validator.invalidHexadecatetMessage];
-    }
-
-    /**
-     * Checks if given value is a valid prefix value
-     *
-     * @param prefixValue value to check
-     * @param ipNumType The type of IP number
-     * @returns {(boolean|string)[]} a tuple representing if valid or not and corresponding message
-     */
-    static isValidPrefixValue(prefixValue: number, ipNumType: IPNumType): [boolean, string] {
-        if (IPNumType.IPv4 === ipNumType) {
-            let withinRange = Validator.isWithinRange(bigInt(prefixValue), bigInt.zero, bigInt(32));
-            return [withinRange, withinRange ? "valid": Validator.invalidPrefixValueMessage];
-        }
-        if (IPNumType.IPv6 === ipNumType) {
-            let withinRange = Validator.isWithinRange(bigInt(prefixValue), bigInt.zero, bigInt(128));
-            return [withinRange, withinRange ? "valid": Validator.invalidPrefixValueMessage];
-        }
-        return [false, "Given ipNumType must be either InetNumType.IPv4 or InetNumType.IPv6"]
-    }
 
     /**
      * Checks if given ipNumber is in between the given lower and upper bound
@@ -162,8 +37,141 @@ export class Validator {
      * @param upperBound upper bound
      * @returns {boolean} true if ipNumber is between lower and upper bound
      */
-    static isWithinRange(ipNumber: bigInt.BigInteger, lowerBound: bigInt.BigInteger, upperBound: bigInt.BigInteger) : boolean {
+    private static isWithinRange(ipNumber: bigInt.BigInteger, lowerBound: bigInt.BigInteger, upperBound: bigInt.BigInteger) : boolean {
         return ipNumber.greaterOrEquals(lowerBound) && ipNumber.lesserOrEquals(upperBound);
+    }
+
+    /**
+     * Checks if the number given is within the value considered valid for an ASN number
+     *
+     * @param asnNumber the asn number to validate
+     * @returns {[boolean , string]} first value is true if valid ASN, false otherwise. Second value contains
+     * "valid" or an error message when value is invalid
+     */
+    static isValidAsnNumber(asnNumber: bigInt.BigInteger): [boolean, string[]] {
+        let isValid = this.isWithinRange(asnNumber, bigInt.zero, this.THIRTY_TWO_BIT_SIZE);
+        return [isValid, isValid ? []: [Validator.invalidAsnRangeMessage]];
+    }
+
+    /**
+     * Checks if the given ASN number is a 16bit ASN number
+     *
+     * @param {bigInt.BigInteger} asnNumber to check if 16bit or not
+     * @returns {[boolean , string]} first value is true if valid 16bit ASN, false otherwise. Second value contains
+     * "valid" or an error message when value is invalid
+     */
+    static isValid16BitAsnNumber(asnNumber: bigInt.BigInteger): [boolean, string[]] {
+        let isValid = Validator.isWithinRange(asnNumber, bigInt.zero, Validator.SIXTEEN_BIT_SIZE);
+        return [isValid, isValid ? []: [Validator.invalid16BitAsnRangeMessage]];
+    }
+
+    /**
+     * Checks if the number given is within the value considered valid for an IPv4 number
+     *
+     * @param ipv4Number the asn number to validate
+     * @returns {[boolean , string]} first value is true if valid IPv4 number, false otherwise. Second value contains
+     * "valid" or an error message when value is invalid
+     */
+    static isValidIPv4Number(ipv4Number: bigInt.BigInteger): [boolean, string[]]  {
+        let isValid = this.isWithinRange(ipv4Number, bigInt.zero, this.THIRTY_TWO_BIT_SIZE);
+        return isValid ? [isValid, []]: [isValid, [Validator.invalidIPv4NumberMessage]];
+    }
+
+    /**
+     * Checks if the number given is within the value considered valid for an IPv6 number
+     *
+     * @param ipv6Number the asn number to validate
+     * @returns {[boolean , string]} first value is true if valid IPv6 number, false otherwise. Second value contains
+     * "valid" or an error message when value is invalid
+     */
+    static isValidIPv6Number(ipv6Number: bigInt.BigInteger): [boolean, string[]] {
+        let isValid = this.isWithinRange(ipv6Number, bigInt.zero, this.ONE_HUNDRED_AND_TWENTY_EIGHT_BIT_SIZE);
+        return isValid ? [isValid, []]: [isValid, [Validator.invalidIPv6NumberMessage]];
+    }
+
+    /**
+     * Checks if the number given is valid for an IPv4 octet
+     *
+     * @param octetNumber the octet value
+     * @returns {boolean} true if valid octet, false otherwise
+     */
+    static isValidIPv4Octet(octetNumber: bigInt.BigInteger): [boolean, string[]] {
+        let withinRange = this.isWithinRange(octetNumber, bigInt.zero, this.EIGHT_BIT_SIZE);
+        return [withinRange, withinRange ? []: [Validator.invalidOctetRangeMessage]];
+    }
+
+    /**
+     * Checks if the number given is valid for an IPv6 hexadecatet
+     *
+     * @param {bigInt.BigInteger} hexadecatetNum the hexadecatet value
+     * @returns {[boolean , string]} first value is true if valid hexadecatet, false otherwise. Second value contains
+     * "valid" or an error message when value is invalid
+     */
+    static isValidIPv6Hexadecatet(hexadecatetNum: bigInt.BigInteger): [boolean, string[]] {
+        let isValid = this.isWithinRange(hexadecatetNum, bigInt.zero, this.SIXTEEN_BIT_SIZE);
+        return isValid ? [isValid, []]: [isValid, [Validator.invalidHexadecatetMessage]];
+    }
+
+    /**
+     * Checks if given string is a valid IPv4 value.
+     *
+     * @param {string} ipv4String the IPv4 string to validate
+     * @returns {[boolean , string]} result of validation, first value represents if is valid IPv4, second value
+     * contains error message if invalid IPv4
+     */
+    static isValidIPv4String(ipv4String: string): [boolean, string[]] {
+        let rawOctets = ipv4String.split(".");
+
+        if (rawOctets.length != 4) {
+            return [false, [Validator.invalidOctetCountMessage]];
+        }
+
+        let isValid = rawOctets.every(octet => {
+            let [valid,] = Validator.isValidIPv4Octet(bigInt(parseInt(octet)));
+            return valid;
+        });
+
+        return [isValid, isValid ? []: [Validator.invalidOctetRangeMessage]];
+    }
+
+    /**
+     * Checks if given string is a valid IPv6 value.
+     *
+     * @param {string} ipv6String the IPv6 string to validate
+     * @returns {[boolean , string]} result of validation, first value represents if is valid IPv6, second value
+     * contains error message if invalid IPv6
+     */
+    static isValidIPv6String(ipv6String: string): [boolean, string[]] {
+        let hexadecimals = ipv6String.split(":");
+        if (hexadecimals.length != 8) {
+            return [false, [Validator.invalidHexadecatetCountMessage]]
+        }
+
+        let isValid = hexadecimals.every(hexadecimal => {
+            let numberValue = parseInt(hexadecimal, 16);
+            return Validator.isValidIPv6Hexadecatet(bigInt(numberValue))[0];
+        });
+
+        return [isValid, isValid? []: [Validator.invalidHexadecatetMessage]];
+    }
+
+    /**
+     * Checks if given value is a valid prefix value
+     *
+     * @param prefixValue value to check
+     * @param ipNumType The type of IP number
+     * @returns {(boolean|string)[]} a tuple representing if valid or not and corresponding message
+     */
+    static isValidPrefixValue(prefixValue: number, ipNumType: IPNumType): [boolean, string[]] {
+        if (IPNumType.IPv4 === ipNumType) {
+            let withinRange = Validator.isWithinRange(bigInt(prefixValue), bigInt.zero, bigInt(32));
+            return [withinRange, withinRange ? []: [Validator.invalidPrefixValueMessage]];
+        }
+        if (IPNumType.IPv6 === ipNumType) {
+            let withinRange = Validator.isWithinRange(bigInt(prefixValue), bigInt.zero, bigInt(128));
+            return [withinRange, withinRange ? []: [Validator.invalidPrefixValueMessage]];
+        }
+        return [false, ["Given ipNumType must be either InetNumType.IPv4 or InetNumType.IPv6"]]
     }
 
     /**
@@ -173,10 +181,10 @@ export class Validator {
      * @returns {[boolean , string]} first value is true if valid IPv4 subnet string, false otherwise. Second value
      * contains "valid" or an error message when value is invalid
      */
-    static isValidIPv4Subnet(ipv4SubnetString: string) : [boolean, string] {
+    static isValidIPv4Subnet(ipv4SubnetString: string) : [boolean, string[]] {
         let ipv4InBinary = dottedDecimalNotationToBinaryString(ipv4SubnetString);
         let isValid = Validator.IPV4_SUBNET_BIT_PATTERN.test(ipv4InBinary);
-        return isValid ? [isValid, "valid"]: [isValid, Validator.invalidSubnetMessage];
+        return isValid ? [isValid, []]: [isValid, [Validator.invalidSubnetMessage]];
     }
 
     /**
@@ -186,10 +194,10 @@ export class Validator {
      * @returns {[boolean , string]} first value is true if valid IPv6 subnet string, false otherwise. Second value
      * contains "valid" or an error message when value is invalid
      */
-    static isValidIPv6Subnet(ipv6SubnetString: string) : [boolean, string] {
+    static isValidIPv6Subnet(ipv6SubnetString: string) : [boolean, string[]] {
         let ipv6InBinary = hexadectetNotationToBinaryString(ipv6SubnetString);
         let isValid = Validator.IPV6_SUBNET_BIT_PATTERN.test(ipv6InBinary);
-        return isValid ? [isValid, "valid"]: [isValid, Validator.invalidSubnetMessage];
+        return isValid ? [isValid, []]: [isValid, [Validator.invalidSubnetMessage]];
     }
 
     /**
@@ -213,13 +221,7 @@ export class Validator {
         let [validPrefix, invalidPrefixMessage] = Validator.isValidPrefixValue(parseInt(range), IPNumType.IPv4);
 
         let isValid = validIpv4 && validPrefix;
-        if (invalidIpv4Message === 'valid') {
-            invalidIpv4Message = '';
-        }
-        if (invalidPrefixMessage === 'valid') {
-            invalidPrefixMessage = '';
-        }
-        let invalidMessage = [invalidIpv4Message, invalidPrefixMessage];
+        let invalidMessage = invalidIpv4Message.concat(invalidPrefixMessage);
 
         return isValid ? [isValid, []]: [isValid, invalidMessage];
     }
@@ -232,9 +234,9 @@ export class Validator {
      * @returns {[boolean , string]} first value is true if valid IPv6 range in Cidr notation, false otherwise.
      * Second value contains "valid" or an error message when value is invalid
      */
-    static isValidIPv6CidrNotation(ipv6RangeAsCidrString: string): [boolean, string] {
+    static isValidIPv6CidrNotation(ipv6RangeAsCidrString: string): [boolean, string[]] {
         let isValid = Validator.IPV6_RANGE_PATTERN.test(ipv6RangeAsCidrString);
-        return isValid ? [isValid, "valid"]: [isValid, Validator.invalidIPv6CidrNotationString];
+        return isValid ? [isValid, []]: [isValid, [Validator.invalidIPv6CidrNotationString]];
     }
 
 }

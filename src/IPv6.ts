@@ -95,7 +95,7 @@ export class IPv6 implements InetNumber {
     private constructFromBigIntegerValue(ipv6Number: bigInt.BigInteger): [bigInt.BigInteger, Array<Hexadecatet>]  {
         let [isValid, message] = Validator.isValidIPv6Number(ipv6Number);
         if (!isValid) {
-            throw new Error(message);
+            throw new Error(message.filter(msg => {return msg !== '';}).toString());
         }
 
         let binaryString = bigIntegerNumberToBinaryString(ipv6Number);
@@ -105,7 +105,7 @@ export class IPv6 implements InetNumber {
     private constructFromHexadecimalDottedString(expandedIPv6: string): [bigInt.BigInteger, Array<Hexadecatet>] {
         let [isValid, message] = Validator.isValidIPv6String(expandedIPv6);
         if (!isValid) {
-            throw new Error(message);
+            throw new Error(message.filter(msg => {return msg !== '';}).toString());
         }
 
         let stringHexadecimals: string[] = expandedIPv6.split(":");

@@ -107,7 +107,7 @@ export class IPv4 implements InetNumber {
         let value;
         let [isValid, message] = Validator.isValidIPv4String(ipString);
         if (!isValid) {
-            throw new Error(message);
+            throw new Error(message.filter(msg => {return msg !== '';}).toString());
         }
         let stringOctets = ipString.split(".");
         octets = stringOctets.map((rawOctet) => {
@@ -120,7 +120,7 @@ export class IPv4 implements InetNumber {
     private constructFromBigIntegerValue(ipv4Number: bigInt.BigInteger): [bigInt.BigInteger, Array<Octet>]  {
         let [isValid, message] = Validator.isValidIPv4Number(ipv4Number);
         if (!isValid) {
-            throw new Error(message);
+            throw new Error(message.filter(msg => {return msg !== '';}).toString());
         }
         let binaryString = bigIntegerNumberToBinaryString(ipv4Number);
         return [ipv4Number, this.binaryStringToDecimalOctets(binaryString)]

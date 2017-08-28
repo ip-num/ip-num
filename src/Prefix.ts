@@ -21,10 +21,10 @@ class IPv4Prefix {
 
     constructor(rawValue: number) {
         let isValid: boolean;
-        let message: string;
+        let message: string[];
         [isValid, message] = Validator.isValidPrefixValue(rawValue, IPNumType.IPv4);
         if (!isValid) {
-            throw new Error(message);
+            throw new Error(message.filter(msg => {return msg !== '';}).toString());
         }
         this.value = rawValue;
     }
@@ -57,10 +57,10 @@ class IPv6Prefix {
 
     constructor(rawValue: number) {
         let isValid: boolean;
-        let message: string;
+        let message: string[];
         [isValid, message] = Validator.isValidPrefixValue(rawValue, IPNumType.IPv6);
         if (!isValid) {
-            throw new Error(message);
+            throw new Error(message.filter(msg => {return msg !== '';}).toString());
         }
         this.value = rawValue;
     }

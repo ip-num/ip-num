@@ -16,9 +16,9 @@ export class Octet {
         } else {
             octetValue = givenValue;
         }
-
-        if (!Validator.isValidIPv4Octet(bigInt(octetValue))) {
-            throw Error(Validator.invalidOctetRangeMessage);
+        let [isValid, message] = Validator.isValidIPv4Octet(bigInt(octetValue));
+        if (!isValid) {
+            throw Error(message.filter(msg => {return msg !== '';}).toString());
         }
         this.value = octetValue;
     }

@@ -19,11 +19,11 @@ export class IPv4Subnet implements InetNumber {
     // TODO similar code as in constructor of IPv4, reuse?
     constructor(ipString: string) {
         let isValid: boolean;
-        let message: string;
+        let message: string[];
         [isValid, message] = Validator.isValidIPv4Subnet(ipString);
 
         if (!isValid) {
-            throw new Error(message);
+            throw new Error(message.filter(msg => {return msg !== '';}).toString());
         }
 
         let stringOctets = ipString.split(".");
@@ -60,12 +60,11 @@ export class IPv6Subnet implements InetNumber {
     // TODO similar code as in constructor of IPv4, reuse?
     constructor(ipString: string) {
         let isValid: boolean;
-        let message: string;
+        let message: string[];
         [isValid, message] = Validator.isValidIPv6Subnet(ipString);
 
-
         if (!isValid) {
-            throw new Error(message);
+            throw new Error(message.filter(msg => {return msg !== '';}).toString());
         }
 
         let stringHexadecimals = ipString.split(":");

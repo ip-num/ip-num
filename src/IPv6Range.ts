@@ -13,7 +13,7 @@ export class IPv6Range implements IterableIterator<IPv6> {
     static of(rangeIncidrNotation:string):IPv6Range {
         let [isValid, message] = Validator.isValidIPv6CidrNotation(rangeIncidrNotation);
         if (!isValid) {
-            throw new Error(message);
+            throw new Error(message.filter(msg => {return msg !== '';}).toString());
         }
         let cidrComponents: Array<string> = rangeIncidrNotation.split("/");
         let ipString = cidrComponents[0];
