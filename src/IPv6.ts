@@ -6,16 +6,19 @@ import {binaryStringToHexadecimalString} from "./HexadecimalUtils";
 import {expandIPv6Address} from "./IPv6Utils";
 import {hexadectetNotationToBinaryString} from "./IPv6Utils";
 import * as bigInt from "big-integer/BigInteger";
-import {leftPadWithZeroBit} from "./BinaryUtils";
+import {AbstractIPNum} from "./AbstractIPNum";
 
 
 /**
  * reference https://www.rfc-editor.org/rfc/rfc4291.txt
  * https://tools.ietf.org/html/rfc5952
  */
-export class IPv6 implements InetNumber {
-    value: bigInt.BigInteger;
+export class IPv6 extends AbstractIPNum implements InetNumber {
+    readonly value: bigInt.BigInteger;
     readonly hexadecatet: Array<Hexadecatet> = [];
+    readonly separator: string = ":";
+    readonly bitSize: number = 128;
+    readonly validatorBitSize: bigInt.BigInteger = Validator.ONE_HUNDRED_AND_TWENTY_EIGHT_BIT_SIZE;
 
     static fromBigInteger(bigIntValue: bigInt.BigInteger): IPv6 {
         return new IPv6(bigIntValue);
@@ -26,6 +29,7 @@ export class IPv6 implements InetNumber {
     }
 
     constructor(ipValue: string | bigInt.BigInteger) {
+        super();
         if (typeof ipValue === "string" ) {
             let expandedIPv6 = expandIPv6Address(ipValue);
             let [value, hexadecatet] = this.constructFromHexadecimalDottedString(expandedIPv6);
@@ -39,16 +43,8 @@ export class IPv6 implements InetNumber {
         }
     }
 
-    getValue(): bigInt.BigInteger {
-        return this.value;
-    }
-
     public toString(): string {
         return this.hexadecatet.map((value) => { return value.toString()}).join(":");
-    }
-
-    public toBinaryString() : string {
-        return leftPadWithZeroBit(this.value.toString(2),128);
     }
 
     //TODO maybe rename to something like getSegments? so it can be same with getOctet
@@ -62,34 +58,6 @@ export class IPv6 implements InetNumber {
 
     public previousIPAddress(): IPv6 {
         return IPv6.fromBigInteger(this.getValue().minus(1))
-    }
-
-    hasNext():boolean {
-         return this.value.lesser(Validator.ONE_HUNDRED_AND_TWENTY_EIGHT_BIT_SIZE);
-    }
-
-    hasPrevious():boolean {
-        return this.value.greater(bigInt.zero);
-    }
-
-    public isEquals(anotherIPv6: IPv6): boolean {
-        return this.value.equals(anotherIPv6.value);
-    }
-
-    public isLessThan(anotherIPv6: IPv6): boolean {
-        return this.value.lt(anotherIPv6.value);
-    }
-
-    public isGreaterThan(anotherIPv6: IPv6): boolean {
-        return this.value.gt(anotherIPv6.value);
-    }
-
-    public isLessThanOrEquals(anotherIPv6: IPv6): boolean {
-        return this.value.lesserOrEquals(anotherIPv6.value);
-    }
-
-    public isGreaterThanOrEquals(anotherIPv6: IPv6): boolean {
-        return this.value.greaterOrEquals(anotherIPv6.value);
     }
 
     private constructFromBigIntegerValue(ipv6Number: bigInt.BigInteger): [bigInt.BigInteger, Array<Hexadecatet>]  {

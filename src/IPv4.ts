@@ -8,6 +8,7 @@ import {dottedDecimalNotationToBinaryString} from "./BinaryUtils";
 import {bigIntegerNumberToBinaryString} from "./BinaryUtils";
 import {parseBinaryStringToBigInteger} from "./BinaryUtils";
 import {leftPadWithZeroBit} from "./BinaryUtils";
+import {AbstractIPNum} from "./AbstractIPNum";
 
 /**
  * Represents the 32 bit number that is used to uniquely identify a device that is part of a computer
@@ -15,17 +16,15 @@ import {leftPadWithZeroBit} from "./BinaryUtils";
  *
  * For more see https://en.wikipedia.org/wiki/IPv4
  */
-export class IPv4 implements InetNumber {
+export class IPv4 extends AbstractIPNum implements InetNumber {
     readonly value: bigInt.BigInteger;
     readonly octets: Array<Octet> = [];
-
+    readonly separator: string = ".";
+    readonly bitSize: number = 32;
+    readonly validatorBitSize: bigInt.BigInteger = Validator.THIRTY_TWO_BIT_SIZE;
 
     static fromBigInteger(bigIntValue: bigInt.BigInteger): IPv4 {
         return new IPv4(bigIntValue);
-    }
-
-    static fromNumber(numValue: number): IPv4 {
-        return new IPv4(bigInt(numValue));
     }
 
     static fromDecimalDottedString(ipString: string) : IPv4 {
@@ -39,6 +38,7 @@ export class IPv4 implements InetNumber {
     };
 
     constructor(ipValue: string | bigInt.BigInteger) {
+        super();
         if (typeof ipValue === "string" ) {
             let [value, octets] = this.constructFromDecimalDottedString(ipValue);
             this.value = value;
@@ -50,56 +50,20 @@ export class IPv4 implements InetNumber {
         }
     }
 
-    public getValue():bigInt.BigInteger {
-        return this.value;
-    }
-
     public toString(): string {
-        return this.octets.map((value) => { return value.toString()}).join(".");
-    }
-
-    public toBinaryString(): string {
-        return leftPadWithZeroBit(this.value.toString(2), 32);
+        return this.octets.map((value) => { return value.toString()}).join(this.separator);
     }
 
     public getOctets(): Array<Octet> {
         return this.octets;
     }
 
-    public nextIPv4(): IPv4 {
+    public nextIPAddress(): IPv4 {
         return IPv4.fromBigInteger(this.getValue().add(1))
     }
 
-    public previousIPv4(): IPv4 {
+    public previousIPAddress(): IPv4 {
         return IPv4.fromBigInteger(this.getValue().minus(1))
-    }
-
-    hasNext():boolean {
-        return this.value < Validator.THIRTY_TWO_BIT_SIZE;
-    }
-
-    hasPrevious():boolean {
-        return this.value.valueOf() > 0;
-    }
-
-    public isEquals(anotherIPv4: IPv4): boolean {
-        return this.value.equals(anotherIPv4.value);
-    }
-
-    public isLessThan(anotherIPv4: IPv4): boolean {
-        return this.value.lt(anotherIPv4.value);
-    }
-
-    public isGreaterThan(anotherIPv4: IPv4): boolean {
-        return this.value.gt(anotherIPv4.value);
-    }
-
-    public isLessThanOrEquals(anotherIPv4: IPv4): boolean {
-        return this.value.lesserOrEquals(anotherIPv4.value);
-    }
-
-    public isGreaterThanOrEquals(anotherIPv4: IPv4): boolean {
-        return this.value.greaterOrEquals(anotherIPv4.value);
     }
 
     private constructFromDecimalDottedString(ipString: string): [bigInt.BigInteger, Array<Octet>] {
