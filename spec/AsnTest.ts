@@ -6,6 +6,7 @@ import {Asn} from "../src/Asn";
 import {Validator} from "../src/Validator";
 
 import * as bigInt from "big-integer"
+import {AbstractIPNum} from "../src/AbstractIPNum";
 
 describe('ASN', () => {
     it('should instantiate by passing number to static method', () => {

@@ -1,7 +1,7 @@
 'use strict';
 import {dottedDecimalNotationToBinaryString} from "./BinaryUtils";
 import * as bigInt from "big-integer";
-import {IPNumType} from "./InetNumType";
+import {IPNumType} from "./IPNumType";
 import {hexadectetNotationToBinaryString} from "./IPv6Utils";
 
 export class Validator {

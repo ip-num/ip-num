@@ -73,30 +73,30 @@ describe('IPv4: ', () => {
 
     it('should return next IPv4 value', () => {
         let value = new IPv4("111.222.90.255");
-        expect(value.nextIPAddress().toString()).toEqual("111.222.91.0");
+        expect(value.nextIPNumber().toString()).toEqual("111.222.91.0");
     });
 
     it('should correctly tell if there is a next value for an IPv4', () => {
         let value = new IPv4("255.255.255.254");
         expect(value.hasNext()).toBe(true);
-        expect(value.nextIPAddress().hasNext()).toBe(false);
+        expect(value.nextIPNumber().hasNext()).toBe(false);
     });
 
     it('should correctly tell if there is a previous value for an IPv4', () => {
         let value = new IPv4("0.0.0.1");
         expect(value.hasPrevious()).toBe(true);
-        expect(value.previousIPAddress().hasPrevious()).toBe(false);
+        expect(value.previousIPNumber().hasPrevious()).toBe(false);
     });
 
     it('should return previous IPv4 value', () => {
         let value = new IPv4("111.222.91.0");
-        expect(value.previousIPAddress().toString()).toEqual("111.222.90.255");
+        expect(value.previousIPNumber().toString()).toEqual("111.222.90.255");
     });
 
     it('should throw exception when calling next leads to an invalid IPv4', () => {
         let value = new IPv4("255.255.255.255");
         expect(() => {
-            value.nextIPAddress();
+            value.nextIPNumber();
         }).toThrowError(Error, Validator.invalidIPv4NumberMessage);
     });
 

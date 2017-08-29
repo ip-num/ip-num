@@ -62,9 +62,9 @@ export class IPv6Range implements IterableIterator<IPv6> {
         let otherLast: IPv6 = otherRange.getLast();
 
         return (
-            thisLast.hasNext() && thisLast.nextIPAddress().isEquals(otherFirst)
+            thisLast.hasNext() && thisLast.nextIPNumber().isEquals(otherFirst)
             ||
-            otherLast.hasNext() && otherLast.nextIPAddress().isEquals(thisFirst)
+            otherLast.hasNext() && otherLast.nextIPNumber().isEquals(thisFirst)
         )
     }
 
@@ -108,8 +108,8 @@ export class IPv6Range implements IterableIterator<IPv6> {
         }
 
         for (var counter = 0; counter < count - 1; counter++) {
-            iPv6s.push(iteratingIPv6.nextIPAddress());
-            iteratingIPv6 = iteratingIPv6.nextIPAddress();
+            iPv6s.push(iteratingIPv6.nextIPNumber());
+            iteratingIPv6 = iteratingIPv6.nextIPNumber();
         }
         return iPv6s;
     }
@@ -122,7 +122,7 @@ export class IPv6Range implements IterableIterator<IPv6> {
         let splitCidr = IPv6Prefix.of(prefixToSplit + 1);
         let firstIPOfFirstRange = this.getFirst();
         let firstRange = new IPv6Range(firstIPOfFirstRange, splitCidr);
-        let firstIPOfSecondRange = firstRange.getLast().nextIPAddress();
+        let firstIPOfSecondRange = firstRange.getLast().nextIPNumber();
         let secondRange = new IPv6Range(firstIPOfSecondRange, splitCidr);
         return [firstRange, secondRange];
     }
@@ -132,7 +132,7 @@ export class IPv6Range implements IterableIterator<IPv6> {
     next(value?: any): IteratorResult<IPv6>;
     next(value?: any) {
         let returnValue = this.internalCounterValue;
-        this.internalCounterValue = this.internalCounterValue.nextIPAddress();
+        this.internalCounterValue = this.internalCounterValue.nextIPNumber();
 
         if (returnValue.isLessThanOrEquals(this.getLast())) {
             return {

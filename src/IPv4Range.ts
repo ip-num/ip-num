@@ -68,9 +68,9 @@ export class IPv4Range implements IterableIterator<IPv4> {
         let otherLast: IPv4 = otherRange.getLast();
 
         return (
-            thisLast.hasNext() && thisLast.nextIPAddress().isEquals(otherFirst)
+            thisLast.hasNext() && thisLast.nextIPNumber().isEquals(otherFirst)
             ||
-            otherLast.hasNext() && otherLast.nextIPAddress().isEquals(thisFirst)
+            otherLast.hasNext() && otherLast.nextIPNumber().isEquals(thisFirst)
         )
     }
 
@@ -114,8 +114,8 @@ export class IPv4Range implements IterableIterator<IPv4> {
         }
 
         for (var counter = 0; counter < count - 1; counter++) {
-            ipv4s.push(iteratingIPv4.nextIPAddress());
-            iteratingIPv4 = iteratingIPv4.nextIPAddress();
+            ipv4s.push(iteratingIPv4.nextIPNumber());
+            iteratingIPv4 = iteratingIPv4.nextIPNumber();
         }
         return ipv4s;
     }
@@ -128,7 +128,7 @@ export class IPv4Range implements IterableIterator<IPv4> {
         let splitCidr = IPv4Prefix.of(prefixToSplit + 1);
         let firstIPOfFirstRange = this.getFirst();
         let firstRange = new IPv4Range(firstIPOfFirstRange, splitCidr);
-        let firstIPOfSecondRange = firstRange.getLast().nextIPAddress();
+        let firstIPOfSecondRange = firstRange.getLast().nextIPNumber();
         let secondRange = new IPv4Range(firstIPOfSecondRange, splitCidr);
         return [firstRange, secondRange];
     }
@@ -137,7 +137,7 @@ export class IPv4Range implements IterableIterator<IPv4> {
     next(value?: any): IteratorResult<IPv4>;
     next(value?: any) {
         let returnValue = this.internalCounterValue;
-        this.internalCounterValue = this.internalCounterValue.nextIPAddress();
+        this.internalCounterValue = this.internalCounterValue.nextIPNumber();
 
         if (returnValue.isLessThanOrEquals(this.getLast())) {
             return {

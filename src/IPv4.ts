@@ -2,13 +2,14 @@
 
 import {Octet} from "./Octet";
 import {Validator} from "./Validator";
-import {InetNumber} from "./interface/InetNumber";
+import {IPNumber} from "./interface/IPNumber";
 import * as bigInt from "big-integer"
 import {dottedDecimalNotationToBinaryString} from "./BinaryUtils";
 import {bigIntegerNumberToBinaryString} from "./BinaryUtils";
 import {parseBinaryStringToBigInteger} from "./BinaryUtils";
 import {leftPadWithZeroBit} from "./BinaryUtils";
 import {AbstractIPNum} from "./AbstractIPNum";
+import {IPNumType} from "./IPNumType";
 
 /**
  * Represents the 32 bit number that is used to uniquely identify a device that is part of a computer
@@ -16,8 +17,9 @@ import {AbstractIPNum} from "./AbstractIPNum";
  *
  * For more see https://en.wikipedia.org/wiki/IPv4
  */
-export class IPv4 extends AbstractIPNum implements InetNumber {
+export class IPv4 extends AbstractIPNum implements IPNumber {
     readonly value: bigInt.BigInteger;
+    readonly type: IPNumType = IPNumType.IPv4;
     readonly octets: Array<Octet> = [];
     readonly separator: string = ".";
     readonly bitSize: number = 32;
@@ -58,11 +60,11 @@ export class IPv4 extends AbstractIPNum implements InetNumber {
         return this.octets;
     }
 
-    public nextIPAddress(): IPv4 {
+    public nextIPNumber(): IPv4 {
         return IPv4.fromBigInteger(this.getValue().add(1))
     }
 
-    public previousIPAddress(): IPv4 {
+    public previousIPNumber(): IPv4 {
         return IPv4.fromBigInteger(this.getValue().minus(1))
     }
 

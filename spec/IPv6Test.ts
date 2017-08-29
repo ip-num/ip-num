@@ -61,38 +61,38 @@ describe('IPv6: ', () => {
 
     it('should correctly return the next value when nextIPAddress is called', () => {
         let iPv6 = IPv6.fromHexadecimalString("ffff:ffff:ffff:ffff:ffff:ffff:ffff:fffe");
-        expect(iPv6.nextIPAddress().toString()).toEqual("ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff");
+        expect(iPv6.nextIPNumber().toString()).toEqual("ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff");
     });
 
     it('should correctly return the previous value when previousIPAddress is called', () => {
         let iPv6 = IPv6.fromHexadecimalString("ffff:ffff:ffff:ffff:ffff:ffff:ffff:fffe");
-        expect(iPv6.previousIPAddress().toString()).toEqual("ffff:ffff:ffff:ffff:ffff:ffff:ffff:fffd");
+        expect(iPv6.previousIPNumber().toString()).toEqual("ffff:ffff:ffff:ffff:ffff:ffff:ffff:fffd");
     });
 
     it('should throw exception when calling next leads to an invalid IPv4', () => {
         let value = IPv6.fromHexadecimalString("ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff");
         expect(() => {
-            value.nextIPAddress();
+            value.nextIPNumber();
         }).toThrowError(Error, Validator.invalidIPv6NumberMessage);
     });
 
     it('should throw exception when calling previous leads to an invalid IPv4', () => {
         let value = IPv6.fromHexadecimalString("::000");
         expect(() => {
-            value.previousIPAddress();
+            value.previousIPNumber();
         }).toThrowError(Error, Validator.invalidIPv6NumberMessage);
     });
 
     it('should correctly tell if there is a next value for an IPv6', () => {
         let value: IPv6 = IPv6.fromHexadecimalString("ffff:ffff:ffff:ffff:ffff:ffff:ffff:fffe");
         expect(value.hasNext()).toBe(true);
-        expect(value.nextIPAddress().hasNext()).toBe(false);
+        expect(value.nextIPNumber().hasNext()).toBe(false);
     });
 
     it('should correctly tell if there is a previous value for an IPv6', () => {
         let value = IPv6.fromHexadecimalString("::001");
         expect(value.hasPrevious()).toBe(true);
-        expect(value.previousIPAddress().hasPrevious()).toBe(false);
+        expect(value.previousIPNumber().hasPrevious()).toBe(false);
     });
 
     it('should correctly check equality related operations', () => {

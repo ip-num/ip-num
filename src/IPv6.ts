@@ -1,4 +1,4 @@
-import {InetNumber} from "./interface/InetNumber";
+import {IPNumber} from "./interface/IPNumber";
 import {Hexadecatet} from "./Hexadecatet";
 import {Validator} from "./Validator";
 import {bigIntegerNumberToBinaryString} from "./BinaryUtils";
@@ -7,14 +7,16 @@ import {expandIPv6Address} from "./IPv6Utils";
 import {hexadectetNotationToBinaryString} from "./IPv6Utils";
 import * as bigInt from "big-integer/BigInteger";
 import {AbstractIPNum} from "./AbstractIPNum";
+import {IPNumType} from "./IPNumType";
 
 
 /**
  * reference https://www.rfc-editor.org/rfc/rfc4291.txt
  * https://tools.ietf.org/html/rfc5952
  */
-export class IPv6 extends AbstractIPNum implements InetNumber {
+export class IPv6 extends AbstractIPNum implements IPNumber {
     readonly value: bigInt.BigInteger;
+    readonly type: IPNumType = IPNumType.IPv6;
     readonly hexadecatet: Array<Hexadecatet> = [];
     readonly separator: string = ":";
     readonly bitSize: number = 128;
@@ -43,20 +45,20 @@ export class IPv6 extends AbstractIPNum implements InetNumber {
         }
     }
 
-    public toString(): string {
-        return this.hexadecatet.map((value) => { return value.toString()}).join(":");
-    }
-
     //TODO maybe rename to something like getSegments? so it can be same with getOctet
     public getHexadecatet():Array<Hexadecatet> {
         return this.hexadecatet;
     }
 
-    public nextIPAddress(): IPv6 {
+    public toString(): string {
+        return this.hexadecatet.map((value) => { return value.toString()}).join(":");
+    }
+
+    public nextIPNumber(): IPv6 {
         return IPv6.fromBigInteger(this.getValue().add(1))
     }
 
-    public previousIPAddress(): IPv6 {
+    public previousIPNumber(): IPv6 {
         return IPv6.fromBigInteger(this.getValue().minus(1))
     }
 

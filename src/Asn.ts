@@ -1,9 +1,11 @@
 'use strict';
 
 import {Validator} from "./Validator"
-import {InetNumber} from "./interface/InetNumber"
+import {IPNumber} from "./interface/IPNumber"
 import {decimalNumberToBinaryString} from "./BinaryUtils";
 import * as bigInt from "big-integer"
+import {IPNumType} from "./IPNumType";
+import {AbstractIPNum} from "./AbstractIPNum";
 
 /**
  * Represents an Autonomous System Number. Which is a number that is used to identify
@@ -11,7 +13,11 @@ import * as bigInt from "big-integer"
  *
  * For more see https://en.wikipedia.org/wiki/Autonomous_system_(Internet)
  */
-export class Asn implements InetNumber {
+export class Asn extends AbstractIPNum implements IPNumber {
+    bitSize: number = 32;
+    validatorBitSize: bigInt.BigInteger = Validator.THIRTY_TWO_BIT_SIZE;
+    type: IPNumType = IPNumType.ASN;
+
     readonly value:bigInt.BigInteger;
     private static AS_PREFIX = "AS";
 
@@ -20,6 +26,7 @@ export class Asn implements InetNumber {
     };
 
     constructor(rawValue:string | number) {
+        super();
         if (typeof rawValue === 'string') {
             if (Asn.startWithASprefix(rawValue)) {
                 this.value = bigInt(parseInt(rawValue.substring(2)));
@@ -104,6 +111,14 @@ export class Asn implements InetNumber {
 
     previous():Asn {
         return new Asn(this.value.valueOf() - 1)
+    }
+
+    nextIPNumber(): IPNumber {
+        return this.next();
+    }
+
+    previousIPNumber(): IPNumber {
+        return this.previous();
     }
 
     hasNext():boolean {
