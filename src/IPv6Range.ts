@@ -1,13 +1,13 @@
 import {IPv6Prefix} from "./Prefix";
 import {IPv6} from "./IPv6";
-import {BigInteger} from "big-integer";
-import bigInt = require("big-integer");
+import * as bigInt from "big-integer";
 import {leftPadWithZeroBit} from "./BinaryUtils";
 import {parseBinaryStringToBigInteger} from "./BinaryUtils";
 import {Validator} from "./Validator";
+import {IPRange} from "./interface/IPRange";
 
-export class IPv6Range implements IterableIterator<IPv6> {
-    private readonly bitValue: BigInteger = bigInt(128);
+export class IPv6Range implements IPRange, IterableIterator<IPv6> {
+    private readonly bitValue: bigInt.BigInteger = bigInt(128);
     private internalCounterValue: IPv6;
 
     static of(rangeIncidrNotation:string):IPv6Range {
@@ -26,7 +26,7 @@ export class IPv6Range implements IterableIterator<IPv6> {
         this.internalCounterValue = this.getFirst();
     }
 
-    public getSize(): BigInteger {
+    public getSize(): bigInt.BigInteger {
         /**
          * Using bitwise shit operation this will be
          * 1 << (this.bitValue - this.prefix.getValue())

@@ -5,15 +5,14 @@ import {IPv4Prefix} from "./Prefix";
 import {leftPadWithZeroBit} from "./BinaryUtils";
 import {parseBinaryStringToBigInteger} from "./BinaryUtils";
 import {Validator} from "./Validator";
-//TODO why these two
-import {BigInteger} from "big-integer";
-import bigInt = require("big-integer");
+import * as bigInt from "big-integer";
+import {IPRange} from "./interface/IPRange";
 
 /**
  * Represents a continuous segment of IPv4 addresses
  */
-export class IPv4Range implements IterableIterator<IPv4> {
-    private readonly bitValue: BigInteger = bigInt(32);
+export class IPv4Range implements IPRange, IterableIterator<IPv4> {
+    private readonly bitValue: bigInt.BigInteger = bigInt(32);
     private internalCounterValue: IPv4;
 
     static of(rangeIncidrNotation:string):IPv4Range {
@@ -32,7 +31,7 @@ export class IPv4Range implements IterableIterator<IPv4> {
         this.internalCounterValue = this.getFirst();
     }
 
-    public getSize(): BigInteger {
+    public getSize(): bigInt.BigInteger {
         /**
          * Using bitwise shit operation this will be
          * 1 << (this.bitValue - this.prefix.getValue())
