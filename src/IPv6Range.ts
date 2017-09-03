@@ -10,7 +10,7 @@ export class IPv6Range implements IPRange, IterableIterator<IPv6> {
     private readonly bitValue: bigInt.BigInteger = bigInt(128);
     private internalCounterValue: IPv6;
 
-    static of(rangeIncidrNotation:string):IPv6Range {
+    static fromCidr(rangeIncidrNotation:string):IPv6Range {
         let [isValid, message] = Validator.isValidIPv6CidrNotation(rangeIncidrNotation);
         if (!isValid) {
             throw new Error(message.filter(msg => {return msg !== '';}).toString());
@@ -19,7 +19,7 @@ export class IPv6Range implements IPRange, IterableIterator<IPv6> {
         let ipString = cidrComponents[0];
         let prefix = parseInt(cidrComponents[1]);
 
-        return new IPv6Range(IPv6.fromHexadecimalString(ipString), IPv6Prefix.of(prefix));
+        return new IPv6Range(IPv6.parseFromHexadecimalString(ipString), IPv6Prefix.fromNumber(prefix));
     };
 
     constructor(private readonly ipv6: IPv6, private readonly cidrPrefix: IPv6Prefix) {
@@ -45,14 +45,14 @@ export class IPv6Range implements IPRange, IterableIterator<IPv6> {
     }
 
     public getFirst(): IPv6 {
-        return IPv6.fromBigInteger(this.ipv6.getValue().and(this.cidrPrefix.toSubnet().getValue()));
+        return IPv6.parseFromBigInteger(this.ipv6.getValue().and(this.cidrPrefix.toSubnet().getValue()));
     }
 
     public getLast(): IPv6 {
         let onMask = bigInt("1".repeat(128), 2);
         let subnetAsBigInteger = this.cidrPrefix.toSubnet().getValue();
         let invertedSubnet = leftPadWithZeroBit(subnetAsBigInteger.xor(onMask).toString(2), 128);
-        return IPv6.fromBigInteger(this.ipv6.getValue().or(parseBinaryStringToBigInteger(invertedSubnet)));
+        return IPv6.parseFromBigInteger(this.ipv6.getValue().or(parseBinaryStringToBigInteger(invertedSubnet)));
     }
 
     public isConsecutive(otherRange: IPv6Range): boolean {
@@ -119,7 +119,7 @@ export class IPv6Range implements IPRange, IterableIterator<IPv6> {
         if (prefixToSplit === 128) {
             throw new Error("Cannot split an IP range with a single IP address");
         }
-        let splitCidr = IPv6Prefix.of(prefixToSplit + 1);
+        let splitCidr = IPv6Prefix.fromNumber(prefixToSplit + 1);
         let firstIPOfFirstRange = this.getFirst();
         let firstRange = new IPv6Range(firstIPOfFirstRange, splitCidr);
         let firstIPOfSecondRange = firstRange.getLast().nextIPNumber();

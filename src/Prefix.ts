@@ -15,7 +15,7 @@ import {Hexadecatet} from "./Hexadecatet";
 class IPv4Prefix {
     value: number;
 
-    static of(rawValue:number):IPv4Prefix {
+    static fromNumber(rawValue:number):IPv4Prefix {
         return new IPv4Prefix(rawValue);
     };
 
@@ -40,7 +40,7 @@ class IPv4Prefix {
     public toSubnet(): IPv4Subnet {
         let onBits = '1'.repeat(this.value);
         let offBits = '0'.repeat(32 - this.value);
-        return IPv4Subnet.of(this.toDecimalNotation(`${onBits}${offBits}`));
+        return IPv4Subnet.fromString(this.toDecimalNotation(`${onBits}${offBits}`));
     }
 
     private toDecimalNotation(bits:string): string {
@@ -51,7 +51,7 @@ class IPv4Prefix {
 class IPv6Prefix {
     value: number;
 
-    static of(rawValue:number):IPv6Prefix {
+    static fromNumber(rawValue:number):IPv6Prefix {
         return new IPv6Prefix(rawValue);
     };
 
@@ -76,13 +76,13 @@ class IPv6Prefix {
     public toSubnet(): IPv6Subnet {
         let onBits = '1'.repeat(this.value);
         let offBits = '0'.repeat(128 - this.value);
-        return IPv6Subnet.of(this.toHexadecatetNotation(`${onBits}${offBits}`));
+        return IPv6Subnet.fromString(this.toHexadecatetNotation(`${onBits}${offBits}`));
     }
 
     private toHexadecatetNotation(bits:string): string {
         let binaryStrings: string[] = bits.match(/.{1,16}/g)!;
         let hexadecimalStrings: Hexadecatet[] = binaryStrings.map((binaryString) => {
-            return Hexadecatet.of(binaryStringToHexadecimalString(binaryString));
+            return Hexadecatet.fromString(binaryStringToHexadecimalString(binaryString));
         });
         return hexadecimalStrings.map((value) => { return value.toString()}).join(":");
     }

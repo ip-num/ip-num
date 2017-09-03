@@ -5,7 +5,11 @@ import bigInt = require("big-integer");
 export class Octet {
     private readonly value: number;
 
-    static of(rawValue:string | number):Octet {
+    static fromString(rawValue:string):Octet {
+        return new Octet(rawValue);
+    };
+
+    static fromNumber(rawValue:number):Octet {
         return new Octet(rawValue);
     };
 

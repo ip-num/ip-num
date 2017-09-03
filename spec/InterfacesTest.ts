@@ -23,8 +23,8 @@ describe('Interface : ', () => {
     describe('IPRange', () => {
         it('should correctly encapsulate IPv4Range and IPv6Range', () => {
             let ipRanges: IPRange[] = [];
-            ipRanges.push(IPv4Range.of("192.198.0.0/24"));
-            ipRanges.push(IPv6Range.of("2001:db8::/33"));
+            ipRanges.push(IPv4Range.fromCidr("192.198.0.0/24"));
+            ipRanges.push(IPv6Range.fromCidr("2001:db8::/33"));
             expect(ipRanges.some(ipRange => { return ipRange.toCidrString() === "192.198.0.0/24"})).toBe(true);
             expect(ipRanges.some(ipRange => { return ipRange.toCidrString() === "2001:db8:0:0:0:0:0:0/33"})).toBe(true);
         });

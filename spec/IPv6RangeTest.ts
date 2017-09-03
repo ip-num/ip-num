@@ -9,7 +9,7 @@ describe('IPv6Range: ', () => {
         expect(ipv6Range.toCidrString()).toEqual("0:0:0:0:0:0:0:0/0");
     });
     it('should instantiate from string in cidr notation', () => {
-         let ipv6Range = IPv6Range.of("2001:db8::/33");
+         let ipv6Range = IPv6Range.fromCidr("2001:db8::/33");
          expect(ipv6Range.toCidrString()).toEqual("2001:db8:0:0:0:0:0:0/33");
     });
     it('should return the first IPv6 address in range', () => {

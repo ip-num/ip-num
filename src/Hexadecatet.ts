@@ -5,7 +5,11 @@ import * as bigInt from "big-integer"
 export class Hexadecatet {
     private readonly value: number;
 
-    static of(rawValue:string | number):Hexadecatet {
+    static fromString(rawValue:string):Hexadecatet {
+        return new Hexadecatet(rawValue);
+    };
+
+    static fromNumber(rawValue:number):Hexadecatet {
         return new Hexadecatet(rawValue);
     };
 

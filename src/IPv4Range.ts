@@ -15,7 +15,7 @@ export class IPv4Range implements IPRange, IterableIterator<IPv4> {
     private readonly bitValue: bigInt.BigInteger = bigInt(32);
     private internalCounterValue: IPv4;
 
-    static of(rangeIncidrNotation:string):IPv4Range {
+    static fromCidr(rangeIncidrNotation:string):IPv4Range {
         let [isValid, errorMessages] = Validator.isValidIPv4CidrNotation(rangeIncidrNotation);
         if (!isValid) {
             let messages = errorMessages.filter(message => {return message !== ''});
@@ -24,7 +24,7 @@ export class IPv4Range implements IPRange, IterableIterator<IPv4> {
         let cidrComponents: Array<string> = rangeIncidrNotation.split("/");
         let ipString = cidrComponents[0];
         let prefix = parseInt(cidrComponents[1]);
-        return new IPv4Range(IPv4.fromDecimalDottedString(ipString), IPv4Prefix.of(prefix));
+        return new IPv4Range(IPv4.fromDecimalDottedString(ipString), IPv4Prefix.fromNumber(prefix));
     };
 
     constructor(private readonly ipv4: IPv4, private readonly cidrPrefix: IPv4Prefix) {
@@ -124,7 +124,7 @@ export class IPv4Range implements IPRange, IterableIterator<IPv4> {
         if (prefixToSplit === 32) {
             throw new Error("Cannot split an IP range with a single IP address");
         }
-        let splitCidr = IPv4Prefix.of(prefixToSplit + 1);
+        let splitCidr = IPv4Prefix.fromNumber(prefixToSplit + 1);
         let firstIPOfFirstRange = this.getFirst();
         let firstRange = new IPv4Range(firstIPOfFirstRange, splitCidr);
         let firstIPOfSecondRange = firstRange.getLast().nextIPNumber();

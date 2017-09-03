@@ -21,7 +21,11 @@ export class Asn extends AbstractIPNum implements IPNumber {
     readonly value:bigInt.BigInteger;
     private static AS_PREFIX = "AS";
 
-    static of(rawValue:string | number):Asn {
+    static fromString(rawValue:string):Asn {
+        return new Asn(rawValue);
+    };
+
+    static fromNumber(rawValue:number):Asn {
         return new Asn(rawValue);
     };
 

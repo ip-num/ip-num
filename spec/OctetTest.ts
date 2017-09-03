@@ -11,16 +11,16 @@ describe('Octet', () => {
         expect(new Octet("234").getValue()).toEqual(234);
     });
     it('should instantiate by passing number or string to static method', () => {
-        expect(Octet.of(234).getValue()).toEqual(234);
-        expect(Octet.of("234").getValue()).toEqual(234);
+        expect(Octet.fromNumber(234).getValue()).toEqual(234);
+        expect(Octet.fromString("234").getValue()).toEqual(234);
     });
     it('should throw an exception when invalid octet number is given', () => {
         expect(() => {
-            Octet.of(256);
+            Octet.fromNumber(256);
         }).toThrowError(Error, Validator.invalidOctetRangeMessage);
 
         expect(() => {
-            Octet.of(-1);
+            Octet.fromNumber(-1);
         }).toThrowError(Error, Validator.invalidOctetRangeMessage);
     });
 });

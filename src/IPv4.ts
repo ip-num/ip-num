@@ -33,12 +33,6 @@ export class IPv4 extends AbstractIPNum implements IPNumber {
         return new IPv4(ipString);
     }
 
-    static of(rawValue:string):IPv4
-    static of(intValue:bigInt.BigInteger):IPv4
-    static of(rawValue:string | bigInt.BigInteger):IPv4 {
-        return new IPv4(rawValue);
-    };
-
     constructor(ipValue: string | bigInt.BigInteger) {
         super();
         if (typeof ipValue === "string" ) {
@@ -77,7 +71,7 @@ export class IPv4 extends AbstractIPNum implements IPNumber {
         }
         let stringOctets = ipString.split(".");
         octets = stringOctets.map((rawOctet) => {
-            return Octet.of(rawOctet)
+            return Octet.fromString(rawOctet)
         });
         value = bigInt(dottedDecimalNotationToBinaryString(ipString), 2);
         return [value, octets]
@@ -98,7 +92,7 @@ export class IPv4 extends AbstractIPNum implements IPNumber {
         }
         let octets: string[] = ipv4BinaryString.match(/.{1,8}/g)!;
         return octets.map((octet) => {
-            return Octet.of(parseBinaryStringToBigInteger(octet).toString())
+            return Octet.fromString(parseBinaryStringToBigInteger(octet).toString())
         });
     }
 }

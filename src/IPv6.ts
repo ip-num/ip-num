@@ -22,11 +22,11 @@ export class IPv6 extends AbstractIPNum implements IPNumber {
     readonly bitSize: number = 128;
     readonly validatorBitSize: bigInt.BigInteger = Validator.ONE_HUNDRED_AND_TWENTY_EIGHT_BIT_SIZE;
 
-    static fromBigInteger(bigIntValue: bigInt.BigInteger): IPv6 {
+    static parseFromBigInteger(bigIntValue: bigInt.BigInteger): IPv6 {
         return new IPv6(bigIntValue);
     }
 
-    static fromHexadecimalString(ipString: string) : IPv6 {
+    static parseFromHexadecimalString(ipString: string) : IPv6 {
         return new IPv6(ipString);
     }
 
@@ -55,11 +55,11 @@ export class IPv6 extends AbstractIPNum implements IPNumber {
     }
 
     public nextIPNumber(): IPv6 {
-        return IPv6.fromBigInteger(this.getValue().add(1))
+        return IPv6.parseFromBigInteger(this.getValue().add(1))
     }
 
     public previousIPNumber(): IPv6 {
-        return IPv6.fromBigInteger(this.getValue().minus(1))
+        return IPv6.parseFromBigInteger(this.getValue().minus(1))
     }
 
     private constructFromBigIntegerValue(ipv6Number: bigInt.BigInteger): [bigInt.BigInteger, Array<Hexadecatet>]  {
@@ -80,7 +80,7 @@ export class IPv6 extends AbstractIPNum implements IPNumber {
 
         let stringHexadecimals: string[] = expandedIPv6.split(":");
         let hexadecatet: Hexadecatet[]  = stringHexadecimals.map((stringHexadecatet) => {
-            return Hexadecatet.of(stringHexadecatet);
+            return Hexadecatet.fromString(stringHexadecatet);
         });
         let value = bigInt(hexadectetNotationToBinaryString(expandedIPv6), 2);
         return [value, hexadecatet];
@@ -90,7 +90,7 @@ export class IPv6 extends AbstractIPNum implements IPNumber {
         let hexadecimalString = binaryStringToHexadecimalString(binaryString);
         let hexadecimalStrings: string[] = hexadecimalString.match(/.{1,4}/g)!;
         return hexadecimalStrings.map((stringHexadecatet)=> {
-            return Hexadecatet.of(stringHexadecatet);
+            return Hexadecatet.fromString(stringHexadecatet);
         });
     }
 }

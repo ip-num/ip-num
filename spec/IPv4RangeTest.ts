@@ -10,7 +10,7 @@ describe('IPv4Range: ', () => {
         expect(ipv4Range.toCidrString()).toEqual("192.198.0.0/24");
     });
     it('should instantiate from string in cidr notation', () => {
-        let ipv4Range = IPv4Range.of("192.198.0.0/24");
+        let ipv4Range = IPv4Range.fromCidr("192.198.0.0/24");
         expect(ipv4Range.toCidrString()).toEqual("192.198.0.0/24");
     });
 
@@ -18,7 +18,7 @@ describe('IPv4Range: ', () => {
         let errorMessages = [Validator.invalidOctetRangeMessage, Validator.invalidPrefixValueMessage];
         let errorMessage = errorMessages.filter(message => {return message !== ''}).join(" and ");
         expect(() => {
-            IPv4Range.of("192.198.333.0/66");
+            IPv4Range.fromCidr("192.198.333.0/66");
 
         }).toThrowError(Error, errorMessage);
     });
@@ -44,9 +44,9 @@ describe('IPv4Range: ', () => {
         expect(take[2].toString()).toBe("192.198.0.2");
     });
     it('should correctly tell if ranges are consecutive', () => {
-        let firstRange = IPv4Range.of("192.168.0.0/25");
-        let secondRange = IPv4Range.of("192.168.0.128/25");
-        let anotherSecondRange = IPv4Range.of("192.168.0.127/25");
+        let firstRange = IPv4Range.fromCidr("192.168.0.0/25");
+        let secondRange = IPv4Range.fromCidr("192.168.0.128/25");
+        let anotherSecondRange = IPv4Range.fromCidr("192.168.0.127/25");
 
         expect(firstRange.isConsecutive(secondRange)).toBe(true);
         expect(secondRange.isConsecutive(firstRange)).toBe(true);
@@ -60,9 +60,9 @@ describe('IPv4Range: ', () => {
 
     });
     it('should correctly tell if a range contains another range', () => {
-        let containerRange = IPv4Range.of("192.168.0.0/24");
-        let firstRange = IPv4Range.of("192.168.0.0/25");
-        let secondRange = IPv4Range.of("192.168.0.128/25");
+        let containerRange = IPv4Range.fromCidr("192.168.0.0/24");
+        let firstRange = IPv4Range.fromCidr("192.168.0.0/25");
+        let secondRange = IPv4Range.fromCidr("192.168.0.128/25");
 
         expect(containerRange.contains(firstRange)).toBe(true);
         expect(containerRange.contains(secondRange)).toBe(true);
@@ -71,9 +71,9 @@ describe('IPv4Range: ', () => {
         expect(secondRange.contains(containerRange)).toBe(false);
     });
     it('should correctly tell if a range is inside another range', () => {
-        let containerRange = IPv4Range.of("192.168.0.0/24");
-        let firstRange = IPv4Range.of("192.168.0.0/25");
-        let secondRange = IPv4Range.of("192.168.0.128/25");
+        let containerRange = IPv4Range.fromCidr("192.168.0.0/24");
+        let firstRange = IPv4Range.fromCidr("192.168.0.0/25");
+        let secondRange = IPv4Range.fromCidr("192.168.0.128/25");
 
         expect(containerRange.inside(firstRange)).toBe(false);
         expect(containerRange.inside(secondRange)).toBe(false);
@@ -82,17 +82,17 @@ describe('IPv4Range: ', () => {
         expect(secondRange.inside(containerRange)).toBe(true);
     });
     it('should correctly tell if ranges are not overlapping', () => {
-        let firstRange = IPv4Range.of("192.168.0.0/26");
-        let secondRange = IPv4Range.of("192.168.0.64/26");
+        let firstRange = IPv4Range.fromCidr("192.168.0.0/26");
+        let secondRange = IPv4Range.fromCidr("192.168.0.64/26");
 
         expect(firstRange.isOverlapping(secondRange)).toBe(false);
         expect(firstRange.isOverlapping(secondRange)).toBe(false);
 
     });
     it('should correctly tell that containing ranges are not overlapping', () => {
-        let containerRange = IPv4Range.of("192.168.0.0/24");
-        let firstRange = IPv4Range.of("192.168.0.0/25");
-        let secondRange = IPv4Range.of("192.168.0.128/25");
+        let containerRange = IPv4Range.fromCidr("192.168.0.0/24");
+        let firstRange = IPv4Range.fromCidr("192.168.0.0/25");
+        let secondRange = IPv4Range.fromCidr("192.168.0.128/25");
 
         expect(firstRange.isOverlapping(secondRange)).toBe(false);
         expect(secondRange.isOverlapping(firstRange)).toBe(false);
@@ -111,7 +111,7 @@ describe('IPv4Range: ', () => {
         }
     });
     it('should split IP range correctly', () => {
-        let ipv4Range = IPv4Range.of("192.168.208.0/24");
+        let ipv4Range = IPv4Range.fromCidr("192.168.208.0/24");
         let splitRanges: Array<IPv4Range> = ipv4Range.split();
         let firstRange = splitRanges[0];
         let secondRange = splitRanges[1];

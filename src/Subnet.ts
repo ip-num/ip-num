@@ -11,7 +11,7 @@ export class IPv4Subnet {
     readonly octets: Array<Octet> = [];
     readonly value: bigInt.BigInteger;
 
-    static of(rawValue:string):IPv4Subnet {
+    static fromString(rawValue:string):IPv4Subnet {
         return new IPv4Subnet(rawValue);
     };
 
@@ -28,7 +28,7 @@ export class IPv4Subnet {
         let stringOctets = ipString.split(".");
 
         this.octets = stringOctets.map((rawOctet) => {
-            return Octet.of(rawOctet)
+            return Octet.fromString(rawOctet)
         });
 
         this.value = bigInt(dottedDecimalNotationToBinaryString(ipString), 2);
@@ -52,7 +52,7 @@ export class IPv6Subnet {
     readonly hexadecatet: Array<Hexadecatet> = [];
     readonly value: bigInt.BigInteger;
 
-    static of(rawValue:string):IPv6Subnet {
+    static fromString(rawValue:string):IPv6Subnet {
         return new IPv6Subnet(rawValue);
     };
 
@@ -69,7 +69,7 @@ export class IPv6Subnet {
         let stringHexadecimals = ipString.split(":");
 
         this.hexadecatet = stringHexadecimals.map((stringHexadecatet) => {
-            return Hexadecatet.of(stringHexadecatet)
+            return Hexadecatet.fromString(stringHexadecatet)
         });
 
         this.value = bigInt(hexadectetNotationToBinaryString(ipString), 2);
