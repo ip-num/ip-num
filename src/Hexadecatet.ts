@@ -1,7 +1,6 @@
-
-
 import {Validator} from "./Validator";
 import * as bigInt from "big-integer"
+
 export class Hexadecatet {
     private readonly value: number;
 

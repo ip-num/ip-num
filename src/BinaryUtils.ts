@@ -1,6 +1,5 @@
 import * as bigInt from "big-integer/BigInteger";
 
-'use strict';
 /**
  * Converts a decimal number to binary string
  *

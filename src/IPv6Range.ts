@@ -6,6 +6,12 @@ import {parseBinaryStringToBigInteger} from "./BinaryUtils";
 import {Validator} from "./Validator";
 import {IPRange} from "./interface/IPRange";
 
+/**
+ * Represents a continuous segment of IPv4 addresses following the
+ * classless inter-domain routing scheme for allocating IP addresses.
+ *
+ * @see https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing
+ */
 export class IPv6Range implements IPRange, IterableIterator<IPv6> {
     private readonly bitValue: bigInt.BigInteger = bigInt(128);
     private internalCounterValue: IPv6;

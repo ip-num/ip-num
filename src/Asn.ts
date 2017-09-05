@@ -1,5 +1,3 @@
-'use strict';
-
 import {Validator} from "./Validator"
 import {IPNumber} from "./interface/IPNumber"
 import {decimalNumberToBinaryString} from "./BinaryUtils";
@@ -11,7 +9,8 @@ import {AbstractIPNum} from "./AbstractIPNum";
  * Represents an Autonomous System Number. Which is a number that is used to identify
  * a group of IP addresses with a common, clearly defined routing policy.
  *
- * For more see https://en.wikipedia.org/wiki/Autonomous_system_(Internet)
+ * @see https://en.wikipedia.org/wiki/Autonomous_system_(Internet)
+ * @see https://www.rfc-editor.org/info/rfc4271
  */
 export class Asn extends AbstractIPNum implements IPNumber {
     bitSize: number = 32;

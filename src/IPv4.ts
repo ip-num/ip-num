@@ -1,5 +1,3 @@
-'use strict';
-
 import {Octet} from "./Octet";
 import {Validator} from "./Validator";
 import {IPNumber} from "./interface/IPNumber";
@@ -12,10 +10,11 @@ import {AbstractIPNum} from "./AbstractIPNum";
 import {IPNumType} from "./IPNumType";
 
 /**
- * Represents the 32 bit number that is used to uniquely identify a device that is part of a computer
+ * Represents an IPv4 number. A 32 bit number that is used to uniquely identify a device that is part of a computer
  * network that uses the internet protocol for communication.
  *
- * For more see https://en.wikipedia.org/wiki/IPv4
+ * @see https://en.wikipedia.org/wiki/IPv4
+ * @see https://www.rfc-editor.org/info/rfc791
  */
 export class IPv4 extends AbstractIPNum implements IPNumber {
     readonly value: bigInt.BigInteger;

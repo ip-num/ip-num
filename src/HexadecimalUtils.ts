@@ -1,7 +1,5 @@
 import * as bigInt from "big-integer/BigInteger";
 
-'use strict';
-
 /**
  * Converts a given BigInteger number to a hexadecimal string
  * @param num the BigInteger number

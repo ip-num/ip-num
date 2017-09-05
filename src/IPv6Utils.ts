@@ -1,4 +1,3 @@
-'use strict';
 import {leftPadWithZeroBit} from "./BinaryUtils";
 import {hexadecimalStringToBinaryString} from "./HexadecimalUtils";
 

@@ -1,5 +1,3 @@
-'use strict';
-
 import {Octet} from "./Octet";
 import {Validator} from "./Validator";
 import * as bigInt from "big-integer"

@@ -11,8 +11,11 @@ import {IPNumType} from "./IPNumType";
 
 
 /**
- * reference https://www.rfc-editor.org/rfc/rfc4291.txt
- * https://tools.ietf.org/html/rfc5952
+ * Represents an IPv6 number. A 128 bit number that is used to uniquely identify a device that is part of a computer
+ * network that uses the internet protocol for communication.
+ *
+ * @see https://en.wikipedia.org/wiki/IPv6
+ * @see https://www.rfc-editor.org/info/rfc8200
  */
 export class IPv6 extends AbstractIPNum implements IPNumber {
     readonly value: bigInt.BigInteger;

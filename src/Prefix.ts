@@ -1,5 +1,3 @@
-'use strict';
-
 import {Validator} from "./Validator";
 import {IPv4Subnet} from "./Subnet";
 import {parseBinaryStringToBigInteger} from "./BinaryUtils";

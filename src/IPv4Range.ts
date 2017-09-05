@@ -1,5 +1,3 @@
-'use strict';
-
 import {IPv4} from "./IPv4";
 import {IPv4Prefix} from "./Prefix";
 import {leftPadWithZeroBit} from "./BinaryUtils";
@@ -9,7 +7,10 @@ import * as bigInt from "big-integer";
 import {IPRange} from "./interface/IPRange";
 
 /**
- * Represents a continuous segment of IPv4 addresses
+ * Represents a continuous segment of IPv4 addresses following the
+ * classless inter-domain routing scheme for allocating IP addresses.
+ *
+ * @see https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing
  */
 export class IPv4Range implements IPRange, IterableIterator<IPv4> {
     private readonly bitValue: bigInt.BigInteger = bigInt(32);
