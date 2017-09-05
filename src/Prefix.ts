@@ -6,10 +6,6 @@ import {IPv6Subnet} from "./Subnet";
 import {binaryStringToHexadecimalString} from "./HexadecimalUtils";
 import {Hexadecatet} from "./Hexadecatet";
 
-/**
- * TODO
- * maybe add a constuctor to create using string...eg IPv4Prefix.of("/24")
- */
 class IPv4Prefix {
     value: number;
 

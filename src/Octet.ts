@@ -1,5 +1,6 @@
 import {Validator} from "./Validator"
 import bigInt = require("big-integer");
+
 export class Octet {
     private readonly value: number;
 
