@@ -1,0 +1,11 @@
+node_modules/
+*.tgz
+*.iml
+.idea
+.nyc_output
+src/
+dist/spec
+/spec
+tsconfig.json
+*.js.map
+ip-num-*.js

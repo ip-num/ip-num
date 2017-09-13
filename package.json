@@ -2,10 +2,12 @@
   "name": "ip-num",
   "version": "0.0.3-pre-alpha",
   "description": "A TypeScript library that represents various internet protocol numbers. It provides ability to perform various IP related operations like parsing, validating etc.",
-  "main": "./dist/main.js",
+  "main": "./dist/src/index.js",
+  "types": "./dist/src/index.d.ts",
   "scripts": {
+    "clean": "rm -rf ./dist",
     "compile": "tsc -p tsconfig.json",
-    "prepublish": "tsc --module commonjs",
+    "prepare": "webpack && npm run compile",
     "test": "jasmine-ts spec/**/*.ts",
     "test:watch": "npm run test -- -w",
     "test:coverage": "nyc -e .ts -x *.spec.ts jasmine-ts spec/**/*.ts"
@@ -26,14 +28,19 @@
   ],
   "author": "Dadepo Aderemi",
   "license": "MIT",
+  "dependencies": {
+    "big-integer": "1.6.23"
+  },
   "devDependencies": {
     "@types/jasmine": "2.5.53",
     "@types/node": "7.0.39",
-    "big-integer": "1.6.23",
+    "awesome-typescript-loader": "^3.2.3",
     "jasmine-node": "1.14.5",
     "jasmine-spec-reporter": "4.1.0",
     "jasmine-ts": "0.2.0",
     "nyc": "11.1.0",
-    "tsunit.external": "2.0.11"
+    "source-map-loader": "^0.2.1",
+    "tsunit.external": "2.0.11",
+    "webpack": "^3.5.6"
   }
 }
