@@ -1,16 +1,20 @@
 {
   "name": "ip-num",
-  "version": "0.0.4-pre-alpha",
+  "version": "0.0.5-pre-alpha",
   "description": "A TypeScript library that represents various internet protocol numbers. It provides ability to perform various IP related operations like parsing, validating etc.",
-  "main": "./dist/src/index.js",
-  "types": "./dist/src/index.d.ts",
+  "main": "./index.js",
+  "types": "./index.d.ts",
   "scripts": {
     "clean": "rm -rf ./dist",
     "compile": "tsc -p tsconfig.json",
-    "prepare": "webpack && npm run compile",
     "test": "jasmine-ts spec/**/*.ts",
     "test:watch": "npm run test -- -w",
-    "test:coverage": "nyc -e .ts -x *.spec.ts jasmine-ts spec/**/*.ts"
+    "test:coverage": "nyc -e .ts -x *.spec.ts jasmine-ts spec/**/*.ts",
+    "dprep": "npm run clean && npm run compile && cp package.json ./dist/src && cd ./dist/src && webpack --config ../../webpack.config.js",
+    "dpack": "cd ./dist/src && npm pack",
+    "test-release": "npm run dprep && npm run dpack",
+    "drelease": "cd ./dist/src && npm publish",
+    "release": "npm run dprep && npm run drelease"
   },
   "nyc": {
     "reporter": [
