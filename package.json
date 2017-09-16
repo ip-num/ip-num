@@ -1,6 +1,6 @@
 {
   "name": "ip-num",
-  "version": "0.0.5-pre-alpha",
+  "version": "0.0.5",
   "description": "A TypeScript library that represents various internet protocol numbers. It provides ability to perform various IP related operations like parsing, validating etc.",
   "main": "./index.js",
   "types": "./index.d.ts",
