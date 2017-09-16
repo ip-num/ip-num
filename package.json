@@ -14,6 +14,7 @@
     "dpack": "cd ./dist/src && npm pack",
     "test-release": "npm run dprep && npm run dpack",
     "drelease": "cd ./dist/src && npm publish",
+    "docs": "typedoc --out ./docs ./src/ --theme minimal --exclude '**/spec/*.ts'",
     "release": "npm run dprep && npm run drelease"
   },
   "nyc": {

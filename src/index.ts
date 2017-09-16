@@ -1,3 +1,12 @@
+/**
+ * Exposes all the library's modules making them available from the "ip-num" module.
+ * Making it possible to get access to all any of the modules by doing require("ip-num")
+ *
+ * @example
+ * let ipNum = require("ip-num")
+ * ipNum.IPv4Range // gets access to IPv4Range
+ * ipNum.Asn // gets access to Asn
+ */
 export * from './interface/IPNumber'
 export * from './interface/IPRange'
 export * from './AbstractIPNum'
