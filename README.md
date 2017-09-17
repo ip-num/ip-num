@@ -18,7 +18,7 @@ Installation
 ----------------
 
 ### Node.js
-Want`ip-num` from within a Node.js environment? It can be installed via [npm](https://npmjs.org/).
+If you want to use `ip-num` from within a Node.js environment, you can install it via [npm](https://npmjs.org/).
 
 ```npm install ip-num```
 
@@ -42,14 +42,16 @@ How you get access to the above, depends on the module loading mechanism being u
 
 Import what you need from `ip-num` and use away
 
-```import { Asn } from "ip-num/Asn";
-   import { IPv4 } from "ip-num/IPv4";
-   import { IPv6 } from "ip-num/IPv6";
+```
+import { Asn } from "ip-num/Asn";
+import { IPv4 } from "ip-num/IPv4";
+import { IPv6 } from "ip-num/IPv6";
 ```
 
 You can then make use of the imported module in your TypeScript code
 
-```let asn = new Asn(65546);
+```
+let asn = new Asn(65546);
 asn.toBinaryString() //10000000000001010
 
 let ipv4 = new IPv4("74.125.43.99");
@@ -65,14 +67,16 @@ All external modules in `ip-num` are exported and made available via the global 
 ('ip-num')` and then access the module you want to use in your application, or access the module in one go, while 
 requiring; as shown below:
 
-```const Asn = require("ip-num").Asn;
-   const IPv4 = require("ip-num").IPv4;
-   const IPv6 = require("ip-num").IPv6;
+```
+const Asn = require("ip-num").Asn;
+const IPv4 = require("ip-num").IPv4;
+const IPv6 = require("ip-num").IPv6;
 ```
 
 The imported module can then be used:
 
-```let asn = new Asn(65546);
+```
+let asn = new Asn(65546);
 asn.toBinaryString() //10000000000001010
 
 let ipv4 = new IPv4("74.125.43.99");
@@ -87,7 +91,9 @@ ipv6.toBinaryString() //11111111111111111111111111111111111111111111111111111111
 Including the `ip-num` library via the script tag in the browser exposes `ipnum` variable from which you can access 
 the modules exposes by the library.
 
-```<script src="https://raw.githubusercontent.com/ip-num/ip-num/master/ip-num.js"></script>
+```
+<script src="https://raw.githubusercontent.com/ip-num/ip-num/master/ip-num.js"></script>
+........
 let asn = new ipnum.Asn(65546);
 console.log(asn.toBinaryString()); //10000000000001010
 
@@ -115,7 +121,8 @@ values that needs to be worked with when dealing with IP numbers can exceed the 
 This would be seen in some of the example given below.
  
 ### ASN
-```import { Asn } from "ip-num/Asn";
+```
+import { Asn } from "ip-num/Asn";
 ..........
 // creating
 let asA = Asn.fromNumber(1234) // using the fromNumber factory method to create an instance from number
