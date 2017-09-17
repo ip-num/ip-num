@@ -914,7 +914,114 @@ img { max-width: 100%; }
 <div class="container container-main">
 	<div class="content-wrap">
 		<div class="tsd-panel tsd-typography">
-			<p>In dev mode...</p>
+			<h1 id="ip-num">ip-num</h1>
+			<p><code>ip-num</code> is a <a href="https://www.typescriptlang.org/">TypeScript</a> library for working with IPv4, IPv6 and ASN numbers. It provides representations of these
+				internet protocol numbers with the ability to perform various IP related operations like parsing, validating etc. on
+			them.</p>
+			<p>Even though <code>ip-num</code> is written in TypeScript, you do not need to write your applications in TypeScript to be able to
+			use <code>ip-num</code>. It can be used easily within a JavaScript application as it can be used within a TypeScript application. </p>
+			<p><code>ip-num</code> also support both usage within a browser environment as well as Node.Js environment.</p>
+			<p><code>ip-num</code> makes use of the <a href="https://github.com/peterolson/BigInteger.js/">BigInteger.js</a> library to represents numeric values. This is due to the fact that numeric
+				values that needs to be worked with when dealing with IP numbers can exceed the numeric value that can be safely represented natively within JavaScript without loosing precisions ie numbers greater than
+			<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/MAX_SAFE_INTEGER">Number.MAX_SAFE_INTEGER</a></p>
+			<h2 id="installation">Installation</h2>
+			<h3 id="node-js">Node.js</h3>
+			<p>If you want to use <code>ip-num</code> from within a Node.js environment, you can install it via <a href="https://npmjs.org/">npm</a>.</p>
+			<p><code>npm install ip-num</code></p>
+			<h3 id="browser">Browser</h3>
+			<p>If you are using a browser, you can include <code>ip-num</code> by linking to it or download it from GitHub</p>
+			<p><code>&lt;script src=&quot;https://raw.githubusercontent.com/ip-num/ip-num/master/ip-num.js&quot;&gt;&lt;/script&gt;</code></p>
+			<h2 id="usage">Usage</h2>
+			<p>The functionality <code>ip-num</code> exposes can be grouped into 2 broad categories:</p>
+			<ul>
+				<li>Modules representing ASN, IPv4, and IPv6 internet protocol numbers</li>
+				<li>Utilities and Validator </li>
+			</ul>
+			<p>How you get access to the above, depends on the module loading mechanism being used. The examples below will show how
+				to access <code>ip-num</code> using ES module mechanism with TypeScript in Node.js, using CommonJs module mechanism with
+			JavaScript in Node.Js, and by including <code>ip-num</code> via a script tag with JavaScript in the browser.</p>
+			<h3 id="es-module-with-typescript">ES module with TypeScript</h3>
+			<p>Import what you need from <code>ip-num</code> and use away</p>
+			<pre><code>import { Asn } <span class="hljs-keyword">from</span> <span class="hljs-string">"ip-num/Asn"</span>;
+import { IPv4 } <span class="hljs-keyword">from</span> <span class="hljs-string">"ip-num/IPv4"</span>;
+import {<span class="hljs-built_in"> IPv6 </span>} <span class="hljs-keyword">from</span> <span class="hljs-string">"ip-num/IPv6"</span>;
+</code></pre><p>You can then make use of the imported module in your TypeScript code</p>
+			<pre><code><span class="hljs-keyword">let</span> asn = <span class="hljs-keyword">new</span> Asn(<span class="hljs-number">65546</span>);
+asn.toBinaryString() <span class="hljs-comment">//10000000000001010</span>
+
+<span class="hljs-keyword">let</span> ipv<span class="hljs-number">4</span> = <span class="hljs-keyword">new</span> IPv<span class="hljs-number">4</span>(<span class="hljs-string">"74.125.43.99"</span>);
+ipv<span class="hljs-number">4</span>.toBinaryString() <span class="hljs-comment">//01001010011111010010101101100011</span>
+
+<span class="hljs-keyword">let</span> ipv<span class="hljs-number">6</span> = <span class="hljs-keyword">new</span> IPv<span class="hljs-number">6</span>(<span class="hljs-string">"ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff"</span>);
+ipv<span class="hljs-number">6</span>.toBinaryString() <span class="hljs-comment">//11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111</span>
+</code></pre><h3 id="commonjs-with-javascript">CommonJs with JavaScript</h3>
+			<p>All external modules in <code>ip-num</code> are exported and made available via the global <em>ip-num</em> module. So you can <code>require
+(&#39;ip-num&#39;)</code> and then access the module you want to use in your application, or access the module in one go, while 
+			requiring; as shown below:</p>
+			<pre><code>const Asn = require(<span class="hljs-string">"ip-num"</span>).Asn;
+const IPv4 = require(<span class="hljs-string">"ip-num"</span>).IPv4;
+const<span class="hljs-built_in"> IPv6 </span>= require(<span class="hljs-string">"ip-num"</span>).IPv6;
+</code></pre><p>The imported module can then be used:</p>
+			<pre><code><span class="hljs-keyword">let</span> asn = <span class="hljs-keyword">new</span> Asn(<span class="hljs-number">65546</span>);
+asn.toBinaryString() <span class="hljs-comment">//10000000000001010</span>
+
+<span class="hljs-keyword">let</span> ipv<span class="hljs-number">4</span> = <span class="hljs-keyword">new</span> IPv<span class="hljs-number">4</span>(<span class="hljs-string">"74.125.43.99"</span>);
+ipv<span class="hljs-number">4</span>.toBinaryString() <span class="hljs-comment">//01001010011111010010101101100011</span>
+
+<span class="hljs-keyword">let</span> ipv<span class="hljs-number">6</span> = <span class="hljs-keyword">new</span> IPv<span class="hljs-number">6</span>(<span class="hljs-string">"ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff"</span>);
+ipv<span class="hljs-number">6</span>.toBinaryString() <span class="hljs-comment">//11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111</span>
+</code></pre><h3 id="via-script-tag-with-javascript">Via Script tag with JavaScript</h3>
+			<p>Including the <code>ip-num</code> library via the script tag in the browser exposes <code>ipnum</code> variable from which you can access
+			the modules exposes by the library.</p>
+			<pre><code>&lt;script src=<span class="hljs-string">"https://raw.githubusercontent.com/ip-num/ip-num/master/ip-num.js"</span>&gt;&lt;/script&gt;
+<span class="hljs-params">...</span><span class="hljs-params">...</span>..
+<span class="hljs-keyword">let</span> asn = <span class="hljs-literal">new</span> ipnum.Asn(<span class="hljs-number">65546</span>);
+console.<span class="hljs-keyword">log</span>(asn.toBinaryString()); <span class="hljs-comment">//10000000000001010</span>
+
+<span class="hljs-keyword">let</span> ipv4 = <span class="hljs-literal">new</span> ipnum.IPv4(<span class="hljs-string">"74.125.43.99"</span>)
+console.<span class="hljs-keyword">log</span>(ipv4.toBinaryString()); <span class="hljs-comment">//01001010011111010010101101100011</span>
+
+<span class="hljs-keyword">let</span> ipv6 = <span class="hljs-literal">new</span> ipnum.IPv6(<span class="hljs-string">"ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff"</span>);
+console.<span class="hljs-keyword">log</span>(ipv6.toBinaryString()); <span class="hljs-comment">//11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111</span>
+</code></pre><h2 id="documentation">Documentation</h2>
+			<p>Documentation can be found at <a href="https://ip-num.github.io/ip-num/">https://ip-num.github.io/ip-num/</a></p>
+			<h2 id="examples">Examples</h2>
+			<p>Find below some example of the API <code>ip-num</code> provides and how to use them. Check the <a href="https://ip-num.github.io/ip-num/">documentation</a> for a more complete
+			overview of <code>ip-num&#39;s</code> API.</p>
+			<p><code>ip-num</code> makes use of the <a href="https://github.com/peterolson/BigInteger.js/">BigInteger.js</a> library to represents numeric values. This is due to the fact that numeric
+				values that needs to be worked with when dealing with IP numbers can exceed the numeric value that can be safely represented natively within JavaScript without loosing precisions ie numbers greater than
+			<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/MAX_SAFE_INTEGER">Number.MAX_SAFE_INTEGER</a></p>
+			<p>This would be seen in some of the example given below.</p>
+			<h3 id="asn">ASN</h3>
+			<pre><code><span class="hljs-keyword">import</span> { Asn } <span class="hljs-keyword">from</span> <span class="hljs-string">"ip-num/Asn"</span>;
+..........
+<span class="hljs-comment">// creating</span>
+<span class="hljs-keyword">let</span> asA = Asn.fromNumber(<span class="hljs-number">1234</span>) <span class="hljs-comment">// using the fromNumber factory method to create an instance from number</span>
+<span class="hljs-keyword">let</span> asB Asn.fromString(<span class="hljs-string">"AS1234"</span>) <span class="hljs-comment">// using the fromString factory method to create an instance from string</span>
+<span class="hljs-keyword">let</span> asC = Asn.fromString(<span class="hljs-string">"1234"</span>) <span class="hljs-comment">// string without the "AS" prefix is also supported</span>
+<span class="hljs-keyword">let</span> asD = Asn.fromString(<span class="hljs-string">"1.10"</span>) <span class="hljs-comment">// string in asdot+ format is also supported</span>
+
+<span class="hljs-comment">// converting between different ASN string representations</span>
+Asn.fromNumber(<span class="hljs-number">65526</span>).toASDotPlus() <span class="hljs-comment">// will give "0.65526"</span>
+Asn.fromNumber(<span class="hljs-number">65546</span>).toASDot() <span class="hljs-comment">// will give "1.10"</span>
+Asn.fromNumber(<span class="hljs-number">2</span>).toBinaryString() <span class="hljs-comment">// will give 10</span>
+
+<span class="hljs-comment">// check if previous and next values exist, getting previous and next values</span>
+Asn.fromNumber(Math.pow(<span class="hljs-number">2</span>, <span class="hljs-number">32</span>) - <span class="hljs-number">1</span>).hasNext() <span class="hljs-comment">// false</span>
+Asn.fromNumber(<span class="hljs-number">2</span>).hasNext() <span class="hljs-comment">// true</span>
+Asn.fromNumber(<span class="hljs-number">0</span>).hasPrevious() <span class="hljs-comment">// false</span>
+Asn.fromNumber(<span class="hljs-number">2</span>).hasPrevious() <span class="hljs-comment">// true</span>
+</code></pre><p>See the <a href="https://ip-num.github.io/ip-num/classes/_asn_.asn.html">ASN documentation</a> for more information</p>
+			<h3 id="ipv4">IPv4</h3>
+			<p>// TODO</p>
+			<h3 id="ipv6">IPv6</h3>
+			<p>// TODO</p>
+			<h3 id="ranges">Ranges</h3>
+			<p>// TODO</p>
+			<h3 id="ipnumber-and-iprange-interfaces">IPNumber and IPRange interfaces</h3>
+			<p>// TODO</p>
+			<h2 id="license">License</h2>
+			<p>The <code>ip-num</code> library is released under the MIT license</p>
 		</div>
 		<div style="position:relative;"><a name="typedoc-main-index" class="tsd-anchor"></a></div>
 		<section class="tsd-panel-group tsd-index-group">
