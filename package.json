@@ -14,7 +14,7 @@
     "dpack": "cd ./dist/src && npm pack",
     "test-release": "npm run dprep && npm run dpack",
     "drelease": "cd ./dist/src && npm publish",
-    "docs": "typedoc --out ./docs ./src/ --exclude '**/spec/*.ts'",
+    "docs": "typedoc --out ./docs ./src/ --exclude '**/spec/*.ts' touch ./docs/.nojekyll",
     "release": "npm run docs && npm run dprep && npm run drelease"
   },
   "nyc": {
