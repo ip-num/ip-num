@@ -85,15 +85,15 @@ describe('ASN', () => {
 
     });
     it('should correctly return the next ASN value', () => {
-        expect(Asn.fromNumber(1234).next().getValue()).toEqual(Asn.fromNumber(1235).getValue());
+        expect(Asn.fromNumber(1234).nextIPNumber().getValue()).toEqual(Asn.fromNumber(1235).getValue());
         expect(() => {
-            Asn.fromNumber(Math.pow(2, 32) - 1).next();
+            Asn.fromNumber(Math.pow(2, 32) - 1).nextIPNumber();
         }).toThrowError(Error, Validator.invalidAsnRangeMessage);
     });
     it('should correctly return the previous ASN value', () => {
-        expect(Asn.fromNumber(1234).previous().getValue()).toEqual(Asn.fromNumber(1233).getValue());
+        expect(Asn.fromNumber(1234).previousIPNumber().getValue()).toEqual(Asn.fromNumber(1233).getValue());
         expect(() => {
-            Asn.fromNumber(0).previous();
+            Asn.fromNumber(0).previousIPNumber();
         }).toThrowError(Error, Validator.invalidAsnRangeMessage);
     });
     it('should correctly tell if an ASN has next or previous', () => {

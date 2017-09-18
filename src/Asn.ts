@@ -84,20 +84,12 @@ export class Asn extends AbstractIPNum implements IPNumber {
         return !this.is16Bit();
     }
 
-    next():Asn {
+    nextIPNumber(): IPNumber {
         return new Asn(this.value.valueOf() + 1);
     }
 
-    previous():Asn {
-        return new Asn(this.value.valueOf() - 1)
-    }
-
-    nextIPNumber(): IPNumber {
-        return this.next();
-    }
-
     previousIPNumber(): IPNumber {
-        return this.previous();
+        return new Asn(this.value.valueOf() - 1)
     }
 
     private static startWithASprefix(word:string):boolean {
