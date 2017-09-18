@@ -49,10 +49,6 @@ export class Asn extends AbstractIPNum implements IPNumber {
         }
     }
 
-    public getValue():bigInt.BigInteger {
-        return this.value;
-    }
-
     toString():string {
         let stringValue = this.value.toString();
         return `${Asn.AS_PREFIX}${stringValue}`;
@@ -88,26 +84,6 @@ export class Asn extends AbstractIPNum implements IPNumber {
         return !this.is16Bit();
     }
 
-    isEquals(anotherAsn:Asn):boolean {
-        return this.value.equals(anotherAsn.value);
-    }
-
-    isGreaterThan(anotherAsn:Asn):boolean {
-        return this.value.greater(anotherAsn.value);
-    }
-
-    isLessThan(anotherAsn:Asn):boolean {
-        return this.value.lesser(anotherAsn.value);
-    }
-
-    isGreaterThanOrEquals(anotherAsn:Asn):boolean {
-        return this.value.greaterOrEquals(anotherAsn.value);
-    }
-
-    isLessThanOrEquals(anotherAsn:Asn):boolean {
-        return this.value.lesserOrEquals(anotherAsn.value);
-    }
-
     next():Asn {
         return new Asn(this.value.valueOf() + 1);
     }
@@ -122,14 +98,6 @@ export class Asn extends AbstractIPNum implements IPNumber {
 
     previousIPNumber(): IPNumber {
         return this.previous();
-    }
-
-    hasNext():boolean {
-        return this.value < Validator.THIRTY_TWO_BIT_SIZE;
-    }
-
-    hasPrevious():boolean {
-        return this.value.valueOf() > 0;
     }
 
     private static startWithASprefix(word:string):boolean {
