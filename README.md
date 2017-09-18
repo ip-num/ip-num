@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/ip-num/ip-num.svg?branch=master)](https://travis-ci.org/ip-num/ip-num)
+
 ip-num
 ================
 `ip-num` is a [TypeScript](https://www.typescriptlang.org/) library for working with `IPv4`, `IPv6` and `ASN` numbers. It provides representations of these internet protocol numbers with the ability to perform various operations like parsing, validating etc. on them.
