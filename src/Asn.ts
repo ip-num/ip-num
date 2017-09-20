@@ -13,11 +13,20 @@ import {AbstractIPNum} from "./AbstractIPNum";
  * @see https://www.rfc-editor.org/info/rfc4271
  */
 export class Asn extends AbstractIPNum implements IPNumber {
-    bitSize: number = 32;
-    validatorBitSize: bigInt.BigInteger = Validator.THIRTY_TWO_BIT_SIZE;
-    type: IPNumType = IPNumType.ASN;
-
+    /**
+     * The decimal value represented by the ASN number in BigInteger
+     */
     readonly value:bigInt.BigInteger;
+    /**
+     * The number of bits needed to represents the value of the ASN number
+     */
+    bitSize: number = 32;
+    /**
+     * The maximum bit size (i.e. binary value) of the ASN number in BigInteger
+     */
+    maximumBitSize: bigInt.BigInteger = Validator.THIRTY_TWO_BIT_SIZE;
+
+    type: IPNumType = IPNumType.ASN;
     private static AS_PREFIX = "AS";
 
     /**

@@ -918,11 +918,11 @@ img { max-width: 100%; }
 				<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-overwrite">
 					<a href="_asn_.asn.html#bitsize" class="tsd-kind-icon">bit<wbr>Size</a>
 				</li>
+				<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-overwrite">
+					<a href="_asn_.asn.html#maximumbitsize" class="tsd-kind-icon">maximum<wbr>Bit<wbr>Size</a>
+				</li>
 				<li class=" tsd-kind-property tsd-parent-kind-class">
 					<a href="_asn_.asn.html#type" class="tsd-kind-icon">type</a>
-				</li>
-				<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-overwrite">
-					<a href="_asn_.asn.html#validatorbitsize" class="tsd-kind-icon">validator<wbr>Bit<wbr>Size</a>
 				</li>
 				<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-overwrite">
 					<a href="_asn_.asn.html#value" class="tsd-kind-icon">value</a>
@@ -1048,8 +1048,8 @@ img { max-width: 100%; }
 						<h3>Properties</h3>
 						<ul class="tsd-index-list">
 							<li class="tsd-kind-property tsd-parent-kind-class tsd-is-overwrite"><a href="_asn_.asn.html#bitsize" class="tsd-kind-icon">bit<wbr>Size</a></li>
+							<li class="tsd-kind-property tsd-parent-kind-class tsd-is-overwrite"><a href="_asn_.asn.html#maximumbitsize" class="tsd-kind-icon">maximum<wbr>Bit<wbr>Size</a></li>
 							<li class="tsd-kind-property tsd-parent-kind-class"><a href="_asn_.asn.html#type" class="tsd-kind-icon">type</a></li>
-							<li class="tsd-kind-property tsd-parent-kind-class tsd-is-overwrite"><a href="_asn_.asn.html#validatorbitsize" class="tsd-kind-icon">validator<wbr>Bit<wbr>Size</a></li>
 							<li class="tsd-kind-property tsd-parent-kind-class tsd-is-overwrite"><a href="_asn_.asn.html#value" class="tsd-kind-icon">value</a></li>
 							<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private tsd-is-static"><a href="_asn_.asn.html#as_prefix" class="tsd-kind-icon">AS_<wbr>PREFIX</a></li>
 						</ul>
@@ -1095,7 +1095,7 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/c44e5a4/src/Asn.ts#L45">Asn.ts:45</a></li>
+								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/5773eb4/src/Asn.ts#L54">Asn.ts:54</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1129,9 +1129,30 @@ img { max-width: 100%; }
 				<aside class="tsd-sources">
 					<p>Overrides <a href="_abstractipnum_.abstractipnum.html">AbstractIPNum</a>.<a href="_abstractipnum_.abstractipnum.html#bitsize">bitSize</a></p>
 					<ul>
-						<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/c44e5a4/src/Asn.ts#L16">Asn.ts:16</a></li>
+						<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/5773eb4/src/Asn.ts#L23">Asn.ts:23</a></li>
 					</ul>
 				</aside>
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>The number of bits needed to represents the value of the ASN number</p>
+					</div>
+				</div>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-overwrite">
+				<a name="maximumbitsize" class="tsd-anchor"></a>
+				<h3>maximum<wbr>Bit<wbr>Size</h3>
+				<div class="tsd-signature tsd-kind-icon">maximum<wbr>Bit<wbr>Size<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">BigInteger</span><span class="tsd-signature-symbol"> =&nbsp;Validator.THIRTY_TWO_BIT_SIZE</span></div>
+				<aside class="tsd-sources">
+					<p>Overrides <a href="_abstractipnum_.abstractipnum.html">AbstractIPNum</a>.<a href="_abstractipnum_.abstractipnum.html#maximumbitsize">maximumBitSize</a></p>
+					<ul>
+						<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/5773eb4/src/Asn.ts#L27">Asn.ts:27</a></li>
+					</ul>
+				</aside>
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>The maximum bit size (i.e. binary value) of the ASN number in BigInteger</p>
+					</div>
+				</div>
 			</section>
 			<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 				<a name="type" class="tsd-anchor"></a>
@@ -1140,18 +1161,7 @@ img { max-width: 100%; }
 				<aside class="tsd-sources">
 					<p>Implementation of <a href="../interfaces/_interface_ipnumber_.ipnumber.html">IPNumber</a>.<a href="../interfaces/_interface_ipnumber_.ipnumber.html#type">type</a></p>
 					<ul>
-						<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/c44e5a4/src/Asn.ts#L18">Asn.ts:18</a></li>
-					</ul>
-				</aside>
-			</section>
-			<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-overwrite">
-				<a name="validatorbitsize" class="tsd-anchor"></a>
-				<h3>validator<wbr>Bit<wbr>Size</h3>
-				<div class="tsd-signature tsd-kind-icon">validator<wbr>Bit<wbr>Size<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">BigInteger</span><span class="tsd-signature-symbol"> =&nbsp;Validator.THIRTY_TWO_BIT_SIZE</span></div>
-				<aside class="tsd-sources">
-					<p>Overrides <a href="_abstractipnum_.abstractipnum.html">AbstractIPNum</a>.<a href="_abstractipnum_.abstractipnum.html#validatorbitsize">validatorBitSize</a></p>
-					<ul>
-						<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/c44e5a4/src/Asn.ts#L17">Asn.ts:17</a></li>
+						<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/5773eb4/src/Asn.ts#L29">Asn.ts:29</a></li>
 					</ul>
 				</aside>
 			</section>
@@ -1163,9 +1173,14 @@ img { max-width: 100%; }
 					<p>Implementation of <a href="../interfaces/_interface_ipnumber_.ipnumber.html">IPNumber</a>.<a href="../interfaces/_interface_ipnumber_.ipnumber.html#value">value</a></p>
 					<p>Overrides <a href="_abstractipnum_.abstractipnum.html">AbstractIPNum</a>.<a href="_abstractipnum_.abstractipnum.html#value">value</a></p>
 					<ul>
-						<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/c44e5a4/src/Asn.ts#L20">Asn.ts:20</a></li>
+						<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/5773eb4/src/Asn.ts#L19">Asn.ts:19</a></li>
 					</ul>
 				</aside>
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>The decimal value represented by the ASN number in BigInteger</p>
+					</div>
+				</div>
 			</section>
 			<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private tsd-is-static">
 				<a name="as_prefix" class="tsd-anchor"></a>
@@ -1173,7 +1188,7 @@ img { max-width: 100%; }
 				<div class="tsd-signature tsd-kind-icon">AS_<wbr>PREFIX<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;AS&quot;</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/c44e5a4/src/Asn.ts#L21">Asn.ts:21</a></li>
+						<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/5773eb4/src/Asn.ts#L30">Asn.ts:30</a></li>
 					</ul>
 				</aside>
 			</section>
@@ -1192,7 +1207,7 @@ img { max-width: 100%; }
 							<p>Implementation of <a href="../interfaces/_interface_ipnumber_.ipnumber.html">IPNumber</a>.<a href="../interfaces/_interface_ipnumber_.ipnumber.html#getvalue">getValue</a></p>
 							<p>Inherited from <a href="_abstractipnum_.abstractipnum.html">AbstractIPNum</a>.<a href="_abstractipnum_.abstractipnum.html#getvalue">getValue</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/c44e5a4/src/AbstractIPNum.ts#L17">AbstractIPNum.ts:17</a></li>
+								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/5773eb4/src/AbstractIPNum.ts#L26">AbstractIPNum.ts:26</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1217,7 +1232,7 @@ img { max-width: 100%; }
 							<p>Implementation of <a href="../interfaces/_interface_ipnumber_.ipnumber.html">IPNumber</a>.<a href="../interfaces/_interface_ipnumber_.ipnumber.html#hasnext">hasNext</a></p>
 							<p>Inherited from <a href="_abstractipnum_.abstractipnum.html">AbstractIPNum</a>.<a href="_abstractipnum_.abstractipnum.html#hasnext">hasNext</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/c44e5a4/src/AbstractIPNum.ts#L34">AbstractIPNum.ts:34</a></li>
+								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/5773eb4/src/AbstractIPNum.ts#L43">AbstractIPNum.ts:43</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1242,7 +1257,7 @@ img { max-width: 100%; }
 							<p>Implementation of <a href="../interfaces/_interface_ipnumber_.ipnumber.html">IPNumber</a>.<a href="../interfaces/_interface_ipnumber_.ipnumber.html#hasprevious">hasPrevious</a></p>
 							<p>Inherited from <a href="_abstractipnum_.abstractipnum.html">AbstractIPNum</a>.<a href="_abstractipnum_.abstractipnum.html#hasprevious">hasPrevious</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/c44e5a4/src/AbstractIPNum.ts#L42">AbstractIPNum.ts:42</a></li>
+								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/5773eb4/src/AbstractIPNum.ts#L51">AbstractIPNum.ts:51</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1265,7 +1280,7 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/c44e5a4/src/Asn.ts#L136">Asn.ts:136</a></li>
+								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/5773eb4/src/Asn.ts#L145">Asn.ts:145</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1288,7 +1303,7 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/c44e5a4/src/Asn.ts#L146">Asn.ts:146</a></li>
+								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/5773eb4/src/Asn.ts#L155">Asn.ts:155</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1312,7 +1327,7 @@ img { max-width: 100%; }
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="_abstractipnum_.abstractipnum.html">AbstractIPNum</a>.<a href="_abstractipnum_.abstractipnum.html#isequals">isEquals</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/c44e5a4/src/AbstractIPNum.ts#L52">AbstractIPNum.ts:52</a></li>
+								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/5773eb4/src/AbstractIPNum.ts#L61">AbstractIPNum.ts:61</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1345,7 +1360,7 @@ img { max-width: 100%; }
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="_abstractipnum_.abstractipnum.html">AbstractIPNum</a>.<a href="_abstractipnum_.abstractipnum.html#isgreaterthan">isGreaterThan</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/c44e5a4/src/AbstractIPNum.ts#L72">AbstractIPNum.ts:72</a></li>
+								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/5773eb4/src/AbstractIPNum.ts#L81">AbstractIPNum.ts:81</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1378,7 +1393,7 @@ img { max-width: 100%; }
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="_abstractipnum_.abstractipnum.html">AbstractIPNum</a>.<a href="_abstractipnum_.abstractipnum.html#isgreaterthanorequals">isGreaterThanOrEquals</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/c44e5a4/src/AbstractIPNum.ts#L93">AbstractIPNum.ts:93</a></li>
+								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/5773eb4/src/AbstractIPNum.ts#L102">AbstractIPNum.ts:102</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1412,7 +1427,7 @@ img { max-width: 100%; }
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="_abstractipnum_.abstractipnum.html">AbstractIPNum</a>.<a href="_abstractipnum_.abstractipnum.html#islessthan">isLessThan</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/c44e5a4/src/AbstractIPNum.ts#L62">AbstractIPNum.ts:62</a></li>
+								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/5773eb4/src/AbstractIPNum.ts#L71">AbstractIPNum.ts:71</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1445,7 +1460,7 @@ img { max-width: 100%; }
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="_abstractipnum_.abstractipnum.html">AbstractIPNum</a>.<a href="_abstractipnum_.abstractipnum.html#islessthanorequals">isLessThanOrEquals</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/c44e5a4/src/AbstractIPNum.ts#L82">AbstractIPNum.ts:82</a></li>
+								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/5773eb4/src/AbstractIPNum.ts#L91">AbstractIPNum.ts:91</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1478,7 +1493,7 @@ img { max-width: 100%; }
 						<aside class="tsd-sources">
 							<p>Implementation of <a href="../interfaces/_interface_ipnumber_.ipnumber.html">IPNumber</a>.<a href="../interfaces/_interface_ipnumber_.ipnumber.html#nextipnumber">nextIPNumber</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/c44e5a4/src/Asn.ts#L155">Asn.ts:155</a></li>
+								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/5773eb4/src/Asn.ts#L164">Asn.ts:164</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1501,7 +1516,7 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/c44e5a4/src/Asn.ts#L172">Asn.ts:172</a></li>
+								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/5773eb4/src/Asn.ts#L181">Asn.ts:181</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1525,7 +1540,7 @@ img { max-width: 100%; }
 						<aside class="tsd-sources">
 							<p>Implementation of <a href="../interfaces/_interface_ipnumber_.ipnumber.html">IPNumber</a>.<a href="../interfaces/_interface_ipnumber_.ipnumber.html#previousipnumber">previousIPNumber</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/c44e5a4/src/Asn.ts#L164">Asn.ts:164</a></li>
+								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/5773eb4/src/Asn.ts#L173">Asn.ts:173</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1548,7 +1563,7 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/c44e5a4/src/Asn.ts#L103">Asn.ts:103</a></li>
+								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/5773eb4/src/Asn.ts#L112">Asn.ts:112</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1574,7 +1589,7 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/c44e5a4/src/Asn.ts#L116">Asn.ts:116</a></li>
+								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/5773eb4/src/Asn.ts#L125">Asn.ts:125</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1597,7 +1612,7 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/c44e5a4/src/Asn.ts#L89">Asn.ts:89</a></li>
+								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/5773eb4/src/Asn.ts#L98">Asn.ts:98</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1621,7 +1636,7 @@ img { max-width: 100%; }
 						<aside class="tsd-sources">
 							<p>Overrides <a href="_abstractipnum_.abstractipnum.html">AbstractIPNum</a>.<a href="_abstractipnum_.abstractipnum.html#tobinarystring">toBinaryString</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/c44e5a4/src/Asn.ts#L127">Asn.ts:127</a></li>
+								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/5773eb4/src/Asn.ts#L136">Asn.ts:136</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1645,7 +1660,7 @@ img { max-width: 100%; }
 						<aside class="tsd-sources">
 							<p>Implementation of <a href="../interfaces/_interface_ipnumber_.ipnumber.html">IPNumber</a>.<a href="../interfaces/_interface_ipnumber_.ipnumber.html#tostring">toString</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/c44e5a4/src/Asn.ts#L79">Asn.ts:79</a></li>
+								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/5773eb4/src/Asn.ts#L88">Asn.ts:88</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1668,7 +1683,7 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/c44e5a4/src/Asn.ts#L43">Asn.ts:43</a></li>
+								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/5773eb4/src/Asn.ts#L52">Asn.ts:52</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1700,7 +1715,7 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/c44e5a4/src/Asn.ts#L33">Asn.ts:33</a></li>
+								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/5773eb4/src/Asn.ts#L42">Asn.ts:42</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1735,7 +1750,7 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/c44e5a4/src/Asn.ts#L168">Asn.ts:168</a></li>
+								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/5773eb4/src/Asn.ts#L177">Asn.ts:177</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-parameters-title">Parameters</h4>

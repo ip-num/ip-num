@@ -1717,7 +1717,7 @@ class AbstractIPNum {
         return BinaryUtils_1.leftPadWithZeroBit(this.value.toString(2), this.bitSize);
     }
     hasNext() {
-        return this.value.lesser(this.validatorBitSize);
+        return this.value.lesser(this.maximumBitSize);
     }
     hasPrevious() {
         return this.value.greater(bigInt.zero);
@@ -2049,7 +2049,7 @@ class IPv4 extends AbstractIPNum_1.AbstractIPNum {
         this.octets = [];
         this.separator = ".";
         this.bitSize = 32;
-        this.validatorBitSize = Validator_1.Validator.THIRTY_TWO_BIT_SIZE;
+        this.maximumBitSize = Validator_1.Validator.THIRTY_TWO_BIT_SIZE;
         if (typeof ipValue === "string") {
             let [value, octets] = this.constructFromDecimalDottedString(ipValue);
             this.value = value;
@@ -2144,7 +2144,7 @@ class IPv6 extends AbstractIPNum_1.AbstractIPNum {
         this.hexadecatet = [];
         this.separator = ":";
         this.bitSize = 128;
-        this.validatorBitSize = Validator_1.Validator.ONE_HUNDRED_AND_TWENTY_EIGHT_BIT_SIZE;
+        this.maximumBitSize = Validator_1.Validator.ONE_HUNDRED_AND_TWENTY_EIGHT_BIT_SIZE;
         if (typeof ipValue === "string") {
             let expandedIPv6 = IPv6Utils_1.expandIPv6Address(ipValue);
             let [value, hexadecatet] = this.constructFromHexadecimalDottedString(expandedIPv6);
@@ -2171,10 +2171,10 @@ class IPv6 extends AbstractIPNum_1.AbstractIPNum {
         return this.hexadecatet.map((value) => { return value.toString(); }).join(":");
     }
     nextIPNumber() {
-        return IPv6.parseFromBigInteger(this.getValue().add(1));
+        return IPv6.fromBigInteger(this.getValue().add(1));
     }
     previousIPNumber() {
-        return IPv6.parseFromBigInteger(this.getValue().minus(1));
+        return IPv6.fromBigInteger(this.getValue().minus(1));
     }
     constructFromBigIntegerValue(ipv6Number) {
         let [isValid, message] = Validator_1.Validator.isValidIPv6Number(ipv6Number);
@@ -2285,7 +2285,7 @@ class Asn extends AbstractIPNum_1.AbstractIPNum {
     constructor(rawValue) {
         super();
         this.bitSize = 32;
-        this.validatorBitSize = Validator_1.Validator.THIRTY_TWO_BIT_SIZE;
+        this.maximumBitSize = Validator_1.Validator.THIRTY_TWO_BIT_SIZE;
         this.type = IPNumType_1.IPNumType.ASN;
         if (typeof rawValue === 'string') {
             if (Asn.startWithASprefix(rawValue)) {
@@ -2577,7 +2577,7 @@ class IPv6Range {
         let cidrComponents = rangeIncidrNotation.split("/");
         let ipString = cidrComponents[0];
         let prefix = parseInt(cidrComponents[1]);
-        return new IPv6Range(IPv6_1.IPv6.parseFromHexadecimalString(ipString), Prefix_1.IPv6Prefix.fromNumber(prefix));
+        return new IPv6Range(IPv6_1.IPv6.fromHexadecimalString(ipString), Prefix_1.IPv6Prefix.fromNumber(prefix));
     }
     ;
     getSize() {
@@ -2596,13 +2596,13 @@ class IPv6Range {
         return `${this.getFirst()}-${this.getLast()}`;
     }
     getFirst() {
-        return IPv6_1.IPv6.parseFromBigInteger(this.ipv6.getValue().and(this.cidrPrefix.toSubnet().getValue()));
+        return IPv6_1.IPv6.fromBigInteger(this.ipv6.getValue().and(this.cidrPrefix.toSubnet().getValue()));
     }
     getLast() {
         let onMask = bigInt("1".repeat(128), 2);
         let subnetAsBigInteger = this.cidrPrefix.toSubnet().getValue();
         let invertedSubnet = BinaryUtils_1.leftPadWithZeroBit(subnetAsBigInteger.xor(onMask).toString(2), 128);
-        return IPv6_1.IPv6.parseFromBigInteger(this.ipv6.getValue().or(BinaryUtils_2.parseBinaryStringToBigInteger(invertedSubnet)));
+        return IPv6_1.IPv6.fromBigInteger(this.ipv6.getValue().or(BinaryUtils_2.parseBinaryStringToBigInteger(invertedSubnet)));
     }
     isConsecutive(otherRange) {
         let thisFirst = this.getFirst();

@@ -18,21 +18,66 @@ import {IPNumType} from "./IPNumType";
  * @see https://www.rfc-editor.org/info/rfc8200
  */
 export class IPv6 extends AbstractIPNum implements IPNumber {
+    /**
+     * The decimal value represented by the IPv6 number in BigInteger
+     */
     readonly value: bigInt.BigInteger;
-    readonly type: IPNumType = IPNumType.IPv6;
-    readonly hexadecatet: Array<Hexadecatet> = [];
-    readonly separator: string = ":";
+    /**
+     * The number of bits needed to represents the value of the IPv6 number
+     */
     readonly bitSize: number = 128;
-    readonly validatorBitSize: bigInt.BigInteger = Validator.ONE_HUNDRED_AND_TWENTY_EIGHT_BIT_SIZE;
+    /**
+     * The maximum bit size (i.e. binary value) of the IPv6 number in BigInteger
+     */
+    readonly maximumBitSize: bigInt.BigInteger = Validator.ONE_HUNDRED_AND_TWENTY_EIGHT_BIT_SIZE;
+    /**
+     * The type of IP number. Value is one of the values of the {@link IPNumType} enum
+     * @type {IPNumType} the type of IP number
+     */
+    readonly type: IPNumType = IPNumType.IPv6;
+    /**
+     * An array of {@link Hexadecatet}'s
+     *
+     * @type {Array} the hexadecatet that makes up the IPv6 address
+     */
+    readonly hexadecatet: Array<Hexadecatet> = [];
 
-    static parseFromBigInteger(bigIntValue: bigInt.BigInteger): IPv6 {
+    /**
+     * The string character used to separate the individual hexadecatet when the IPv6 is rendered as strings
+     *
+     * @type {string} The string character used to separate the individual hexadecatet when rendered as strings
+     */
+    readonly separator: string = ":";
+
+    /**
+     * A convenience method for creating an {@link IPv6} by providing the decimal value of the IP number in BigInteger
+     *
+     * @param {bigInt.BigInteger} bigIntValue the decimal value of the IP number in BigInteger
+     * @returns {IPv6} the IPv6 instance
+     */
+    static fromBigInteger(bigIntValue: bigInt.BigInteger): IPv6 {
         return new IPv6(bigIntValue);
     }
 
-    static parseFromHexadecimalString(ipString: string) : IPv6 {
+    /**
+     * A convenience method for creating an {@link IPv6} by providing the IP number in hexadecatet notation. E.g
+     * "2001:800:0:0:0:0:0:2002"
+     *
+     * {@see https://en.wikipedia.org/wiki/IPv6_address#Representation} for more information on hexadecatet notation.
+     *
+     * @param {string} ipString the IP number in hexadecatet
+     * @returns {IPv6} the IPv6 instance
+     */
+    static fromHexadecimalString(ipString: string) : IPv6 {
         return new IPv6(ipString);
     }
 
+    /**
+     * Constructor for an IPv6 number.
+     *
+     * @param {string | bigInt.BigInteger} ipValue value to construct an IPv6 from. The given value can either be
+     * numeric or string. If a string is given then it needs to be in hexadecatet string notation
+     */
     constructor(ipValue: string | bigInt.BigInteger) {
         super();
         if (typeof ipValue === "string" ) {
@@ -48,21 +93,41 @@ export class IPv6 extends AbstractIPNum implements IPNumber {
         }
     }
 
+    /**
+     * A string representation of the IPv6 number.
+     *
+     * @returns {string} The string representation of IPv6
+     */
+    public toString(): string {
+        return this.hexadecatet.map((value) => { return value.toString()}).join(":");
+    }
+
+    /**
+     * Gets the individual {@link Hexadecatet} that makes up the IPv6 address
+     *
+     * @returns {Array<Hexadecatet>} The individual {@link Hexadecatet} that makes up the IPv6 address
+     */
     //TODO maybe rename to something like getSegments? so it can be same with getOctet
     public getHexadecatet():Array<Hexadecatet> {
         return this.hexadecatet;
     }
 
-    public toString(): string {
-        return this.hexadecatet.map((value) => { return value.toString()}).join(":");
-    }
-
+    /**
+     * Returns the next IPv6 number
+     *
+     * @returns {IPv6} the next IPv6 number
+     */
     public nextIPNumber(): IPv6 {
-        return IPv6.parseFromBigInteger(this.getValue().add(1))
+        return IPv6.fromBigInteger(this.getValue().add(1))
     }
 
+    /**
+     * Returns the previous IPv6 number
+     *
+     * @returns {IPv6} the previous IPv6 number
+     */
     public previousIPNumber(): IPv6 {
-        return IPv6.parseFromBigInteger(this.getValue().minus(1))
+        return IPv6.fromBigInteger(this.getValue().minus(1))
     }
 
     private constructFromBigIntegerValue(ipv6Number: bigInt.BigInteger): [bigInt.BigInteger, Array<Hexadecatet>]  {

@@ -5,9 +5,18 @@ import {leftPadWithZeroBit} from "./BinaryUtils";
  * Provides the implementation of functionality that are common to {@link IPNumber}'s
  */
 export abstract class AbstractIPNum {
+    /**
+     * The decimal value represented by the IP number in BigInteger
+     */
     abstract readonly value: bigInt.BigInteger;
+    /**
+     * The number of bits needed to represents the value of the IP number
+     */
     abstract readonly bitSize: number;
-    abstract readonly validatorBitSize: bigInt.BigInteger;
+    /**
+     * The maximum bit size (i.e. binary value) of the IP number in BigInteger
+     */
+    abstract readonly maximumBitSize: bigInt.BigInteger;
 
     /**
      * Gets the numeric value of an IP number as {@link BigInteger}
@@ -32,7 +41,7 @@ export abstract class AbstractIPNum {
      * @returns {boolean} true, if there is a value greater than the present value. Returns false otherwise.
      */
     hasNext():boolean {
-        return this.value.lesser(this.validatorBitSize);
+        return this.value.lesser(this.maximumBitSize);
     }
 
     /**

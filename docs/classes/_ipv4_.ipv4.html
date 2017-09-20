@@ -918,6 +918,9 @@ img { max-width: 100%; }
 				<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-overwrite">
 					<a href="_ipv4_.ipv4.html#bitsize" class="tsd-kind-icon">bit<wbr>Size</a>
 				</li>
+				<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-overwrite">
+					<a href="_ipv4_.ipv4.html#maximumbitsize" class="tsd-kind-icon">maximum<wbr>Bit<wbr>Size</a>
+				</li>
 				<li class=" tsd-kind-property tsd-parent-kind-class">
 					<a href="_ipv4_.ipv4.html#octets" class="tsd-kind-icon">octets</a>
 				</li>
@@ -926,9 +929,6 @@ img { max-width: 100%; }
 				</li>
 				<li class=" tsd-kind-property tsd-parent-kind-class">
 					<a href="_ipv4_.ipv4.html#type" class="tsd-kind-icon">type</a>
-				</li>
-				<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-overwrite">
-					<a href="_ipv4_.ipv4.html#validatorbitsize" class="tsd-kind-icon">validator<wbr>Bit<wbr>Size</a>
 				</li>
 				<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-overwrite">
 					<a href="_ipv4_.ipv4.html#value" class="tsd-kind-icon">value</a>
@@ -1042,10 +1042,10 @@ img { max-width: 100%; }
 						<h3>Properties</h3>
 						<ul class="tsd-index-list">
 							<li class="tsd-kind-property tsd-parent-kind-class tsd-is-overwrite"><a href="_ipv4_.ipv4.html#bitsize" class="tsd-kind-icon">bit<wbr>Size</a></li>
+							<li class="tsd-kind-property tsd-parent-kind-class tsd-is-overwrite"><a href="_ipv4_.ipv4.html#maximumbitsize" class="tsd-kind-icon">maximum<wbr>Bit<wbr>Size</a></li>
 							<li class="tsd-kind-property tsd-parent-kind-class"><a href="_ipv4_.ipv4.html#octets" class="tsd-kind-icon">octets</a></li>
 							<li class="tsd-kind-property tsd-parent-kind-class"><a href="_ipv4_.ipv4.html#separator" class="tsd-kind-icon">separator</a></li>
 							<li class="tsd-kind-property tsd-parent-kind-class"><a href="_ipv4_.ipv4.html#type" class="tsd-kind-icon">type</a></li>
-							<li class="tsd-kind-property tsd-parent-kind-class tsd-is-overwrite"><a href="_ipv4_.ipv4.html#validatorbitsize" class="tsd-kind-icon">validator<wbr>Bit<wbr>Size</a></li>
 							<li class="tsd-kind-property tsd-parent-kind-class tsd-is-overwrite"><a href="_ipv4_.ipv4.html#value" class="tsd-kind-icon">value</a></li>
 						</ul>
 					</section>
@@ -1087,13 +1087,24 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/c44e5a4/src/IPv4.ts#L33">IPv4.ts:33</a></li>
+								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/5773eb4/src/IPv4.ts#L72">IPv4.ts:72</a></li>
 							</ul>
 						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Constructor for an IPv4 number.</p>
+							</div>
+						</div>
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
 							<li>
 								<h5>ipValue: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">BigInteger</span></h5>
+								<div class="tsd-comment tsd-typography">
+									<div class="lead">
+										<p>value to construct an IPv4 from. The given value can either be
+										numeric or string. If a string is given then it needs to be in dot-decimal notation</p>
+									</div>
+								</div>
 							</li>
 						</ul>
 						<h4 class="tsd-returns-title">Returns <a href="_ipv4_.ipv4.html" class="tsd-signature-type">IPv4</a></h4>
@@ -1110,9 +1121,30 @@ img { max-width: 100%; }
 				<aside class="tsd-sources">
 					<p>Overrides <a href="_abstractipnum_.abstractipnum.html">AbstractIPNum</a>.<a href="_abstractipnum_.abstractipnum.html#bitsize">bitSize</a></p>
 					<ul>
-						<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/c44e5a4/src/IPv4.ts#L24">IPv4.ts:24</a></li>
+						<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/5773eb4/src/IPv4.ts#L27">IPv4.ts:27</a></li>
 					</ul>
 				</aside>
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>The number of bits needed to represents the value of the IPv4 number</p>
+					</div>
+				</div>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-overwrite">
+				<a name="maximumbitsize" class="tsd-anchor"></a>
+				<h3>maximum<wbr>Bit<wbr>Size</h3>
+				<div class="tsd-signature tsd-kind-icon">maximum<wbr>Bit<wbr>Size<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">BigInteger</span><span class="tsd-signature-symbol"> =&nbsp;Validator.THIRTY_TWO_BIT_SIZE</span></div>
+				<aside class="tsd-sources">
+					<p>Overrides <a href="_abstractipnum_.abstractipnum.html">AbstractIPNum</a>.<a href="_abstractipnum_.abstractipnum.html#maximumbitsize">maximumBitSize</a></p>
+					<ul>
+						<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/5773eb4/src/IPv4.ts#L31">IPv4.ts:31</a></li>
+					</ul>
+				</aside>
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>The maximum bit size (i.e. binary value) of the IPv4 number in BigInteger</p>
+					</div>
+				</div>
 			</section>
 			<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 				<a name="octets" class="tsd-anchor"></a>
@@ -1120,9 +1152,19 @@ img { max-width: 100%; }
 				<div class="tsd-signature tsd-kind-icon">octets<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><a href="_octet_.octet.html" class="tsd-signature-type">Octet</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> =&nbsp;[]</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/c44e5a4/src/IPv4.ts#L22">IPv4.ts:22</a></li>
+						<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/5773eb4/src/IPv4.ts#L42">IPv4.ts:42</a></li>
 					</ul>
 				</aside>
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>An array of <a href="_octet_.octet.html">Octet</a>&#39;s</p>
+					</div>
+					<dl class="tsd-comment-tags">
+						<dt>type</dt>
+						<dd><p>{Array} the octets that makes up the IPv4 address</p>
+						</dd>
+					</dl>
+				</div>
 			</section>
 			<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 				<a name="separator" class="tsd-anchor"></a>
@@ -1130,9 +1172,19 @@ img { max-width: 100%; }
 				<div class="tsd-signature tsd-kind-icon">separator<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;.&quot;</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/c44e5a4/src/IPv4.ts#L23">IPv4.ts:23</a></li>
+						<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/5773eb4/src/IPv4.ts#L49">IPv4.ts:49</a></li>
 					</ul>
 				</aside>
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>The string character used to separate the individual octets when the IPv4 is rendered as strings</p>
+					</div>
+					<dl class="tsd-comment-tags">
+						<dt>type</dt>
+						<dd><p>{string} The string character used to separate the individual octets when rendered as strings</p>
+						</dd>
+					</dl>
+				</div>
 			</section>
 			<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 				<a name="type" class="tsd-anchor"></a>
@@ -1141,20 +1193,19 @@ img { max-width: 100%; }
 				<aside class="tsd-sources">
 					<p>Implementation of <a href="../interfaces/_interface_ipnumber_.ipnumber.html">IPNumber</a>.<a href="../interfaces/_interface_ipnumber_.ipnumber.html#type">type</a></p>
 					<ul>
-						<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/c44e5a4/src/IPv4.ts#L21">IPv4.ts:21</a></li>
+						<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/5773eb4/src/IPv4.ts#L36">IPv4.ts:36</a></li>
 					</ul>
 				</aside>
-			</section>
-			<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-overwrite">
-				<a name="validatorbitsize" class="tsd-anchor"></a>
-				<h3>validator<wbr>Bit<wbr>Size</h3>
-				<div class="tsd-signature tsd-kind-icon">validator<wbr>Bit<wbr>Size<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">BigInteger</span><span class="tsd-signature-symbol"> =&nbsp;Validator.THIRTY_TWO_BIT_SIZE</span></div>
-				<aside class="tsd-sources">
-					<p>Overrides <a href="_abstractipnum_.abstractipnum.html">AbstractIPNum</a>.<a href="_abstractipnum_.abstractipnum.html#validatorbitsize">validatorBitSize</a></p>
-					<ul>
-						<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/c44e5a4/src/IPv4.ts#L25">IPv4.ts:25</a></li>
-					</ul>
-				</aside>
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>The type of IP number. Value is one of the values of the <a href="../enums/_ipnumtype_.ipnumtype.html">IPNumType</a> enum</p>
+					</div>
+					<dl class="tsd-comment-tags">
+						<dt>type</dt>
+						<dd><p>{IPNumType} the type of IP number</p>
+						</dd>
+					</dl>
+				</div>
 			</section>
 			<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-overwrite">
 				<a name="value" class="tsd-anchor"></a>
@@ -1164,9 +1215,14 @@ img { max-width: 100%; }
 					<p>Implementation of <a href="../interfaces/_interface_ipnumber_.ipnumber.html">IPNumber</a>.<a href="../interfaces/_interface_ipnumber_.ipnumber.html#value">value</a></p>
 					<p>Overrides <a href="_abstractipnum_.abstractipnum.html">AbstractIPNum</a>.<a href="_abstractipnum_.abstractipnum.html#value">value</a></p>
 					<ul>
-						<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/c44e5a4/src/IPv4.ts#L20">IPv4.ts:20</a></li>
+						<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/5773eb4/src/IPv4.ts#L23">IPv4.ts:23</a></li>
 					</ul>
 				</aside>
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>The decimal value represented by the IPv4 number in BigInteger</p>
+					</div>
+				</div>
 			</section>
 		</section>
 		<section class="tsd-panel-group tsd-member-group ">
@@ -1181,7 +1237,7 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/c44e5a4/src/IPv4.ts#L88">IPv4.ts:88</a></li>
+								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/5773eb4/src/IPv4.ts#L153">IPv4.ts:153</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1204,7 +1260,7 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/c44e5a4/src/IPv4.ts#L79">IPv4.ts:79</a></li>
+								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/5773eb4/src/IPv4.ts#L144">IPv4.ts:144</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1227,7 +1283,7 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/c44e5a4/src/IPv4.ts#L64">IPv4.ts:64</a></li>
+								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/5773eb4/src/IPv4.ts#L129">IPv4.ts:129</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1250,10 +1306,16 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/c44e5a4/src/IPv4.ts#L52">IPv4.ts:52</a></li>
+								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/5773eb4/src/IPv4.ts#L107">IPv4.ts:107</a></li>
 							</ul>
 						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Gets the individual <a href="_octet_.octet.html">Octet</a> that makes up the IPv4 address</p>
+							</div>
+						</div>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><a href="_octet_.octet.html" class="tsd-signature-type">Octet</a><span class="tsd-signature-symbol">&gt;</span></h4>
+						<p>The individual <a href="_octet_.octet.html">Octet</a> that makes up the IPv4 address</p>
 					</li>
 				</ul>
 			</section>
@@ -1269,7 +1331,7 @@ img { max-width: 100%; }
 							<p>Implementation of <a href="../interfaces/_interface_ipnumber_.ipnumber.html">IPNumber</a>.<a href="../interfaces/_interface_ipnumber_.ipnumber.html#getvalue">getValue</a></p>
 							<p>Inherited from <a href="_abstractipnum_.abstractipnum.html">AbstractIPNum</a>.<a href="_abstractipnum_.abstractipnum.html#getvalue">getValue</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/c44e5a4/src/AbstractIPNum.ts#L17">AbstractIPNum.ts:17</a></li>
+								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/5773eb4/src/AbstractIPNum.ts#L26">AbstractIPNum.ts:26</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1294,7 +1356,7 @@ img { max-width: 100%; }
 							<p>Implementation of <a href="../interfaces/_interface_ipnumber_.ipnumber.html">IPNumber</a>.<a href="../interfaces/_interface_ipnumber_.ipnumber.html#hasnext">hasNext</a></p>
 							<p>Inherited from <a href="_abstractipnum_.abstractipnum.html">AbstractIPNum</a>.<a href="_abstractipnum_.abstractipnum.html#hasnext">hasNext</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/c44e5a4/src/AbstractIPNum.ts#L34">AbstractIPNum.ts:34</a></li>
+								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/5773eb4/src/AbstractIPNum.ts#L43">AbstractIPNum.ts:43</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1319,7 +1381,7 @@ img { max-width: 100%; }
 							<p>Implementation of <a href="../interfaces/_interface_ipnumber_.ipnumber.html">IPNumber</a>.<a href="../interfaces/_interface_ipnumber_.ipnumber.html#hasprevious">hasPrevious</a></p>
 							<p>Inherited from <a href="_abstractipnum_.abstractipnum.html">AbstractIPNum</a>.<a href="_abstractipnum_.abstractipnum.html#hasprevious">hasPrevious</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/c44e5a4/src/AbstractIPNum.ts#L42">AbstractIPNum.ts:42</a></li>
+								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/5773eb4/src/AbstractIPNum.ts#L51">AbstractIPNum.ts:51</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1343,7 +1405,7 @@ img { max-width: 100%; }
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="_abstractipnum_.abstractipnum.html">AbstractIPNum</a>.<a href="_abstractipnum_.abstractipnum.html#isequals">isEquals</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/c44e5a4/src/AbstractIPNum.ts#L52">AbstractIPNum.ts:52</a></li>
+								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/5773eb4/src/AbstractIPNum.ts#L61">AbstractIPNum.ts:61</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1376,7 +1438,7 @@ img { max-width: 100%; }
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="_abstractipnum_.abstractipnum.html">AbstractIPNum</a>.<a href="_abstractipnum_.abstractipnum.html#isgreaterthan">isGreaterThan</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/c44e5a4/src/AbstractIPNum.ts#L72">AbstractIPNum.ts:72</a></li>
+								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/5773eb4/src/AbstractIPNum.ts#L81">AbstractIPNum.ts:81</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1409,7 +1471,7 @@ img { max-width: 100%; }
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="_abstractipnum_.abstractipnum.html">AbstractIPNum</a>.<a href="_abstractipnum_.abstractipnum.html#isgreaterthanorequals">isGreaterThanOrEquals</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/c44e5a4/src/AbstractIPNum.ts#L93">AbstractIPNum.ts:93</a></li>
+								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/5773eb4/src/AbstractIPNum.ts#L102">AbstractIPNum.ts:102</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1443,7 +1505,7 @@ img { max-width: 100%; }
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="_abstractipnum_.abstractipnum.html">AbstractIPNum</a>.<a href="_abstractipnum_.abstractipnum.html#islessthan">isLessThan</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/c44e5a4/src/AbstractIPNum.ts#L62">AbstractIPNum.ts:62</a></li>
+								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/5773eb4/src/AbstractIPNum.ts#L71">AbstractIPNum.ts:71</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1476,7 +1538,7 @@ img { max-width: 100%; }
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="_abstractipnum_.abstractipnum.html">AbstractIPNum</a>.<a href="_abstractipnum_.abstractipnum.html#islessthanorequals">isLessThanOrEquals</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/c44e5a4/src/AbstractIPNum.ts#L82">AbstractIPNum.ts:82</a></li>
+								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/5773eb4/src/AbstractIPNum.ts#L91">AbstractIPNum.ts:91</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1509,10 +1571,16 @@ img { max-width: 100%; }
 						<aside class="tsd-sources">
 							<p>Implementation of <a href="../interfaces/_interface_ipnumber_.ipnumber.html">IPNumber</a>.<a href="../interfaces/_interface_ipnumber_.ipnumber.html#nextipnumber">nextIPNumber</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/c44e5a4/src/IPv4.ts#L56">IPv4.ts:56</a></li>
+								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/5773eb4/src/IPv4.ts#L116">IPv4.ts:116</a></li>
 							</ul>
 						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Returns the next IPv4 number</p>
+							</div>
+						</div>
 						<h4 class="tsd-returns-title">Returns <a href="_ipv4_.ipv4.html" class="tsd-signature-type">IPv4</a></h4>
+						<p>the next IPv4 number</p>
 					</li>
 				</ul>
 			</section>
@@ -1527,10 +1595,16 @@ img { max-width: 100%; }
 						<aside class="tsd-sources">
 							<p>Implementation of <a href="../interfaces/_interface_ipnumber_.ipnumber.html">IPNumber</a>.<a href="../interfaces/_interface_ipnumber_.ipnumber.html#previousipnumber">previousIPNumber</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/c44e5a4/src/IPv4.ts#L60">IPv4.ts:60</a></li>
+								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/5773eb4/src/IPv4.ts#L125">IPv4.ts:125</a></li>
 							</ul>
 						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Returns the previous IPv4 number</p>
+							</div>
+						</div>
 						<h4 class="tsd-returns-title">Returns <a href="_ipv4_.ipv4.html" class="tsd-signature-type">IPv4</a></h4>
+						<p>the previous IPv4 number</p>
 					</li>
 				</ul>
 			</section>
@@ -1545,7 +1619,7 @@ img { max-width: 100%; }
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="_abstractipnum_.abstractipnum.html">AbstractIPNum</a>.<a href="_abstractipnum_.abstractipnum.html#tobinarystring">toBinaryString</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/c44e5a4/src/AbstractIPNum.ts#L26">AbstractIPNum.ts:26</a></li>
+								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/5773eb4/src/AbstractIPNum.ts#L35">AbstractIPNum.ts:35</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1569,10 +1643,16 @@ img { max-width: 100%; }
 						<aside class="tsd-sources">
 							<p>Implementation of <a href="../interfaces/_interface_ipnumber_.ipnumber.html">IPNumber</a>.<a href="../interfaces/_interface_ipnumber_.ipnumber.html#tostring">toString</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/c44e5a4/src/IPv4.ts#L48">IPv4.ts:48</a></li>
+								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/5773eb4/src/IPv4.ts#L98">IPv4.ts:98</a></li>
 							</ul>
 						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>A string representation of the IPv4 number. The string representation is in dot-decimal notation</p>
+							</div>
+						</div>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
+						<p>The string representation in dot-decimal notation</p>
 					</li>
 				</ul>
 			</section>
@@ -1586,16 +1666,25 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/c44e5a4/src/IPv4.ts#L27">IPv4.ts:27</a></li>
+								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/5773eb4/src/IPv4.ts#L57">IPv4.ts:57</a></li>
 							</ul>
 						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>A convenience method for creating an <a href="_ipv4_.ipv4.html">IPv4</a> by providing the decimal value of the IP number in BigInteger</p>
+							</div>
+						</div>
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
 							<li>
 								<h5>bigIntValue: <span class="tsd-signature-type">BigInteger</span></h5>
+								<div class="tsd-comment tsd-typography">
+									<p>the decimal value of the IP number in BigInteger</p>
+								</div>
 							</li>
 						</ul>
 						<h4 class="tsd-returns-title">Returns <a href="_ipv4_.ipv4.html" class="tsd-signature-type">IPv4</a></h4>
+						<p>the IPv4 instance</p>
 					</li>
 				</ul>
 			</section>
@@ -1609,16 +1698,27 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/c44e5a4/src/IPv4.ts#L31">IPv4.ts:31</a></li>
+								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/5773eb4/src/IPv4.ts#L70">IPv4.ts:70</a></li>
 							</ul>
 						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>A convenience method for creating an <a href="_ipv4_.ipv4.html">IPv4</a> by providing the IP number in dot-decimal notation. E.g
+								&quot;10.1.1.10&quot;</p>
+							</div>
+							<p>{@see <a href="https://en.wikipedia.org/wiki/Dot-decimal_notation}">https://en.wikipedia.org/wiki/Dot-decimal_notation}</a> for more information on dot-decimal notation.</p>
+						</div>
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
 							<li>
 								<h5>ipString: <span class="tsd-signature-type">string</span></h5>
+								<div class="tsd-comment tsd-typography">
+									<p>the IP number in dot-decimal notation</p>
+								</div>
 							</li>
 						</ul>
 						<h4 class="tsd-returns-title">Returns <a href="_ipv4_.ipv4.html" class="tsd-signature-type">IPv4</a></h4>
+						<p>the IPv4 instance</p>
 					</li>
 				</ul>
 			</section>
