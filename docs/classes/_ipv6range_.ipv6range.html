@@ -984,7 +984,7 @@ img { max-width: 100%; }
 		<section class="tsd-panel tsd-comment">
 			<div class="tsd-comment tsd-typography">
 				<div class="lead">
-					<p>Represents a continuous segment of IPv4 addresses following the
+					<p>Represents a continuous segment of IPv6 addresses following the
 					classless inter-domain routing scheme for allocating IP addresses.</p>
 				</div>
 				<dl class="tsd-comment-tags">
@@ -1064,9 +1064,16 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/d59a6ea/src/IPv6Range.ts#L29">IPv6Range.ts:29</a></li>
+								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/8466b6e/src/IPv6Range.ts#L36">IPv6Range.ts:36</a></li>
 							</ul>
 						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Constructor for creating an instance of an IPv6 range.</p>
+							</div>
+							<p>The arguments taken by the constructor is inspired by the CIDR notation which basically consists of the IP
+							number and the prefix.</p>
+						</div>
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
 							<li>
@@ -1074,6 +1081,12 @@ img { max-width: 100%; }
 							</li>
 							<li>
 								<h5>cidrPrefix: <a href="_prefix_.ipv6prefix.html" class="tsd-signature-type">IPv6Prefix</a></h5>
+								<div class="tsd-comment tsd-typography">
+									<div class="lead">
+										<p>the prefix which is a representation of the number of bits used to mask the
+										given IPv6 number in other to create the range</p>
+									</div>
+								</div>
 							</li>
 						</ul>
 						<h4 class="tsd-returns-title">Returns <a href="_ipv6range_.ipv6range.html" class="tsd-signature-type">IPv6Range</a></h4>
@@ -1089,7 +1102,7 @@ img { max-width: 100%; }
 				<div class="tsd-signature tsd-kind-icon">bit<wbr>Value<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">BigInteger</span><span class="tsd-signature-symbol"> =&nbsp;bigInt(128)</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/d59a6ea/src/IPv6Range.ts#L16">IPv6Range.ts:16</a></li>
+						<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/8466b6e/src/IPv6Range.ts#L17">IPv6Range.ts:17</a></li>
 					</ul>
 				</aside>
 			</section>
@@ -1099,9 +1112,15 @@ img { max-width: 100%; }
 				<div class="tsd-signature tsd-kind-icon">cidr<wbr>Prefix<span class="tsd-signature-symbol">:</span> <a href="_prefix_.ipv6prefix.html" class="tsd-signature-type">IPv6Prefix</a></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/d59a6ea/src/IPv6Range.ts#L31">IPv6Range.ts:31</a></li>
+						<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/8466b6e/src/IPv6Range.ts#L49">IPv6Range.ts:49</a></li>
 					</ul>
 				</aside>
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>the prefix which is a representation of the number of bits used to mask the
+						given IPv6 number in other to create the range</p>
+					</div>
+				</div>
 			</section>
 			<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
 				<a name="internalcountervalue" class="tsd-anchor"></a>
@@ -1109,7 +1128,7 @@ img { max-width: 100%; }
 				<div class="tsd-signature tsd-kind-icon">internal<wbr>Counter<wbr>Value<span class="tsd-signature-symbol">:</span> <a href="_ipv6_.ipv6.html" class="tsd-signature-type">IPv6</a></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/d59a6ea/src/IPv6Range.ts#L17">IPv6Range.ts:17</a></li>
+						<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/8466b6e/src/IPv6Range.ts#L18">IPv6Range.ts:18</a></li>
 					</ul>
 				</aside>
 			</section>
@@ -1119,7 +1138,7 @@ img { max-width: 100%; }
 				<div class="tsd-signature tsd-kind-icon">ipv6<span class="tsd-signature-symbol">:</span> <a href="_ipv6_.ipv6.html" class="tsd-signature-type">IPv6</a></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/d59a6ea/src/IPv6Range.ts#L31">IPv6Range.ts:31</a></li>
+						<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/8466b6e/src/IPv6Range.ts#L49">IPv6Range.ts:49</a></li>
 					</ul>
 				</aside>
 			</section>
@@ -1136,7 +1155,7 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/d59a6ea/src/IPv6Range.ts#L167">IPv6Range.ts:167</a></li>
+								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/8466b6e/src/IPv6Range.ts#L259">IPv6Range.ts:259</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">IterableIterator</span><span class="tsd-signature-symbol">&lt;</span><a href="_ipv6_.ipv6.html" class="tsd-signature-type">IPv6</a><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -1153,16 +1172,26 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/d59a6ea/src/IPv6Range.ts#L77">IPv6Range.ts:77</a></li>
+								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/8466b6e/src/IPv6Range.ts#L143">IPv6Range.ts:143</a></li>
 							</ul>
 						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Indicates if the given IPv6 range is a subset.</p>
+							</div>
+							<p>By a subset range, it means all the values of the given range are contained by this IPv6 range</p>
+						</div>
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
 							<li>
 								<h5>otherRange: <a href="_ipv6range_.ipv6range.html" class="tsd-signature-type">IPv6Range</a></h5>
+								<div class="tsd-comment tsd-typography">
+									<p>the other IPv6 range</p>
+								</div>
 							</li>
 						</ul>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
+						<p>true if the other Ipv6 range is a subset. False otherwise.</p>
 					</li>
 				</ul>
 			</section>
@@ -1177,10 +1206,16 @@ img { max-width: 100%; }
 						<aside class="tsd-sources">
 							<p>Implementation of <a href="../interfaces/_interface_iprange_.iprange.html">IPRange</a>.<a href="../interfaces/_interface_iprange_.iprange.html#getfirst">getFirst</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/d59a6ea/src/IPv6Range.ts#L53">IPv6Range.ts:53</a></li>
+								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/8466b6e/src/IPv6Range.ts#L95">IPv6Range.ts:95</a></li>
 							</ul>
 						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Method that returns the first IPv6 number in the IPv6 range</p>
+							</div>
+						</div>
 						<h4 class="tsd-returns-title">Returns <a href="_ipv6_.ipv6.html" class="tsd-signature-type">IPv6</a></h4>
+						<p>the first IPv6 number in the IPv6 range</p>
 					</li>
 				</ul>
 			</section>
@@ -1195,10 +1230,16 @@ img { max-width: 100%; }
 						<aside class="tsd-sources">
 							<p>Implementation of <a href="../interfaces/_interface_iprange_.iprange.html">IPRange</a>.<a href="../interfaces/_interface_iprange_.iprange.html#getlast">getLast</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/d59a6ea/src/IPv6Range.ts#L57">IPv6Range.ts:57</a></li>
+								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/8466b6e/src/IPv6Range.ts#L104">IPv6Range.ts:104</a></li>
 							</ul>
 						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Method that returns the last IPv6 number in the IPv6 range</p>
+							</div>
+						</div>
 						<h4 class="tsd-returns-title">Returns <a href="_ipv6_.ipv6.html" class="tsd-signature-type">IPv6</a></h4>
+						<p>the last IPv6 number in the IPv6 range</p>
 					</li>
 				</ul>
 			</section>
@@ -1213,10 +1254,16 @@ img { max-width: 100%; }
 						<aside class="tsd-sources">
 							<p>Implementation of <a href="../interfaces/_interface_iprange_.iprange.html">IPRange</a>.<a href="../interfaces/_interface_iprange_.iprange.html#getsize">getSize</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/d59a6ea/src/IPv6Range.ts#L35">IPv6Range.ts:35</a></li>
+								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/8466b6e/src/IPv6Range.ts#L58">IPv6Range.ts:58</a></li>
 							</ul>
 						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Gets the size of IPv6 numbers contained within the IPv6 range</p>
+							</div>
+						</div>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">BigInteger</span></h4>
+						<p>the amount of IPv6 numbers in the range</p>
 					</li>
 				</ul>
 			</section>
@@ -1230,16 +1277,26 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/d59a6ea/src/IPv6Range.ts#L86">IPv6Range.ts:86</a></li>
+								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/8466b6e/src/IPv6Range.ts#L161">IPv6Range.ts:161</a></li>
 							</ul>
 						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Indicate if the given range is a container range.</p>
+							</div>
+							<p>By container range, it means all the IP number in this current range can be found within the given range.</p>
+						</div>
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
 							<li>
 								<h5>otherRange: <a href="_ipv6range_.ipv6range.html" class="tsd-signature-type">IPv6Range</a></h5>
+								<div class="tsd-comment tsd-typography">
+									<p>he other IPv6 range</p>
+								</div>
 							</li>
 						</ul>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
+						<p>true if the other Ipv6 range is a container range. False otherwise.</p>
 					</li>
 				</ul>
 			</section>
@@ -1253,16 +1310,27 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/d59a6ea/src/IPv6Range.ts#L64">IPv6Range.ts:64</a></li>
+								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/8466b6e/src/IPv6Range.ts#L121">IPv6Range.ts:121</a></li>
 							</ul>
 						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Indicates whether the given IPv6 range is an adjacent range.</p>
+							</div>
+							<p>An adjacent range being one where the end of the given range, when incremented by one marks the start of the
+							other range. Or where the start of the given range, when decreased by one, marks the end of the other range</p>
+						</div>
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
 							<li>
 								<h5>otherRange: <a href="_ipv6range_.ipv6range.html" class="tsd-signature-type">IPv6Range</a></h5>
+								<div class="tsd-comment tsd-typography">
+									<p>the other IPv6 range to compare with</p>
+								</div>
 							</li>
 						</ul>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
+						<p>true if the two IPv6 ranges are consecutive, false otherwise</p>
 					</li>
 				</ul>
 			</section>
@@ -1276,16 +1344,25 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/d59a6ea/src/IPv6Range.ts#L95">IPv6Range.ts:95</a></li>
+								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/8466b6e/src/IPv6Range.ts#L176">IPv6Range.ts:176</a></li>
 							</ul>
 						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Checks if two IPv6 ranges overlap</p>
+							</div>
+						</div>
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
 							<li>
 								<h5>otherRange: <a href="_ipv6range_.ipv6range.html" class="tsd-signature-type">IPv6Range</a></h5>
+								<div class="tsd-comment tsd-typography">
+									<p>the other IPv6 range</p>
+								</div>
 							</li>
 						</ul>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
+						<p>true if the ranges overlap, false otherwise</p>
 					</li>
 				</ul>
 			</section>
@@ -1300,7 +1377,7 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/d59a6ea/src/IPv6Range.ts#L137">IPv6Range.ts:137</a></li>
+								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/8466b6e/src/IPv6Range.ts#L229">IPv6Range.ts:229</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1314,7 +1391,7 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/d59a6ea/src/IPv6Range.ts#L138">IPv6Range.ts:138</a></li>
+								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/8466b6e/src/IPv6Range.ts#L230">IPv6Range.ts:230</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1337,7 +1414,7 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/d59a6ea/src/IPv6Range.ts#L155">IPv6Range.ts:155</a></li>
+								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/8466b6e/src/IPv6Range.ts#L247">IPv6Range.ts:247</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1361,10 +1438,16 @@ img { max-width: 100%; }
 						<aside class="tsd-sources">
 							<p>Implementation of <a href="../interfaces/_interface_iprange_.iprange.html">IPRange</a>.<a href="../interfaces/_interface_iprange_.iprange.html#split">split</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/d59a6ea/src/IPv6Range.ts#L123">IPv6Range.ts:123</a></li>
+								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/8466b6e/src/IPv6Range.ts#L215">IPv6Range.ts:215</a></li>
 							</ul>
 						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Method that splits an IPv6 range into two halves</p>
+							</div>
+						</div>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><a href="_ipv6range_.ipv6range.html" class="tsd-signature-type">IPv6Range</a><span class="tsd-signature-symbol">&gt;</span></h4>
+						<p>An array of two <a href="_ipv6range_.ipv6range.html">IPv6Range</a></p>
 					</li>
 				</ul>
 			</section>
@@ -1379,16 +1462,25 @@ img { max-width: 100%; }
 						<aside class="tsd-sources">
 							<p>Implementation of <a href="../interfaces/_interface_iprange_.iprange.html">IPRange</a>.<a href="../interfaces/_interface_iprange_.iprange.html#take">take</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/d59a6ea/src/IPv6Range.ts#L108">IPv6Range.ts:108</a></li>
+								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/8466b6e/src/IPv6Range.ts#L195">IPv6Range.ts:195</a></li>
 							</ul>
 						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Method that takes IPv6 number from within an IPv6 range, starting from the first IPv6 number</p>
+							</div>
+						</div>
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
 							<li>
 								<h5>count: <span class="tsd-signature-type">number</span></h5>
+								<div class="tsd-comment tsd-typography">
+									<p>the amount of IPv6 number to take from the IPv6 range</p>
+								</div>
 							</li>
 						</ul>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><a href="_ipv6_.ipv6.html" class="tsd-signature-type">IPv6</a><span class="tsd-signature-symbol">&gt;</span></h4>
+						<p>an array of IPv6 number, taken from the IPv6 range</p>
 					</li>
 				</ul>
 			</section>
@@ -1402,7 +1494,7 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/d59a6ea/src/IPv6Range.ts#L163">IPv6Range.ts:163</a></li>
+								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/8466b6e/src/IPv6Range.ts#L255">IPv6Range.ts:255</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1426,10 +1518,18 @@ img { max-width: 100%; }
 						<aside class="tsd-sources">
 							<p>Implementation of <a href="../interfaces/_interface_iprange_.iprange.html">IPRange</a>.<a href="../interfaces/_interface_iprange_.iprange.html#tocidrstring">toCidrString</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/d59a6ea/src/IPv6Range.ts#L45">IPv6Range.ts:45</a></li>
+								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/8466b6e/src/IPv6Range.ts#L76">IPv6Range.ts:76</a></li>
 							</ul>
 						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Method that returns the IPv6 range in CIDR (Classless Inter-Domain Routing) notation.</p>
+							</div>
+							<p>See <a href="https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing#CIDR_notation" class="external">https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing#CIDR_notation</a> for more information
+							on the Classless Inter-Domain Routing notation</p>
+						</div>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
+						<p>the IPv6 range in CIDR (Classless Inter-Domain Routing) notation</p>
 					</li>
 				</ul>
 			</section>
@@ -1444,10 +1544,17 @@ img { max-width: 100%; }
 						<aside class="tsd-sources">
 							<p>Implementation of <a href="../interfaces/_interface_iprange_.iprange.html">IPRange</a>.<a href="../interfaces/_interface_iprange_.iprange.html#torangestring">toRangeString</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/d59a6ea/src/IPv6Range.ts#L49">IPv6Range.ts:49</a></li>
+								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/8466b6e/src/IPv6Range.ts#L86">IPv6Range.ts:86</a></li>
 							</ul>
 						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Method that returns the IPv6 range in string notation where the first IPv6 number and last IPv6 number are
+								separated by an hyphen. eg. &quot;2001:db8:0:0:0:0:0:0-2001:db8:0:ffff:ffff:ffff:ffff:ffff&quot;</p>
+							</div>
+						</div>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
+						<p>the range in [first IPv6 number] - [last IPv6 number] format</p>
 					</li>
 				</ul>
 			</section>
@@ -1461,16 +1568,25 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/d59a6ea/src/IPv6Range.ts#L19">IPv6Range.ts:19</a></li>
+								<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/8466b6e/src/IPv6Range.ts#L26">IPv6Range.ts:26</a></li>
 							</ul>
 						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Convenience method for constructing an instance of an IPV6Range from an IP range represented in CIDR notation</p>
+							</div>
+						</div>
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
 							<li>
 								<h5>rangeIncidrNotation: <span class="tsd-signature-type">string</span></h5>
+								<div class="tsd-comment tsd-typography">
+									<p>the range of the IPv6 number in CIDR notation</p>
+								</div>
 							</li>
 						</ul>
 						<h4 class="tsd-returns-title">Returns <a href="_ipv6range_.ipv6range.html" class="tsd-signature-type">IPv6Range</a></h4>
+						<p>the IPV6Range</p>
 					</li>
 				</ul>
 			</section>
