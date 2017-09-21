@@ -25,7 +25,7 @@ export interface IPRange {
     toCidrString(): string;
 
     /**
-     * Method that returns the range in string notation with the first IP number and last IP number are separated
+     * Method that returns the range in string notation where the first IP number and last IP number are separated
      * by an hyphen. eg. 192.198.0.0-192.198.0.255
      *
      * @returns {string} the range in [first IP number] - [last IP number] format
@@ -54,7 +54,7 @@ export interface IPRange {
     take(count: number): Array<IPNumber>
 
     /**
-     * Method that splits an IP range into two halfs
+     * Method that splits an IP range into two halves
      *
      * @returns {Array<IPRange>} An array of two {@link IPRange}
      */
