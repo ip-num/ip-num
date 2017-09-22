@@ -3,7 +3,7 @@ import {Hexadecatet} from "./Hexadecatet";
 import {Validator} from "./Validator";
 import {bigIntegerNumberToBinaryString} from "./BinaryUtils";
 import {binaryStringToHexadecimalString} from "./HexadecimalUtils";
-import {expandIPv6Address} from "./IPv6Utils";
+import {expandIPv6Number} from "./IPv6Utils";
 import {hexadectetNotationToBinaryString} from "./IPv6Utils";
 import * as bigInt from "big-integer/BigInteger";
 import {AbstractIPNum} from "./AbstractIPNum";
@@ -38,7 +38,7 @@ export class IPv6 extends AbstractIPNum implements IPNumber {
     /**
      * An array of {@link Hexadecatet}'s
      *
-     * @type {Array} the hexadecatet that makes up the IPv6 address
+     * @type {Array} the hexadecatet that makes up the IPv6 number
      */
     readonly hexadecatet: Array<Hexadecatet> = [];
 
@@ -81,7 +81,7 @@ export class IPv6 extends AbstractIPNum implements IPNumber {
     constructor(ipValue: string | bigInt.BigInteger) {
         super();
         if (typeof ipValue === "string" ) {
-            let expandedIPv6 = expandIPv6Address(ipValue);
+            let expandedIPv6 = expandIPv6Number(ipValue);
             let [value, hexadecatet] = this.constructFromHexadecimalDottedString(expandedIPv6);
             this.value = value;
             this.hexadecatet = hexadecatet;

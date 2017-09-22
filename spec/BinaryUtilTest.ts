@@ -33,7 +33,7 @@ describe('Binary Utils', () => {
             BinaryUtils.decimalNumberToOctetString(122222222222);
         }).toThrowError(Error, 'Given decimal in binary contains digits greater than an octet');
     });
-    it('Should correctly convert IP address in dotted decimal notation to binary string', () => {
+    it('Should correctly convert IP number in dotted decimal notation to binary string', () => {
         expect(BinaryUtils.dottedDecimalNotationToBinaryString('2.16.217.69')).toEqual('00000010000100001101100101000101');
         expect(BinaryUtils.dottedDecimalNotationToBinaryString('0.0.0.0')).toEqual('00000000000000000000000000000000');
         expect(BinaryUtils.dottedDecimalNotationToBinaryString('255.255.255.255')).toEqual('11111111111111111111111111111111');

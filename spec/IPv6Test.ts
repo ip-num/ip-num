@@ -59,12 +59,12 @@ describe('IPv6: ', () => {
         expect(iPv6.getValue()).toEqual(bigIntegerValue);
     });
 
-    it('should correctly return the next value when nextIPAddress is called', () => {
+    it('should correctly return the next value when nextIPNumber is called', () => {
         let iPv6 = IPv6.fromHexadecimalString("ffff:ffff:ffff:ffff:ffff:ffff:ffff:fffe");
         expect(iPv6.nextIPNumber().toString()).toEqual("ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff");
     });
 
-    it('should correctly return the previous value when previousIPAddress is called', () => {
+    it('should correctly return the previous value when previousIPNumber is called', () => {
         let iPv6 = IPv6.fromHexadecimalString("ffff:ffff:ffff:ffff:ffff:ffff:ffff:fffe");
         expect(iPv6.previousIPNumber().toString()).toEqual("ffff:ffff:ffff:ffff:ffff:ffff:ffff:fffd");
     });
@@ -116,7 +116,7 @@ describe('IPv6: ', () => {
         expect(IPv6.fromBigInteger(bigInt("12345")).isGreaterThanOrEquals(IPv6.fromBigInteger(bigInt("12345")))).toEqual(true);
     });
 
-    it('should correctly return address as binary string', () => {
+    it('should correctly return IP number as binary string', () => {
         let value = new IPv6("2001:db8::");
         expect(value.toBinaryString()).toEqual("00100000000000010000110110111000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000");
         let lastValue = new IPv6("ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff");

@@ -9,7 +9,7 @@ import {hexadecimalStringToBinaryString} from "./HexadecimalUtils";
  * @param {string} ipv6String the abbreviated IPv6 address to expand
  * @returns {string} the expanded IPv6 address
  */
-export let expandIPv6Address = (ipv6String:string):string => {
+export let expandIPv6Number = (ipv6String:string):string => {
     let expandWithZero = (hexadecimalArray: string[]): string => {
         let paddedArray = hexadecimalArray.map((hexadecimal) => {
             if (hexadecimal === "") {
@@ -66,7 +66,7 @@ export let expandIPv6Address = (ipv6String:string):string => {
  * @param {string} ipv6String the full form IPv6 address to collapse
  * @returns {string} the collapsed IPv6 address
  */
-export let collapseIPv6Address = (ipv6String:string):string => {
+export let collapseIPv6Number = (ipv6String:string):string => {
     let hexadecimals: string[] = ipv6String.split(":");
     let hexadecimalsWithoutLeadingZeros = hexadecimals.map((hexidecimal) => {
        let withoutLeadingZero = hexidecimal.replace(/^0+/, '');
@@ -91,7 +91,7 @@ export let collapseIPv6Address = (ipv6String:string):string => {
  * @returns {string} the IPv6 number converted to binary string
  */
 export let hexadectetNotationToBinaryString = (hexadectetString: string): string => {
-    let expand = expandIPv6Address(hexadectetString);
+    let expand = expandIPv6Number(hexadectetString);
     let hexadecimals = expand.split(":");
     return hexadecimals.reduce((hexadecimalAsString, hexavalue) => {
         return hexadecimalAsString.concat(leftPadWithZeroBit(hexadecimalStringToBinaryString(hexavalue),16));

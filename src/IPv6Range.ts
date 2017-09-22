@@ -7,7 +7,7 @@ import {Validator} from "./Validator";
 import {IPRange} from "./interface/IPRange";
 
 /**
- * Represents a continuous segment of IPv6 addresses following the
+ * Represents a continuous segment of IPv6 number following the
  * classless inter-domain routing scheme for allocating IP addresses.
  *
  * @see https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing
@@ -215,7 +215,7 @@ export class IPv6Range implements IPRange, IterableIterator<IPv6> {
     public split() : Array<IPv6Range> {
         let prefixToSplit = this.cidrPrefix.getValue();
         if (prefixToSplit === 128) {
-            throw new Error("Cannot split an IP range with a single IP address");
+            throw new Error("Cannot split an IP range with a single IP number");
         }
         let splitCidr = IPv6Prefix.fromNumber(prefixToSplit + 1);
         let firstIPOfFirstRange = this.getFirst();

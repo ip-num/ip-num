@@ -24,11 +24,11 @@ describe('IPv4Range: ', () => {
     });
 
 
-    it('should return the first IPv4 address in range', () => {
+    it('should return the first IPv4 number in range', () => {
         let ipv4Range = new IPv4Range(new IPv4("192.198.0.0"), new IPv4Prefix(24));
         expect(ipv4Range.getFirst().toString()).toEqual("192.198.0.0");
     });
-    it('should return the last IPv4 address in range', () => {
+    it('should return the last IPv4 number in range', () => {
         let ipv4Range = new IPv4Range(new IPv4("192.198.0.0"), new IPv4Prefix(24));
         expect(ipv4Range.getLast().toString()).toEqual("192.198.0.255");
     });
@@ -36,7 +36,7 @@ describe('IPv4Range: ', () => {
         let ipv4Range = new IPv4Range(new IPv4("192.198.0.0"), new IPv4Prefix(24));
         expect(ipv4Range.toRangeString()).toEqual("192.198.0.0-192.198.0.255");
     });
-    it('should return the correct list of IPv4 address when take is called', () => {
+    it('should return the correct list of IPv4 number when take is called', () => {
         let ipv4Range = new IPv4Range(new IPv4("192.198.0.0"), new IPv4Prefix(24));
         let take = ipv4Range.take(3);
         expect(take[0].toString()).toBe("192.198.0.0");

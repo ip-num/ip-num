@@ -12,11 +12,11 @@ describe('IPv6Range: ', () => {
          let ipv6Range = IPv6Range.fromCidr("2001:db8::/33");
          expect(ipv6Range.toCidrString()).toEqual("2001:db8:0:0:0:0:0:0/33");
     });
-    it('should return the first IPv6 address in range', () => {
+    it('should return the first IPv6 number in range', () => {
         let ipv6Range = new IPv6Range(new IPv6("2001:db8::"), new IPv6Prefix(48));
         expect(ipv6Range.getFirst().toString()).toEqual("2001:db8:0:0:0:0:0:0");
     });
-    it('should return the last IPv4 address in range', () => {
+    it('should return the last IPv4 number in range', () => {
         let ipv6Range = new IPv6Range(new IPv6("2001:db8::"), new IPv6Prefix(48));
         expect(ipv6Range.getLast().toString()).toEqual("2001:db8:0:ffff:ffff:ffff:ffff:ffff");
     });
@@ -24,7 +24,7 @@ describe('IPv6Range: ', () => {
         let ipv6Range = new IPv6Range(new IPv6("2001:db8::"), new IPv6Prefix(48));
         expect(ipv6Range.toRangeString()).toEqual("2001:db8:0:0:0:0:0:0-2001:db8:0:ffff:ffff:ffff:ffff:ffff");
     });
-    it('should return the correct list of IPv6 address when take is called', () => {
+    it('should return the correct list of IPv6 number when take is called', () => {
         let ipv6Range = new IPv6Range(new IPv6("2001:db8::"), new IPv6Prefix(48));
         let take = ipv6Range.take(3);
         expect(take[0].toString()).toBe("2001:db8:0:0:0:0:0:0");
