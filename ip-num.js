@@ -1,4 +1,4 @@
-// [ip-num]  Version: 0.0.8-pre-alpha. Released on: Sunday, September 17th, 2017, 10:47:32 PM  
+// [ip-num]  Version: 0.0.9-pre-alpha. Released on: Friday, September 22nd, 2017, 5:39:43 PM  
  var ipnum =
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
@@ -1602,8 +1602,8 @@ Validator.invalidOctetCountMessage = "An IP4 number cannot have less or greater 
 Validator.invalidHexadecatetCountMessage = "An IP6 number cannot have less or greater than 8 octets";
 Validator.invalidSubnetMessage = "The Subnet is invalid";
 Validator.invalidPrefixValueMessage = "A Prefix value cannot be less than 0 or greater than 32";
-Validator.invalidIPv4CidrNotationMessage = "Cidr notation should be in the form [ip address]/[range]";
-Validator.invalidIPv6CidrNotationString = "A Cidr notation string should contain an IPv6 address and prefix";
+Validator.invalidIPv4CidrNotationMessage = "Cidr notation should be in the form [ip number]/[range]";
+Validator.invalidIPv6CidrNotationString = "A Cidr notation string should contain an IPv6 number and prefix";
 exports.Validator = Validator;
 
 
@@ -1631,7 +1631,15 @@ var IPNumType;
 Object.defineProperty(exports, "__esModule", { value: true });
 const BinaryUtils_1 = __webpack_require__(0);
 const HexadecimalUtils_1 = __webpack_require__(6);
-exports.expandIPv6Address = (ipv6String) => {
+/**
+ * Expands an IPv6 number in abbreviated format into its full form
+ *
+ * {@see https://en.wikipedia.org/wiki/IPv6_address#Representation} for more on the representation of IPv6 addresses
+ *
+ * @param {string} ipv6String the abbreviated IPv6 address to expand
+ * @returns {string} the expanded IPv6 address
+ */
+exports.expandIPv6Number = (ipv6String) => {
     let expandWithZero = (hexadecimalArray) => {
         let paddedArray = hexadecimalArray.map((hexadecimal) => {
             if (hexadecimal === "") {
@@ -1669,7 +1677,15 @@ exports.expandIPv6Address = (ipv6String) => {
         return expandWithZero(ipv6String.split(":"));
     }
 };
-exports.collapseIPv6Address = (ipv6String) => {
+/**
+ * Collapses an IPv6 number in full format into its abbreviated form
+ *
+ * {@see https://en.wikipedia.org/wiki/IPv6_address#Representation} for more on the representation of IPv6 addresses
+ *
+ * @param {string} ipv6String the full form IPv6 number to collapse
+ * @returns {string} the collapsed IPv6 number
+ */
+exports.collapseIPv6Number = (ipv6String) => {
     let hexadecimals = ipv6String.split(":");
     let hexadecimalsWithoutLeadingZeros = hexadecimals.map((hexidecimal) => {
         let withoutLeadingZero = hexidecimal.replace(/^0+/, '');
@@ -1687,12 +1703,12 @@ exports.collapseIPv6Address = (ipv6String) => {
     return contracted;
 };
 /**
- * Converts a given IPv6 address expressed in the hexadecimal string notation into a 16 bit binary number in string
+ * Converts a given IPv6 number expressed in the hexadecimal string notation into a 16 bit binary number in string
  * @param {string} hexadectetString the IPv6 number
  * @returns {string} the IPv6 number converted to binary string
  */
 exports.hexadectetNotationToBinaryString = (hexadectetString) => {
-    let expand = exports.expandIPv6Address(hexadectetString);
+    let expand = exports.expandIPv6Number(hexadectetString);
     let hexadecimals = expand.split(":");
     return hexadecimals.reduce((hexadecimalAsString, hexavalue) => {
         return hexadecimalAsString.concat(BinaryUtils_1.leftPadWithZeroBit(HexadecimalUtils_1.hexadecimalStringToBinaryString(hexavalue), 16));
@@ -1709,31 +1725,83 @@ exports.hexadectetNotationToBinaryString = (hexadectetString) => {
 Object.defineProperty(exports, "__esModule", { value: true });
 const bigInt = __webpack_require__(1);
 const BinaryUtils_1 = __webpack_require__(0);
+/**
+ * Provides the implementation of functionality that are common to {@link IPNumber}'s
+ */
 class AbstractIPNum {
+    /**
+     * Gets the numeric value of an IP number as {@link BigInteger}
+     *
+     * @returns {bigInt.BigInteger} the numeric value of an IP number.
+     */
     getValue() {
         return this.value;
     }
+    /**
+     * Gets the binary string representation of an IP number.
+     *
+     * @returns {string} the string binary representation.
+     */
     toBinaryString() {
         return BinaryUtils_1.leftPadWithZeroBit(this.value.toString(2), this.bitSize);
     }
+    /**
+     * Checks if an IP number has a value greater than the present value
+     * @returns {boolean} true, if there is a value greater than the present value. Returns false otherwise.
+     */
     hasNext() {
         return this.value.lesser(this.maximumBitSize);
     }
+    /**
+     * Checks if an IP number has a value lesser than the present value
+     * @returns {boolean} true, if there is a value lesser than the present value. Returns false otherwise.
+     */
     hasPrevious() {
         return this.value.greater(bigInt.zero);
     }
+    /**
+     * Checks if the given IP number, is equals to the current IP number
+     *
+     * @param {AbstractIPNum} anotherIPNum the other IP number to compare with
+     * @returns {boolean} true if the given IP number is equals
+     */
     isEquals(anotherIPNum) {
         return this.value.equals(anotherIPNum.value);
     }
+    /**
+     * Checks if the given IP number is lesser than this current IP number
+     *
+     * @param {AbstractIPNum} anotherIPNum the other IP number to compare with
+     * @returns {boolean} true if the given IP number is less than this current one. False otherwise.
+     */
     isLessThan(anotherIPNum) {
         return this.value.lt(anotherIPNum.value);
     }
+    /**
+     * Checks if the given IP number is greater than this current IP number
+     *
+     * @param {AbstractIPNum} anotherIPNum the other IP number to compare with
+     * @returns {boolean} true if the given IP number is greater than this current one. False otherwise.
+     */
     isGreaterThan(anotherIPNum) {
         return this.value.gt(anotherIPNum.value);
     }
+    /**
+     * Checks if the given IP number is less than or equals to this current IP number
+     *
+     * @param {AbstractIPNum} anotherIPNum the other IP number to compare with
+     * @returns {boolean} true if the given IP number is less than or equals to this current one. False otherwise.
+     */
     isLessThanOrEquals(anotherIPNum) {
         return this.value.lesserOrEquals(anotherIPNum.value);
     }
+    /**
+     * Checks if the given IP number is greater than or equals to this current IP number
+     *
+     * @param {AbstractIPNum} anotherIPNum the other IP number to compare with
+     * @returns {boolean} {boolean} true if the given IP number is greater than or equals to this current one. False
+     * otherwise.
+     */
     isGreaterThanOrEquals(anotherIPNum) {
         return this.value.greaterOrEquals(anotherIPNum.value);
     }
@@ -1787,15 +1855,43 @@ exports.binaryStringToHexadecimalString = (num) => {
 Object.defineProperty(exports, "__esModule", { value: true });
 const Validator_1 = __webpack_require__(2);
 const bigInt = __webpack_require__(1);
+/**
+ * A base 16 (hexadecimal) representation of a 16 bit value.
+ *
+ * It consists of four (base 16) number.
+ *
+ * It is used to represents the components of an IPv6 address
+ */
 class Hexadecatet {
+    /**
+     * A convenience method for constructing an instance of {@link Hexadecatet} from a four (base 16) number
+     * representation of a 16bit value.
+     *
+     * @param {string} rawValue the four (base 16) number
+     * @returns {Hexadecatet} an instance of {@link Hexadecatet}
+     */
     static fromString(rawValue) {
         return new Hexadecatet(rawValue);
     }
     ;
+    /**
+     * A convenience method for constructing an instance of {@link Hexadecatet} from a decimal number representation
+     * of a 16 bit value
+     *
+     * @param {number} rawValue decimal number representation of a 16 bit value
+     * @returns {Hexadecatet} an instance of {@link Hexadecatet}
+     */
     static fromNumber(rawValue) {
         return new Hexadecatet(rawValue);
     }
     ;
+    /**
+     * Constructor for creating an instance of {@link Hexadecatet}
+     *
+     * @param {string | number} givenValue a string or numeric value. If given value is a string then it should be a
+     * four (base 16) number representation of a 16bit value. If it is a number, then it should be a decimal number
+     * representation of a 16 bit value
+     */
     constructor(givenValue) {
         let hexadecatetValue;
         if (typeof givenValue === 'string') {
@@ -1810,9 +1906,19 @@ class Hexadecatet {
         }
         this.value = hexadecatetValue;
     }
+    /**
+     * Returns the numeric value in base 10 (ie decimal)
+     *
+     * @returns {number} the numeric value in base 10 (ie decimal)
+     */
     getValue() {
         return this.value;
     }
+    /**
+     * Returns the string representation of the base 16 representation of the value
+     * @returns {string} the string representation of the base 16 representation of the value
+     */
+    // TODO pad with a zero if digit is less than 4
     toString() {
         return this.value.toString(16);
     }
@@ -1829,15 +1935,45 @@ exports.Hexadecatet = Hexadecatet;
 Object.defineProperty(exports, "__esModule", { value: true });
 const Validator_1 = __webpack_require__(2);
 const bigInt = __webpack_require__(1);
+/**
+ * A binary representation of a 8 bit value.
+ *
+ * {@see https://en.wikipedia.org/wiki/Octet_(computing)} for more information on Octets
+ *
+ * An octet is used in the textual representation of an {@link IPv4} number, where the IP number value is divided
+ * into 4 octets
+ */
 class Octet {
+    /**
+     * Convenience method for creating an Octet out of a string value representing the value of the octet
+     *
+     * @param {string} rawValue the octet value in string
+     * @returns {Octet} the Octet instance
+     */
     static fromString(rawValue) {
         return new Octet(rawValue);
     }
     ;
+    /**
+     * Convenience method for creating an Octet out of a numeric value representing the value of the octet
+     *
+     * @param {number} rawValue the octet value in number
+     * @returns {Octet} the Octet instance
+     */
     static fromNumber(rawValue) {
         return new Octet(rawValue);
     }
     ;
+    /**
+     * Constructor for creating an instance of an Octet.
+     *
+     * The constructor parameter given could either be a string or number.
+     *
+     * If a string, it is the string representation of the numeric value of the octet
+     * If a number, it is the numeric representation of the value of the octet
+     *
+     * @param {string | number} givenValue value of the octet to be created.
+     */
     constructor(givenValue) {
         let octetValue;
         if (typeof givenValue === 'string') {
@@ -1852,9 +1988,19 @@ class Octet {
         }
         this.value = octetValue;
     }
+    /**
+     * Method to get the numeric value of the octet
+     *
+     * @returns {number} the numeric value of the octet
+     */
     getValue() {
         return this.value;
     }
+    /**
+     * Returns a decimal representation of the value of the octet in string
+     *
+     * @returns {string} a decimal representation of the value of the octet in string
+     */
     toString() {
         return this.value.toString(10);
     }
@@ -1876,11 +2022,31 @@ const IPNumType_1 = __webpack_require__(3);
 const Subnet_2 = __webpack_require__(10);
 const HexadecimalUtils_1 = __webpack_require__(6);
 const Hexadecatet_1 = __webpack_require__(7);
+/**
+ * Represents the prefix portion in the CIDR notation for representing IP ranges
+ *
+ * The IPv4 prefix portion represents the subnet mask. It is the number of continuous bits turned on (with value 1)
+ * counting from the left side of an 8 bit value.
+ *
+ * {@see https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing} for more information on CIDR
+ */
 class IPv4Prefix {
+    /**
+     * Convenience method for constructing an instance of IPv4 prefix from a decimal number
+     *
+     * @param {number} rawValue the decimal value to construct the IPv4 prefix from.
+     * @returns {IPv4Prefix} the instance of an IPv4 prefix
+     */
     static fromNumber(rawValue) {
         return new IPv4Prefix(rawValue);
     }
     ;
+    /**
+     * Constructor for an instance of IPv4 prefix from a decimal number
+     *
+     * @param {number} rawValue the decimal value to construct the IPv4 prefix from.
+     * @returns {IPv4Prefix} the instance of an IPv4 prefix
+     */
     constructor(rawValue) {
         let isValid;
         let message;
@@ -1890,12 +2056,28 @@ class IPv4Prefix {
         }
         this.value = rawValue;
     }
+    /**
+     * Gets the decimal value of the IPv4 prefix
+     *
+     * @returns {number} the decimal value of the IPv4 prefix
+     */
     getValue() {
         return this.value;
     }
+    /**
+     * Gets the decimal value of the IPv4 prefix as string
+     * @returns {string} he decimal value of the IPv4 prefix as string
+     */
     toString() {
         return this.value.toString();
     }
+    /**
+     * Converts the IPv4 prefix to a {@link IPv4Subnet}
+     *
+     * The IPv4 Subnet is the representation of the prefix in the dot-decimal notation
+     *
+     * @returns {IPv4Subnet} the subnet representation of the IPv4 number
+     */
     toSubnet() {
         let onBits = '1'.repeat(this.value);
         let offBits = '0'.repeat(32 - this.value);
@@ -1906,11 +2088,31 @@ class IPv4Prefix {
     }
 }
 exports.IPv4Prefix = IPv4Prefix;
+/**
+ * Represents the prefix portion in the CIDR notation for representing IP ranges
+ *
+ * The IPv6 prefix portion represents the subnet mask. It is the number of continuous bits turned on (with value 1)
+ * counting from the left side of an 128 bit value.
+ *
+ * {@see https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing} for more information on CIDR
+ */
 class IPv6Prefix {
+    /**
+     * Convenience method for constructing an instance of IPv46 prefix from a decimal number
+     *
+     * @param {number} rawValue the decimal value to construct the IPv6 prefix from.
+     * @returns {IPv4Prefix} the instance of an IPv6 prefix
+     */
     static fromNumber(rawValue) {
         return new IPv6Prefix(rawValue);
     }
     ;
+    /**
+     * Constructor for an instance of IPv6 prefix from a decimal number
+     *
+     * @param {number} rawValue the decimal value to construct the IPv6 prefix from.
+     * @returns {IPv4Prefix} the instance of an IPv6 prefix
+     */
     constructor(rawValue) {
         let isValid;
         let message;
@@ -1920,12 +2122,28 @@ class IPv6Prefix {
         }
         this.value = rawValue;
     }
+    /**
+     * Gets the decimal value of the IPv6 prefix
+     *
+     * @returns {number} the decimal value of the IPv6 prefix
+     */
     getValue() {
         return this.value;
     }
+    /**
+     * Gets the decimal value of the IPv4 prefix as string
+     * @returns {string} he decimal value of the IPv4 prefix as string
+     */
     toString() {
         return this.value.toString();
     }
+    /**
+     * Converts the IPv6 prefix to a {@link IPv6Subnet}
+     *
+     * The IPv6 Subnet is the representation of the prefix in 8 groups of 16 bit values represented in hexadecimal
+     *
+     * @returns {IPv4Subnet} the subnet representation of the IPv4 number
+     */
     toSubnet() {
         let onBits = '1'.repeat(this.value);
         let offBits = '0'.repeat(128 - this.value);
@@ -1955,9 +2173,24 @@ const bigInt = __webpack_require__(1);
 const BinaryUtils_1 = __webpack_require__(0);
 const Hexadecatet_1 = __webpack_require__(7);
 const IPv6Utils_1 = __webpack_require__(4);
+/**
+ * The IPv4Subnet can be seen as a specialized IPv4 number where, in a 32 bit number, starting from the left, you have
+ * continuous bits turned on (with 1 value) followed by bits turned off (with 0 value)
+ */
 class IPv4Subnet {
+    /**
+     * Constructor for creating an instance of IPv4Subnet. The passed strings need to be a valid IPv4
+     * number in dot-decimal notation.
+     *
+     * @param {string} ipString The passed string in dot-decimal notation
+     */
     // TODO similar code as in constructor of IPv4, reuse?
     constructor(ipString) {
+        /**
+         * An array of {@link Octet}'s
+         *
+         * @type {Array} the octets that makes up the IPv4Subnet
+         */
         this.octets = [];
         let isValid;
         let message;
@@ -1971,24 +2204,63 @@ class IPv4Subnet {
         });
         this.value = bigInt(BinaryUtils_1.dottedDecimalNotationToBinaryString(ipString), 2);
     }
+    /**
+     * A convenience method for creating an instance of IPv4Subnet. The passed strings need to be a valid IPv4
+     * number in dot-decimal notation.
+     *
+     * @param {string} rawValue The passed string in dot-decimal notation
+     * @returns {IPv4Subnet} the instance of IPv4Subnet
+     */
     static fromString(rawValue) {
         return new IPv4Subnet(rawValue);
     }
     ;
+    /**
+     * Method to get the decimal numeric value of the IPv4Subnet as BigInteger
+     *
+     * @returns {bigInt.BigInteger} the decimal numeric value of the IPv4Subnet as BigInteger
+     */
     getValue() {
         return this.value;
     }
+    /**
+     * Method that converts the IPv4Subnet to a string representation.
+     *
+     * The string representation is in dot-decimal notation
+     *
+     * @returns {string} The string representation of the IPv4Subnet in dot-decimal notation
+     */
     toString() {
         return this.octets.map(function (value) { return value.toString(); }).join(".");
     }
+    /**
+     * Gets the individual {@link Octet} that makes up the IPv4 subnet
+     *
+     * @returns {Array<Octet>} The individual {@link Octet} that makes up the IPv4 subnet
+     */
     getOctets() {
         return this.octets;
     }
 }
 exports.IPv4Subnet = IPv4Subnet;
+/**
+ * The IPv6Subnet can be seen as a specialized IPv4 number where, in a 128 bit number, starting from the left, you have
+ * continuous bits turned on (with 1 value) followed by bits turned off (with 0 value)
+ */
 class IPv6Subnet {
+    /**
+     * Constructor for creating an instance of IPv6Subnet. The passed strings need to be a valid IPv6
+     * number in textual representation
+     *
+     * @param {string} ipString The passed IPv6 string
+     */
     // TODO similar code as in constructor of IPv4, reuse?
     constructor(ipString) {
+        /**
+         * An array of {@link Hexadecatet}'s
+         *
+         * @type {Array} the hexadecatet that makes up the IPv6 number
+         */
         this.hexadecatet = [];
         let isValid;
         let message;
@@ -2002,16 +2274,39 @@ class IPv6Subnet {
         });
         this.value = bigInt(IPv6Utils_1.hexadectetNotationToBinaryString(ipString), 2);
     }
+    /**
+     * A convenience method for creating an instance of IPv6Subnet. The passed strings need to be a valid IPv6
+     * number in textual representation.
+     *
+     * @param {string} rawValue The passed string in textual notation
+     * @returns {IPv6Subnet} the instance of IPv6Subnet
+     */
     static fromString(rawValue) {
         return new IPv6Subnet(rawValue);
     }
     ;
+    /**
+     * Method to get the decimal numeric value of the IPv6Subnet as BigInteger
+     *
+     * @returns {bigInt.BigInteger} the decimal numeric value of the IPv6Subnet as BigInteger
+     */
     getValue() {
         return this.value;
     }
+    /**
+     * Method that converts the IPv6Subnet to a string representation.
+     *
+     *
+     * @returns {string} The string representation of the IPv6Subnet
+     */
     toString() {
         return this.hexadecatet.map(function (value) { return value.toString(); }).join(":");
     }
+    /**
+     * Gets the individual {@link Hexadecatet} that makes up the IPv6 subnet
+     *
+     * @returns {Array<Hexadecatet>} The individual {@link Hexadecatet} that makes up the IPv6 subnet
+     */
     getHexadecatet() {
         return this.hexadecatet;
     }
@@ -2043,13 +2338,39 @@ const IPNumType_1 = __webpack_require__(3);
  * @see https://www.rfc-editor.org/info/rfc791
  */
 class IPv4 extends AbstractIPNum_1.AbstractIPNum {
+    /**
+     * Constructor for an IPv4 number.
+     *
+     * @param {string | bigInt.BigInteger} ipValue value to construct an IPv4 from. The given value can either be
+     * numeric or string. If a string is given then it needs to be in dot-decimal notation
+     */
     constructor(ipValue) {
         super();
-        this.type = IPNumType_1.IPNumType.IPv4;
-        this.octets = [];
-        this.separator = ".";
+        /**
+         * The number of bits needed to represents the value of the IPv4 number
+         */
         this.bitSize = 32;
+        /**
+         * The maximum bit size (i.e. binary value) of the IPv4 number in BigInteger
+         */
         this.maximumBitSize = Validator_1.Validator.THIRTY_TWO_BIT_SIZE;
+        /**
+         * The type of IP number. Value is one of the values of the {@link IPNumType} enum
+         * @type {IPNumType} the type of IP number
+         */
+        this.type = IPNumType_1.IPNumType.IPv4;
+        /**
+         * An array of {@link Octet}'s
+         *
+         * @type {Array} the octets that makes up the IPv4 number
+         */
+        this.octets = [];
+        /**
+         * The string character used to separate the individual octets when the IPv4 is rendered as strings
+         *
+         * @type {string} The string character used to separate the individual octets when rendered as strings
+         */
+        this.separator = ".";
         if (typeof ipValue === "string") {
             let [value, octets] = this.constructFromDecimalDottedString(ipValue);
             this.value = value;
@@ -2061,21 +2382,56 @@ class IPv4 extends AbstractIPNum_1.AbstractIPNum {
             this.octets = octets;
         }
     }
+    /**
+     * A convenience method for creating an {@link IPv4} by providing the decimal value of the IP number in BigInteger
+     *
+     * @param {bigInt.BigInteger} bigIntValue the decimal value of the IP number in BigInteger
+     * @returns {IPv4} the IPv4 instance
+     */
     static fromBigInteger(bigIntValue) {
         return new IPv4(bigIntValue);
     }
+    /**
+     * A convenience method for creating an {@link IPv4} by providing the IP number in dot-decimal notation. E.g
+     * "10.1.1.10"
+     *
+     * {@see https://en.wikipedia.org/wiki/Dot-decimal_notation} for more information on dot-decimal notation.
+     *
+     * @param {string} ipString the IP number in dot-decimal notation
+     * @returns {IPv4} the IPv4 instance
+     */
     static fromDecimalDottedString(ipString) {
         return new IPv4(ipString);
     }
+    /**
+     * A string representation of the IPv4 number. The string representation is in dot-decimal notation
+     *
+     * @returns {string} The string representation in dot-decimal notation
+     */
     toString() {
         return this.octets.map((value) => { return value.toString(); }).join(this.separator);
     }
+    /**
+     * Gets the individual {@link Octet} that makes up the IPv4 number
+     *
+     * @returns {Array<Octet>} The individual {@link Octet} that makes up the IPv4 number
+     */
     getOctets() {
         return this.octets;
     }
+    /**
+     * Returns the next IPv4 number
+     *
+     * @returns {IPv4} the next IPv4 number
+     */
     nextIPNumber() {
         return IPv4.fromBigInteger(this.getValue().add(1));
     }
+    /**
+     * Returns the previous IPv4 number
+     *
+     * @returns {IPv4} the previous IPv4 number
+     */
     previousIPNumber() {
         return IPv4.fromBigInteger(this.getValue().minus(1));
     }
@@ -2138,15 +2494,41 @@ const IPNumType_1 = __webpack_require__(3);
  * @see https://www.rfc-editor.org/info/rfc8200
  */
 class IPv6 extends AbstractIPNum_1.AbstractIPNum {
+    /**
+     * Constructor for an IPv6 number.
+     *
+     * @param {string | bigInt.BigInteger} ipValue value to construct an IPv6 from. The given value can either be
+     * numeric or string. If a string is given then it needs to be in hexadecatet string notation
+     */
     constructor(ipValue) {
         super();
-        this.type = IPNumType_1.IPNumType.IPv6;
-        this.hexadecatet = [];
-        this.separator = ":";
+        /**
+         * The number of bits needed to represents the value of the IPv6 number
+         */
         this.bitSize = 128;
+        /**
+         * The maximum bit size (i.e. binary value) of the IPv6 number in BigInteger
+         */
         this.maximumBitSize = Validator_1.Validator.ONE_HUNDRED_AND_TWENTY_EIGHT_BIT_SIZE;
+        /**
+         * The type of IP number. Value is one of the values of the {@link IPNumType} enum
+         * @type {IPNumType} the type of IP number
+         */
+        this.type = IPNumType_1.IPNumType.IPv6;
+        /**
+         * An array of {@link Hexadecatet}'s
+         *
+         * @type {Array} the hexadecatet that makes up the IPv6 number
+         */
+        this.hexadecatet = [];
+        /**
+         * The string character used to separate the individual hexadecatet when the IPv6 is rendered as strings
+         *
+         * @type {string} The string character used to separate the individual hexadecatet when rendered as strings
+         */
+        this.separator = ":";
         if (typeof ipValue === "string") {
-            let expandedIPv6 = IPv6Utils_1.expandIPv6Address(ipValue);
+            let expandedIPv6 = IPv6Utils_1.expandIPv6Number(ipValue);
             let [value, hexadecatet] = this.constructFromHexadecimalDottedString(expandedIPv6);
             this.value = value;
             this.hexadecatet = hexadecatet;
@@ -2157,22 +2539,57 @@ class IPv6 extends AbstractIPNum_1.AbstractIPNum {
             this.hexadecatet = hexadecatet;
         }
     }
-    static parseFromBigInteger(bigIntValue) {
+    /**
+     * A convenience method for creating an {@link IPv6} by providing the decimal value of the IP number in BigInteger
+     *
+     * @param {bigInt.BigInteger} bigIntValue the decimal value of the IP number in BigInteger
+     * @returns {IPv6} the IPv6 instance
+     */
+    static fromBigInteger(bigIntValue) {
         return new IPv6(bigIntValue);
     }
-    static parseFromHexadecimalString(ipString) {
+    /**
+     * A convenience method for creating an {@link IPv6} by providing the IP number in hexadecatet notation. E.g
+     * "2001:800:0:0:0:0:0:2002"
+     *
+     * {@see https://en.wikipedia.org/wiki/IPv6_address#Representation} for more information on hexadecatet notation.
+     *
+     * @param {string} ipString the IP number in hexadecatet
+     * @returns {IPv6} the IPv6 instance
+     */
+    static fromHexadecimalString(ipString) {
         return new IPv6(ipString);
     }
+    /**
+     * A string representation of the IPv6 number.
+     *
+     * @returns {string} The string representation of IPv6
+     */
+    toString() {
+        return this.hexadecatet.map((value) => { return value.toString(); }).join(":");
+    }
+    /**
+     * Gets the individual {@link Hexadecatet} that makes up the IPv6 number
+     *
+     * @returns {Array<Hexadecatet>} The individual {@link Hexadecatet} that makes up the IPv6 number
+     */
     //TODO maybe rename to something like getSegments? so it can be same with getOctet
     getHexadecatet() {
         return this.hexadecatet;
     }
-    toString() {
-        return this.hexadecatet.map((value) => { return value.toString(); }).join(":");
-    }
+    /**
+     * Returns the next IPv6 number
+     *
+     * @returns {IPv6} the next IPv6 number
+     */
     nextIPNumber() {
         return IPv6.fromBigInteger(this.getValue().add(1));
     }
+    /**
+     * Returns the previous IPv6 number
+     *
+     * @returns {IPv6} the previous IPv6 number
+     */
     previousIPNumber() {
         return IPv6.fromBigInteger(this.getValue().minus(1));
     }
@@ -2282,9 +2699,21 @@ const AbstractIPNum_1 = __webpack_require__(5);
  * @see https://www.rfc-editor.org/info/rfc4271
  */
 class Asn extends AbstractIPNum_1.AbstractIPNum {
+    /**
+     * Constructor for an instance of {@link ASN}
+     *
+     * @param {string | number} rawValue value to construct an ASN from. The given value can either be numeric or
+     * string. If in string then it can be in asplain, asdot or asdot+ string representation format
+     */
     constructor(rawValue) {
         super();
+        /**
+         * The number of bits needed to represents the value of the ASN number
+         */
         this.bitSize = 32;
+        /**
+         * The maximum bit size (i.e. binary value) of the ASN number in BigInteger
+         */
         this.maximumBitSize = Validator_1.Validator.THIRTY_TWO_BIT_SIZE;
         this.type = IPNumType_1.IPNumType.ASN;
         if (typeof rawValue === 'string') {
@@ -2307,77 +2736,114 @@ class Asn extends AbstractIPNum_1.AbstractIPNum {
             this.value = valueAsBigInt;
         }
     }
+    /**
+     * A convenience method for creating an instance of {@link Asn} from a string
+     *
+     * The given string can be in asplain, asdot or asdot+ representation format.
+     * {@see https://tools.ietf.org/html/rfc5396} for more information on
+     * the different ASN string representation
+     *
+     * @param {string} rawValue the asn string. In either asplain, asdot or asdot+ format
+     * @returns {Asn} the constructed ASN instance
+     */
     static fromString(rawValue) {
         return new Asn(rawValue);
     }
     ;
+    /**
+     * A convenience method for creating an instance of {@link Asn} from a numeric value
+     *
+     * @param {number} rawValue the asn numeric value
+     * @returns {Asn} he constructed ASN instance
+     */
     static fromNumber(rawValue) {
         return new Asn(rawValue);
     }
     ;
-    getValue() {
-        return this.value;
-    }
+    /**
+     * A string representation where the asn value is prefixed by "ASN". For example "AS65526"
+     *
+     * @returns {string} A string representation where the asn value is prefixed by "ASN"
+     */
     toString() {
         let stringValue = this.value.toString();
         return `${Asn.AS_PREFIX}${stringValue}`;
     }
+    /**
+     * A string representation where the ASN numeric value of is represented as a string. For example "65526"
+     *
+     * @returns {string} A string representation where the ASN numeric value of is represented as a string
+     */
     toASPlain() {
         return this.value.toString();
     }
+    /**
+     * A string representation where the ASN value is represented using the asplain notation if the ASN value is
+     * less than 65536 and uses asdot+ notation when the value is greater than 65536.
+     *
+     * For example 65526 will be represented as "65526" while 65546 will be represented as "1.10"
+     *
+     *
+     * @returns {string} A string representation of the ASN in either asplain or asdot+ notation depending on
+     * whether the numeric value of the ASN number is greater than 65526 or not.
+     */
     toASDot() {
         if (this.value.valueOf() >= 65536) {
             return this.toASDotPlus();
         }
         return this.toASPlain();
     }
+    /**
+     * A string representation where the ASN value is represented using the asdot+ notation
+     *
+     * @returns {string} A string representation where the ASN value is represented using the asdot+ notation
+     *
+     */
     toASDotPlus() {
         let high = Math.floor(this.value.valueOf() / 65535);
         let low = (this.value.valueOf() % 65535) - high;
         return `${high}.${low}`;
     }
+    /**
+     * Converts the ASN value to binary numbers represented with strings
+     *
+     * @returns {string} a binary string representation of the value of the ASN number
+     */
     toBinaryString() {
         return BinaryUtils_1.decimalNumberToBinaryString(this.value.valueOf());
     }
+    /**
+     * Checks if the ASN value is 16bit
+     *
+     * @returns {boolean} true if the ASN is a 16bit value. False otherwise.
+     */
     is16Bit() {
         let [valid16BitAsnNumber,] = Validator_1.Validator.isValid16BitAsnNumber(this.value);
         return valid16BitAsnNumber;
     }
+    /**
+     * Checks if the ASN value is 32bit
+     *
+     * @returns {boolean} true if the ASN is a 32bit value. False otherwise.
+     */
     is32Bit() {
         return !this.is16Bit();
     }
-    isEquals(anotherAsn) {
-        return this.value.equals(anotherAsn.value);
-    }
-    isGreaterThan(anotherAsn) {
-        return this.value.greater(anotherAsn.value);
-    }
-    isLessThan(anotherAsn) {
-        return this.value.lesser(anotherAsn.value);
-    }
-    isGreaterThanOrEquals(anotherAsn) {
-        return this.value.greaterOrEquals(anotherAsn.value);
-    }
-    isLessThanOrEquals(anotherAsn) {
-        return this.value.lesserOrEquals(anotherAsn.value);
-    }
-    next() {
+    /**
+     * Returns the next ASN number
+     *
+     * @returns {IPNumber} the next ASN number
+     */
+    nextIPNumber() {
         return new Asn(this.value.valueOf() + 1);
     }
-    previous() {
-        return new Asn(this.value.valueOf() - 1);
-    }
-    nextIPNumber() {
-        return this.next();
-    }
+    /**
+     * Returns the previous ASN number
+     *
+     * @returns {IPNumber} the previous ASN number
+     */
     previousIPNumber() {
-        return this.previous();
-    }
-    hasNext() {
-        return this.value < Validator_1.Validator.THIRTY_TWO_BIT_SIZE;
-    }
-    hasPrevious() {
-        return this.value.valueOf() > 0;
+        return new Asn(this.value.valueOf() - 1);
     }
     static startWithASprefix(word) {
         return word.indexOf(Asn.AS_PREFIX) === 0;
@@ -2407,18 +2873,36 @@ const BinaryUtils_2 = __webpack_require__(0);
 const Validator_1 = __webpack_require__(2);
 const bigInt = __webpack_require__(1);
 /**
- * Represents a continuous segment of IPv4 addresses following the
+ * Represents a continuous segment of IPv4 numbers following the
  * classless inter-domain routing scheme for allocating IP addresses.
  *
  * @see https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing
  */
 class IPv4Range {
+    /**
+     * Constructor for creating an instance of an IPv4 range.
+     *
+     * The arguments taken by the constructor is inspired by the CIDR notation which basically consists of the IP
+     * number and the prefix.
+     *
+     * @param {IPv4} ipv4 the IP number used to construct the range. By convention this is the first IP number in
+     * the range, but it could also be any IP number within the range
+     * @param {IPv4Prefix} cidrPrefix the prefix which is a representation of the number of bits used to mask the
+     * given IP number in other to create the range
+     */
     constructor(ipv4, cidrPrefix) {
         this.ipv4 = ipv4;
         this.cidrPrefix = cidrPrefix;
         this.bitValue = bigInt(32);
         this.internalCounterValue = this.getFirst();
     }
+    /**
+     * Convenience method for constructing an instance of an IPV4Range from an IP range represented in CIDR notation
+     *
+     * @param {string} rangeIncidrNotation the range of the IPv4 number in CIDR notation
+     * @returns {IPv4Range} the IPv4Range
+     */
+    // TODO introduce an abstract class to share some of the logic between IPv4Range and IPv6Range
     static fromCidr(rangeIncidrNotation) {
         let [isValid, errorMessages] = Validator_1.Validator.isValidIPv4CidrNotation(rangeIncidrNotation);
         if (!isValid) {
@@ -2431,6 +2915,11 @@ class IPv4Range {
         return new IPv4Range(IPv4_1.IPv4.fromDecimalDottedString(ipString), Prefix_1.IPv4Prefix.fromNumber(prefix));
     }
     ;
+    /**
+     * Gets the size of IPv4 numbers contained within the IPv4 range
+     *
+     * @returns {bigInt.BigInteger} the amount of IPv4 numbers in the range
+     */
     getSize() {
         /**
          * Using bitwise shit operation this will be
@@ -2440,21 +2929,55 @@ class IPv4Range {
           */
         return bigInt(2).pow(this.bitValue.minus(bigInt(this.cidrPrefix.getValue())));
     }
+    /**
+     * Method that returns the IPv4 range in CIDR (Classless Inter-Domain Routing) notation.
+     *
+     * See {@link https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing#CIDR_notation} for more information
+     * on the Classless Inter-Domain Routing notation
+     *
+     * @returns {string} the IPv4 range in CIDR (Classless Inter-Domain Routing) notation
+     */
     toCidrString() {
         return `${this.ipv4.toString()}/${this.cidrPrefix.toString()}`;
     }
+    /**
+     * Method that returns the IPv4 range in string notation where the first IPv4 number and last IPv4 number are
+     * separated by an hyphen. eg. 192.198.0.0-192.198.0.255
+     *
+     * @returns {string} the range in [first IPv4 number] - [last IPv4 number] format
+     */
     toRangeString() {
         return `${this.getFirst()}-${this.getLast()}`;
     }
+    /**
+     * Method that returns the first IPv4 number in the IPv4 range
+     *
+     * @returns {IPv4} the first IPv4 number in the IPv4 range
+     */
     getFirst() {
         return IPv4_1.IPv4.fromBigInteger(this.ipv4.getValue().and(this.cidrPrefix.toSubnet().getValue()));
     }
+    /**
+     * Method that returns the last IPv4 number in the IPv4 range
+     *
+     * @returns {IPv4} the last IPv4 number in the IPv4 range
+     */
     getLast() {
         let onMask = bigInt("1".repeat(32), 2);
         let subnetAsBigInteger = this.cidrPrefix.toSubnet().getValue();
         let invertedSubnet = BinaryUtils_1.leftPadWithZeroBit(subnetAsBigInteger.xor(onMask).toString(2), 32);
         return IPv4_1.IPv4.fromBigInteger(this.ipv4.getValue().or(BinaryUtils_2.parseBinaryStringToBigInteger(invertedSubnet)));
     }
+    /**
+     * Indicates whether the given IPv4 range is an adjacent range.
+     *
+     * An adjacent range being one where the end of the given range, when incremented by one marks the start of the
+     * other range. Or where the start of the given range, when decreased by one, marks the end of the other range
+     *
+     * @param {IPv4Range} otherRange the other IPv4 range to compare with
+     * @returns {boolean} true if the two IPv4 ranges are consecutive, false otherwise
+     */
+    // TODO move this to the IPRange interface?
     isConsecutive(otherRange) {
         let thisFirst = this.getFirst();
         let thisLast = this.getLast();
@@ -2464,6 +2987,15 @@ class IPv4Range {
             ||
                 otherLast.hasNext() && otherLast.nextIPNumber().isEquals(thisFirst));
     }
+    /**
+     * Indicates if the given IPv4 range is a subset.
+     *
+     * By a subset range, it means all the values of the given range are contained by this IPv4 range
+     *
+     * @param {IPv4Range} otherRange the other IPv4 range
+     * @returns {boolean} true if the other Ipv4 range is a subset. False otherwise.
+     */
+    // TODO move this to the IPRange interface?
     contains(otherRange) {
         let thisFirst = this.getFirst();
         let thisLast = this.getLast();
@@ -2471,6 +3003,14 @@ class IPv4Range {
         let otherLast = otherRange.getLast();
         return (thisFirst.isLessThanOrEquals(otherFirst) && thisLast.isGreaterThanOrEquals(otherLast));
     }
+    /**
+     * Indicate if the given range is a container range.
+     *
+     * By container range, it means all the IP number in this current range can be found within the given range.
+     *
+     * @param {IPv4Range} otherRange he other IPv4 range
+     * @returns {boolean} true if the other Ipv4 range is a container range. False otherwise.
+     */
     inside(otherRange) {
         let thisFirst = this.getFirst();
         let thisLast = this.getLast();
@@ -2478,6 +3018,12 @@ class IPv4Range {
         let otherLast = otherRange.getLast();
         return (otherFirst.isLessThanOrEquals(thisFirst) && otherLast.isGreaterThanOrEquals(thisLast));
     }
+    /**
+     * Checks if two IPv4 ranges overlap
+     * @param {IPv4Range} otherRange the other IPv4 range
+     * @returns {boolean} true if the ranges overlap, false otherwise
+     */
+    // TODO or confirm than normal ranges cannot overlap
     isOverlapping(otherRange) {
         let thisFirst = this.getFirst();
         let thisLast = this.getLast();
@@ -2487,6 +3033,12 @@ class IPv4Range {
             ||
                 otherLast.isGreaterThan(thisFirst) && otherLast.isLessThanOrEquals(thisLast) && otherFirst.isLessThan(otherFirst));
     }
+    /**
+     * Method that takes IPv4 number from within an IPv4 range, starting from the first IPv4 number
+     *
+     * @param {number} count the amount of IPv4 number to take from the IPv4 range
+     * @returns {Array<IPv4>} an array of IPv4 number, taken from the IPv4 range
+     */
     take(count) {
         let ipv4s = [this.getFirst()];
         let iteratingIPv4 = this.getFirst();
@@ -2499,10 +3051,15 @@ class IPv4Range {
         }
         return ipv4s;
     }
+    /**
+     * Method that splits an IPv4 range into two halves
+     *
+     * @returns {Array<IPv4Range>} An array of two {@link IPv4Range}
+     */
     split() {
         let prefixToSplit = this.cidrPrefix.getValue();
         if (prefixToSplit === 32) {
-            throw new Error("Cannot split an IP range with a single IP address");
+            throw new Error("Cannot split an IP range with a single IP number");
         }
         let splitCidr = Prefix_1.IPv4Prefix.fromNumber(prefixToSplit + 1);
         let firstIPOfFirstRange = this.getFirst();
@@ -2557,18 +3114,36 @@ const BinaryUtils_1 = __webpack_require__(0);
 const BinaryUtils_2 = __webpack_require__(0);
 const Validator_1 = __webpack_require__(2);
 /**
- * Represents a continuous segment of IPv4 addresses following the
+ * Represents a continuous segment of IPv6 number following the
  * classless inter-domain routing scheme for allocating IP addresses.
  *
  * @see https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing
  */
+// TODO introduce an abstract class to share some of the logic between IPv4Range and IPv6Range
 class IPv6Range {
+    /**
+     * Constructor for creating an instance of an IPv6 range.
+     *
+     * The arguments taken by the constructor is inspired by the CIDR notation which basically consists of the IP
+     * number and the prefix.
+     *
+     * @param {IPv6} IPv6 the IP number used to construct the range. By convention this is the first IP number in
+     * the range, but it could also be any IP number within the range
+     * @param {IPv6Prefix} cidrPrefix the prefix which is a representation of the number of bits used to mask the
+     * given IPv6 number in other to create the range
+     */
     constructor(ipv6, cidrPrefix) {
         this.ipv6 = ipv6;
         this.cidrPrefix = cidrPrefix;
         this.bitValue = bigInt(128);
         this.internalCounterValue = this.getFirst();
     }
+    /**
+     * Convenience method for constructing an instance of an IPV6Range from an IP range represented in CIDR notation
+     *
+     * @param {string} rangeIncidrNotation the range of the IPv6 number in CIDR notation
+     * @returns {IPV6Range} the IPV6Range
+     */
     static fromCidr(rangeIncidrNotation) {
         let [isValid, message] = Validator_1.Validator.isValidIPv6CidrNotation(rangeIncidrNotation);
         if (!isValid) {
@@ -2580,6 +3155,11 @@ class IPv6Range {
         return new IPv6Range(IPv6_1.IPv6.fromHexadecimalString(ipString), Prefix_1.IPv6Prefix.fromNumber(prefix));
     }
     ;
+    /**
+     * Gets the size of IPv6 numbers contained within the IPv6 range
+     *
+     * @returns {bigInt.BigInteger} the amount of IPv6 numbers in the range
+     */
     getSize() {
         /**
          * Using bitwise shit operation this will be
@@ -2589,21 +3169,55 @@ class IPv6Range {
          */
         return bigInt(2).pow(this.bitValue.minus(bigInt(this.cidrPrefix.getValue())));
     }
+    /**
+     * Method that returns the IPv6 range in CIDR (Classless Inter-Domain Routing) notation.
+     *
+     * See {@link https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing#CIDR_notation} for more information
+     * on the Classless Inter-Domain Routing notation
+     *
+     * @returns {string} the IPv6 range in CIDR (Classless Inter-Domain Routing) notation
+     */
     toCidrString() {
         return `${this.ipv6.toString()}/${this.cidrPrefix.toString()}`;
     }
+    /**
+     * Method that returns the IPv6 range in string notation where the first IPv6 number and last IPv6 number are
+     * separated by an hyphen. eg. "2001:db8:0:0:0:0:0:0-2001:db8:0:ffff:ffff:ffff:ffff:ffff"
+     *
+     * @returns {string} the range in [first IPv6 number] - [last IPv6 number] format
+     */
     toRangeString() {
         return `${this.getFirst()}-${this.getLast()}`;
     }
+    /**
+     * Method that returns the first IPv6 number in the IPv6 range
+     *
+     * @returns {IPv6} the first IPv6 number in the IPv6 range
+     */
     getFirst() {
         return IPv6_1.IPv6.fromBigInteger(this.ipv6.getValue().and(this.cidrPrefix.toSubnet().getValue()));
     }
+    /**
+     * Method that returns the last IPv6 number in the IPv6 range
+     *
+     * @returns {IPv6} the last IPv6 number in the IPv6 range
+     */
     getLast() {
         let onMask = bigInt("1".repeat(128), 2);
         let subnetAsBigInteger = this.cidrPrefix.toSubnet().getValue();
         let invertedSubnet = BinaryUtils_1.leftPadWithZeroBit(subnetAsBigInteger.xor(onMask).toString(2), 128);
         return IPv6_1.IPv6.fromBigInteger(this.ipv6.getValue().or(BinaryUtils_2.parseBinaryStringToBigInteger(invertedSubnet)));
     }
+    /**
+     * Indicates whether the given IPv6 range is an adjacent range.
+     *
+     * An adjacent range being one where the end of the given range, when incremented by one marks the start of the
+     * other range. Or where the start of the given range, when decreased by one, marks the end of the other range
+     *
+     * @param {IPv6Range} otherRange the other IPv6 range to compare with
+     * @returns {boolean} true if the two IPv6 ranges are consecutive, false otherwise
+     */
+    // TODO move this to the IPRange interface?
     isConsecutive(otherRange) {
         let thisFirst = this.getFirst();
         let thisLast = this.getLast();
@@ -2613,6 +3227,15 @@ class IPv6Range {
             ||
                 otherLast.hasNext() && otherLast.nextIPNumber().isEquals(thisFirst));
     }
+    /**
+     * Indicates if the given IPv6 range is a subset.
+     *
+     * By a subset range, it means all the values of the given range are contained by this IPv6 range
+     *
+     * @param {IPv6Range} otherRange the other IPv6 range
+     * @returns {boolean} true if the other Ipv6 range is a subset. False otherwise.
+     */
+    // TODO move this to the IPRange interface?
     contains(otherRange) {
         let thisFirst = this.getFirst();
         let thisLast = this.getLast();
@@ -2620,6 +3243,15 @@ class IPv6Range {
         let otherLast = otherRange.getLast();
         return (thisFirst.isLessThanOrEquals(otherFirst) && thisLast.isGreaterThanOrEquals(otherLast));
     }
+    /**
+     * Indicate if the given range is a container range.
+     *
+     * By container range, it means all the IP number in this current range can be found within the given range.
+     *
+     * @param {IPv6Range} otherRange he other IPv6 range
+     * @returns {boolean} true if the other Ipv6 range is a container range. False otherwise.
+     */
+    // TODO move this to the IPRange interface?
     inside(otherRange) {
         let thisFirst = this.getFirst();
         let thisLast = this.getLast();
@@ -2627,6 +3259,12 @@ class IPv6Range {
         let otherLast = otherRange.getLast();
         return (otherFirst.isLessThanOrEquals(thisFirst) && otherLast.isGreaterThanOrEquals(thisLast));
     }
+    /**
+     * Checks if two IPv6 ranges overlap
+     * @param {IPv6Range} otherRange the other IPv6 range
+     * @returns {boolean} true if the ranges overlap, false otherwise
+     */
+    // TODO or confirm than normal ranges cannot overlap
     isOverlapping(otherRange) {
         let thisFirst = this.getFirst();
         let thisLast = this.getLast();
@@ -2636,6 +3274,12 @@ class IPv6Range {
             ||
                 otherLast.isGreaterThan(thisFirst) && otherLast.isLessThanOrEquals(thisLast) && otherFirst.isLessThan(otherFirst));
     }
+    /**
+     * Method that takes IPv6 number from within an IPv6 range, starting from the first IPv6 number
+     *
+     * @param {number} count the amount of IPv6 number to take from the IPv6 range
+     * @returns {Array<IPv6>} an array of IPv6 number, taken from the IPv6 range
+     */
     take(count) {
         let iPv6s = [this.getFirst()];
         let iteratingIPv6 = this.getFirst();
@@ -2648,10 +3292,15 @@ class IPv6Range {
         }
         return iPv6s;
     }
+    /**
+     * Method that splits an IPv6 range into two halves
+     *
+     * @returns {Array<IPv6Range>} An array of two {@link IPv6Range}
+     */
     split() {
         let prefixToSplit = this.cidrPrefix.getValue();
         if (prefixToSplit === 128) {
-            throw new Error("Cannot split an IP range with a single IP address");
+            throw new Error("Cannot split an IP range with a single IP number");
         }
         let splitCidr = Prefix_1.IPv6Prefix.fromNumber(prefixToSplit + 1);
         let firstIPOfFirstRange = this.getFirst();
