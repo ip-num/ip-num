@@ -63,8 +63,8 @@ export let expandIPv6Number = (ipv6String:string):string => {
  *
  * {@see https://en.wikipedia.org/wiki/IPv6_address#Representation} for more on the representation of IPv6 addresses
  *
- * @param {string} ipv6String the full form IPv6 address to collapse
- * @returns {string} the collapsed IPv6 address
+ * @param {string} ipv6String the full form IPv6 number to collapse
+ * @returns {string} the collapsed IPv6 number
  */
 export let collapseIPv6Number = (ipv6String:string):string => {
     let hexadecimals: string[] = ipv6String.split(":");
@@ -86,7 +86,7 @@ export let collapseIPv6Number = (ipv6String:string):string => {
 
 
 /**
- * Converts a given IPv6 address expressed in the hexadecimal string notation into a 16 bit binary number in string
+ * Converts a given IPv6 number expressed in the hexadecimal string notation into a 16 bit binary number in string
  * @param {string} hexadectetString the IPv6 number
  * @returns {string} the IPv6 number converted to binary string
  */

@@ -7,7 +7,7 @@ import * as bigInt from "big-integer";
 import {IPRange} from "./interface/IPRange";
 
 /**
- * Represents a continuous segment of IPv4 addresses following the
+ * Represents a continuous segment of IPv4 numbers following the
  * classless inter-domain routing scheme for allocating IP addresses.
  *
  * @see https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing
@@ -215,7 +215,7 @@ export class IPv4Range implements IPRange, IterableIterator<IPv4> {
     public split() : Array<IPv4Range> {
         let prefixToSplit = this.cidrPrefix.getValue();
         if (prefixToSplit === 32) {
-            throw new Error("Cannot split an IP range with a single IP address");
+            throw new Error("Cannot split an IP range with a single IP number");
         }
         let splitCidr = IPv4Prefix.fromNumber(prefixToSplit + 1);
         let firstIPOfFirstRange = this.getFirst();

@@ -103,9 +103,9 @@ export class IPv6 extends AbstractIPNum implements IPNumber {
     }
 
     /**
-     * Gets the individual {@link Hexadecatet} that makes up the IPv6 address
+     * Gets the individual {@link Hexadecatet} that makes up the IPv6 number
      *
-     * @returns {Array<Hexadecatet>} The individual {@link Hexadecatet} that makes up the IPv6 address
+     * @returns {Array<Hexadecatet>} The individual {@link Hexadecatet} that makes up the IPv6 number
      */
     //TODO maybe rename to something like getSegments? so it can be same with getOctet
     public getHexadecatet():Array<Hexadecatet> {

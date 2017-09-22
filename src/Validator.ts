@@ -26,8 +26,8 @@ export class Validator {
     static invalidHexadecatetCountMessage = "An IP6 number cannot have less or greater than 8 octets";
     static invalidSubnetMessage = "The Subnet is invalid";
     static invalidPrefixValueMessage = "A Prefix value cannot be less than 0 or greater than 32";
-    static invalidIPv4CidrNotationMessage = "Cidr notation should be in the form [ip address]/[range]";
-    static invalidIPv6CidrNotationString = "A Cidr notation string should contain an IPv6 address and prefix";
+    static invalidIPv4CidrNotationMessage = "Cidr notation should be in the form [ip number]/[range]";
+    static invalidIPv6CidrNotationString = "A Cidr notation string should contain an IPv6 number and prefix";
 
     /**
      * Checks if given ipNumber is in between the given lower and upper bound

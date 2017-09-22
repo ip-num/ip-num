@@ -37,7 +37,7 @@ export class IPv4 extends AbstractIPNum implements IPNumber {
     /**
      * An array of {@link Octet}'s
      *
-     * @type {Array} the octets that makes up the IPv4 address
+     * @type {Array} the octets that makes up the IPv4 number
      */
     readonly octets: Array<Octet> = [];
 
@@ -100,9 +100,9 @@ export class IPv4 extends AbstractIPNum implements IPNumber {
     }
 
     /**
-     * Gets the individual {@link Octet} that makes up the IPv4 address
+     * Gets the individual {@link Octet} that makes up the IPv4 number
      *
-     * @returns {Array<Octet>} The individual {@link Octet} that makes up the IPv4 address
+     * @returns {Array<Octet>} The individual {@link Octet} that makes up the IPv4 number
      */
     public getOctets(): Array<Octet> {
         return this.octets;
