@@ -89,7 +89,7 @@ Including the `ip-num` library via the script tag in the browser exposes `ipnum`
 the modules exposes by the library.
 
 ```
-<script src="https://raw.githubusercontent.com/ip-num/ip-num/master/ip-num.js"></script>
+<script src="https://ip-num.github.io/ip-num/ip-num.js"></script>
 ........
 let asn = new ipnum.Asn(65546);
 console.log(asn.toBinaryString()); //10000000000001010
