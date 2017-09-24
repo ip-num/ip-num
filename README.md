@@ -182,7 +182,7 @@ See the [IPv6 documentation](https://ip-num.github.io/ip-num/classes/_ipv6_.ipv6
 
 ### IPv4 Ranges
 ```
-import {IPv4Range} from "../src/IPv4Range";
+import {IPv4Range} from "ip-num/IPv4Range";
 
 // creating an IPv4 range from CIDR notation
 let ipv4Range = IPv4Range.fromCidr("192.198.0.0/24");
@@ -203,7 +203,7 @@ See the [IPv4Range documentation](https://ip-num.github.io/ip-num/classes/_ipv4r
 
 ### IPv6 Ranges
 ```
-import {IPv6Range} from "../src/IPv6Range";
+import {IPv6Range} from "ip-num/IPv6Range";
 
 // creating an IPv6 range from CIDR notation
 let ipv6Range = IPv6Range.fromCidr("2001:db8::/33");
