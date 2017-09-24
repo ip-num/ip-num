@@ -145,25 +145,129 @@ See the [ASN documentation](https://ip-num.github.io/ip-num/classes/_asn_.asn.ht
 ### IPv4
 ```
 import { IPv4 } from "ip-num/IPv4";
+
 // creating
 let firstIPv4 = new IPv4("74.125.43.99") // Creating an instance using the constructor
-let secondIPv4 = IPv4.fromBigInteger(bigInt("1876843053") // Using the fromBigInteger convenience method
+let secondIPv4 = IPv4.fromBigInteger(bigInt("1876843053")) // Using the fromBigInteger convenience method
 let thirdIPv4 = IPv4.fromDecimalDottedString("111.222.90.45") // Using the fromDecimalDottedString convenience method
 
 // converting an IPv4 instance to binary string representation
 firstIPv4.toBinaryString() // will be 01001010011111010010101101100011
 
+// comparing IPV4
+firstIPv4.isEquals(thirdIPv4) // false
+firstIPv4.isLessThan(thirdIPv4) // true
+firstIPv4.isGreaterThan(thirdIPv4) // false
 ```
 
 See the [IPv4 documentation](https://ip-num.github.io/ip-num/classes/_ipv4_.ipv4.html) for more information
 
 ### IPv6
-// TODO
-### Ranges
-// TODO
+```
+import { IPv6 } from "ip-num/IPv6";
+
+// creating
+let firstIPv6 = new IPv6("ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff") // Creating an instance using the constructor
+let secondIPv6 = IPv6.fromBigInteger(bigInt("100")) // Using the fromBigInteger convenience method
+let thirdIPv6 = IPv6.fromHexadecimalString(""::") // Using the fromDecimalDottedString convenience method. Not abbreviated representation of IPv6 string is supported
+   
+// converting an IPv6 instance to binary string representation
+firstIPv6.toBinaryString() // will be 11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111
+   
+// comparing IPV6
+firstIPv6.isEquals(thirdIPv6) // false
+firstIPv6.isLessThan(thirdIPv6) // false
+firstIPv6.isGreaterThan(thirdIPv6) // true
+
+```
+
+See the [IPv6 documentation](https://ip-num.github.io/ip-num/classes/_ipv6_.ipv6.html) for more information
+
+### IPv4 Ranges
+```
+import {IPv4Range} from "../src/IPv4Range";
+
+// creating an IPv4 range from CIDR notation
+let ipv4Range = IPv4Range.fromCidr("192.198.0.0/24");
+
+// get first and last IPv4 number in the range
+ipv4Range.getFirst().toString() // gives 192.198.0.0
+ipv4Range.getLast().toString() // gives 192.198.0.255
+
+// getting number of IPv4 numbers in the range
+ipv4Range.getSize() // Returns 256
+
+// splitting ranges
+ipv4Range.split()[0].toCidrString() // returns 192.198.0.0/25
+ipv4Range.split()[1].toCidrString() // returns 192.198.0.128/25
+```
+
+See the [IPv4Range documentation](https://ip-num.github.io/ip-num/classes/_ipv4range_.ipv4range.html) for more information
+
+### IPv6 Ranges
+```
+import {IPv6Range} from "../src/IPv6Range";
+
+// creating an IPv6 range from CIDR notation
+let ipv6Range = IPv6Range.fromCidr("2001:db8::/33");
+
+// get first and last IPv6 number in the range
+ipv6Range.getFirst().toString() // gives 2001:db8:0:0:0:0:0:0
+ipv6Range.getLast().toString() // gives 2001:db8:7fff:ffff:ffff:ffff:ffff:ffff
+
+// getting number of IPv6 numbers in the range
+ipv6Range.getSize() // Returns 39614081257132168796771975168
+
+// splitting ranges
+ipv6Range.split()[0].toCidrString() // returns 2001:db8:0:0:0:0:0:0/34
+ipv6Range.split()[1].toCidrString() // returns 2001:db8:4000:0:0:0:0:0/34
+```
+
+See the [IPv6Range documentation](https://ip-num.github.io/ip-num/classes/_ipv6range_.ipv6range.html) for more information
+
 ### IPNumber and IPRange interfaces
-// TODO
+When working in TypeScript, you have the ability to abstract ASN, IPv4 and IPv6 as an IPNumber, and IPv4Range and 
+IPv6Range as IPRange
+
+```
+// representing ASN, IPv4 and IPv6 with the IPNumber interface
+let ipNumbers: IPNumber[] = [];
+ipNumbers.push(new Asn("200"));
+ipNumbers.push(new IPv4("133.245.233.255"));
+ipNumbers.push(new IPv6("2001:800:0:0:0:0:0:2002"))
+
+// console logs AS200
+                133.245.233.255
+                2001:800:0:0:0:0:0:2002
+ipNumbers.forEach(ip => {
+   console.log(ip.toString());
+});
+
+
+// representing IPv4Range and IPv6Range with the IPRange interface
+let ipRanges: IPRange[] = [];
+ipRanges.push(IPv4Range.fromCidr("192.198.0.0/24"));
+ipRanges.push(IPv6Range.fromCidr("2001:db8::/33"));
+
+// console logs 192.198.0.0/24
+                2001:db8:0:0:0:0:0:0/33
+ipRanges.forEach(iprange => {
+   console.log(iprange.toCidrString());
+});
+
+```
+
+See the [IPNumber documentation](https://ip-num.github.io/ip-num/interfaces/_interface_ipnumber_.ipnumber.html) for more information
+See the [IPRange documentation](https://ip-num.github.io/ip-num/interfaces/_interface_iprange_.iprange.html) for more information
 
 License
 ------------------
 The `ip-num` library is released under the MIT license
+
+Contributing
+------------------
+
+To discuss a new feature or ask a question, open an issue. Find the issue tracker [here](https://github.com/ip-num/ip-num/issues)
+
+Found a bug and what help fix it? Then feel free to submit a pull request. It will be appreciated if the changes made
+ are backed with tests.
