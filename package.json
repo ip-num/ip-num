@@ -15,7 +15,7 @@
     "test": "jasmine-ts spec/**/*.ts",
     "test:watch": "npm run test -- -w",
     "test:coverage": "nyc -e .ts -x *.spec.ts jasmine-ts spec/**/*.ts",
-    "dprep": "npm run clean && npm run compile && cp package.json ./dist/src && cd ./dist/src && webpack --config ../../webpack.config.js",
+    "dprep": "npm run clean && npm run compile && cp package.json README.md ./dist/src && cd ./dist/src && webpack --config ../../webpack.config.js",
     "dpack": "cd ./dist/src && npm pack",
     "test-release": "npm run dprep && npm run dpack",
     "drelease": "cd ./dist/src && npm publish",
