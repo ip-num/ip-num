@@ -22,7 +22,7 @@ If you want to use `ip-num` from within a Node.js environment, you can install i
 ### Browser
 If you are using a browser, you can include `ip-num` by linking to it or download it from GitHub
 
-```<script src="https://raw.githubusercontent.com/ip-num/ip-num/master/ip-num.js"></script>```
+```<script src="https://ip-num.github.io/ip-num/ip-num.js"></script>```
 
 Usage
 ------------------
