@@ -108,14 +108,11 @@ Documentation can be found at [https://ip-num.github.io/ip-num/](https://ip-num.
 
 Examples
 ------------------
-Find below some example of the usage of `ip-num` Check the [documentation](https://ip-num.github.io/ip-num/) for a more complete
- overview of `ip-num's` API.
+Find below, some example of the usage of `ip-num`. For a more comprehensive overview of the API, please refer to the [documentation](https://ip-num.github.io/ip-num/).
 
 `ip-num` makes use of the [BigInteger.js](https://github.com/peterolson/BigInteger.js/) library to represents numeric values. This is due to the fact that numeric 
 values that needs to be worked with when dealing with IP numbers can exceed the numeric value that can be safely represented natively within JavaScript without loosing precisions ie numbers greater than 
 [Number.MAX_SAFE_INTEGER](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/MAX_SAFE_INTEGER)
-
-This would be seen in some of the example given below.
  
 ### ASN
 ```
