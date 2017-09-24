@@ -120,7 +120,7 @@ ipv<span class="hljs-number">6</span>.toBinaryString() <span class="hljs-comment
 </code></pre><h3 id="via-script-tag-with-javascript">Via Script tag with JavaScript</h3>
 				<p>Including the <code>ip-num</code> library via the script tag in the browser exposes <code>ipnum</code> variable from which you can access
 				the modules exposes by the library.</p>
-				<pre><code>&lt;script src=<span class="hljs-string">"https://raw.githubusercontent.com/ip-num/ip-num/master/ip-num.js"</span>&gt;&lt;/script&gt;
+				<pre><code>&lt;script src=<span class="hljs-string">"https://ip-num.github.io/ip-num/ip-num.js"</span>&gt;&lt;/script&gt;
 <span class="hljs-params">...</span><span class="hljs-params">...</span>..
 <span class="hljs-keyword">let</span> asn = <span class="hljs-literal">new</span> ipnum.Asn(<span class="hljs-number">65546</span>);
 console.<span class="hljs-keyword">log</span>(asn.toBinaryString()); <span class="hljs-comment">//10000000000001010</span>
@@ -133,12 +133,10 @@ console.<span class="hljs-keyword">log</span>(ipv6.toBinaryString()); <span clas
 </code></pre><h2 id="documentation">Documentation</h2>
 				<p>Documentation can be found at <a href="https://ip-num.github.io/ip-num/">https://ip-num.github.io/ip-num/</a></p>
 				<h2 id="examples">Examples</h2>
-				<p>Find below some example of the usage of <code>ip-num</code> Check the <a href="https://ip-num.github.io/ip-num/">documentation</a> for a more complete
-				overview of <code>ip-num&#39;s</code> API.</p>
+				<p>Find below, some example of the usage of <code>ip-num</code>. For a more comprehensive overview of the API, please refer to the <a href="https://ip-num.github.io/ip-num/">documentation</a>.</p>
 				<p><code>ip-num</code> makes use of the <a href="https://github.com/peterolson/BigInteger.js/">BigInteger.js</a> library to represents numeric values. This is due to the fact that numeric
 					values that needs to be worked with when dealing with IP numbers can exceed the numeric value that can be safely represented natively within JavaScript without loosing precisions ie numbers greater than
 				<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/MAX_SAFE_INTEGER">Number.MAX_SAFE_INTEGER</a></p>
-				<p>This would be seen in some of the example given below.</p>
 				<h3 id="asn">ASN</h3>
 				<pre><code><span class="hljs-keyword">import</span> { Asn } <span class="hljs-keyword">from</span> <span class="hljs-string">"ip-num/Asn"</span>;
 ..........
