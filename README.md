@@ -108,7 +108,7 @@ Documentation can be found at [https://ip-num.github.io/ip-num/](https://ip-num.
 
 Examples
 ------------------
-Find below some example of the API `ip-num` provides and how to use them. Check the [documentation](https://ip-num.github.io/ip-num/) for a more complete
+Find below some example of the usage of `ip-num` Check the [documentation](https://ip-num.github.io/ip-num/) for a more complete
  overview of `ip-num's` API.
 
 `ip-num` makes use of the [BigInteger.js](https://github.com/peterolson/BigInteger.js/) library to represents numeric values. This is due to the fact that numeric 
@@ -143,7 +143,20 @@ Asn.fromNumber(2).hasPrevious() // true
 See the [ASN documentation](https://ip-num.github.io/ip-num/classes/_asn_.asn.html) for more information
 
 ### IPv4
-// TODO
+```
+import { IPv4 } from "ip-num/IPv4";
+// creating
+let firstIPv4 = new IPv4("74.125.43.99") // Creating an instance using the constructor
+let secondIPv4 = IPv4.fromBigInteger(bigInt("1876843053") // Using the fromBigInteger convenience method
+let thirdIPv4 = IPv4.fromDecimalDottedString("111.222.90.45") // Using the fromDecimalDottedString convenience method
+
+// converting an IPv4 instance to binary string representation
+firstIPv4.toBinaryString() // will be 01001010011111010010101101100011
+
+```
+
+See the [IPv4 documentation](https://ip-num.github.io/ip-num/classes/_ipv4_.ipv4.html) for more information
+
 ### IPv6
 // TODO
 ### Ranges
