@@ -30,6 +30,7 @@ export class Validator {
     static invalidIPv6CidrNotationString = "A Cidr notation string should contain an IPv6 number and prefix";
     static takeOutOfRangeSizeMessage = "$count is greater than $size, the size of the range";
     static cannotSplitSingleRangeErrorMessage = "Cannot split an IP range with a single IP number";
+    static invalidInetNumType = "Given ipNumType must be either InetNumType.IPv4 or InetNumType.IPv6";
 
     /**
      * Checks if given ipNumber is in between the given lower and upper bound
@@ -173,7 +174,7 @@ export class Validator {
             let withinRange = Validator.isWithinRange(bigInt(prefixValue), bigInt.zero, bigInt(128));
             return [withinRange, withinRange ? []: [Validator.invalidPrefixValueMessage]];
         }
-        return [false, ["Given ipNumType must be either InetNumType.IPv4 or InetNumType.IPv6"]]
+        return [false, [Validator.invalidInetNumType]]
     }
 
     /**

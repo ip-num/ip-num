@@ -1,5 +1,6 @@
 'use strict';
 import {Validator} from "../src/Validator";
+import {IPNumType} from "../src/IPNumType";
 
 describe('Validator: ', () => {
     describe('isValidIPv4CidrNotation ', () => {
@@ -22,4 +23,12 @@ describe('Validator: ', () => {
 
         });
     });
+
+    describe('isValidPrefixValue', () => {
+        it('validate invalid IPNumType', () => {
+            expect(Validator.isValidPrefixValue(3, IPNumType.ASN)[0]).toBe(false);
+            expect(Validator.isValidPrefixValue(3, IPNumType.ASN)[1].some(errorMessage => {return errorMessage === Validator.invalidInetNumType})).toBe(true);
+        });
+
+    })
 });
