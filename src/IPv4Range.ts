@@ -246,18 +246,6 @@ export class IPv4Range implements IPRange, IterableIterator<IPv4> {
         }
     }
 
-    return?(value?: any): IteratorResult<IPv4> {
-        return {
-            done:true,
-            value: this.internalCounterValue
-        }
-    }
-
-    // TODO read up on what this method does and decide to implement or remove
-    throw?(e?: any): IteratorResult<IPv4> {
-        throw new Error("Method not implemented.");
-    }
-
     [Symbol.iterator](): IterableIterator<IPv4> {
         return this;
     }
