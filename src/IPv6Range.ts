@@ -244,18 +244,6 @@ export class IPv6Range implements IPRange, IterableIterator<IPv6> {
         }
     }
 
-    return?(value?: any): IteratorResult<IPv6> {
-        return {
-            done:true,
-            value: this.internalCounterValue
-        }
-    }
-
-    // TODO read up on what this method does and decide to implement or remove
-    throw?(e?: any): IteratorResult<IPv6> {
-        throw new Error("Method not implemented.");
-    }
-
     [Symbol.iterator](): IterableIterator<IPv6> {
         return this;
     }
