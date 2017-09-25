@@ -29,6 +29,7 @@ export class Validator {
     static invalidIPv4CidrNotationMessage = "Cidr notation should be in the form [ip number]/[range]";
     static invalidIPv6CidrNotationString = "A Cidr notation string should contain an IPv6 number and prefix";
     static takeOutOfRangeSizeMessage = "$count is greater than $size, the size of the range";
+    static cannotSplitSingleRangeErrorMessage = "Cannot split an IP range with a single IP number";
 
     /**
      * Checks if given ipNumber is in between the given lower and upper bound

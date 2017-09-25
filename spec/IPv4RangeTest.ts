@@ -51,7 +51,12 @@ describe('IPv4Range: ', () => {
         expect(() => {
             ipv4Range.take(ipv4Range.getSize().plus(1).valueOf());
         }).toThrowError(Error, errMessage);
-
+    });
+    it('should throw an exception when trying to split a range with on IP number', function(){
+        let ipv4Range = new IPv4Range(new IPv4("192.198.0.0"), new IPv4Prefix(32));
+        expect(() => {
+            ipv4Range.split();
+        }).toThrowError(Error, Validator.cannotSplitSingleRangeErrorMessage);
     });
     it('should correctly tell if ranges are consecutive', () => {
         let firstRange = IPv4Range.fromCidr("192.168.0.0/25");
