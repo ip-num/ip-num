@@ -44,7 +44,7 @@ describe('Prefix Test: ', () => {
     });
 
     describe('IPv6Prefix', function() {
-        fit('should throw exception if prefix is an invalid number', () => {
+        it('should throw exception if prefix is an invalid number', () => {
             expect(() => {
                 new IPv6Prefix(200);
             }).toThrowError(Error, Validator.invalidPrefixValueMessage);
