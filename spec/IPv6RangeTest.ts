@@ -1,6 +1,7 @@
 import {IPv6} from "../src/IPv6";
 import {IPv6Prefix} from "../src/Prefix";
 import {IPv6Range} from "../src/IPv6Range";
+import {Validator} from "../src/Validator";
 
 
 describe('IPv6Range: ', () => {
@@ -40,6 +41,27 @@ describe('IPv6Range: ', () => {
 
         expect(firstRange.isConsecutive(anotherSecondRange)).toBe(false);
         expect(anotherSecondRange.isConsecutive(firstRange)).toBe(false);
+    });
+    it('should throw an exception when invalid cidr notation is used to create range', function() {
+        expect(() => {
+            IPv6Range.fromCidr("2001:db8:0:0:0:0/300");
+        }).toThrowError(Error, Validator.invalidIPv6CidrNotationString);
+    });
+
+    it('should throw an exception when asked to take a value bigger than the size of range', function() {
+        let ipv6Range = new IPv6Range(new IPv6("2001:db8::"), new IPv6Prefix(46));
+        let errMessage = Validator.takeOutOfRangeSizeMessage
+            .replace("$size", ipv6Range.getSize().toString())
+            .replace("$count", (ipv6Range.getSize().plus(1)).valueOf().toString());
+        expect(() => {
+            ipv6Range.take(ipv6Range.getSize().plus(1).valueOf());
+        }).toThrowError(Error, errMessage);
+    });
+    it('should throw an exception when trying to split a range with on IP number', function(){
+        let ipv6Range = new IPv6Range(new IPv6("2001:db8::"), new IPv6Prefix(128));
+        expect(() => {
+            ipv6Range.split();
+        }).toThrowError(Error, Validator.cannotSplitSingleRangeErrorMessage);
     });
     // xit('should correctly tell if ranges are overlapping', () => {
     //     // TODO find a way to create overlapping ranges.

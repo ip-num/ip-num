@@ -236,6 +236,8 @@ export class Validator {
      * @returns {[boolean , string]} first value is true if valid IPv6 range in Cidr notation, false otherwise.
      * Second value contains "valid" or an error message when value is invalid
      */
+    // TODO change to be like isValidIPv4CidrNotation where validation is done on the component of the cidr notation
+    // instead of a single regex check
     static isValidIPv6CidrNotation(ipv6RangeAsCidrString: string): [boolean, string[]] {
         let isValid = Validator.IPV6_RANGE_PATTERN.test(ipv6RangeAsCidrString);
         return isValid ? [isValid, []]: [isValid, [Validator.invalidIPv6CidrNotationString]];
