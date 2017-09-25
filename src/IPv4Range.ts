@@ -197,7 +197,10 @@ export class IPv4Range implements IPRange, IterableIterator<IPv4> {
         let iteratingIPv4 = this.getFirst();
 
         if (bigInt(count).greater(this.getSize())) {
-            throw new Error(`${count} is greater than ${this.getSize()}, the size of the range`);
+            let errMessage = Validator.takeOutOfRangeSizeMessage
+                .replace("$count", count.toString())
+                .replace("$size", this.getSize().toString());
+            throw new Error(errMessage);
         }
 
         for (var counter = 0; counter < count - 1; counter++) {

@@ -43,6 +43,16 @@ describe('IPv4Range: ', () => {
         expect(take[1].toString()).toBe("192.198.0.1");
         expect(take[2].toString()).toBe("192.198.0.2");
     });
+    it('should throw an exception when asked to take a value bigger than the size of range', function() {
+        let ipv4Range = new IPv4Range(new IPv4("192.198.0.0"), new IPv4Prefix(24));
+        let errMessage = Validator.takeOutOfRangeSizeMessage
+            .replace("$size", ipv4Range.getSize().toString())
+            .replace("$count", (ipv4Range.getSize().plus(1)).toString());
+        expect(() => {
+            ipv4Range.take(ipv4Range.getSize().plus(1).valueOf());
+        }).toThrowError(Error, errMessage);
+
+    });
     it('should correctly tell if ranges are consecutive', () => {
         let firstRange = IPv4Range.fromCidr("192.168.0.0/25");
         let secondRange = IPv4Range.fromCidr("192.168.0.128/25");
