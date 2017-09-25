@@ -12,9 +12,6 @@ import {hexadecimalStringToBinaryString} from "./HexadecimalUtils";
 export let expandIPv6Number = (ipv6String:string):string => {
     let expandWithZero = (hexadecimalArray: string[]): string => {
         let paddedArray = hexadecimalArray.map((hexadecimal) => {
-            if (hexadecimal === "") {
-                return hexadecimal;
-            }
             return leftPadWithZeroBit(hexadecimal,4);
         });
 
