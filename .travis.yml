@@ -6,9 +6,8 @@ node_js:
   - '7'
   - '6'
 
-script:
- - npm test
- - cat ./coverage/lcov.info | ./node_modules/.bin/coveralls
+after_success:
+  - coveralls
 
 sudo: false
 
