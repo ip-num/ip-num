@@ -53,6 +53,12 @@ describe('IPv6: ', () => {
         expect(hexadecatets[7].toString()).toEqual("67cf");
     });
 
+    it('should throw an exception when invalid IPv6 string is used to construct an IPv6 instance', function() {
+        expect(() => {
+            IPv6.fromHexadecimalString("3ffe:1900:4545:0003:0200:f8ff:fe21:67cf:jaja:jajaj:jajaj");
+        }).toThrowError(Error);
+    });
+
     it('should correctly return the right value', () => {
         let bigIntegerValue = bigInt("1".repeat(128), 2);
         let iPv6 = IPv6.fromBigInteger(bigIntegerValue);
