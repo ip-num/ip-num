@@ -45,6 +45,7 @@
     "@types/jasmine": "2.5.53",
     "@types/node": "7.0.39",
     "awesome-typescript-loader": "^3.2.3",
+    "coveralls": "^2.13.1",
     "jasmine-node": "1.14.5",
     "jasmine-spec-reporter": "4.1.0",
     "jasmine-ts": "0.2.0",
