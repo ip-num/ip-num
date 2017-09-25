@@ -6,6 +6,9 @@ node_js:
   - '7'
   - '6'
 
+after_success:
+  - coveralls
+
 sudo: false
 
 branches:
