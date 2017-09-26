@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/ip-num/ip-num.svg?branch=master)](https://travis-ci.org/ip-num/ip-num)
+[![Coverage Status](https://coveralls.io/repos/github/ip-num/ip-num/badge.svg?branch=master)](https://coveralls.io/github/ip-num/ip-num?branch=master)
 
 ip-num
 ================
