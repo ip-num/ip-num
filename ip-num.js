@@ -2081,7 +2081,7 @@ class IPv4Prefix {
     toSubnet() {
         let onBits = '1'.repeat(this.value);
         let offBits = '0'.repeat(32 - this.value);
-        return Subnet_1.IPv4Subnet.fromString(this.toDecimalNotation(`${onBits}${offBits}`));
+        return Subnet_1.IPv4Subnet.fromDecimalDottedString(this.toDecimalNotation(`${onBits}${offBits}`));
     }
     toDecimalNotation(bits) {
         return `${BinaryUtils_1.parseBinaryStringToBigInteger(bits.substr(0, 8))}.${BinaryUtils_1.parseBinaryStringToBigInteger(bits.substr(8, 8))}.${BinaryUtils_1.parseBinaryStringToBigInteger(bits.substr(16, 8))}.${BinaryUtils_1.parseBinaryStringToBigInteger(bits.substr(24, 8))}`;
@@ -2147,7 +2147,7 @@ class IPv6Prefix {
     toSubnet() {
         let onBits = '1'.repeat(this.value);
         let offBits = '0'.repeat(128 - this.value);
-        return Subnet_2.IPv6Subnet.fromString(this.toHexadecatetNotation(`${onBits}${offBits}`));
+        return Subnet_2.IPv6Subnet.fromHexadecimalString(this.toHexadecatetNotation(`${onBits}${offBits}`));
     }
     toHexadecatetNotation(bits) {
         let binaryStrings = bits.match(/.{1,16}/g);

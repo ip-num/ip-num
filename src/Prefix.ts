@@ -73,7 +73,7 @@ class IPv4Prefix {
     public toSubnet(): IPv4Subnet {
         let onBits = '1'.repeat(this.value);
         let offBits = '0'.repeat(32 - this.value);
-        return IPv4Subnet.fromString(this.toDecimalNotation(`${onBits}${offBits}`));
+        return IPv4Subnet.fromDecimalDottedString(this.toDecimalNotation(`${onBits}${offBits}`));
     }
 
     private toDecimalNotation(bits:string): string {
@@ -148,7 +148,7 @@ class IPv6Prefix {
     public toSubnet(): IPv6Subnet {
         let onBits = '1'.repeat(this.value);
         let offBits = '0'.repeat(128 - this.value);
-        return IPv6Subnet.fromString(this.toHexadecatetNotation(`${onBits}${offBits}`));
+        return IPv6Subnet.fromHexadecimalString(this.toHexadecatetNotation(`${onBits}${offBits}`));
     }
 
     private toHexadecatetNotation(bits:string): string {

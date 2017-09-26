@@ -9,6 +9,7 @@ import {hexadectetNotationToBinaryString} from "./IPv6Utils";
  * The IPv4Subnet can be seen as a specialized IPv4 number where, in a 32 bit number, starting from the left, you have
  * continuous bits turned on (with 1 value) followed by bits turned off (with 0 value)
  */
+// TODO revisit and perhaps make abstract the two subnets and make them extend IPnumber
 export class IPv4Subnet {
     /**
      * An array of {@link Octet}'s
@@ -29,7 +30,7 @@ export class IPv4Subnet {
      * @param {string} rawValue The passed string in dot-decimal notation
      * @returns {IPv4Subnet} the instance of IPv4Subnet
      */
-    static fromString(rawValue:string):IPv4Subnet {
+    static fromDecimalDottedString(rawValue:string):IPv4Subnet {
         return new IPv4Subnet(rawValue);
     };
 
@@ -113,7 +114,7 @@ export class IPv6Subnet {
      * @param {string} rawValue The passed string in textual notation
      * @returns {IPv6Subnet} the instance of IPv6Subnet
      */
-    static fromString(rawValue:string):IPv6Subnet {
+    static fromHexadecimalString(rawValue:string):IPv6Subnet {
         return new IPv6Subnet(rawValue);
     };
 
