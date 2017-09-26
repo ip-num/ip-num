@@ -12,9 +12,9 @@
   "scripts": {
     "clean": "rm -rf ./dist",
     "compile": "tsc -p tsconfig.json",
-    "test": "jasmine-ts spec/**/*.ts",
+    "test": "nyc -e .ts jasmine-ts spec/**/*.ts",
     "test:watch": "npm run test -- -w",
-    "test:coverage": "nyc -e .ts -x *.spec.ts jasmine-ts spec/**/*.ts",
+    "test:without-coverage": "jasmine-ts spec/**/*.ts",
     "dprep": "npm run clean && npm run compile && cp package.json README.md ./dist/src && cd ./dist/src && webpack --config ../../webpack.config.js",
     "dpack": "cd ./dist/src && npm pack",
     "test-release": "npm run dprep && npm run dpack",
@@ -23,6 +23,7 @@
     "release": "npm run docs && npm run dprep && cp ip-num.js ./docs && npm run drelease"
   },
   "nyc": {
+    "exclude": ["spec"],
     "reporter": [
       "html","lcov"
     ]
