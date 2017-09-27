@@ -4,13 +4,14 @@ import * as bigInt from "big-integer"
 import {dottedDecimalNotationToBinaryString} from "./BinaryUtils";
 import {Hexadecatet} from "./Hexadecatet";
 import {hexadectetNotationToBinaryString} from "./IPv6Utils";
+import {IPv4} from "./IPv4";
+import {IPv6} from "./IPv6";
 
 /**
  * The IPv4Subnet can be seen as a specialized IPv4 number where, in a 32 bit number, starting from the left, you have
  * continuous bits turned on (with 1 value) followed by bits turned off (with 0 value)
  */
-// TODO revisit and perhaps make abstract the two subnets and make them extend IPnumber
-export class IPv4Subnet {
+export class IPv4Subnet extends IPv4 {
     /**
      * An array of {@link Octet}'s
      *
@@ -40,8 +41,8 @@ export class IPv4Subnet {
      *
      * @param {string} ipString The passed string in dot-decimal notation
      */
-    // TODO similar code as in constructor of IPv4, reuse?
     constructor(ipString: string) {
+        super(ipString);
         let isValid: boolean;
         let message: string[];
         [isValid, message] = Validator.isValidIPv4Subnet(ipString);
@@ -51,41 +52,10 @@ export class IPv4Subnet {
         }
 
         let stringOctets = ipString.split(".");
-
         this.octets = stringOctets.map((rawOctet) => {
             return Octet.fromString(rawOctet)
         });
-
         this.value = bigInt(dottedDecimalNotationToBinaryString(ipString), 2);
-    }
-
-    /**
-     * Method to get the decimal numeric value of the IPv4Subnet as BigInteger
-     *
-     * @returns {bigInt.BigInteger} the decimal numeric value of the IPv4Subnet as BigInteger
-     */
-    public getValue():bigInt.BigInteger {
-        return this.value;
-    }
-
-    /**
-     * Method that converts the IPv4Subnet to a string representation.
-     *
-     * The string representation is in dot-decimal notation
-     *
-     * @returns {string} The string representation of the IPv4Subnet in dot-decimal notation
-     */
-    public toString(): string {
-        return this.octets.map(function(value){ return value.toString()}).join(".");
-    }
-
-    /**
-     * Gets the individual {@link Octet} that makes up the IPv4 subnet
-     *
-     * @returns {Array<Octet>} The individual {@link Octet} that makes up the IPv4 subnet
-     */
-    public getOctets(): Array<Octet> {
-        return this.octets;
     }
 }
 
@@ -93,7 +63,7 @@ export class IPv4Subnet {
  * The IPv6Subnet can be seen as a specialized IPv4 number where, in a 128 bit number, starting from the left, you have
  * continuous bits turned on (with 1 value) followed by bits turned off (with 0 value)
  */
-export class IPv6Subnet {
+export class IPv6Subnet extends IPv6 {
     /**
      * An array of {@link Hexadecatet}'s
      *
@@ -124,8 +94,8 @@ export class IPv6Subnet {
      *
      * @param {string} ipString The passed IPv6 string
      */
-    // TODO similar code as in constructor of IPv4, reuse?
     constructor(ipString: string) {
+        super(ipString);
         let isValid: boolean;
         let message: string[];
         [isValid, message] = Validator.isValidIPv6Subnet(ipString);
@@ -135,39 +105,9 @@ export class IPv6Subnet {
         }
 
         let stringHexadecimals = ipString.split(":");
-
         this.hexadecatet = stringHexadecimals.map((stringHexadecatet) => {
             return Hexadecatet.fromString(stringHexadecatet)
         });
-
         this.value = bigInt(hexadectetNotationToBinaryString(ipString), 2);
-    }
-
-    /**
-     * Method to get the decimal numeric value of the IPv6Subnet as BigInteger
-     *
-     * @returns {bigInt.BigInteger} the decimal numeric value of the IPv6Subnet as BigInteger
-     */
-    public getValue():bigInt.BigInteger {
-        return this.value;
-    }
-
-    /**
-     * Method that converts the IPv6Subnet to a string representation.
-     *
-     *
-     * @returns {string} The string representation of the IPv6Subnet
-     */
-    public toString(): string {
-        return this.hexadecatet.map(function(value){ return value.toString()}).join(":");
-    }
-
-    /**
-     * Gets the individual {@link Hexadecatet} that makes up the IPv6 subnet
-     *
-     * @returns {Array<Hexadecatet>} The individual {@link Hexadecatet} that makes up the IPv6 subnet
-     */
-    public getHexadecatet(): Array<Hexadecatet> {
-        return this.hexadecatet;
     }
 }
