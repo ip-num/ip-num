@@ -4,7 +4,7 @@ import {IPv4} from "../src/IPv4";
 import {IPv6Subnet} from "../src/Subnet";
 import {IPv6} from "../src/IPv6";
 
-fdescribe('Subnet test', function() {
+describe('Subnet test', function() {
     it('should create an instance of IPv4 subnet using fromDecimalDottedString', () => {
         let iPv4Subnet = IPv4Subnet.fromDecimalDottedString("255.0.0.0");
         expect(iPv4Subnet.toString()).toEqual("255.0.0.0");
