@@ -1,4 +1,4 @@
-// [ip-num]  Version: 0.0.11-pre-alpha. Released on: Sunday, September 24th, 2017, 11:55:46 AM  
+// [ip-num]  Version: 0.0.11-pre-alpha. Released on: Thursday, September 28th, 2017, 9:58:46 AM  
  var ipnum =
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
@@ -1523,7 +1523,7 @@ class Validator {
             let withinRange = Validator.isWithinRange(bigInt(prefixValue), bigInt.zero, bigInt(128));
             return [withinRange, withinRange ? [] : [Validator.invalidPrefixValueMessage]];
         }
-        return [false, ["Given ipNumType must be either InetNumType.IPv4 or InetNumType.IPv6"]];
+        return [false, [Validator.invalidInetNumType]];
     }
     /**
      * Checks if given string is a valid IPv4 subnet
@@ -1578,6 +1578,8 @@ class Validator {
      * @returns {[boolean , string]} first value is true if valid IPv6 range in Cidr notation, false otherwise.
      * Second value contains "valid" or an error message when value is invalid
      */
+    // TODO change to be like isValidIPv4CidrNotation where validation is done on the component of the cidr notation
+    // instead of a single regex check
     static isValidIPv6CidrNotation(ipv6RangeAsCidrString) {
         let isValid = Validator.IPV6_RANGE_PATTERN.test(ipv6RangeAsCidrString);
         return isValid ? [isValid, []] : [isValid, [Validator.invalidIPv6CidrNotationString]];
@@ -1604,6 +1606,9 @@ Validator.invalidSubnetMessage = "The Subnet is invalid";
 Validator.invalidPrefixValueMessage = "A Prefix value cannot be less than 0 or greater than 32";
 Validator.invalidIPv4CidrNotationMessage = "Cidr notation should be in the form [ip number]/[range]";
 Validator.invalidIPv6CidrNotationString = "A Cidr notation string should contain an IPv6 number and prefix";
+Validator.takeOutOfRangeSizeMessage = "$count is greater than $size, the size of the range";
+Validator.cannotSplitSingleRangeErrorMessage = "Cannot split an IP range with a single IP number";
+Validator.invalidInetNumType = "Given ipNumType must be either InetNumType.IPv4 or InetNumType.IPv6";
 exports.Validator = Validator;
 
 
@@ -1642,9 +1647,6 @@ const HexadecimalUtils_1 = __webpack_require__(6);
 exports.expandIPv6Number = (ipv6String) => {
     let expandWithZero = (hexadecimalArray) => {
         let paddedArray = hexadecimalArray.map((hexadecimal) => {
-            if (hexadecimal === "") {
-                return hexadecimal;
-            }
             return BinaryUtils_1.leftPadWithZeroBit(hexadecimal, 4);
         });
         return paddedArray.join(":");
@@ -1933,395 +1935,7 @@ exports.Hexadecatet = Hexadecatet;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const Validator_1 = __webpack_require__(2);
-const bigInt = __webpack_require__(1);
-/**
- * A binary representation of a 8 bit value.
- *
- * {@see https://en.wikipedia.org/wiki/Octet_(computing)} for more information on Octets
- *
- * An octet is used in the textual representation of an {@link IPv4} number, where the IP number value is divided
- * into 4 octets
- */
-class Octet {
-    /**
-     * Convenience method for creating an Octet out of a string value representing the value of the octet
-     *
-     * @param {string} rawValue the octet value in string
-     * @returns {Octet} the Octet instance
-     */
-    static fromString(rawValue) {
-        return new Octet(rawValue);
-    }
-    ;
-    /**
-     * Convenience method for creating an Octet out of a numeric value representing the value of the octet
-     *
-     * @param {number} rawValue the octet value in number
-     * @returns {Octet} the Octet instance
-     */
-    static fromNumber(rawValue) {
-        return new Octet(rawValue);
-    }
-    ;
-    /**
-     * Constructor for creating an instance of an Octet.
-     *
-     * The constructor parameter given could either be a string or number.
-     *
-     * If a string, it is the string representation of the numeric value of the octet
-     * If a number, it is the numeric representation of the value of the octet
-     *
-     * @param {string | number} givenValue value of the octet to be created.
-     */
-    constructor(givenValue) {
-        let octetValue;
-        if (typeof givenValue === 'string') {
-            octetValue = parseInt(givenValue);
-        }
-        else {
-            octetValue = givenValue;
-        }
-        let [isValid, message] = Validator_1.Validator.isValidIPv4Octet(bigInt(octetValue));
-        if (!isValid) {
-            throw Error(message.filter(msg => { return msg !== ''; }).toString());
-        }
-        this.value = octetValue;
-    }
-    /**
-     * Method to get the numeric value of the octet
-     *
-     * @returns {number} the numeric value of the octet
-     */
-    getValue() {
-        return this.value;
-    }
-    /**
-     * Returns a decimal representation of the value of the octet in string
-     *
-     * @returns {string} a decimal representation of the value of the octet in string
-     */
-    toString() {
-        return this.value.toString(10);
-    }
-}
-exports.Octet = Octet;
-
-
-/***/ }),
-/* 9 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-const Validator_1 = __webpack_require__(2);
-const Subnet_1 = __webpack_require__(10);
-const BinaryUtils_1 = __webpack_require__(0);
-const IPNumType_1 = __webpack_require__(3);
-const Subnet_2 = __webpack_require__(10);
-const HexadecimalUtils_1 = __webpack_require__(6);
-const Hexadecatet_1 = __webpack_require__(7);
-/**
- * Represents the prefix portion in the CIDR notation for representing IP ranges
- *
- * The IPv4 prefix portion represents the subnet mask. It is the number of continuous bits turned on (with value 1)
- * counting from the left side of an 8 bit value.
- *
- * {@see https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing} for more information on CIDR
- */
-class IPv4Prefix {
-    /**
-     * Convenience method for constructing an instance of IPv4 prefix from a decimal number
-     *
-     * @param {number} rawValue the decimal value to construct the IPv4 prefix from.
-     * @returns {IPv4Prefix} the instance of an IPv4 prefix
-     */
-    static fromNumber(rawValue) {
-        return new IPv4Prefix(rawValue);
-    }
-    ;
-    /**
-     * Constructor for an instance of IPv4 prefix from a decimal number
-     *
-     * @param {number} rawValue the decimal value to construct the IPv4 prefix from.
-     * @returns {IPv4Prefix} the instance of an IPv4 prefix
-     */
-    constructor(rawValue) {
-        let isValid;
-        let message;
-        [isValid, message] = Validator_1.Validator.isValidPrefixValue(rawValue, IPNumType_1.IPNumType.IPv4);
-        if (!isValid) {
-            throw new Error(message.filter(msg => { return msg !== ''; }).toString());
-        }
-        this.value = rawValue;
-    }
-    /**
-     * Gets the decimal value of the IPv4 prefix
-     *
-     * @returns {number} the decimal value of the IPv4 prefix
-     */
-    getValue() {
-        return this.value;
-    }
-    /**
-     * Gets the decimal value of the IPv4 prefix as string
-     * @returns {string} he decimal value of the IPv4 prefix as string
-     */
-    toString() {
-        return this.value.toString();
-    }
-    /**
-     * Converts the IPv4 prefix to a {@link IPv4Subnet}
-     *
-     * The IPv4 Subnet is the representation of the prefix in the dot-decimal notation
-     *
-     * @returns {IPv4Subnet} the subnet representation of the IPv4 number
-     */
-    toSubnet() {
-        let onBits = '1'.repeat(this.value);
-        let offBits = '0'.repeat(32 - this.value);
-        return Subnet_1.IPv4Subnet.fromDecimalDottedString(this.toDecimalNotation(`${onBits}${offBits}`));
-    }
-    toDecimalNotation(bits) {
-        return `${BinaryUtils_1.parseBinaryStringToBigInteger(bits.substr(0, 8))}.${BinaryUtils_1.parseBinaryStringToBigInteger(bits.substr(8, 8))}.${BinaryUtils_1.parseBinaryStringToBigInteger(bits.substr(16, 8))}.${BinaryUtils_1.parseBinaryStringToBigInteger(bits.substr(24, 8))}`;
-    }
-}
-exports.IPv4Prefix = IPv4Prefix;
-/**
- * Represents the prefix portion in the CIDR notation for representing IP ranges
- *
- * The IPv6 prefix portion represents the subnet mask. It is the number of continuous bits turned on (with value 1)
- * counting from the left side of an 128 bit value.
- *
- * {@see https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing} for more information on CIDR
- */
-class IPv6Prefix {
-    /**
-     * Convenience method for constructing an instance of IPv46 prefix from a decimal number
-     *
-     * @param {number} rawValue the decimal value to construct the IPv6 prefix from.
-     * @returns {IPv4Prefix} the instance of an IPv6 prefix
-     */
-    static fromNumber(rawValue) {
-        return new IPv6Prefix(rawValue);
-    }
-    ;
-    /**
-     * Constructor for an instance of IPv6 prefix from a decimal number
-     *
-     * @param {number} rawValue the decimal value to construct the IPv6 prefix from.
-     * @returns {IPv4Prefix} the instance of an IPv6 prefix
-     */
-    constructor(rawValue) {
-        let isValid;
-        let message;
-        [isValid, message] = Validator_1.Validator.isValidPrefixValue(rawValue, IPNumType_1.IPNumType.IPv6);
-        if (!isValid) {
-            throw new Error(message.filter(msg => { return msg !== ''; }).toString());
-        }
-        this.value = rawValue;
-    }
-    /**
-     * Gets the decimal value of the IPv6 prefix
-     *
-     * @returns {number} the decimal value of the IPv6 prefix
-     */
-    getValue() {
-        return this.value;
-    }
-    /**
-     * Gets the decimal value of the IPv4 prefix as string
-     * @returns {string} he decimal value of the IPv4 prefix as string
-     */
-    toString() {
-        return this.value.toString();
-    }
-    /**
-     * Converts the IPv6 prefix to a {@link IPv6Subnet}
-     *
-     * The IPv6 Subnet is the representation of the prefix in 8 groups of 16 bit values represented in hexadecimal
-     *
-     * @returns {IPv4Subnet} the subnet representation of the IPv4 number
-     */
-    toSubnet() {
-        let onBits = '1'.repeat(this.value);
-        let offBits = '0'.repeat(128 - this.value);
-        return Subnet_2.IPv6Subnet.fromHexadecimalString(this.toHexadecatetNotation(`${onBits}${offBits}`));
-    }
-    toHexadecatetNotation(bits) {
-        let binaryStrings = bits.match(/.{1,16}/g);
-        let hexadecimalStrings = binaryStrings.map((binaryString) => {
-            return Hexadecatet_1.Hexadecatet.fromString(HexadecimalUtils_1.binaryStringToHexadecimalString(binaryString));
-        });
-        return hexadecimalStrings.map((value) => { return value.toString(); }).join(":");
-    }
-}
-exports.IPv6Prefix = IPv6Prefix;
-
-
-/***/ }),
-/* 10 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-const Octet_1 = __webpack_require__(8);
-const Validator_1 = __webpack_require__(2);
-const bigInt = __webpack_require__(1);
-const BinaryUtils_1 = __webpack_require__(0);
-const Hexadecatet_1 = __webpack_require__(7);
-const IPv6Utils_1 = __webpack_require__(4);
-/**
- * The IPv4Subnet can be seen as a specialized IPv4 number where, in a 32 bit number, starting from the left, you have
- * continuous bits turned on (with 1 value) followed by bits turned off (with 0 value)
- */
-class IPv4Subnet {
-    /**
-     * Constructor for creating an instance of IPv4Subnet. The passed strings need to be a valid IPv4
-     * number in dot-decimal notation.
-     *
-     * @param {string} ipString The passed string in dot-decimal notation
-     */
-    // TODO similar code as in constructor of IPv4, reuse?
-    constructor(ipString) {
-        /**
-         * An array of {@link Octet}'s
-         *
-         * @type {Array} the octets that makes up the IPv4Subnet
-         */
-        this.octets = [];
-        let isValid;
-        let message;
-        [isValid, message] = Validator_1.Validator.isValidIPv4Subnet(ipString);
-        if (!isValid) {
-            throw new Error(message.filter(msg => { return msg !== ''; }).toString());
-        }
-        let stringOctets = ipString.split(".");
-        this.octets = stringOctets.map((rawOctet) => {
-            return Octet_1.Octet.fromString(rawOctet);
-        });
-        this.value = bigInt(BinaryUtils_1.dottedDecimalNotationToBinaryString(ipString), 2);
-    }
-    /**
-     * A convenience method for creating an instance of IPv4Subnet. The passed strings need to be a valid IPv4
-     * number in dot-decimal notation.
-     *
-     * @param {string} rawValue The passed string in dot-decimal notation
-     * @returns {IPv4Subnet} the instance of IPv4Subnet
-     */
-    static fromString(rawValue) {
-        return new IPv4Subnet(rawValue);
-    }
-    ;
-    /**
-     * Method to get the decimal numeric value of the IPv4Subnet as BigInteger
-     *
-     * @returns {bigInt.BigInteger} the decimal numeric value of the IPv4Subnet as BigInteger
-     */
-    getValue() {
-        return this.value;
-    }
-    /**
-     * Method that converts the IPv4Subnet to a string representation.
-     *
-     * The string representation is in dot-decimal notation
-     *
-     * @returns {string} The string representation of the IPv4Subnet in dot-decimal notation
-     */
-    toString() {
-        return this.octets.map(function (value) { return value.toString(); }).join(".");
-    }
-    /**
-     * Gets the individual {@link Octet} that makes up the IPv4 subnet
-     *
-     * @returns {Array<Octet>} The individual {@link Octet} that makes up the IPv4 subnet
-     */
-    getOctets() {
-        return this.octets;
-    }
-}
-exports.IPv4Subnet = IPv4Subnet;
-/**
- * The IPv6Subnet can be seen as a specialized IPv4 number where, in a 128 bit number, starting from the left, you have
- * continuous bits turned on (with 1 value) followed by bits turned off (with 0 value)
- */
-class IPv6Subnet {
-    /**
-     * Constructor for creating an instance of IPv6Subnet. The passed strings need to be a valid IPv6
-     * number in textual representation
-     *
-     * @param {string} ipString The passed IPv6 string
-     */
-    // TODO similar code as in constructor of IPv4, reuse?
-    constructor(ipString) {
-        /**
-         * An array of {@link Hexadecatet}'s
-         *
-         * @type {Array} the hexadecatet that makes up the IPv6 number
-         */
-        this.hexadecatet = [];
-        let isValid;
-        let message;
-        [isValid, message] = Validator_1.Validator.isValidIPv6Subnet(ipString);
-        if (!isValid) {
-            throw new Error(message.filter(msg => { return msg !== ''; }).toString());
-        }
-        let stringHexadecimals = ipString.split(":");
-        this.hexadecatet = stringHexadecimals.map((stringHexadecatet) => {
-            return Hexadecatet_1.Hexadecatet.fromString(stringHexadecatet);
-        });
-        this.value = bigInt(IPv6Utils_1.hexadectetNotationToBinaryString(ipString), 2);
-    }
-    /**
-     * A convenience method for creating an instance of IPv6Subnet. The passed strings need to be a valid IPv6
-     * number in textual representation.
-     *
-     * @param {string} rawValue The passed string in textual notation
-     * @returns {IPv6Subnet} the instance of IPv6Subnet
-     */
-    static fromString(rawValue) {
-        return new IPv6Subnet(rawValue);
-    }
-    ;
-    /**
-     * Method to get the decimal numeric value of the IPv6Subnet as BigInteger
-     *
-     * @returns {bigInt.BigInteger} the decimal numeric value of the IPv6Subnet as BigInteger
-     */
-    getValue() {
-        return this.value;
-    }
-    /**
-     * Method that converts the IPv6Subnet to a string representation.
-     *
-     *
-     * @returns {string} The string representation of the IPv6Subnet
-     */
-    toString() {
-        return this.hexadecatet.map(function (value) { return value.toString(); }).join(":");
-    }
-    /**
-     * Gets the individual {@link Hexadecatet} that makes up the IPv6 subnet
-     *
-     * @returns {Array<Hexadecatet>} The individual {@link Hexadecatet} that makes up the IPv6 subnet
-     */
-    getHexadecatet() {
-        return this.hexadecatet;
-    }
-}
-exports.IPv6Subnet = IPv6Subnet;
-
-
-/***/ }),
-/* 11 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-const Octet_1 = __webpack_require__(8);
+const Octet_1 = __webpack_require__(9);
 const Validator_1 = __webpack_require__(2);
 const bigInt = __webpack_require__(1);
 const BinaryUtils_1 = __webpack_require__(0);
@@ -2468,6 +2082,345 @@ class IPv4 extends AbstractIPNum_1.AbstractIPNum {
     }
 }
 exports.IPv4 = IPv4;
+
+
+/***/ }),
+/* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const Validator_1 = __webpack_require__(2);
+const bigInt = __webpack_require__(1);
+/**
+ * A binary representation of a 8 bit value.
+ *
+ * {@see https://en.wikipedia.org/wiki/Octet_(computing)} for more information on Octets
+ *
+ * An octet is used in the textual representation of an {@link IPv4} number, where the IP number value is divided
+ * into 4 octets
+ */
+class Octet {
+    /**
+     * Convenience method for creating an Octet out of a string value representing the value of the octet
+     *
+     * @param {string} rawValue the octet value in string
+     * @returns {Octet} the Octet instance
+     */
+    static fromString(rawValue) {
+        return new Octet(rawValue);
+    }
+    ;
+    /**
+     * Convenience method for creating an Octet out of a numeric value representing the value of the octet
+     *
+     * @param {number} rawValue the octet value in number
+     * @returns {Octet} the Octet instance
+     */
+    static fromNumber(rawValue) {
+        return new Octet(rawValue);
+    }
+    ;
+    /**
+     * Constructor for creating an instance of an Octet.
+     *
+     * The constructor parameter given could either be a string or number.
+     *
+     * If a string, it is the string representation of the numeric value of the octet
+     * If a number, it is the numeric representation of the value of the octet
+     *
+     * @param {string | number} givenValue value of the octet to be created.
+     */
+    constructor(givenValue) {
+        let octetValue;
+        if (typeof givenValue === 'string') {
+            octetValue = parseInt(givenValue);
+        }
+        else {
+            octetValue = givenValue;
+        }
+        let [isValid, message] = Validator_1.Validator.isValidIPv4Octet(bigInt(octetValue));
+        if (!isValid) {
+            throw Error(message.filter(msg => { return msg !== ''; }).toString());
+        }
+        this.value = octetValue;
+    }
+    /**
+     * Method to get the numeric value of the octet
+     *
+     * @returns {number} the numeric value of the octet
+     */
+    getValue() {
+        return this.value;
+    }
+    /**
+     * Returns a decimal representation of the value of the octet in string
+     *
+     * @returns {string} a decimal representation of the value of the octet in string
+     */
+    toString() {
+        return this.value.toString(10);
+    }
+}
+exports.Octet = Octet;
+
+
+/***/ }),
+/* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const Validator_1 = __webpack_require__(2);
+const Subnet_1 = __webpack_require__(11);
+const BinaryUtils_1 = __webpack_require__(0);
+const IPNumType_1 = __webpack_require__(3);
+const Subnet_2 = __webpack_require__(11);
+const HexadecimalUtils_1 = __webpack_require__(6);
+const Hexadecatet_1 = __webpack_require__(7);
+/**
+ * Represents the prefix portion in the CIDR notation for representing IP ranges
+ *
+ * The IPv4 prefix portion represents the subnet mask. It is the number of continuous bits turned on (with value 1)
+ * counting from the left side of an 8 bit value.
+ *
+ * {@see https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing} for more information on CIDR
+ */
+class IPv4Prefix {
+    /**
+     * Convenience method for constructing an instance of IPv4 prefix from a decimal number
+     *
+     * @param {number} rawValue the decimal value to construct the IPv4 prefix from.
+     * @returns {IPv4Prefix} the instance of an IPv4 prefix
+     */
+    static fromNumber(rawValue) {
+        return new IPv4Prefix(rawValue);
+    }
+    ;
+    /**
+     * Constructor for an instance of IPv4 prefix from a decimal number
+     *
+     * @param {number} rawValue the decimal value to construct the IPv4 prefix from.
+     * @returns {IPv4Prefix} the instance of an IPv4 prefix
+     */
+    constructor(rawValue) {
+        let isValid;
+        let message;
+        [isValid, message] = Validator_1.Validator.isValidPrefixValue(rawValue, IPNumType_1.IPNumType.IPv4);
+        if (!isValid) {
+            throw new Error(message.filter(msg => { return msg !== ''; }).toString());
+        }
+        this.value = rawValue;
+    }
+    /**
+     * Gets the decimal value of the IPv4 prefix
+     *
+     * @returns {number} the decimal value of the IPv4 prefix
+     */
+    getValue() {
+        return this.value;
+    }
+    /**
+     * Gets the decimal value of the IPv4 prefix as string
+     * @returns {string} he decimal value of the IPv4 prefix as string
+     */
+    toString() {
+        return this.value.toString();
+    }
+    /**
+     * Converts the IPv4 prefix to a {@link IPv4Subnet}
+     *
+     * The IPv4 Subnet is the representation of the prefix in the dot-decimal notation
+     *
+     * @returns {IPv4Subnet} the subnet representation of the IPv4 number
+     */
+    toSubnet() {
+        let onBits = '1'.repeat(this.value);
+        let offBits = '0'.repeat(32 - this.value);
+        return Subnet_1.IPv4Subnet.fromDecimalDottedString(this.toDecimalNotation(`${onBits}${offBits}`));
+    }
+    toDecimalNotation(bits) {
+        return `${BinaryUtils_1.parseBinaryStringToBigInteger(bits.substr(0, 8))}.${BinaryUtils_1.parseBinaryStringToBigInteger(bits.substr(8, 8))}.${BinaryUtils_1.parseBinaryStringToBigInteger(bits.substr(16, 8))}.${BinaryUtils_1.parseBinaryStringToBigInteger(bits.substr(24, 8))}`;
+    }
+}
+exports.IPv4Prefix = IPv4Prefix;
+/**
+ * Represents the prefix portion in the CIDR notation for representing IP ranges
+ *
+ * The IPv6 prefix portion represents the subnet mask. It is the number of continuous bits turned on (with value 1)
+ * counting from the left side of an 128 bit value.
+ *
+ * {@see https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing} for more information on CIDR
+ */
+class IPv6Prefix {
+    /**
+     * Convenience method for constructing an instance of IPv46 prefix from a decimal number
+     *
+     * @param {number} rawValue the decimal value to construct the IPv6 prefix from.
+     * @returns {IPv4Prefix} the instance of an IPv6 prefix
+     */
+    static fromNumber(rawValue) {
+        return new IPv6Prefix(rawValue);
+    }
+    ;
+    /**
+     * Constructor for an instance of IPv6 prefix from a decimal number
+     *
+     * @param {number} rawValue the decimal value to construct the IPv6 prefix from.
+     * @returns {IPv4Prefix} the instance of an IPv6 prefix
+     */
+    constructor(rawValue) {
+        let isValid;
+        let message;
+        [isValid, message] = Validator_1.Validator.isValidPrefixValue(rawValue, IPNumType_1.IPNumType.IPv6);
+        if (!isValid) {
+            throw new Error(message.filter(msg => { return msg !== ''; }).toString());
+        }
+        this.value = rawValue;
+    }
+    /**
+     * Gets the decimal value of the IPv6 prefix
+     *
+     * @returns {number} the decimal value of the IPv6 prefix
+     */
+    getValue() {
+        return this.value;
+    }
+    /**
+     * Gets the decimal value of the IPv4 prefix as string
+     * @returns {string} he decimal value of the IPv4 prefix as string
+     */
+    toString() {
+        return this.value.toString();
+    }
+    /**
+     * Converts the IPv6 prefix to a {@link IPv6Subnet}
+     *
+     * The IPv6 Subnet is the representation of the prefix in 8 groups of 16 bit values represented in hexadecimal
+     *
+     * @returns {IPv4Subnet} the subnet representation of the IPv4 number
+     */
+    toSubnet() {
+        let onBits = '1'.repeat(this.value);
+        let offBits = '0'.repeat(128 - this.value);
+        return Subnet_2.IPv6Subnet.fromHexadecimalString(this.toHexadecatetNotation(`${onBits}${offBits}`));
+    }
+    toHexadecatetNotation(bits) {
+        let binaryStrings = bits.match(/.{1,16}/g);
+        let hexadecimalStrings = binaryStrings.map((binaryString) => {
+            return Hexadecatet_1.Hexadecatet.fromString(HexadecimalUtils_1.binaryStringToHexadecimalString(binaryString));
+        });
+        return hexadecimalStrings.map((value) => { return value.toString(); }).join(":");
+    }
+}
+exports.IPv6Prefix = IPv6Prefix;
+
+
+/***/ }),
+/* 11 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const Octet_1 = __webpack_require__(9);
+const Validator_1 = __webpack_require__(2);
+const bigInt = __webpack_require__(1);
+const BinaryUtils_1 = __webpack_require__(0);
+const Hexadecatet_1 = __webpack_require__(7);
+const IPv6Utils_1 = __webpack_require__(4);
+const IPv4_1 = __webpack_require__(8);
+const IPv6_1 = __webpack_require__(12);
+/**
+ * The IPv4Subnet can be seen as a specialized IPv4 number where, in a 32 bit number, starting from the left, you have
+ * continuous bits turned on (with 1 value) followed by bits turned off (with 0 value)
+ */
+class IPv4Subnet extends IPv4_1.IPv4 {
+    /**
+     * Constructor for creating an instance of IPv4Subnet. The passed strings need to be a valid IPv4
+     * number in dot-decimal notation.
+     *
+     * @param {string} ipString The passed string in dot-decimal notation
+     */
+    constructor(ipString) {
+        super(ipString);
+        /**
+         * An array of {@link Octet}'s
+         *
+         * @type {Array} the octets that makes up the IPv4Subnet
+         */
+        this.octets = [];
+        let isValid;
+        let message;
+        [isValid, message] = Validator_1.Validator.isValidIPv4Subnet(ipString);
+        if (!isValid) {
+            throw new Error(message.filter(msg => { return msg !== ''; }).toString());
+        }
+        let stringOctets = ipString.split(".");
+        this.octets = stringOctets.map((rawOctet) => {
+            return Octet_1.Octet.fromString(rawOctet);
+        });
+        this.value = bigInt(BinaryUtils_1.dottedDecimalNotationToBinaryString(ipString), 2);
+    }
+    /**
+     * A convenience method for creating an instance of IPv4Subnet. The passed strings need to be a valid IPv4
+     * number in dot-decimal notation.
+     *
+     * @param {string} rawValue The passed string in dot-decimal notation
+     * @returns {IPv4Subnet} the instance of IPv4Subnet
+     */
+    static fromDecimalDottedString(rawValue) {
+        return new IPv4Subnet(rawValue);
+    }
+    ;
+}
+exports.IPv4Subnet = IPv4Subnet;
+/**
+ * The IPv6Subnet can be seen as a specialized IPv4 number where, in a 128 bit number, starting from the left, you have
+ * continuous bits turned on (with 1 value) followed by bits turned off (with 0 value)
+ */
+class IPv6Subnet extends IPv6_1.IPv6 {
+    /**
+     * Constructor for creating an instance of IPv6Subnet. The passed strings need to be a valid IPv6
+     * number in textual representation
+     *
+     * @param {string} ipString The passed IPv6 string
+     */
+    constructor(ipString) {
+        super(ipString);
+        /**
+         * An array of {@link Hexadecatet}'s
+         *
+         * @type {Array} the hexadecatet that makes up the IPv6 number
+         */
+        this.hexadecatet = [];
+        let isValid;
+        let message;
+        [isValid, message] = Validator_1.Validator.isValidIPv6Subnet(ipString);
+        if (!isValid) {
+            throw new Error(message.filter(msg => { return msg !== ''; }).toString());
+        }
+        let stringHexadecimals = ipString.split(":");
+        this.hexadecatet = stringHexadecimals.map((stringHexadecatet) => {
+            return Hexadecatet_1.Hexadecatet.fromString(stringHexadecatet);
+        });
+        this.value = bigInt(IPv6Utils_1.hexadectetNotationToBinaryString(ipString), 2);
+    }
+    /**
+     * A convenience method for creating an instance of IPv6Subnet. The passed strings need to be a valid IPv6
+     * number in textual representation.
+     *
+     * @param {string} rawValue The passed string in textual notation
+     * @returns {IPv6Subnet} the instance of IPv6Subnet
+     */
+    static fromHexadecimalString(rawValue) {
+        return new IPv6Subnet(rawValue);
+    }
+    ;
+}
+exports.IPv6Subnet = IPv6Subnet;
 
 
 /***/ }),
@@ -2640,14 +2593,14 @@ __export(__webpack_require__(0));
 __export(__webpack_require__(7));
 __export(__webpack_require__(6));
 __export(__webpack_require__(3));
-__export(__webpack_require__(11));
+__export(__webpack_require__(8));
 __export(__webpack_require__(16));
 __export(__webpack_require__(12));
 __export(__webpack_require__(17));
 __export(__webpack_require__(4));
-__export(__webpack_require__(8));
 __export(__webpack_require__(9));
 __export(__webpack_require__(10));
+__export(__webpack_require__(11));
 __export(__webpack_require__(2));
 
 
@@ -2866,8 +2819,8 @@ exports.Asn = Asn;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const IPv4_1 = __webpack_require__(11);
-const Prefix_1 = __webpack_require__(9);
+const IPv4_1 = __webpack_require__(8);
+const Prefix_1 = __webpack_require__(10);
 const BinaryUtils_1 = __webpack_require__(0);
 const BinaryUtils_2 = __webpack_require__(0);
 const Validator_1 = __webpack_require__(2);
@@ -3043,7 +2996,10 @@ class IPv4Range {
         let ipv4s = [this.getFirst()];
         let iteratingIPv4 = this.getFirst();
         if (bigInt(count).greater(this.getSize())) {
-            throw new Error(`${count} is greater than ${this.getSize()}, the size of the range`);
+            let errMessage = Validator_1.Validator.takeOutOfRangeSizeMessage
+                .replace("$count", count.toString())
+                .replace("$size", this.getSize().toString());
+            throw new Error(errMessage);
         }
         for (var counter = 0; counter < count - 1; counter++) {
             ipv4s.push(iteratingIPv4.nextIPNumber());
@@ -3083,16 +3039,6 @@ class IPv4Range {
             };
         }
     }
-    return(value) {
-        return {
-            done: true,
-            value: this.internalCounterValue
-        };
-    }
-    // TODO read up on what this method does and decide to implement or remove
-    throw(e) {
-        throw new Error("Method not implemented.");
-    }
     [Symbol.iterator]() {
         return this;
     }
@@ -3107,7 +3053,7 @@ exports.IPv4Range = IPv4Range;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const Prefix_1 = __webpack_require__(9);
+const Prefix_1 = __webpack_require__(10);
 const IPv6_1 = __webpack_require__(12);
 const bigInt = __webpack_require__(1);
 const BinaryUtils_1 = __webpack_require__(0);
@@ -3323,16 +3269,6 @@ class IPv6Range {
                 done: true
             };
         }
-    }
-    return(value) {
-        return {
-            done: true,
-            value: this.internalCounterValue
-        };
-    }
-    // TODO read up on what this method does and decide to implement or remove
-    throw(e) {
-        throw new Error("Method not implemented.");
     }
     [Symbol.iterator]() {
         return this;
