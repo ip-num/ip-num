@@ -25,6 +25,10 @@ If you are using a browser, you can include `ip-num` by linking to it or downloa
 
 ```<script src="https://ip-num.github.io/ip-num/ip-num.js"></script>```
 
+The source maps can be found at
+
+```<script src="https://ip-num.github.io/ip-num/ip-num.js.map"></script>```
+
 Usage
 ------------------
 
