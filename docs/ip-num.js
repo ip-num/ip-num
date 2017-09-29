@@ -1,4 +1,4 @@
-// [ip-num]  Version: 1.0.0-2. Released on: Friday, September 29th, 2017, 9:48:40 PM  
+// [ip-num]  Version: 1.0.0. Released on: Friday, September 29th, 2017, 10:40:12 PM  
  var ipnum =
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
