@@ -18,7 +18,7 @@ describe('Subnet test', function() {
     it('should create throw an exception when invalid subnet string is given', () => {
         expect(() => {
             // Although given string is a valid IPv4 String, it cannot be a subnet, since a subnet can only be a
-            // contagious on bits (1's) followed by off bits (0's)
+            // contiguous on bits (1's) followed by off bits (0's)
             new IPv4Subnet("10.255.10.3");
         }).toThrowError(Error, Validator.invalidSubnetMessage);
     });
@@ -47,7 +47,7 @@ describe('Subnet test', function() {
     it('should create throw an exception when invalid subnet string is given', () => {
         expect(() => {
             // Although given string is a valid IPv6 String, it cannot be a subnet, since a subnet can only be a
-            // contagious on bits (1's) followed by off bits (0's)
+            // contiguous on bits (1's) followed by off bits (0's)
             new IPv6Subnet("3ffe:1900:4545:0003:0200:f8ff:fe21:67cf");
         }).toThrowError(Error, Validator.invalidSubnetMessage);
     });

@@ -12,6 +12,8 @@ ip-num
 
 `ip-num`'s source can be found on [GitHub](https://github.com/ip-num/ip-num)
 
+You can have a play at `ip-num`'s API via the JsBin at [http://bit.ly/ipnum-playground](http://bit.ly/ipnum-playground)
+
 Installation
 ----------------
 
@@ -27,7 +29,9 @@ If you are using a browser, you can include `ip-num` by linking to it or downloa
 
 The source maps can be found at
 
-```<script src="https://ip-num.github.io/ip-num/ip-num.js.map"></script>```
+```https://ip-num.github.io/ip-num/ip-num.js.map"```
+
+Previous releases can be seen at [https://github.com/ip-num/ip-num/releases](https://github.com/ip-num/ip-num/releases)
 
 Usage
 ------------------
@@ -261,6 +265,70 @@ ipRanges.forEach(iprange => {
 
 See the [IPNumber documentation](https://ip-num.github.io/ip-num/interfaces/_interface_ipnumber_.ipnumber.html) for more information
 See the [IPRange documentation](https://ip-num.github.io/ip-num/interfaces/_interface_iprange_.iprange.html) for more information
+
+### IPv4Subnet and IPv6Subnet
+
+IPv4Subnet and IPv6Subnet are used to represents subnets in IPv4 and IPv6 
+respectively. 
+
+Subnets are in all respects IP numbers with the only restriction that they must contain contiguous on bits (1's) 
+followed by contiguous off bits (0's). This means IPv4Subnet and IPv6Subnet can perform all the operations available 
+on IPv4 and IPv6. The only difference is that the invariant required for a subnet is enforced in the contructor of 
+IPv4Subnet and IPv6Subnet. For example:
+
+The following code will throw an exception:
+
+```
+import {IPv4Subnet} from 'ip-num/IPv4Subnet'
+import {IPv4Subnet} from 'ip-num/IPv4Subnet'
+
+let ipv4Subnet = new IPv4Subnet("10.255.10.3");
+let ipv6Subnet = new IPv6Subnet("3ffe:1900:4545:0003:0200:f8ff:fe21:67cf");
+```
+
+While the following code works fine:
+
+```
+import {IPv4Subnet} from 'ip-num/IPv4Subnet'
+import {IPv6Subnet} from 'ip-num/IPv6Subnet'
+
+let iPv4Subnet = new IPv4Subnet("255.0.0.0");
+let iPv6Subnet = new IPv6Subnet("ffff:ffff:ffff:ffff:ffff:ffff:0:0");
+``` 
+See the [Subnet documentation](https://ip-num.github.io/ip-num/modules/_subnet_.html) for more information
+
+### Validation and Utilities
+
+Various validation are exposed via the `Validator` module.  `ip-num` also provide various utility operations. These 
+utility operations can be found in `BinaryUtils`, `IPv6Utils`, and `HexadecimalUtils`.
+
+For example to expand and collapse IPv6 numbers:
+
+```
+import {IPv6Utils} from 'ip-num/IPv6Utils'
+
+// expanding
+IPv6Utils.expandIPv6Number("::") // Expands to 0000:0000:0000:0000:0000:0000:0000:0000
+IPv6Utils.expandIPv6Number("FF01::101")// Expands to FF01:0000:0000:0000:0000:0000:0000:0101
+// collapsing
+IPv6Utils.collapseIPv6Number("0000:0000:0000:0000:0000:0000:0000:0000") // Collapses to :: 
+IPv6Utils.collapseIPv6Number("FF01:0:0:0:0:0:0:101") // Collapses to FF01::101
+```
+
+To check if a given string is valid cidr notation:
+
+```
+import {Validator} from 'ip-num/Validator'
+
+let result = Validator.isValidIPv4CidrNotation("123.234.334.23")
+// result => [false, ["Cidr notation should be in the form [ip number]/[range]"]]
+let result = Validator.isValidIPv4CidrNotation("10.0.0.0/8")
+// result => [true, []]
+``` 
+See the [Validator documentation](https://ip-num.github.io/ip-num/classes/_validator_.validator.html) for more information
+See the [BinaryUtils documentation](https://ip-num.github.io/ip-num/modules/_binaryutils_.html) for more information
+See the [IPv6Utils documentation](https://ip-num.github.io/ip-num/modules/_ipv6utils_.html) for more information
+See the [HexadecimalUtils documentation](https://ip-num.github.io/ip-num/modules/_hexadecimalutils_.html) for more information
 
 License
 ------------------
