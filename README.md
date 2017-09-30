@@ -289,8 +289,8 @@ let ipv6Subnet = new IPv6Subnet("3ffe:1900:4545:0003:0200:f8ff:fe21:67cf");
 While the following code works fine:
 
 ```
-import {IPv4Subnet} from 'ip-num/IPv4Subnet'
-import {IPv6Subnet} from 'ip-num/IPv6Subnet'
+import {IPv4Subnet} from 'ip-num/Subnet'
+import {IPv6Subnet} from 'ip-num/Subnet'
 
 let iPv4Subnet = new IPv4Subnet("255.0.0.0");
 let iPv6Subnet = new IPv6Subnet("ffff:ffff:ffff:ffff:ffff:ffff:0:0");
