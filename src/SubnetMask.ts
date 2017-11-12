@@ -8,36 +8,37 @@ import {IPv4} from "./IPv4";
 import {IPv6} from "./IPv6";
 
 /**
- * The IPv4Subnet can be seen as a specialized IPv4 number where, in a 32 bit number, starting from the left, you have
- * continuous bits turned on (with 1 value) followed by bits turned off (with 0 value)
+ * The IPv4SubnetMask can be seen as a specialized IPv4 number where, in a 32 bit number, starting from the left, you
+ * have continuous bits turned on (with 1 value) followed by bits turned off (with 0 value). In networking, it is used
+ * to demarcate which bits are used to identify a network, and the ones that are used to identify hosts on the network
  */
-export class IPv4Subnet extends IPv4 {
+export class IPv4SubnetMask extends IPv4 {
     /**
      * An array of {@link Octet}'s
      *
-     * @type {Array} the octets that makes up the IPv4Subnet
+     * @type {Array} the octets that makes up the IPv4SubnetMask
      */
     readonly octets: Array<Octet> = [];
 
     /**
-     * The decimal value represented by the IPv4 subnet in BigInteger
+     * The decimal value represented by the IPv4 subnet mask in BigInteger
      */
     readonly value: bigInt.BigInteger;
 
     /**
-     * A convenience method for creating an instance of IPv4Subnet. The passed strings need to be a valid IPv4
+     * A convenience method for creating an instance of IPv4SubnetMask. The passed strings need to be a valid IPv4
      * number in dot-decimal notation.
      *
      * @param {string} rawValue The passed string in dot-decimal notation
-     * @returns {IPv4Subnet} the instance of IPv4Subnet
+     * @returns {IPv4SubnetMask} the instance of IPv4SubnetMask
      */
-    static fromDecimalDottedString(rawValue:string):IPv4Subnet {
-        return new IPv4Subnet(rawValue);
+    static fromDecimalDottedString(rawValue:string):IPv4SubnetMask {
+        return new IPv4SubnetMask(rawValue);
     };
 
     /**
-     * Constructor for creating an instance of IPv4Subnet. The passed strings need to be a valid IPv4
-     * number in dot-decimal notation.
+     * Constructor for creating an instance of IPv4SubnetMask.
+     * The passed strings need to be a valid IPv4 subnet mask number in dot-decimal notation.
      *
      * @param {string} ipString The passed string in dot-decimal notation
      */
@@ -45,7 +46,7 @@ export class IPv4Subnet extends IPv4 {
         super(ipString);
         let isValid: boolean;
         let message: string[];
-        [isValid, message] = Validator.isValidIPv4Subnet(ipString);
+        [isValid, message] = Validator.isValidIPv4SubnetMask(ipString);
 
         if (!isValid) {
             throw new Error(message.filter(msg => {return msg !== '';}).toString());
@@ -60,10 +61,12 @@ export class IPv4Subnet extends IPv4 {
 }
 
 /**
- * The IPv6Subnet can be seen as a specialized IPv4 number where, in a 128 bit number, starting from the left, you have
- * continuous bits turned on (with 1 value) followed by bits turned off (with 0 value)
+ * The IPv6SubnetMask can be seen as a specialized IPv4 number where, in a 128 bit number, starting from the left,
+ * you have continuous bits turned on (with 1 value) followed by bits turned off (with 0 value). In networking, it
+ * is used to to demarcate which bits are used to identify a network, and the ones that are used to identify hosts
+ * on the network
  */
-export class IPv6Subnet extends IPv6 {
+export class IPv6SubnetMask extends IPv6 {
     /**
      * An array of {@link Hexadecatet}'s
      *
@@ -78,19 +81,19 @@ export class IPv6Subnet extends IPv6 {
 
 
     /**
-     * A convenience method for creating an instance of IPv6Subnet. The passed strings need to be a valid IPv6
-     * number in textual representation.
+     * A convenience method for creating an instance of IPv6SubnetMask.
+     * The passed strings need to be a valid IPv4 subnet mask number in dot-decimal notation.
      *
      * @param {string} rawValue The passed string in textual notation
-     * @returns {IPv6Subnet} the instance of IPv6Subnet
+     * @returns {IPv6SubnetMask} the instance of IPv6SubnetMask
      */
-    static fromHexadecimalString(rawValue:string):IPv6Subnet {
-        return new IPv6Subnet(rawValue);
+    static fromHexadecimalString(rawValue:string):IPv6SubnetMask {
+        return new IPv6SubnetMask(rawValue);
     };
 
     /**
-     * Constructor for creating an instance of IPv6Subnet. The passed strings need to be a valid IPv6
-     * number in textual representation
+     * Constructor for creating an instance of IPv6SubnetMask.
+     * The passed strings need to be a valid IPv6 subnet mask number in dot-decimal notation
      *
      * @param {string} ipString The passed IPv6 string
      */
@@ -98,7 +101,7 @@ export class IPv6Subnet extends IPv6 {
         super(ipString);
         let isValid: boolean;
         let message: string[];
-        [isValid, message] = Validator.isValidIPv6Subnet(ipString);
+        [isValid, message] = Validator.isValidIPv6SubnetMask(ipString);
 
         if (!isValid) {
             throw new Error(message.filter(msg => {return msg !== '';}).toString());

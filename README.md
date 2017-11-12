@@ -340,3 +340,9 @@ Contributing
 To discuss a new feature or ask a question, open an issue. Find the issue tracker [here](https://github.com/ip-num/ip-num/issues)
 
 Found a bug and you want to provide a fix for it? Then feel free to submit a pull request. It will be appreciated if the changes made are backed with tests.
+
+Change log
+------------------
+##### Next release
+
+* Rename Subnet to SubnetMask [Issue #1] (https://github.com/ip-num/ip-num/issues/1)

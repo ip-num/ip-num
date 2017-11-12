@@ -1,8 +1,8 @@
 import {Validator} from "./Validator";
-import {IPv4Subnet} from "./Subnet";
+import {IPv4SubnetMask} from "./SubnetMask";
 import {parseBinaryStringToBigInteger} from "./BinaryUtils";
 import {IPNumType} from "./IPNumType";
-import {IPv6Subnet} from "./Subnet";
+import {IPv6SubnetMask} from "./SubnetMask";
 import {binaryStringToHexadecimalString} from "./HexadecimalUtils";
 import {Hexadecatet} from "./Hexadecatet";
 
@@ -64,16 +64,16 @@ class IPv4Prefix {
     }
 
     /**
-     * Converts the IPv4 prefix to a {@link IPv4Subnet}
+     * Converts the IPv4 prefix to a {@link IPv4SubnetMask}
      *
-     * The IPv4 Subnet is the representation of the prefix in the dot-decimal notation
+     * The IPv4 Subnet mask is the representation of the prefix in the dot-decimal notation
      *
-     * @returns {IPv4Subnet} the subnet representation of the IPv4 number
+     * @returns {IPv4SubnetMask} the subnet mask representation of the prefix
      */
-    public toSubnet(): IPv4Subnet {
+    public toSubnetMask(): IPv4SubnetMask {
         let onBits = '1'.repeat(this.value);
         let offBits = '0'.repeat(32 - this.value);
-        return IPv4Subnet.fromDecimalDottedString(this.toDecimalNotation(`${onBits}${offBits}`));
+        return IPv4SubnetMask.fromDecimalDottedString(this.toDecimalNotation(`${onBits}${offBits}`));
     }
 
     private toDecimalNotation(bits:string): string {
@@ -139,16 +139,16 @@ class IPv6Prefix {
     }
 
     /**
-     * Converts the IPv6 prefix to a {@link IPv6Subnet}
+     * Converts the IPv6 prefix to a {@link IPv6SubnetMask}
      *
-     * The IPv6 Subnet is the representation of the prefix in 8 groups of 16 bit values represented in hexadecimal
+     * The IPv6 Subnet mask is the representation of the prefix in 8 groups of 16 bit values represented in hexadecimal
      *
-     * @returns {IPv4Subnet} the subnet representation of the IPv4 number
+     * @returns {IPv6SubnetMask} the subnet mask representation of the prefix
      */
-    public toSubnet(): IPv6Subnet {
+    public toSubnetMask(): IPv6SubnetMask {
         let onBits = '1'.repeat(this.value);
         let offBits = '0'.repeat(128 - this.value);
-        return IPv6Subnet.fromHexadecimalString(this.toHexadecatetNotation(`${onBits}${offBits}`));
+        return IPv6SubnetMask.fromHexadecimalString(this.toHexadecatetNotation(`${onBits}${offBits}`));
     }
 
     private toHexadecatetNotation(bits:string): string {

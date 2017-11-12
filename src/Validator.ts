@@ -8,8 +8,8 @@ export class Validator {
     static IPV4_PATTERN: RegExp = new RegExp(/^(0?[0-9]?[0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.(0?[0-9]?[0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.(0?[0-9]?[0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.(0?[0-9]?[0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])$/);
     static IPV4_RANGE_PATTERN: RegExp = new RegExp(/^(0?[0-9]?[0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.(0?[0-9]?[0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.(0?[0-9]?[0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.(0?[0-9]?[0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(\/)([1-9]|[1-2][0-9]|3[0-2])$/);
     static IPV6_RANGE_PATTERN: RegExp = new RegExp(/^s*((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:)))(%.+)?s*(\/([0-9]|[1-9][0-9]|1[0-1][0-9]|12[0-8]))?$/);
-    static IPV4_SUBNET_BIT_PATTERN: RegExp = new RegExp(/^(1){0,32}(0){0,32}$/);
-    static IPV6_SUBNET_BIT_PATTERN: RegExp = new RegExp(/^(1){0,128}(0){0,128}$/);
+    static IPV4_SUBNET_MASK_BIT_PATTERN: RegExp = new RegExp(/^(1){0,32}(0){0,32}$/);
+    static IPV6_SUBNET_MASK_BIT_PATTERN: RegExp = new RegExp(/^(1){0,128}(0){0,128}$/);
 
     static EIGHT_BIT_SIZE: bigInt.BigInteger = bigInt("1".repeat(8), 2);
     static SIXTEEN_BIT_SIZE: bigInt.BigInteger = bigInt("1".repeat(16), 2);
@@ -24,7 +24,7 @@ export class Validator {
     static invalidHexadecatetMessage = "The value given is less than zero or is greater than 16bit";
     static invalidOctetCountMessage = "An IP4 number cannot have less or greater than 4 octets";
     static invalidHexadecatetCountMessage = "An IP6 number cannot have less or greater than 8 octets";
-    static invalidSubnetMessage = "The Subnet is invalid";
+    static invalidSubnetMaskMessage = "The Subnet Mask is invalid";
     static invalidPrefixValueMessage = "A Prefix value cannot be less than 0 or greater than 32";
     static invalidIPv4CidrNotationMessage = "Cidr notation should be in the form [ip number]/[range]";
     static invalidIPv6CidrNotationString = "A Cidr notation string should contain an IPv6 number and prefix";
@@ -178,29 +178,29 @@ export class Validator {
     }
 
     /**
-     * Checks if given string is a valid IPv4 subnet
+     * Checks if given string is a valid IPv4 subnet mask
      *
-     * @param {string} ipv4SubnetString the given IPv4 subnet string
-     * @returns {[boolean , string]} first value is true if valid IPv4 subnet string, false otherwise. Second value
+     * @param {string} ipv4SubnetMaskString the given IPv4 subnet mask string
+     * @returns {[boolean , string]} first value is true if valid IPv4 subnet mask string, false otherwise. Second value
      * contains "valid" or an error message when value is invalid
      */
-    static isValidIPv4Subnet(ipv4SubnetString: string) : [boolean, string[]] {
-        let ipv4InBinary = dottedDecimalNotationToBinaryString(ipv4SubnetString);
-        let isValid = Validator.IPV4_SUBNET_BIT_PATTERN.test(ipv4InBinary);
-        return isValid ? [isValid, []]: [isValid, [Validator.invalidSubnetMessage]];
+    static isValidIPv4SubnetMask(ipv4SubnetMaskString: string) : [boolean, string[]] {
+        let ipv4InBinary = dottedDecimalNotationToBinaryString(ipv4SubnetMaskString);
+        let isValid = Validator.IPV4_SUBNET_MASK_BIT_PATTERN.test(ipv4InBinary);
+        return isValid ? [isValid, []]: [isValid, [Validator.invalidSubnetMaskMessage]];
     }
 
     /**
-     * Checks if given string is a valid IPv6 subnet
+     * Checks if given string is a valid IPv6 subnet mask
      *
-     * @param {string} ipv6SubnetString the given IPv6 subnet string
-     * @returns {[boolean , string]} first value is true if valid IPv6 subnet string, false otherwise. Second value
+     * @param {string} ipv6SubnetMaskString the given IPv6 subnet mask string
+     * @returns {[boolean , string]} first value is true if valid IPv6 subnet mask string, false otherwise. Second value
      * contains "valid" or an error message when value is invalid
      */
-    static isValidIPv6Subnet(ipv6SubnetString: string) : [boolean, string[]] {
-        let ipv6InBinary = hexadectetNotationToBinaryString(ipv6SubnetString);
-        let isValid = Validator.IPV6_SUBNET_BIT_PATTERN.test(ipv6InBinary);
-        return isValid ? [isValid, []]: [isValid, [Validator.invalidSubnetMessage]];
+    static isValidIPv6SubnetMask(ipv6SubnetMaskString: string) : [boolean, string[]] {
+        let ipv6InBinary = hexadectetNotationToBinaryString(ipv6SubnetMaskString);
+        let isValid = Validator.IPV6_SUBNET_MASK_BIT_PATTERN.test(ipv6InBinary);
+        return isValid ? [isValid, []]: [isValid, [Validator.invalidSubnetMaskMessage]];
     }
 
     /**

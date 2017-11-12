@@ -94,7 +94,7 @@ export class IPv4Range implements IPRange, IterableIterator<IPv4> {
      * @returns {IPv4} the first IPv4 number in the IPv4 range
      */
     public getFirst(): IPv4 {
-        return IPv4.fromBigInteger(this.ipv4.getValue().and(this.cidrPrefix.toSubnet().getValue()));
+        return IPv4.fromBigInteger(this.ipv4.getValue().and(this.cidrPrefix.toSubnetMask().getValue()));
     }
 
     /**
@@ -104,7 +104,7 @@ export class IPv4Range implements IPRange, IterableIterator<IPv4> {
      */
     public getLast(): IPv4 {
         let onMask = bigInt("1".repeat(32), 2);
-        let subnetAsBigInteger = this.cidrPrefix.toSubnet().getValue();
+        let subnetAsBigInteger = this.cidrPrefix.toSubnetMask().getValue();
         let invertedSubnet = leftPadWithZeroBit(subnetAsBigInteger.xor(onMask).toString(2), 32);
         return IPv4.fromBigInteger(this.ipv4.getValue().or(parseBinaryStringToBigInteger(invertedSubnet)));
     }

@@ -93,7 +93,7 @@ export class IPv6Range implements IPRange, IterableIterator<IPv6> {
      * @returns {IPv6} the first IPv6 number in the IPv6 range
      */
     public getFirst(): IPv6 {
-        return IPv6.fromBigInteger(this.ipv6.getValue().and(this.cidrPrefix.toSubnet().getValue()));
+        return IPv6.fromBigInteger(this.ipv6.getValue().and(this.cidrPrefix.toSubnetMask().getValue()));
     }
 
     /**
@@ -103,9 +103,9 @@ export class IPv6Range implements IPRange, IterableIterator<IPv6> {
      */
     public getLast(): IPv6 {
         let onMask = bigInt("1".repeat(128), 2);
-        let subnetAsBigInteger = this.cidrPrefix.toSubnet().getValue();
-        let invertedSubnet = leftPadWithZeroBit(subnetAsBigInteger.xor(onMask).toString(2), 128);
-        return IPv6.fromBigInteger(this.ipv6.getValue().or(parseBinaryStringToBigInteger(invertedSubnet)));
+        let subnetMaskAsBigInteger = this.cidrPrefix.toSubnetMask().getValue();
+        let invertedSubnetMask = leftPadWithZeroBit(subnetMaskAsBigInteger.xor(onMask).toString(2), 128);
+        return IPv6.fromBigInteger(this.ipv6.getValue().or(parseBinaryStringToBigInteger(invertedSubnetMask)));
     }
 
     /**
