@@ -345,4 +345,4 @@ Change log
 ------------------
 ##### Next release
 
-* Rename Subnet to SubnetMask [Issue #1] (https://github.com/ip-num/ip-num/issues/1)
+* Rename Subnet to SubnetMask [Issue #1](https://github.com/ip-num/ip-num/issues/1)
