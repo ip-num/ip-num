@@ -131,9 +131,6 @@ export class Validator {
 
         let isValid = rawOctets.every(octet => {
             let numberValue = parseInt(octet);
-            if (isNaN(numberValue)) {
-                return false;
-            } 
             return isNaN(numberValue) ? false : Validator.isValidIPv4Octet(bigInt(numberValue))[0];
         });
 
