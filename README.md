@@ -347,5 +347,5 @@ Change log
 
 * Renamed Subnet to SubnetMask [Issue #1](https://github.com/ip-num/ip-num/issues/1)
 * Fixed the throwing of *invalid integer: NaN* when invalid IPv4 and IPv6 strings are passed to Validator
-.isValidIPv4String and Validator.isValidIPv6String validators. Fixed by [saiyeek](https://github.com/saiyeek) [Issue #5](https://github
-.com/ip-num/ip-num/issues/5)
+.isValidIPv4String and Validator.isValidIPv6String validators. Fixed by [saiyeek](https://github.com/saiyeek) 
+[Issue #5](https://github.com/ip-num/ip-num/issues/5)
