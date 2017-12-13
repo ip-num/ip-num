@@ -130,8 +130,8 @@ export class Validator {
         }
 
         let isValid = rawOctets.every(octet => {
-            let [valid,] = Validator.isValidIPv4Octet(bigInt(parseInt(octet)));
-            return valid;
+            let numberValue = parseInt(octet);
+            return isNaN(numberValue) ? false : Validator.isValidIPv4Octet(bigInt(numberValue))[0];
         });
 
         return [isValid, isValid ? []: [Validator.invalidOctetRangeMessage]];
@@ -152,7 +152,7 @@ export class Validator {
 
         let isValid = hexadecimals.every(hexadecimal => {
             let numberValue = parseInt(hexadecimal, 16);
-            return Validator.isValidIPv6Hexadecatet(bigInt(numberValue))[0];
+            return isNaN(numberValue) ? false :Validator.isValidIPv6Hexadecatet(bigInt(numberValue))[0];
         });
 
         return [isValid, isValid? []: [Validator.invalidHexadecatetMessage]];

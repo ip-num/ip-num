@@ -3,6 +3,12 @@ import {Validator} from "../src/Validator";
 import {IPNumType} from "../src/IPNumType";
 
 describe('Validator: ', () => {
+    describe('isValidIPv4String ', () => {
+        it('validate IPv4 strings', () => {
+            expect(Validator.isValidIPv4String('123.234.0.1')[0]).toBe(true);
+            expect(Validator.isValidIPv4String('10.10.10.X')[0]).toBe(false);
+        });
+    });
     describe('isValidIPv4CidrNotation ', () => {
         it('validate malformed IPv4', () => {
             expect(Validator.isValidIPv4CidrNotation("123.234.334.23")[0]).toBe(false);
@@ -21,6 +27,7 @@ describe('Validator: ', () => {
             expect(Validator.isValidIPv4CidrNotation("123.234.334.0/34")[1].some(errorMessage => { return errorMessage === Validator.invalidOctetRangeMessage})).toBe(true);
             expect(Validator.isValidIPv4CidrNotation("123.234.334.0/34")[1].some(errorMessage => {return errorMessage ===Validator.invalidPrefixValueMessage})).toBe(true);
 
+            expect(Validator.isValidIPv4CidrNotation('1.1.1.x/28')[0]).toBe(false);
         });
     });
 
