@@ -220,8 +220,12 @@ export class Validator {
         let ip = cidrComponents[0];
         let range = cidrComponents[1];
 
+        if (isNaN(Number(range))) {
+            return [false, [Validator.invalidIPv4CidrNotationMessage]];
+        }
+
         let [validIpv4, invalidIpv4Message] = Validator.isValidIPv4String(ip);
-        let [validPrefix, invalidPrefixMessage] = Validator.isValidPrefixValue(parseInt(range), IPNumType.IPv4);
+        let [validPrefix, invalidPrefixMessage] = Validator.isValidPrefixValue(Number(range), IPNumType.IPv4);
 
         let isValid = validIpv4 && validPrefix;
         let invalidMessage = invalidIpv4Message.concat(invalidPrefixMessage);
