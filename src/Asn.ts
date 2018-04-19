@@ -16,7 +16,7 @@ export class Asn extends AbstractIPNum implements IPNumber {
     /**
      * The decimal value represented by the ASN number in BigInteger
      */
-    readonly value:bigInt.BigInteger;
+    readonly value!:bigInt.BigInteger;
     /**
      * The number of bits needed to represents the value of the ASN number
      */
