@@ -16,7 +16,7 @@ export class Asn extends AbstractIPNum implements IPNumber {
     /**
      * The decimal value represented by the ASN number in BigInteger
      */
-    readonly value!:bigInt.BigInteger;
+    readonly value:bigInt.BigInteger;
     /**
      * The number of bits needed to represents the value of the ASN number
      */
@@ -69,8 +69,7 @@ export class Asn extends AbstractIPNum implements IPNumber {
             } else {
                 this.value = bigInt(parseInt(rawValue));
             }
-        }
-        if (typeof rawValue === 'number') {
+        } else {
             let valueAsBigInt = bigInt(rawValue);
             let [isValid, message] = Validator.isValidAsnNumber(valueAsBigInt);
             if (!isValid) {
