@@ -1,4 +1,4 @@
-// [ip-num]  Version: 1.0.0. Released on: Friday, September 29th, 2017, 10:40:12 PM  
+// [ip-num]  Version: 1.0.1. Released on: Thursday, April 19th, 2018, 8:15:59 PM  
  var ipnum =
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
@@ -1484,8 +1484,8 @@ class Validator {
             return [false, [Validator.invalidOctetCountMessage]];
         }
         let isValid = rawOctets.every(octet => {
-            let [valid,] = Validator.isValidIPv4Octet(bigInt(parseInt(octet)));
-            return valid;
+            let numberValue = parseInt(octet);
+            return isNaN(numberValue) ? false : Validator.isValidIPv4Octet(bigInt(numberValue))[0];
         });
         return [isValid, isValid ? [] : [Validator.invalidOctetRangeMessage]];
     }
@@ -1503,7 +1503,7 @@ class Validator {
         }
         let isValid = hexadecimals.every(hexadecimal => {
             let numberValue = parseInt(hexadecimal, 16);
-            return Validator.isValidIPv6Hexadecatet(bigInt(numberValue))[0];
+            return isNaN(numberValue) ? false : Validator.isValidIPv6Hexadecatet(bigInt(numberValue))[0];
         });
         return [isValid, isValid ? [] : [Validator.invalidHexadecatetMessage]];
     }
@@ -1526,28 +1526,28 @@ class Validator {
         return [false, [Validator.invalidInetNumType]];
     }
     /**
-     * Checks if given string is a valid IPv4 subnet
+     * Checks if given string is a valid IPv4 subnet mask
      *
-     * @param {string} ipv4SubnetString the given IPv4 subnet string
-     * @returns {[boolean , string]} first value is true if valid IPv4 subnet string, false otherwise. Second value
+     * @param {string} ipv4SubnetMaskString the given IPv4 subnet mask string
+     * @returns {[boolean , string]} first value is true if valid IPv4 subnet mask string, false otherwise. Second value
      * contains "valid" or an error message when value is invalid
      */
-    static isValidIPv4Subnet(ipv4SubnetString) {
-        let ipv4InBinary = BinaryUtils_1.dottedDecimalNotationToBinaryString(ipv4SubnetString);
-        let isValid = Validator.IPV4_SUBNET_BIT_PATTERN.test(ipv4InBinary);
-        return isValid ? [isValid, []] : [isValid, [Validator.invalidSubnetMessage]];
+    static isValidIPv4SubnetMask(ipv4SubnetMaskString) {
+        let ipv4InBinary = BinaryUtils_1.dottedDecimalNotationToBinaryString(ipv4SubnetMaskString);
+        let isValid = Validator.IPV4_SUBNET_MASK_BIT_PATTERN.test(ipv4InBinary);
+        return isValid ? [isValid, []] : [isValid, [Validator.invalidSubnetMaskMessage]];
     }
     /**
-     * Checks if given string is a valid IPv6 subnet
+     * Checks if given string is a valid IPv6 subnet mask
      *
-     * @param {string} ipv6SubnetString the given IPv6 subnet string
-     * @returns {[boolean , string]} first value is true if valid IPv6 subnet string, false otherwise. Second value
+     * @param {string} ipv6SubnetMaskString the given IPv6 subnet mask string
+     * @returns {[boolean , string]} first value is true if valid IPv6 subnet mask string, false otherwise. Second value
      * contains "valid" or an error message when value is invalid
      */
-    static isValidIPv6Subnet(ipv6SubnetString) {
-        let ipv6InBinary = IPv6Utils_1.hexadectetNotationToBinaryString(ipv6SubnetString);
-        let isValid = Validator.IPV6_SUBNET_BIT_PATTERN.test(ipv6InBinary);
-        return isValid ? [isValid, []] : [isValid, [Validator.invalidSubnetMessage]];
+    static isValidIPv6SubnetMask(ipv6SubnetMaskString) {
+        let ipv6InBinary = IPv6Utils_1.hexadectetNotationToBinaryString(ipv6SubnetMaskString);
+        let isValid = Validator.IPV6_SUBNET_MASK_BIT_PATTERN.test(ipv6InBinary);
+        return isValid ? [isValid, []] : [isValid, [Validator.invalidSubnetMaskMessage]];
     }
     /**
      * Checks if the given string is a valid IPv4 range in Cidr notation
@@ -1564,8 +1564,11 @@ class Validator {
         }
         let ip = cidrComponents[0];
         let range = cidrComponents[1];
+        if (isNaN(Number(range))) {
+            return [false, [Validator.invalidIPv4CidrNotationMessage]];
+        }
         let [validIpv4, invalidIpv4Message] = Validator.isValidIPv4String(ip);
-        let [validPrefix, invalidPrefixMessage] = Validator.isValidPrefixValue(parseInt(range), IPNumType_1.IPNumType.IPv4);
+        let [validPrefix, invalidPrefixMessage] = Validator.isValidPrefixValue(Number(range), IPNumType_1.IPNumType.IPv4);
         let isValid = validIpv4 && validPrefix;
         let invalidMessage = invalidIpv4Message.concat(invalidPrefixMessage);
         return isValid ? [isValid, []] : [isValid, invalidMessage];
@@ -1588,8 +1591,8 @@ class Validator {
 Validator.IPV4_PATTERN = new RegExp(/^(0?[0-9]?[0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.(0?[0-9]?[0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.(0?[0-9]?[0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.(0?[0-9]?[0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])$/);
 Validator.IPV4_RANGE_PATTERN = new RegExp(/^(0?[0-9]?[0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.(0?[0-9]?[0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.(0?[0-9]?[0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.(0?[0-9]?[0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(\/)([1-9]|[1-2][0-9]|3[0-2])$/);
 Validator.IPV6_RANGE_PATTERN = new RegExp(/^s*((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:)))(%.+)?s*(\/([0-9]|[1-9][0-9]|1[0-1][0-9]|12[0-8]))?$/);
-Validator.IPV4_SUBNET_BIT_PATTERN = new RegExp(/^(1){0,32}(0){0,32}$/);
-Validator.IPV6_SUBNET_BIT_PATTERN = new RegExp(/^(1){0,128}(0){0,128}$/);
+Validator.IPV4_SUBNET_MASK_BIT_PATTERN = new RegExp(/^(1){0,32}(0){0,32}$/);
+Validator.IPV6_SUBNET_MASK_BIT_PATTERN = new RegExp(/^(1){0,128}(0){0,128}$/);
 Validator.EIGHT_BIT_SIZE = bigInt("1".repeat(8), 2);
 Validator.SIXTEEN_BIT_SIZE = bigInt("1".repeat(16), 2);
 Validator.THIRTY_TWO_BIT_SIZE = bigInt("1".repeat(32), 2);
@@ -1602,7 +1605,7 @@ Validator.invalidOctetRangeMessage = "Value given contains an invalid Octet; Val
 Validator.invalidHexadecatetMessage = "The value given is less than zero or is greater than 16bit";
 Validator.invalidOctetCountMessage = "An IP4 number cannot have less or greater than 4 octets";
 Validator.invalidHexadecatetCountMessage = "An IP6 number cannot have less or greater than 8 octets";
-Validator.invalidSubnetMessage = "The Subnet is invalid";
+Validator.invalidSubnetMaskMessage = "The Subnet Mask is invalid";
 Validator.invalidPrefixValueMessage = "A Prefix value cannot be less than 0 or greater than 32";
 Validator.invalidIPv4CidrNotationMessage = "Cidr notation should be in the form [ip number]/[range]";
 Validator.invalidIPv6CidrNotationString = "A Cidr notation string should contain an IPv6 number and prefix";
@@ -2174,10 +2177,10 @@ exports.Octet = Octet;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const Validator_1 = __webpack_require__(2);
-const Subnet_1 = __webpack_require__(11);
+const SubnetMask_1 = __webpack_require__(11);
 const BinaryUtils_1 = __webpack_require__(0);
 const IPNumType_1 = __webpack_require__(3);
-const Subnet_2 = __webpack_require__(11);
+const SubnetMask_2 = __webpack_require__(11);
 const HexadecimalUtils_1 = __webpack_require__(6);
 const Hexadecatet_1 = __webpack_require__(7);
 /**
@@ -2230,16 +2233,16 @@ class IPv4Prefix {
         return this.value.toString();
     }
     /**
-     * Converts the IPv4 prefix to a {@link IPv4Subnet}
+     * Converts the IPv4 prefix to a {@link IPv4SubnetMask}
      *
-     * The IPv4 Subnet is the representation of the prefix in the dot-decimal notation
+     * The IPv4 Subnet mask is the representation of the prefix in the dot-decimal notation
      *
-     * @returns {IPv4Subnet} the subnet representation of the IPv4 number
+     * @returns {IPv4SubnetMask} the subnet mask representation of the prefix
      */
-    toSubnet() {
+    toSubnetMask() {
         let onBits = '1'.repeat(this.value);
         let offBits = '0'.repeat(32 - this.value);
-        return Subnet_1.IPv4Subnet.fromDecimalDottedString(this.toDecimalNotation(`${onBits}${offBits}`));
+        return SubnetMask_1.IPv4SubnetMask.fromDecimalDottedString(this.toDecimalNotation(`${onBits}${offBits}`));
     }
     toDecimalNotation(bits) {
         return `${BinaryUtils_1.parseBinaryStringToBigInteger(bits.substr(0, 8))}.${BinaryUtils_1.parseBinaryStringToBigInteger(bits.substr(8, 8))}.${BinaryUtils_1.parseBinaryStringToBigInteger(bits.substr(16, 8))}.${BinaryUtils_1.parseBinaryStringToBigInteger(bits.substr(24, 8))}`;
@@ -2296,16 +2299,16 @@ class IPv6Prefix {
         return this.value.toString();
     }
     /**
-     * Converts the IPv6 prefix to a {@link IPv6Subnet}
+     * Converts the IPv6 prefix to a {@link IPv6SubnetMask}
      *
-     * The IPv6 Subnet is the representation of the prefix in 8 groups of 16 bit values represented in hexadecimal
+     * The IPv6 Subnet mask is the representation of the prefix in 8 groups of 16 bit values represented in hexadecimal
      *
-     * @returns {IPv4Subnet} the subnet representation of the IPv4 number
+     * @returns {IPv6SubnetMask} the subnet mask representation of the prefix
      */
-    toSubnet() {
+    toSubnetMask() {
         let onBits = '1'.repeat(this.value);
         let offBits = '0'.repeat(128 - this.value);
-        return Subnet_2.IPv6Subnet.fromHexadecimalString(this.toHexadecatetNotation(`${onBits}${offBits}`));
+        return SubnetMask_2.IPv6SubnetMask.fromHexadecimalString(this.toHexadecatetNotation(`${onBits}${offBits}`));
     }
     toHexadecatetNotation(bits) {
         let binaryStrings = bits.match(/.{1,16}/g);
@@ -2334,13 +2337,14 @@ const IPv6Utils_1 = __webpack_require__(4);
 const IPv4_1 = __webpack_require__(8);
 const IPv6_1 = __webpack_require__(12);
 /**
- * The IPv4Subnet can be seen as a specialized IPv4 number where, in a 32 bit number, starting from the left, you have
- * continuous bits turned on (with 1 value) followed by bits turned off (with 0 value)
+ * The IPv4SubnetMask can be seen as a specialized IPv4 number where, in a 32 bit number, starting from the left, you
+ * have continuous bits turned on (with 1 value) followed by bits turned off (with 0 value). In networking, it is used
+ * to demarcate which bits are used to identify a network, and the ones that are used to identify hosts on the network
  */
-class IPv4Subnet extends IPv4_1.IPv4 {
+class IPv4SubnetMask extends IPv4_1.IPv4 {
     /**
-     * Constructor for creating an instance of IPv4Subnet. The passed strings need to be a valid IPv4
-     * number in dot-decimal notation.
+     * Constructor for creating an instance of IPv4SubnetMask.
+     * The passed strings need to be a valid IPv4 subnet mask number in dot-decimal notation.
      *
      * @param {string} ipString The passed string in dot-decimal notation
      */
@@ -2349,12 +2353,12 @@ class IPv4Subnet extends IPv4_1.IPv4 {
         /**
          * An array of {@link Octet}'s
          *
-         * @type {Array} the octets that makes up the IPv4Subnet
+         * @type {Array} the octets that makes up the IPv4SubnetMask
          */
         this.octets = [];
         let isValid;
         let message;
-        [isValid, message] = Validator_1.Validator.isValidIPv4Subnet(ipString);
+        [isValid, message] = Validator_1.Validator.isValidIPv4SubnetMask(ipString);
         if (!isValid) {
             throw new Error(message.filter(msg => { return msg !== ''; }).toString());
         }
@@ -2365,26 +2369,28 @@ class IPv4Subnet extends IPv4_1.IPv4 {
         this.value = bigInt(BinaryUtils_1.dottedDecimalNotationToBinaryString(ipString), 2);
     }
     /**
-     * A convenience method for creating an instance of IPv4Subnet. The passed strings need to be a valid IPv4
+     * A convenience method for creating an instance of IPv4SubnetMask. The passed strings need to be a valid IPv4
      * number in dot-decimal notation.
      *
      * @param {string} rawValue The passed string in dot-decimal notation
-     * @returns {IPv4Subnet} the instance of IPv4Subnet
+     * @returns {IPv4SubnetMask} the instance of IPv4SubnetMask
      */
     static fromDecimalDottedString(rawValue) {
-        return new IPv4Subnet(rawValue);
+        return new IPv4SubnetMask(rawValue);
     }
     ;
 }
-exports.IPv4Subnet = IPv4Subnet;
+exports.IPv4SubnetMask = IPv4SubnetMask;
 /**
- * The IPv6Subnet can be seen as a specialized IPv4 number where, in a 128 bit number, starting from the left, you have
- * continuous bits turned on (with 1 value) followed by bits turned off (with 0 value)
+ * The IPv6SubnetMask can be seen as a specialized IPv4 number where, in a 128 bit number, starting from the left,
+ * you have continuous bits turned on (with 1 value) followed by bits turned off (with 0 value). In networking, it
+ * is used to to demarcate which bits are used to identify a network, and the ones that are used to identify hosts
+ * on the network
  */
-class IPv6Subnet extends IPv6_1.IPv6 {
+class IPv6SubnetMask extends IPv6_1.IPv6 {
     /**
-     * Constructor for creating an instance of IPv6Subnet. The passed strings need to be a valid IPv6
-     * number in textual representation
+     * Constructor for creating an instance of IPv6SubnetMask.
+     * The passed strings need to be a valid IPv6 subnet mask number in dot-decimal notation
      *
      * @param {string} ipString The passed IPv6 string
      */
@@ -2398,7 +2404,7 @@ class IPv6Subnet extends IPv6_1.IPv6 {
         this.hexadecatet = [];
         let isValid;
         let message;
-        [isValid, message] = Validator_1.Validator.isValidIPv6Subnet(ipString);
+        [isValid, message] = Validator_1.Validator.isValidIPv6SubnetMask(ipString);
         if (!isValid) {
             throw new Error(message.filter(msg => { return msg !== ''; }).toString());
         }
@@ -2409,18 +2415,18 @@ class IPv6Subnet extends IPv6_1.IPv6 {
         this.value = bigInt(IPv6Utils_1.hexadectetNotationToBinaryString(ipString), 2);
     }
     /**
-     * A convenience method for creating an instance of IPv6Subnet. The passed strings need to be a valid IPv6
-     * number in textual representation.
+     * A convenience method for creating an instance of IPv6SubnetMask.
+     * The passed strings need to be a valid IPv4 subnet mask number in dot-decimal notation.
      *
      * @param {string} rawValue The passed string in textual notation
-     * @returns {IPv6Subnet} the instance of IPv6Subnet
+     * @returns {IPv6SubnetMask} the instance of IPv6SubnetMask
      */
     static fromHexadecimalString(rawValue) {
-        return new IPv6Subnet(rawValue);
+        return new IPv6SubnetMask(rawValue);
     }
     ;
 }
-exports.IPv6Subnet = IPv6Subnet;
+exports.IPv6SubnetMask = IPv6SubnetMask;
 
 
 /***/ }),
@@ -2680,7 +2686,7 @@ class Asn extends AbstractIPNum_1.AbstractIPNum {
                 this.value = bigInt(parseInt(rawValue));
             }
         }
-        if (typeof rawValue === 'number') {
+        else {
             let valueAsBigInt = bigInt(rawValue);
             let [isValid, message] = Validator_1.Validator.isValidAsnNumber(valueAsBigInt);
             if (!isValid) {
@@ -2908,7 +2914,7 @@ class IPv4Range {
      * @returns {IPv4} the first IPv4 number in the IPv4 range
      */
     getFirst() {
-        return IPv4_1.IPv4.fromBigInteger(this.ipv4.getValue().and(this.cidrPrefix.toSubnet().getValue()));
+        return IPv4_1.IPv4.fromBigInteger(this.ipv4.getValue().and(this.cidrPrefix.toSubnetMask().getValue()));
     }
     /**
      * Method that returns the last IPv4 number in the IPv4 range
@@ -2917,7 +2923,7 @@ class IPv4Range {
      */
     getLast() {
         let onMask = bigInt("1".repeat(32), 2);
-        let subnetAsBigInteger = this.cidrPrefix.toSubnet().getValue();
+        let subnetAsBigInteger = this.cidrPrefix.toSubnetMask().getValue();
         let invertedSubnet = BinaryUtils_1.leftPadWithZeroBit(subnetAsBigInteger.xor(onMask).toString(2), 32);
         return IPv4_1.IPv4.fromBigInteger(this.ipv4.getValue().or(BinaryUtils_2.parseBinaryStringToBigInteger(invertedSubnet)));
     }
@@ -3141,7 +3147,7 @@ class IPv6Range {
      * @returns {IPv6} the first IPv6 number in the IPv6 range
      */
     getFirst() {
-        return IPv6_1.IPv6.fromBigInteger(this.ipv6.getValue().and(this.cidrPrefix.toSubnet().getValue()));
+        return IPv6_1.IPv6.fromBigInteger(this.ipv6.getValue().and(this.cidrPrefix.toSubnetMask().getValue()));
     }
     /**
      * Method that returns the last IPv6 number in the IPv6 range
@@ -3150,9 +3156,9 @@ class IPv6Range {
      */
     getLast() {
         let onMask = bigInt("1".repeat(128), 2);
-        let subnetAsBigInteger = this.cidrPrefix.toSubnet().getValue();
-        let invertedSubnet = BinaryUtils_1.leftPadWithZeroBit(subnetAsBigInteger.xor(onMask).toString(2), 128);
-        return IPv6_1.IPv6.fromBigInteger(this.ipv6.getValue().or(BinaryUtils_2.parseBinaryStringToBigInteger(invertedSubnet)));
+        let subnetMaskAsBigInteger = this.cidrPrefix.toSubnetMask().getValue();
+        let invertedSubnetMask = BinaryUtils_1.leftPadWithZeroBit(subnetMaskAsBigInteger.xor(onMask).toString(2), 128);
+        return IPv6_1.IPv6.fromBigInteger(this.ipv6.getValue().or(BinaryUtils_2.parseBinaryStringToBigInteger(invertedSubnetMask)));
     }
     /**
      * Indicates whether the given IPv6 range is an adjacent range.

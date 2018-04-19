@@ -28,6 +28,7 @@ describe('Validator: ', () => {
             expect(Validator.isValidIPv4CidrNotation("123.234.334.0/34")[1].some(errorMessage => {return errorMessage ===Validator.invalidPrefixValueMessage})).toBe(true);
 
             expect(Validator.isValidIPv4CidrNotation('1.1.1.x/28')[0]).toBe(false);
+            expect(Validator.isValidIPv4CidrNotation("123.234.334.0/3x")[0]).toBe(false);
         });
     });
 

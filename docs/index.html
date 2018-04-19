@@ -98,12 +98,14 @@ How you get access to the above, depends on the module loading mechanism being u
 ### ES module with TypeScript
 
 Import what you need from `ip-num` and use away
+
 </code></pre>
 				<p>import { Asn } from &quot;ip-num/Asn&quot;;
 					import { IPv4 } from &quot;ip-num/IPv4&quot;;
 				import { IPv6 } from &quot;ip-num/IPv6&quot;;</p>
 				<pre><code>
 You can <span class="hljs-keyword">then</span> make <span class="hljs-keyword">use</span> <span class="hljs-keyword">of</span> the imported <span class="hljs-keyword">module</span> <span class="hljs-keyword">in</span> your TypeScript code
+
 </code></pre><p>let asn = new Asn(65546);
 				asn.toBinaryString() //10000000000001010</p>
 				<p>let ipv4 = new IPv4(&quot;74.125.43.99&quot;);
@@ -116,11 +118,13 @@ You can <span class="hljs-keyword">then</span> make <span class="hljs-keyword">u
 All external modules <span class="hljs-keyword">in</span> `ip-<span class="hljs-built_in">num</span>` are exported <span class="hljs-keyword">and</span> made available via <span class="hljs-keyword">the</span> <span class="hljs-built_in">global</span> <span class="hljs-title">_ip-num</span>_ module. So you can `<span class="hljs-built_in">require</span>
 (<span class="hljs-string">'ip-num'</span>)` <span class="hljs-keyword">and</span> <span class="hljs-keyword">then</span> access <span class="hljs-keyword">the</span> module you want <span class="hljs-built_in">to</span> use <span class="hljs-keyword">in</span> your application, <span class="hljs-keyword">or</span> access <span class="hljs-keyword">the</span> module <span class="hljs-keyword">in</span> <span class="hljs-literal">one</span> go, <span class="hljs-keyword">while</span> 
 requiring; <span class="hljs-keyword">as</span> shown below:
+
 </code></pre><p>const Asn = require(&quot;ip-num&quot;).Asn;
 					const IPv4 = require(&quot;ip-num&quot;).IPv4;
 				const IPv6 = require(&quot;ip-num&quot;).IPv6;</p>
 				<pre><code>
 The imported <span class="hljs-keyword">module</span> can <span class="hljs-keyword">then</span> be used:
+
 </code></pre><p>let asn = new Asn(65546);
 				asn.toBinaryString() //10000000000001010</p>
 				<p>let ipv4 = new IPv4(&quot;74.125.43.99&quot;);
@@ -132,6 +136,7 @@ The imported <span class="hljs-keyword">module</span> can <span class="hljs-keyw
 
 Including the `ip-num` library via the<span class="hljs-built_in"> script </span>tag <span class="hljs-keyword">in</span> the browser exposes `ipnum` variable <span class="hljs-keyword">from</span> which you can access 
 the modules exposes by the library.
+
 </code></pre><p><script src="https://ip-num.github.io/ip-num/ip-num.js"></script>
 					........
 					let asn = new ipnum.Asn(65546);
@@ -236,6 +241,7 @@ See <span class="hljs-keyword">the</span> [IPv6Range documentation](<span class=
 <span class="hljs-comment">### IPNumber and IPRange interfaces</span>
 When working <span class="hljs-keyword">in</span> TypeScript, you have <span class="hljs-keyword">the</span> ability <span class="hljs-built_in">to</span> abstract ASN, IPv4 <span class="hljs-keyword">and</span> IPv6 <span class="hljs-keyword">as</span> <span class="hljs-keyword">an</span> IPNumber, <span class="hljs-keyword">and</span> IPv4Range <span class="hljs-keyword">and</span> 
 IPv6Range <span class="hljs-keyword">as</span> IPRange
+
 </code></pre><p>// representing ASN, IPv4 and IPv6 with the IPNumber interface
 					let ipNumbers: IPNumber[] = [];
 					ipNumbers.push(new Asn(&quot;200&quot;));
@@ -271,14 +277,16 @@ followed by contiguous off bits (<span class="hljs-number">0</span><span class="
 IPv4Subnet <span class="hljs-keyword">and</span> IPv6Subnet. <span class="hljs-keyword">For</span> example:
 
 The following code will throw an exception:
+
 </code></pre><p>import {IPv4Subnet} from &#39;ip-num/IPv4Subnet&#39;
 				import {IPv4Subnet} from &#39;ip-num/IPv4Subnet&#39;</p>
 				<p>let ipv4Subnet = new IPv4Subnet(&quot;10.255.10.3&quot;);
 				let ipv6Subnet = new IPv6Subnet(&quot;3ffe:1900:4545:0003:0200:f8ff:fe21:67cf&quot;);</p>
 				<pre><code>
 <span class="hljs-keyword">While</span> the following <span class="hljs-built_in">code</span> works fine:
-</code></pre><p>import {IPv4Subnet} from &#39;ip-num/IPv4Subnet&#39;
-				import {IPv6Subnet} from &#39;ip-num/IPv6Subnet&#39;</p>
+
+</code></pre><p>import {IPv4Subnet} from &#39;ip-num/Subnet&#39;
+				import {IPv6Subnet} from &#39;ip-num/Subnet&#39;</p>
 				<p>let iPv4Subnet = new IPv4Subnet(&quot;255.0.0.0&quot;);
 				let iPv6Subnet = new IPv6Subnet(&quot;ffff:ffff:ffff:ffff:ffff:ffff:0:0&quot;);</p>
 				<pre><code>See the [Subnet documentation](https:<span class="hljs-comment">//ip-num.github.io/ip-num/modules/_subnet_.html) for more information</span>
@@ -289,6 +297,7 @@ Various validation are exposed via the `Validator` <span class="hljs-keyword">mo
 utility operations can be found <span class="hljs-keyword">in</span> `BinaryUtils`, `IPv6Utils`, and `HexadecimalUtils`.
 
 For example to expand and collapse IPv6 numbers:
+
 </code></pre><p>import {IPv6Utils} from &#39;ip-num/IPv6Utils&#39;</p>
 				<p>// expanding
 					IPv6Utils.expandIPv6Number(&quot;::&quot;) // Expands to 0000:0000:0000:0000:0000:0000:0000:0000
@@ -298,12 +307,13 @@ For example to expand and collapse IPv6 numbers:
 				IPv6Utils.collapseIPv6Number(&quot;FF01:0:0:0:0:0:0:101&quot;) // Collapses to FF01::101</p>
 				<pre><code>
 To<span class="hljs-built_in"> check </span>if a given string is valid cidr notation:
+
 </code></pre><p>import {Validator} from &#39;ip-num/Validator&#39;</p>
 				<p>let result = Validator.isValidIPv4CidrNotation(&quot;123.234.334.23&quot;)
 					// result =&gt; [false, [&quot;Cidr notation should be in the form [ip number]/[range]&quot;]]
 					let result = Validator.isValidIPv4CidrNotation(&quot;10.0.0.0/8&quot;)
 					// result =&gt; [true, []]
-					```
+					<code>`</code>
 					See the <a href="https://ip-num.github.io/ip-num/classes/_validator_.validator.html">Validator documentation</a> for more information
 					See the <a href="https://ip-num.github.io/ip-num/modules/_binaryutils_.html">BinaryUtils documentation</a> for more information
 					See the <a href="https://ip-num.github.io/ip-num/modules/_ipv6utils_.html">IPv6Utils documentation</a> for more information
@@ -313,6 +323,15 @@ To<span class="hljs-built_in"> check </span>if a given string is valid cidr nota
 				<h2 id="contributing">Contributing</h2>
 				<p>To discuss a new feature or ask a question, open an issue. Find the issue tracker <a href="https://github.com/ip-num/ip-num/issues">here</a></p>
 				<p>Found a bug and you want to provide a fix for it? Then feel free to submit a pull request. It will be appreciated if the changes made are backed with tests.</p>
+				<h2 id="change-log">Change log</h2>
+				<h5 id="v1-0-1">v1.0.1</h5>
+				<ul>
+					<li>Renamed Subnet to SubnetMask <a href="https://github.com/ip-num/ip-num/issues/1">Issue #1</a></li>
+					<li>Fixed the throwing of <em>invalid integer: NaN</em> when invalid IPv4 and IPv6 strings are passed to Validator
+						.isValidIPv4String and Validator.isValidIPv6String validators. Fixed by <a href="https://github.com/saiyeek">saiyeek</a>
+						<a href="https://github.com/ip-num/ip-num/issues/5">Issue #5</a>
+					*</li>
+				</ul>
 			</div>
 		</div>
 		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
@@ -320,9 +339,6 @@ To<span class="hljs-built_in"> check </span>if a given string is valid cidr nota
 				<ul>
 					<li class="globals  ">
 						<a href="globals.html"><em>Globals</em></a>
-					</li>
-					<li class="label tsd-is-external">
-						<span>Internals</span>
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="modules/_abstractipnum_.html">"<wbr>AbstractIPNum"</a>
@@ -364,7 +380,7 @@ To<span class="hljs-built_in"> check </span>if a given string is valid cidr nota
 						<a href="modules/_prefix_.html">"<wbr>Prefix"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="modules/_subnet_.html">"<wbr>Subnet"</a>
+						<a href="modules/_subnetmask_.html">"<wbr>Subnet<wbr>Mask"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="modules/_validator_.html">"<wbr>Validator"</a>
@@ -372,13 +388,10 @@ To<span class="hljs-built_in"> check </span>if a given string is valid cidr nota
 					<li class=" tsd-kind-external-module">
 						<a href="modules/_index_.html">"index"</a>
 					</li>
-					<li class="label tsd-is-external">
-						<span>Externals</span>
-					</li>
-					<li class=" tsd-kind-external-module tsd-is-external">
+					<li class=" tsd-kind-external-module">
 						<a href="modules/_interface_ipnumber_.html">"interface/IPNumber"</a>
 					</li>
-					<li class=" tsd-kind-external-module tsd-is-external">
+					<li class=" tsd-kind-external-module">
 						<a href="modules/_interface_iprange_.html">"interface/IPRange"</a>
 					</li>
 				</ul>

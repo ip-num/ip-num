@@ -69,8 +69,7 @@ export class Asn extends AbstractIPNum implements IPNumber {
             } else {
                 this.value = bigInt(parseInt(rawValue));
             }
-        }
-        if (typeof rawValue === 'number') {
+        } else {
             let valueAsBigInt = bigInt(rawValue);
             let [isValid, message] = Validator.isValidAsnNumber(valueAsBigInt);
             if (!isValid) {
