@@ -43,21 +43,21 @@
   "author": "Dadepo Aderemi",
   "license": "MIT",
   "dependencies": {
-    "big-integer": "1.6.23",
+    "big-integer": "1.6.28",
     "npm": "^6.0.0"
   },
   "devDependencies": {
-    "@types/jasmine": "2.5.53",
-    "@types/node": "7.0.39",
-    "awesome-typescript-loader": "^3.5.0",
-    "coveralls": "^2.13.3",
+    "@types/jasmine": "2.8.6",
+    "@types/node": "10.0.0",
+    "awesome-typescript-loader": "5.0.0",
+    "coveralls": "3.0.0",
     "jasmine-node": "1.14.5",
-    "jasmine-spec-reporter": "4.1.0",
-    "jasmine-ts": "0.2.0",
-    "nyc": "11.1.0",
+    "jasmine-spec-reporter": "4.2.1",
+    "jasmine-ts": "0.2.1",
+    "nyc": "11.7.1",
     "source-map-loader": "^0.2.3",
     "tsunit.external": "2.0.11",
-    "webpack": "^3.11.0",
+    "webpack": "4.6.0",
     "webpack-auto-inject-version": "^1.1.0"
   }
 }
