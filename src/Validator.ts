@@ -125,12 +125,12 @@ export class Validator {
     static isValidIPv4String(ipv4String: string): [boolean, string[]] {
         let rawOctets = ipv4String.split(".");
 
-        if (rawOctets.length != 4) {
+        if (rawOctets.length != 4 || rawOctets.includes('')) {
             return [false, [Validator.invalidOctetCountMessage]];
         }
 
         let isValid = rawOctets.every(octet => {
-            let numberValue = parseInt(octet);
+            let numberValue = +octet;
             return isNaN(numberValue) ? false : Validator.isValidIPv4Octet(bigInt(numberValue))[0];
         });
 

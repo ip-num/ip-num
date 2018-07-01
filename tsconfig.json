@@ -14,7 +14,7 @@
       "pretty": true,
       "sourceMap": true,
       "typeRoots": [ "./node_modules/@types" ],
-      "lib": ["es6"],
+      "lib": ["es7"],
       "target": "es6"
     }
 }
