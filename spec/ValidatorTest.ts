@@ -8,6 +8,7 @@ describe('Validator: ', () => {
             expect(Validator.isValidIPv4String('123.234.0.1')[0]).toBe(true);
             expect(Validator.isValidIPv4String('10.10.10.X')[0]).toBe(false);
             expect(Validator.isValidIPv4String('1.2.3.4xyz')[0]).toBe(false);
+            expect(Validator.isValidIPv4String('1. 2.3.4xyz')[0]).toBe(false);
             expect(Validator.isValidIPv4String('1..3.4xyz')[0]).toBe(false);
             expect(Validator.isValidIPv4String('1.2.3.')[0]).toBe(false);
         });
