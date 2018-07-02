@@ -22,6 +22,8 @@ If you want to use `ip-num` from within a Node.js environment, you can install i
 
 ```npm install ip-num```
 
+`ip-num` is tested against version 7 - and upwards - of NodeJs.
+
 ### Browser
 If you are using a browser, you can include `ip-num` by linking to it or download it from GitHub
 

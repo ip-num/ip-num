@@ -41,6 +41,5 @@ describe('Validator: ', () => {
             expect(Validator.isValidPrefixValue(3, IPNumType.ASN)[0]).toBe(false);
             expect(Validator.isValidPrefixValue(3, IPNumType.ASN)[1].some(errorMessage => {return errorMessage === Validator.invalidInetNumType})).toBe(true);
         });
-
     })
 });
