@@ -130,8 +130,7 @@ export class Validator {
         }
 
         let isValid = rawOctets.every(octet => {
-            let numberValue = +octet;
-            return isNaN(numberValue) ? false : Validator.isValidIPv4Octet(bigInt(numberValue))[0];
+            return Validator.isNumeric(octet) ? Validator.isValidIPv4Octet(bigInt(octet))[0] : false;
         });
 
         return [isValid, isValid ? []: [Validator.invalidOctetRangeMessage]];
@@ -151,8 +150,8 @@ export class Validator {
         }
 
         let isValid = hexadecimals.every(hexadecimal => {
-            let numberValue = parseInt(hexadecimal, 16);
-            return isNaN(numberValue) ? false :Validator.isValidIPv6Hexadecatet(bigInt(numberValue))[0];
+            return Validator.isHexadecatet(hexadecimal) ?
+                Validator.isValidIPv6Hexadecatet(bigInt(parseInt(hexadecimal, 16)))[0] : false;
         });
 
         return [isValid, isValid? []: [Validator.invalidHexadecatetMessage]];
@@ -246,6 +245,14 @@ export class Validator {
     static isValidIPv6CidrNotation(ipv6RangeAsCidrString: string): [boolean, string[]] {
         let isValid = Validator.IPV6_RANGE_PATTERN.test(ipv6RangeAsCidrString);
         return isValid ? [isValid, []]: [isValid, [Validator.invalidIPv6CidrNotationString]];
+    }
+
+    private static isNumeric(value: string): boolean {
+        return /^(\d+)$/.test(value)
+    }
+
+    private static isHexadecatet(value: string): boolean {
+        return /^[0-9A-Fa-f]{4}$/.test(value)
     }
 
 }

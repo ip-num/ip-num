@@ -6,6 +6,8 @@ describe('Validator: ', () => {
     describe('isValidIPv4String ', () => {
         it('validate IPv4 strings', () => {
             expect(Validator.isValidIPv4String('123.234.0.1')[0]).toBe(true);
+            expect(Validator.isValidIPv4String('123.234.0. 1')[0]).toBe(false);
+            expect(Validator.isValidIPv4String('123.234.0 .1')[0]).toBe(false);
             expect(Validator.isValidIPv4String('10.10.10.X')[0]).toBe(false);
             expect(Validator.isValidIPv4String('1.2.3.4xyz')[0]).toBe(false);
             expect(Validator.isValidIPv4String('1. 2.3.4xyz')[0]).toBe(false);
@@ -13,6 +15,21 @@ describe('Validator: ', () => {
             expect(Validator.isValidIPv4String('1.2.3.')[0]).toBe(false);
         });
     });
+
+    describe('isValidIPv6String ', () => {
+        it('validate IPv6 strings', () => {
+            expect(Validator.isValidIPv6String('ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff')[0]).toBe(true);
+            expect(Validator.isValidIPv6String('ffff:ffffxyz:ffff:ffff:ffff:ffff:ffff:ffff')[0]).toBe(false);
+            expect(Validator.isValidIPv6String(' ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff ')[0]).toBe(false);
+            expect(Validator.isValidIPv6String('ffff:ffff:::ffff:ffff:ffff')[0]).toBe(false);
+            expect(Validator.isValidIPv6String('ffff:ffff:ffff:ffff:ffff:ffff::ffff:ffff')[0]).toBe(false);
+            expect(Validator.isValidIPv6String('ffff:ffff:ffff:ffff:ffff:ffff:ffff: ffff')[0]).toBe(false);
+            expect(Validator.isValidIPv6String('ffff:ffff:ffff:ffff:ffff:ffff:ffff :ffff')[0]).toBe(false);
+            expect(Validator.isValidIPv6String('ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff')[0]).toBe(false);
+            expect(Validator.isValidIPv6String('123.234.10.10')[0]).toBe(false);
+        });
+    });
+
     describe('isValidIPv4CidrNotation ', () => {
         it('validate malformed IPv4', () => {
             expect(Validator.isValidIPv4CidrNotation("123.234.334.23")[0]).toBe(false);
