@@ -8,6 +8,8 @@ import {hexadectetNotationToBinaryString} from "./IPv6Utils";
 import * as bigInt from "big-integer/BigInteger";
 import {AbstractIPNum} from "./AbstractIPNum";
 import {IPNumType} from "./IPNumType";
+import {parseBinaryStringToBigInteger} from "./BinaryUtils";
+import {IPv4} from "./IPv4";
 
 
 /**
@@ -70,6 +72,16 @@ export class IPv6 extends AbstractIPNum implements IPNumber {
      */
     static fromHexadecimalString(ipString: string) : IPv6 {
         return new IPv6(ipString);
+    }
+
+    /**
+     * A convenience method for creating an {@link IPv6} from binary string
+     *
+     * @param {string} ipBinaryString the binary string representing the IPv6 number to be created
+     * @returns {IPv6} the IPv6 instance
+     */
+    static fromBinaryString(ipBinaryString: string) : IPv6 {
+        return new IPv6(parseBinaryStringToBigInteger(ipBinaryString));
     }
 
     /**

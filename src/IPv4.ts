@@ -8,6 +8,7 @@ import {parseBinaryStringToBigInteger} from "./BinaryUtils";
 import {leftPadWithZeroBit} from "./BinaryUtils";
 import {AbstractIPNum} from "./AbstractIPNum";
 import {IPNumType} from "./IPNumType";
+import {IPv6} from "./IPv6";
 
 /**
  * Represents an IPv4 number. A 32 bit number that is used to uniquely identify a device that is part of a computer
@@ -69,6 +70,16 @@ export class IPv4 extends AbstractIPNum implements IPNumber {
      */
     static fromDecimalDottedString(ipString: string) : IPv4 {
         return new IPv4(ipString);
+    }
+
+    /**
+     * A convenience method for creating an {@link IPv4} from binary string
+     *
+     * @param {string} ipBinaryString the binary string representing the IPv4 number to be created
+     * @returns {IPv4} the IPv4 instance
+     */
+    static fromBinaryString(ipBinaryString: string) : IPv4 {
+        return new IPv4(parseBinaryStringToBigInteger(ipBinaryString));
     }
 
     /**

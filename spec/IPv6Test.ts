@@ -53,6 +53,27 @@ describe('IPv6: ', () => {
         expect(hexadecatets[7].toString()).toEqual("67cf");
     });
 
+    it('should instantiate by calling fromBinaryString', () => {
+        let IPv6String = "3ffe:1900:4545:0003:0200:f8ff:fe21:67cf";
+
+        let binaryString = IPv6
+            .fromHexadecimalString(IPv6String)
+            .toBinaryString();
+
+        let iPv6 = IPv6.fromBinaryString(binaryString);
+
+        expect(iPv6.toString()).toEqual("3ffe:1900:4545:3:200:f8ff:fe21:67cf");
+        let hexadecatets = iPv6.getHexadecatet();
+        expect(hexadecatets[0].toString()).toEqual("3ffe");
+        expect(hexadecatets[1].toString()).toEqual("1900");
+        expect(hexadecatets[2].toString()).toEqual("4545");
+        expect(hexadecatets[3].toString()).toEqual("3");
+        expect(hexadecatets[4].toString()).toEqual("200");
+        expect(hexadecatets[5].toString()).toEqual("f8ff");
+        expect(hexadecatets[6].toString()).toEqual("fe21");
+        expect(hexadecatets[7].toString()).toEqual("67cf");
+    });
+
     it('should throw an exception when invalid IPv6 string is used to construct an IPv6 instance', function() {
         expect(() => {
             IPv6.fromHexadecimalString("3ffe:1900:4545:0003:0200");

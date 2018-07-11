@@ -15,8 +15,14 @@ describe('IPv4: ', () => {
         expect(IPv4.fromBigInteger(bigInt("1876843053")).toString()).toEqual("111.222.90.45");
     });
 
-    it('should instantiate by convenient method', () => {
+    it('should instantiate by passing dot-decimal notation', () => {
         expect(IPv4.fromDecimalDottedString("111.222.90.45").toString()).toEqual("111.222.90.45");
+    });
+
+    it('should instantiate by passing binary string', () => {
+        let testIPv4String = "111.222.90.45";
+        let createdIPv4 = IPv4.fromBinaryString(new IPv4(testIPv4String).toBinaryString());
+        expect(createdIPv4.toString()).toEqual("111.222.90.45");
     });
 
     it('should correctly check equality related operations', () => {
