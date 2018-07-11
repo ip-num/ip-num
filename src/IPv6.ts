@@ -10,6 +10,7 @@ import {AbstractIPNum} from "./AbstractIPNum";
 import {IPNumType} from "./IPNumType";
 import {parseBinaryStringToBigInteger} from "./BinaryUtils";
 import {IPv4} from "./IPv4";
+import {leftPadWithZeroBit} from "./BinaryUtils";
 
 
 /**
@@ -81,7 +82,18 @@ export class IPv6 extends AbstractIPNum implements IPNumber {
      * @returns {IPv6} the IPv6 instance
      */
     static fromBinaryString(ipBinaryString: string) : IPv6 {
-        return new IPv6(parseBinaryStringToBigInteger(ipBinaryString));
+        let paddedBinaryString = leftPadWithZeroBit(ipBinaryString, 128);
+        return new IPv6(parseBinaryStringToBigInteger(paddedBinaryString));
+    }
+
+
+    /**
+     * A convenience method for creating an IPv4-Compatible {@link IPv6} Address
+     * @param {IPv4} ipv4 to create an IPv4-Compatible {@link IPv6} Address
+     * @returns {IPv6} the IPv4-Compatible {@link IPv6} Address
+     */
+    static fromIPv4(ipv4: IPv4): IPv6 {
+        return ipv4.toIPv4MappedIPv6();
     }
 
     /**

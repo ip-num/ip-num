@@ -12,7 +12,7 @@ import {hexadecimalStringToBinaryString} from "./HexadecimalUtils";
 export let expandIPv6Number = (ipv6String:string):string => {
     let expandWithZero = (hexadecimalArray: string[]): string => {
         let paddedArray = hexadecimalArray.map((hexadecimal) => {
-            return leftPadWithZeroBit(hexadecimal,4);
+            return leftPadWithZeroBit(hexadecimal, 4);
         });
 
         return paddedArray.join(":")
@@ -25,6 +25,8 @@ export let expandIPv6Number = (ipv6String:string):string => {
         }
         return pads.join(":");
     };
+
+    if (/(:){3,}/.test(ipv6String)) throw "given IPv6 contains consecutive : more than two";
 
     if (ipv6String.includes("::")) {
         let split = ipv6String.split("::");

@@ -46,6 +46,6 @@ describe('Binary Utils', () => {
     it('Should throw an exception if given string is already greater than required final length after padding', () => {
         expect(()=> {
             BinaryUtils.leftPadWithZeroBit('111111110', 5)
-        }).toThrowError(Error, 'Given string is already longer than 5');
+        }).toThrowError(Error, 'Given string is already longer than given final length after padding: 5');
     })
 });

@@ -137,6 +137,21 @@ export class IPv4 extends AbstractIPNum implements IPNumber {
         return IPv4.fromBigInteger(this.getValue().minus(1))
     }
 
+    /**
+     * Returns this IPv4 number as a IPv4-Mapped IPv6 Address
+     *
+     * The IPv4-Mapped IPv6 Address allows an IPv4 number to be embedded within an IPv6 number
+     *
+     * {@see https://tools.ietf.org/html/rfc4291#section-2.5.5} for more information on the IPv4-Mapped IPv6 Address
+     *
+     * @returns {IPv6} an IPv6 number with the IPv4 embedded within it
+     */
+    public toIPv4MappedIPv6(): IPv6 {
+        let binary = '1'.repeat(16) + this.toBinaryString();
+        return IPv6.fromBinaryString(binary);
+    }
+
+
     private constructFromDecimalDottedString(ipString: string): [bigInt.BigInteger, Array<Octet>] {
         let octets;
         let value;

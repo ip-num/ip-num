@@ -69,7 +69,7 @@ export let dottedDecimalNotationToBinaryString = (dottedDecimal: string): string
  */
 export let leftPadWithZeroBit = (binaryString: string, finalStringLength: number): string => {
     if (binaryString.length > finalStringLength) {
-        throw new Error(`Given string is already longer than ${finalStringLength}`);
+        throw new Error(`Given string is already longer than given final length after padding: ${finalStringLength}`);
     }
     return "0".repeat(finalStringLength - binaryString.length).concat(binaryString);
 };

@@ -114,4 +114,14 @@ describe('IPv4: ', () => {
         let firstValue = new IPv4("0.0.0.0");
         expect(firstValue.toBinaryString()).toEqual("00000000000000000000000000000000");
     });
+
+    it('should create IPv4-Mapped IPv6 Address', () => {
+        let value = new IPv4("74.125.43.99");
+        let iPv6 = value.toIPv4MappedIPv6();
+        expect(iPv6.toString()).toEqual('::ffff:4a7d:2b63');
+
+        let value1 = new IPv4("127.0.0.1");
+        let iPv61 = value1.toIPv4MappedIPv6();
+        expect(iPv61.toString()).toEqual('::ffff:7f00:1');
+    })
 });

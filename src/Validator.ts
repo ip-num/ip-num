@@ -3,6 +3,7 @@ import {dottedDecimalNotationToBinaryString} from "./BinaryUtils";
 import * as bigInt from "big-integer";
 import {IPNumType} from "./IPNumType";
 import {hexadectetNotationToBinaryString} from "./IPv6Utils";
+import {expandIPv6Number} from "./IPv6Utils";
 
 export class Validator {
     static IPV4_PATTERN: RegExp = new RegExp(/^(0?[0-9]?[0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.(0?[0-9]?[0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.(0?[0-9]?[0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.(0?[0-9]?[0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])$/);
@@ -23,7 +24,7 @@ export class Validator {
     static invalidOctetRangeMessage = "Value given contains an invalid Octet; Value is less than zero or is greater than 8bit";
     static invalidHexadecatetMessage = "The value given is less than zero or is greater than 16bit";
     static invalidOctetCountMessage = "An IP4 number cannot have less or greater than 4 octets";
-    static invalidHexadecatetCountMessage = "An IP6 number cannot have less or greater than 8 octets";
+    static invalidHexadecatetCountMessage = "An IP6 number must have exactly 8 hexadecatet";
     static invalidSubnetMaskMessage = "The Subnet Mask is invalid";
     static invalidPrefixValueMessage = "A Prefix value cannot be less than 0 or greater than 32";
     static invalidIPv4CidrNotationMessage = "Cidr notation should be in the form [ip number]/[range]";
@@ -144,17 +145,21 @@ export class Validator {
      * contains error message if invalid IPv6
      */
     static isValidIPv6String(ipv6String: string): [boolean, string[]] {
-        let hexadecimals = ipv6String.split(":");
-        if (hexadecimals.length != 8) {
-            return [false, [Validator.invalidHexadecatetCountMessage]]
+        try {
+            let hexadecimals = expandIPv6Number(ipv6String).split(":");
+            if (hexadecimals.length != 8 ) {
+                return [false, [Validator.invalidHexadecatetCountMessage]]
+            }
+
+            let isValid = hexadecimals.every(hexadecimal => {
+                return Validator.isHexadecatet(hexadecimal) ?
+                    Validator.isValidIPv6Hexadecatet(bigInt(parseInt(hexadecimal, 16)))[0] : false;
+            });
+
+            return [isValid, isValid? []: [Validator.invalidHexadecatetMessage]];
+        } catch (error) {
+            return [false, [error]]
         }
-
-        let isValid = hexadecimals.every(hexadecimal => {
-            return Validator.isHexadecatet(hexadecimal) ?
-                Validator.isValidIPv6Hexadecatet(bigInt(parseInt(hexadecimal, 16)))[0] : false;
-        });
-
-        return [isValid, isValid? []: [Validator.invalidHexadecatetMessage]];
     }
 
     /**

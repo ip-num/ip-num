@@ -2,6 +2,7 @@
 import {Validator} from "../src/Validator";
 import * as bigInt from "big-integer";
 import {IPv6} from "../src/IPv6";
+import {IPv4} from "../src";
 
 describe('IPv6: ', () => {
     it('should instantiate by calling constructor', () => {
@@ -53,6 +54,14 @@ describe('IPv6: ', () => {
         expect(hexadecatets[7].toString()).toEqual("67cf");
     });
 
+    it('should instantiate by calling fromIPv4', () => {
+        let iPv6 = IPv6.fromIPv4(new IPv4("127.0.0.1"));
+        expect(iPv6.toString()).toEqual('::ffff:7f00:1');
+
+        let iPv61 = IPv6.fromIPv4(new IPv4("74.125.43.99"));
+        expect(iPv61.toString()).toEqual('::ffff:4a7d:2b63');
+    });
+
     it('should instantiate by calling fromBinaryString', () => {
         let IPv6String = "3ffe:1900:4545:0003:0200:f8ff:fe21:67cf";
 
@@ -84,6 +93,10 @@ describe('IPv6: ', () => {
         let bigIntegerValue = bigInt("1".repeat(128), 2);
         let iPv6 = IPv6.fromBigInteger(bigIntegerValue);
         expect(iPv6.getValue()).toEqual(bigIntegerValue);
+    });
+
+    it('should pad with :: if ', () => {
+
     });
 
     it('should correctly return the next value when nextIPNumber is called', () => {
