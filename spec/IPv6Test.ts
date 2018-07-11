@@ -122,6 +122,11 @@ describe('IPv6: ', () => {
         expect(value.previousIPNumber().hasPrevious()).toBe(false);
     });
 
+    it('toString should prepend with :: if IPv6 value has leading zeros', () => {
+        let iPv6 = new IPv6(bigInt('2130706433'));
+        expect(iPv6.toString().startsWith('::')).toBe(true);
+    });
+
     it('should correctly check equality related operations', () => {
         expect(IPv6.fromBigInteger(bigInt("100")).isLessThan(IPv6.fromBigInteger(bigInt("200")))).toEqual(true);
         expect(IPv6.fromBigInteger(bigInt("200")).isLessThan(IPv6.fromBigInteger(bigInt("100")))).toEqual(false);
