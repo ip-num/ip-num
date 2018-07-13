@@ -4,6 +4,7 @@ import {decimalNumberToBinaryString} from "./BinaryUtils";
 import * as bigInt from "big-integer"
 import {IPNumType} from "./IPNumType";
 import {AbstractIPNum} from "./AbstractIPNum";
+import {parseBinaryStringToBigInteger} from "./BinaryUtils";
 
 /**
  * Represents an Autonomous System Number. Which is a number that is used to identify
@@ -47,11 +48,25 @@ export class Asn extends AbstractIPNum implements IPNumber {
      * A convenience method for creating an instance of {@link Asn} from a numeric value
      *
      * @param {number} rawValue the asn numeric value
-     * @returns {Asn} he constructed ASN instance
+     * @returns {Asn} the constructed ASN instance
      */
     static fromNumber(rawValue:number):Asn {
         return new Asn(rawValue);
     };
+
+    /**
+     * A convenience method for creating an instance of {@link Asn} from a binary string
+     *
+     * @param {string} binaryString to create an ASN instance from
+     * @returns {Asn} the constructed ASN instance
+     */
+    static fromBinaryString(binaryString: string): Asn {
+        if (/^([10])+$/.test(binaryString)) {
+            return new Asn(parseInt(binaryString, 2))
+        } else {
+            throw Error("binary string should contain only contiguous 1s and 0s")
+        }
+    }
 
     /**
      * Constructor for an instance of {@link ASN}
