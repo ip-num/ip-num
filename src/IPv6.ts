@@ -82,8 +82,13 @@ export class IPv6 extends AbstractIPNum implements IPNumber {
      * @returns {IPv6} the IPv6 instance
      */
     static fromBinaryString(ipBinaryString: string) : IPv6 {
-        let paddedBinaryString = leftPadWithZeroBit(ipBinaryString, 128);
-        return new IPv6(parseBinaryStringToBigInteger(paddedBinaryString));
+        let validationResult = Validator.isValidBinaryString(ipBinaryString);
+        if (validationResult[0]) {
+            let paddedBinaryString = leftPadWithZeroBit(ipBinaryString, 128);
+            return new IPv6(parseBinaryStringToBigInteger(paddedBinaryString));
+        } else {
+            throw Error(validationResult[1].join(','))
+        }
     }
 
     /**

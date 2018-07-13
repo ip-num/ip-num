@@ -91,6 +91,12 @@ describe('IPv6: ', () => {
         expect(hexadecatets[7].toString()).toEqual("67cf");
     });
 
+    it('should not instantiate IPv6 when passed invalid binary string', () => {
+        expect(() => {
+            IPv6.fromBinaryString("111 10");
+        }).toThrowError(Error, 'Binary string should contain only contiguous 1s and 0s');
+    });
+
     it('should throw an exception when invalid IPv6 string is used to construct an IPv6 instance', function() {
         expect(() => {
             IPv6.fromHexadecimalString("3ffe:1900:4545:0003:0200");

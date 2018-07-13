@@ -40,16 +40,16 @@ describe('ASN', () => {
     it('should throw an exception when passed invalid binary string', () => {
         expect(() => {
             Asn.fromBinaryString("132");
-        }).toThrowError(Error, 'binary string should contain only contiguous 1s and 0s');
+        }).toThrowError(Error, 'Binary string should contain only contiguous 1s and 0s');
         expect(() => {
             Asn.fromBinaryString("1x2");
-        }).toThrowError(Error, 'binary string should contain only contiguous 1s and 0s');
+        }).toThrowError(Error, 'Binary string should contain only contiguous 1s and 0s');
         expect(() => {
             Asn.fromBinaryString(" 10");
-        }).toThrowError(Error, 'binary string should contain only contiguous 1s and 0s');
+        }).toThrowError(Error, 'Binary string should contain only contiguous 1s and 0s');
         expect(() => {
             Asn.fromBinaryString("10 1");
-        }).toThrowError(Error, 'binary string should contain only contiguous 1s and 0s');
+        }).toThrowError(Error, 'Binary string should contain only contiguous 1s and 0s');
     });
     it('should correctly parse to string value', () => {
         expect(Asn.fromNumber(1234).toString()).toEqual("AS1234");

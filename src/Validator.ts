@@ -32,6 +32,7 @@ export class Validator {
     static takeOutOfRangeSizeMessage = "$count is greater than $size, the size of the range";
     static cannotSplitSingleRangeErrorMessage = "Cannot split an IP range with a single IP number";
     static invalidInetNumType = "Given ipNumType must be either InetNumType.IPv4 or InetNumType.IPv6";
+    static invalidBinaryStringErrorMessage = "Binary string should contain only contiguous 1s and 0s";
 
     /**
      * Checks if given ipNumber is in between the given lower and upper bound
@@ -250,6 +251,20 @@ export class Validator {
     static isValidIPv6CidrNotation(ipv6RangeAsCidrString: string): [boolean, string[]] {
         let isValid = Validator.IPV6_RANGE_PATTERN.test(ipv6RangeAsCidrString);
         return isValid ? [isValid, []]: [isValid, [Validator.invalidIPv6CidrNotationString]];
+    }
+
+    /**
+     * Checks if the given string is a binary string. That is contains only contiguous 1s and 0s
+     *
+     * @param {string} binaryString the binary string
+     * @returns {(boolean|string)[]} a tuple representing if valid or not and corresponding message
+     */
+    static isValidBinaryString(binaryString: string): [boolean, string[]] {
+        if (/^([10])+$/.test(binaryString)) {
+            return [true, []]
+        } else {
+            return [false, [Validator.invalidBinaryStringErrorMessage]]
+        }
     }
 
     private static isNumeric(value: string): boolean {

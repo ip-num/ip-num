@@ -19,10 +19,16 @@ describe('IPv4: ', () => {
         expect(IPv4.fromDecimalDottedString("111.222.90.45").toString()).toEqual("111.222.90.45");
     });
 
-    it('should instantiate by passing binary string', () => {
+    it('should instantiate IPv4 by passing binary string', () => {
         let testIPv4String = "111.222.90.45";
         let createdIPv4 = IPv4.fromBinaryString(new IPv4(testIPv4String).toBinaryString());
         expect(createdIPv4.toString()).toEqual("111.222.90.45");
+    });
+
+    it('should not instantiate IPv4 when passed invalid binary string', () => {
+        expect(() => {
+            IPv4.fromBinaryString("111 10");
+        }).toThrowError(Error, 'Binary string should contain only contiguous 1s and 0s');
     });
 
     it('should correctly check equality related operations', () => {

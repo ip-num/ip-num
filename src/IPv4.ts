@@ -79,7 +79,12 @@ export class IPv4 extends AbstractIPNum implements IPNumber {
      * @returns {IPv4} the IPv4 instance
      */
     static fromBinaryString(ipBinaryString: string) : IPv4 {
-        return new IPv4(parseBinaryStringToBigInteger(ipBinaryString));
+        let validationResult = Validator.isValidBinaryString(ipBinaryString);
+        if (validationResult[0]) {
+            return new IPv4(parseBinaryStringToBigInteger(ipBinaryString));
+        } else {
+            throw Error(validationResult[1].join(','))
+        }
     }
 
     /**

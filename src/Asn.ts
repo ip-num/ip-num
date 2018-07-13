@@ -61,10 +61,11 @@ export class Asn extends AbstractIPNum implements IPNumber {
      * @returns {Asn} the constructed ASN instance
      */
     static fromBinaryString(binaryString: string): Asn {
-        if (/^([10])+$/.test(binaryString)) {
+        let validationResult = Validator.isValidBinaryString(binaryString);
+        if (validationResult[0]) {
             return new Asn(parseInt(binaryString, 2))
         } else {
-            throw Error("binary string should contain only contiguous 1s and 0s")
+            throw Error(validationResult[1].join(','))
         }
     }
 
