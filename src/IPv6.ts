@@ -86,14 +86,25 @@ export class IPv6 extends AbstractIPNum implements IPNumber {
         return new IPv6(parseBinaryStringToBigInteger(paddedBinaryString));
     }
 
-
     /**
-     * A convenience method for creating an IPv4-Compatible {@link IPv6} Address
+     * A convenience method for creating an IPv4-Compatible {@link IPv6} Address from an instance of {@link IPv4}
+     *
      * @param {IPv4} ipv4 to create an IPv4-Compatible {@link IPv6} Address
      * @returns {IPv6} the IPv4-Compatible {@link IPv6} Address
      */
     static fromIPv4(ipv4: IPv4): IPv6 {
         return ipv4.toIPv4MappedIPv6();
+    }
+
+    /**
+     * A convenience method for creating an IPv4-Compatible {@link IPv6} Address from a IPv4 represented in
+     * dot-decimal notation i.e. 127.0.0.1
+     *
+     * @param {IPv4} ipv4 string represented in a dot decimal string
+     * @returns {IPv6} the IPv4-Compatible {@link IPv6} Address
+     */
+    static fromIPv4DotDecimalString(ip4DotDecimalString: string): IPv6 {
+        return new IPv4(ip4DotDecimalString).toIPv4MappedIPv6();
     }
 
     /**

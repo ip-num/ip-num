@@ -62,6 +62,14 @@ describe('IPv6: ', () => {
         expect(iPv61.toString()).toEqual('::ffff:4a7d:2b63');
     });
 
+    it('should instantiate by calling fromIPv4DotDecimalString', () => {
+        let iPv6 = IPv6.fromIPv4DotDecimalString("127.0.0.1");
+        expect(iPv6.toString()).toEqual('::ffff:7f00:1');
+
+        let iPv61 = IPv6.fromIPv4DotDecimalString("74.125.43.99");
+        expect(iPv61.toString()).toEqual('::ffff:4a7d:2b63');
+    });
+
     it('should instantiate by calling fromBinaryString', () => {
         let IPv6String = "3ffe:1900:4545:0003:0200:f8ff:fe21:67cf";
 
