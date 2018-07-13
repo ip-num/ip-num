@@ -303,9 +303,9 @@ let iPv6Subnet = new IPv6Subnet("ffff:ffff:ffff:ffff:ffff:ffff:0:0");
 See the [Subnet documentation](https://ip-num.github.io/ip-num/modules/_subnet_.html) for more information
 
 ### IPv4-Mapped IPv6 Address Support
-IPv4-Compatible IPv6 Address allows embedding an IPv4 address within an IPv6 address. See [IPv6 Addresses with Embedded IPv4 Addresses](https://tools.ietf.org/html/rfc4291#section-2.5.5)
+IPv4-Mapped IPv6 Address IPv6 allows embedding an IPv4 address within an IPv6 address. See [IPv6 Addresses with Embedded IPv4 Addresses](https://tools.ietf.org/html/rfc4291#section-2.5.5)
 
-`ip-num` offers various ways to create an IPv4-Compatible IPv6 Address:
+`ip-num` offers various ways to create an IPv4-Mapped IPv6 Address:
 
 ##### Converting from an existing IPv4
 

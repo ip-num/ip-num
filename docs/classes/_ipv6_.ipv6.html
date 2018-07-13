@@ -150,7 +150,10 @@
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_ipv6_.ipv6.html#tobinarystring" class="tsd-kind-icon">to<wbr>Binary<wbr>String</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_ipv6_.ipv6.html#tostring" class="tsd-kind-icon">to<wbr>String</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_ipv6_.ipv6.html#frombiginteger" class="tsd-kind-icon">from<wbr>Big<wbr>Integer</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_ipv6_.ipv6.html#frombinarystring" class="tsd-kind-icon">from<wbr>Binary<wbr>String</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_ipv6_.ipv6.html#fromhexadecimalstring" class="tsd-kind-icon">from<wbr>Hexadecimal<wbr>String</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_ipv6_.ipv6.html#fromipv4" class="tsd-kind-icon">fromIPv4</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_ipv6_.ipv6.html#fromipv4dotdecimalstring" class="tsd-kind-icon">fromIPv4<wbr>Dot<wbr>Decimal<wbr>String</a></li>
 							</ul>
 						</section>
 					</div>
@@ -168,7 +171,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/ea16949/src/IPv6.ts#L73">IPv6.ts:73</a></li>
+									<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/56b6c9d/src/IPv6.ts#L113">IPv6.ts:113</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -202,7 +205,7 @@
 					<aside class="tsd-sources">
 						<p>Overrides <a href="_abstractipnum_.abstractipnum.html">AbstractIPNum</a>.<a href="_abstractipnum_.abstractipnum.html#bitsize">bitSize</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/ea16949/src/IPv6.ts#L28">IPv6.ts:28</a></li>
+							<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/56b6c9d/src/IPv6.ts#L31">IPv6.ts:31</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -217,7 +220,7 @@
 					<div class="tsd-signature tsd-kind-icon">hexadecatet<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><a href="_hexadecatet_.hexadecatet.html" class="tsd-signature-type">Hexadecatet</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> =&nbsp;[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/ea16949/src/IPv6.ts#L43">IPv6.ts:43</a></li>
+							<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/56b6c9d/src/IPv6.ts#L46">IPv6.ts:46</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -238,7 +241,7 @@
 					<aside class="tsd-sources">
 						<p>Overrides <a href="_abstractipnum_.abstractipnum.html">AbstractIPNum</a>.<a href="_abstractipnum_.abstractipnum.html#maximumbitsize">maximumBitSize</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/ea16949/src/IPv6.ts#L32">IPv6.ts:32</a></li>
+							<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/56b6c9d/src/IPv6.ts#L35">IPv6.ts:35</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -253,7 +256,7 @@
 					<div class="tsd-signature tsd-kind-icon">separator<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;:&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/ea16949/src/IPv6.ts#L50">IPv6.ts:50</a></li>
+							<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/56b6c9d/src/IPv6.ts#L53">IPv6.ts:53</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -270,11 +273,11 @@
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="type" class="tsd-anchor"></a>
 					<h3>type</h3>
-					<div class="tsd-signature tsd-kind-icon">type<span class="tsd-signature-symbol">:</span> <a href="../enums/_ipnumtype_.ipnumtype.html" class="tsd-signature-type">IPNumType</a><span class="tsd-signature-symbol"> =&nbsp;IPNumType.IPv6</span></div>
+					<div class="tsd-signature tsd-kind-icon">type<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">IPNumType.ASN</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">IPNumType.IPv4</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">IPNumType.IPv6</span><span class="tsd-signature-symbol"> =&nbsp;IPNumType.IPv6</span></div>
 					<aside class="tsd-sources">
 						<p>Implementation of <a href="../interfaces/_interface_ipnumber_.ipnumber.html">IPNumber</a>.<a href="../interfaces/_interface_ipnumber_.ipnumber.html#type">type</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/ea16949/src/IPv6.ts#L37">IPv6.ts:37</a></li>
+							<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/56b6c9d/src/IPv6.ts#L40">IPv6.ts:40</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -296,7 +299,7 @@
 						<p>Implementation of <a href="../interfaces/_interface_ipnumber_.ipnumber.html">IPNumber</a>.<a href="../interfaces/_interface_ipnumber_.ipnumber.html#value">value</a></p>
 						<p>Overrides <a href="_abstractipnum_.abstractipnum.html">AbstractIPNum</a>.<a href="_abstractipnum_.abstractipnum.html#value">value</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/ea16949/src/IPv6.ts#L24">IPv6.ts:24</a></li>
+							<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/56b6c9d/src/IPv6.ts#L27">IPv6.ts:27</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -318,7 +321,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/ea16949/src/IPv6.ts#L157">IPv6.ts:157</a></li>
+									<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/56b6c9d/src/IPv6.ts#L202">IPv6.ts:202</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -341,7 +344,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/ea16949/src/IPv6.ts#L133">IPv6.ts:133</a></li>
+									<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/56b6c9d/src/IPv6.ts#L178">IPv6.ts:178</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -364,7 +367,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/ea16949/src/IPv6.ts#L143">IPv6.ts:143</a></li>
+									<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/56b6c9d/src/IPv6.ts#L188">IPv6.ts:188</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -387,7 +390,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/ea16949/src/IPv6.ts#L111">IPv6.ts:111</a></li>
+									<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/56b6c9d/src/IPv6.ts#L156">IPv6.ts:156</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -412,7 +415,7 @@
 								<p>Implementation of <a href="../interfaces/_interface_ipnumber_.ipnumber.html">IPNumber</a>.<a href="../interfaces/_interface_ipnumber_.ipnumber.html#getvalue">getValue</a></p>
 								<p>Inherited from <a href="_abstractipnum_.abstractipnum.html">AbstractIPNum</a>.<a href="_abstractipnum_.abstractipnum.html#getvalue">getValue</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/ea16949/src/AbstractIPNum.ts#L26">AbstractIPNum.ts:26</a></li>
+									<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/56b6c9d/src/AbstractIPNum.ts#L26">AbstractIPNum.ts:26</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -437,7 +440,7 @@
 								<p>Implementation of <a href="../interfaces/_interface_ipnumber_.ipnumber.html">IPNumber</a>.<a href="../interfaces/_interface_ipnumber_.ipnumber.html#hasnext">hasNext</a></p>
 								<p>Inherited from <a href="_abstractipnum_.abstractipnum.html">AbstractIPNum</a>.<a href="_abstractipnum_.abstractipnum.html#hasnext">hasNext</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/ea16949/src/AbstractIPNum.ts#L43">AbstractIPNum.ts:43</a></li>
+									<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/56b6c9d/src/AbstractIPNum.ts#L43">AbstractIPNum.ts:43</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -462,7 +465,7 @@
 								<p>Implementation of <a href="../interfaces/_interface_ipnumber_.ipnumber.html">IPNumber</a>.<a href="../interfaces/_interface_ipnumber_.ipnumber.html#hasprevious">hasPrevious</a></p>
 								<p>Inherited from <a href="_abstractipnum_.abstractipnum.html">AbstractIPNum</a>.<a href="_abstractipnum_.abstractipnum.html#hasprevious">hasPrevious</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/ea16949/src/AbstractIPNum.ts#L51">AbstractIPNum.ts:51</a></li>
+									<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/56b6c9d/src/AbstractIPNum.ts#L51">AbstractIPNum.ts:51</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -486,7 +489,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_abstractipnum_.abstractipnum.html">AbstractIPNum</a>.<a href="_abstractipnum_.abstractipnum.html#isequals">isEquals</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/ea16949/src/AbstractIPNum.ts#L61">AbstractIPNum.ts:61</a></li>
+									<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/56b6c9d/src/AbstractIPNum.ts#L61">AbstractIPNum.ts:61</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -519,7 +522,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_abstractipnum_.abstractipnum.html">AbstractIPNum</a>.<a href="_abstractipnum_.abstractipnum.html#isgreaterthan">isGreaterThan</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/ea16949/src/AbstractIPNum.ts#L81">AbstractIPNum.ts:81</a></li>
+									<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/56b6c9d/src/AbstractIPNum.ts#L81">AbstractIPNum.ts:81</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -552,7 +555,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_abstractipnum_.abstractipnum.html">AbstractIPNum</a>.<a href="_abstractipnum_.abstractipnum.html#isgreaterthanorequals">isGreaterThanOrEquals</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/ea16949/src/AbstractIPNum.ts#L102">AbstractIPNum.ts:102</a></li>
+									<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/56b6c9d/src/AbstractIPNum.ts#L102">AbstractIPNum.ts:102</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -586,7 +589,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_abstractipnum_.abstractipnum.html">AbstractIPNum</a>.<a href="_abstractipnum_.abstractipnum.html#islessthan">isLessThan</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/ea16949/src/AbstractIPNum.ts#L71">AbstractIPNum.ts:71</a></li>
+									<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/56b6c9d/src/AbstractIPNum.ts#L71">AbstractIPNum.ts:71</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -619,7 +622,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_abstractipnum_.abstractipnum.html">AbstractIPNum</a>.<a href="_abstractipnum_.abstractipnum.html#islessthanorequals">isLessThanOrEquals</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/ea16949/src/AbstractIPNum.ts#L91">AbstractIPNum.ts:91</a></li>
+									<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/56b6c9d/src/AbstractIPNum.ts#L91">AbstractIPNum.ts:91</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -652,7 +655,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/_interface_ipnumber_.ipnumber.html">IPNumber</a>.<a href="../interfaces/_interface_ipnumber_.ipnumber.html#nextipnumber">nextIPNumber</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/ea16949/src/IPv6.ts#L120">IPv6.ts:120</a></li>
+									<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/56b6c9d/src/IPv6.ts#L165">IPv6.ts:165</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -676,7 +679,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/_interface_ipnumber_.ipnumber.html">IPNumber</a>.<a href="../interfaces/_interface_ipnumber_.ipnumber.html#previousipnumber">previousIPNumber</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/ea16949/src/IPv6.ts#L129">IPv6.ts:129</a></li>
+									<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/56b6c9d/src/IPv6.ts#L174">IPv6.ts:174</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -700,7 +703,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_abstractipnum_.abstractipnum.html">AbstractIPNum</a>.<a href="_abstractipnum_.abstractipnum.html#tobinarystring">toBinaryString</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/ea16949/src/AbstractIPNum.ts#L35">AbstractIPNum.ts:35</a></li>
+									<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/56b6c9d/src/AbstractIPNum.ts#L35">AbstractIPNum.ts:35</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -724,7 +727,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/_interface_ipnumber_.ipnumber.html">IPNumber</a>.<a href="../interfaces/_interface_ipnumber_.ipnumber.html#tostring">toString</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/ea16949/src/IPv6.ts#L101">IPv6.ts:101</a></li>
+									<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/56b6c9d/src/IPv6.ts#L141">IPv6.ts:141</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -747,7 +750,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/ea16949/src/IPv6.ts#L58">IPv6.ts:58</a></li>
+									<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/56b6c9d/src/IPv6.ts#L61">IPv6.ts:61</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -770,6 +773,38 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
+					<a name="frombinarystring" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> from<wbr>Binary<wbr>String</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
+						<li class="tsd-signature tsd-kind-icon">from<wbr>Binary<wbr>String<span class="tsd-signature-symbol">(</span>ipBinaryString<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_ipv6_.ipv6.html" class="tsd-signature-type">IPv6</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/56b6c9d/src/IPv6.ts#L84">IPv6.ts:84</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>A convenience method for creating an <a href="_ipv6_.ipv6.html">IPv6</a> from binary string</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>ipBinaryString: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the binary string representing the IPv6 number to be created</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="_ipv6_.ipv6.html" class="tsd-signature-type">IPv6</a></h4>
+							<p>the IPv6 instance</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
 					<a name="fromhexadecimalstring" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> from<wbr>Hexadecimal<wbr>String</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
@@ -779,7 +814,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/ea16949/src/IPv6.ts#L71">IPv6.ts:71</a></li>
+									<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/56b6c9d/src/IPv6.ts#L74">IPv6.ts:74</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -803,6 +838,71 @@
 						</li>
 					</ul>
 				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
+					<a name="fromipv4" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> fromIPv4</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
+						<li class="tsd-signature tsd-kind-icon">fromIPv4<span class="tsd-signature-symbol">(</span>ipv4<span class="tsd-signature-symbol">: </span><a href="_ipv4_.ipv4.html" class="tsd-signature-type">IPv4</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_ipv6_.ipv6.html" class="tsd-signature-type">IPv6</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/56b6c9d/src/IPv6.ts#L100">IPv6.ts:100</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>A convenience method for creating an IPv4-Compatible <a href="_ipv6_.ipv6.html">IPv6</a> Address from an instance of <a href="../enums/_ipnumtype_.ipnumtype.html#ipv4">IPv4</a></p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>ipv4: <a href="_ipv4_.ipv4.html" class="tsd-signature-type">IPv4</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>to create an IPv4-Compatible <a href="_ipv6_.ipv6.html">IPv6</a> Address</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="_ipv6_.ipv6.html" class="tsd-signature-type">IPv6</a></h4>
+							<p>the IPv4-Compatible <a href="_ipv6_.ipv6.html">IPv6</a> Address</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
+					<a name="fromipv4dotdecimalstring" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> fromIPv4<wbr>Dot<wbr>Decimal<wbr>String</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
+						<li class="tsd-signature tsd-kind-icon">fromIPv4<wbr>Dot<wbr>Decimal<wbr>String<span class="tsd-signature-symbol">(</span>ip4DotDecimalString<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_ipv6_.ipv6.html" class="tsd-signature-type">IPv6</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/56b6c9d/src/IPv6.ts#L111">IPv6.ts:111</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>A convenience method for creating an IPv4-Compatible <a href="_ipv6_.ipv6.html">IPv6</a> Address from a IPv4 represented in
+									dot-decimal notation i.e. 127.0.0.1</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>ip4DotDecimalString: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>string represented in a dot decimal string</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="_ipv6_.ipv6.html" class="tsd-signature-type">IPv6</a></h4>
+							<p>the IPv4-Compatible <a href="_ipv6_.ipv6.html">IPv6</a> Address</p>
+						</li>
+					</ul>
+				</section>
 			</section>
 		</div>
 		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
@@ -810,6 +910,9 @@
 				<ul>
 					<li class="globals  ">
 						<a href="../globals.html"><em>Globals</em></a>
+					</li>
+					<li class="label tsd-is-external">
+						<span>Internals</span>
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="../modules/_abstractipnum_.html">"<wbr>AbstractIPNum"</a>
@@ -859,10 +962,13 @@
 					<li class=" tsd-kind-external-module">
 						<a href="../modules/_index_.html">"index"</a>
 					</li>
-					<li class=" tsd-kind-external-module">
+					<li class="label tsd-is-external">
+						<span>Externals</span>
+					</li>
+					<li class=" tsd-kind-external-module tsd-is-external">
 						<a href="../modules/_interface_ipnumber_.html">"interface/IPNumber"</a>
 					</li>
-					<li class=" tsd-kind-external-module">
+					<li class=" tsd-kind-external-module tsd-is-external">
 						<a href="../modules/_interface_iprange_.html">"interface/IPRange"</a>
 					</li>
 				</ul>
@@ -947,7 +1053,16 @@
 								<a href="_ipv6_.ipv6.html#frombiginteger" class="tsd-kind-icon">from<wbr>Big<wbr>Integer</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
+								<a href="_ipv6_.ipv6.html#frombinarystring" class="tsd-kind-icon">from<wbr>Binary<wbr>String</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
 								<a href="_ipv6_.ipv6.html#fromhexadecimalstring" class="tsd-kind-icon">from<wbr>Hexadecimal<wbr>String</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
+								<a href="_ipv6_.ipv6.html#fromipv4" class="tsd-kind-icon">fromIPv4</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
+								<a href="_ipv6_.ipv6.html#fromipv4dotdecimalstring" class="tsd-kind-icon">fromIPv4<wbr>Dot<wbr>Decimal<wbr>String</a>
 							</li>
 						</ul>
 					</li>

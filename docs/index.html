@@ -77,6 +77,7 @@
 				<h3 id="node-js">Node.js</h3>
 				<p>If you want to use <code>ip-num</code> from within a Node.js environment, you can install it via <a href="https://npmjs.org/">npm</a>.</p>
 				<p><code>npm install ip-num</code></p>
+				<p><code>ip-num</code> is tested against version 7 - and upwards - of NodeJs.</p>
 				<h3 id="browser">Browser</h3>
 				<p>If you are using a browser, you can include <code>ip-num</code> by linking to it or download it from GitHub</p>
 				<p><code>&lt;script src=&quot;https://ip-num.github.io/ip-num/ip-num.js&quot;&gt;&lt;/script&gt;</code></p>
@@ -98,14 +99,12 @@ How you get access to the above, depends on the module loading mechanism being u
 ### ES module with TypeScript
 
 Import what you need from `ip-num` and use away
-
 </code></pre>
 				<p>import { Asn } from &quot;ip-num/Asn&quot;;
 					import { IPv4 } from &quot;ip-num/IPv4&quot;;
 				import { IPv6 } from &quot;ip-num/IPv6&quot;;</p>
 				<pre><code>
 You can <span class="hljs-keyword">then</span> make <span class="hljs-keyword">use</span> <span class="hljs-keyword">of</span> the imported <span class="hljs-keyword">module</span> <span class="hljs-keyword">in</span> your TypeScript code
-
 </code></pre><p>let asn = new Asn(65546);
 				asn.toBinaryString() //10000000000001010</p>
 				<p>let ipv4 = new IPv4(&quot;74.125.43.99&quot;);
@@ -118,13 +117,11 @@ You can <span class="hljs-keyword">then</span> make <span class="hljs-keyword">u
 All external modules <span class="hljs-keyword">in</span> `ip-<span class="hljs-built_in">num</span>` are exported <span class="hljs-keyword">and</span> made available via <span class="hljs-keyword">the</span> <span class="hljs-built_in">global</span> <span class="hljs-title">_ip-num</span>_ module. So you can `<span class="hljs-built_in">require</span>
 (<span class="hljs-string">'ip-num'</span>)` <span class="hljs-keyword">and</span> <span class="hljs-keyword">then</span> access <span class="hljs-keyword">the</span> module you want <span class="hljs-built_in">to</span> use <span class="hljs-keyword">in</span> your application, <span class="hljs-keyword">or</span> access <span class="hljs-keyword">the</span> module <span class="hljs-keyword">in</span> <span class="hljs-literal">one</span> go, <span class="hljs-keyword">while</span> 
 requiring; <span class="hljs-keyword">as</span> shown below:
-
 </code></pre><p>const Asn = require(&quot;ip-num&quot;).Asn;
 					const IPv4 = require(&quot;ip-num&quot;).IPv4;
 				const IPv6 = require(&quot;ip-num&quot;).IPv6;</p>
 				<pre><code>
 The imported <span class="hljs-keyword">module</span> can <span class="hljs-keyword">then</span> be used:
-
 </code></pre><p>let asn = new Asn(65546);
 				asn.toBinaryString() //10000000000001010</p>
 				<p>let ipv4 = new IPv4(&quot;74.125.43.99&quot;);
@@ -136,7 +133,6 @@ The imported <span class="hljs-keyword">module</span> can <span class="hljs-keyw
 
 Including the `ip-num` library via the<span class="hljs-built_in"> script </span>tag <span class="hljs-keyword">in</span> the browser exposes `ipnum` variable <span class="hljs-keyword">from</span> which you can access 
 the modules exposes by the library.
-
 </code></pre><p><script src="https://ip-num.github.io/ip-num/ip-num.js"></script>
 					........
 					let asn = new ipnum.Asn(65546);
@@ -165,7 +161,8 @@ values that needs to be worked with when dealing with IP numbers can exceed the 
 					let asA = Asn.fromNumber(1234) // using the fromNumber factory method to create an instance from number
 					let asB Asn.fromString(&quot;AS1234&quot;) // using the fromString factory method to create an instance from string
 					let asC = Asn.fromString(&quot;1234&quot;) // string without the &quot;AS&quot; prefix is also supported
-				let asD = Asn.fromString(&quot;1.10&quot;) // string in asdot+ format is also supported</p>
+					let asD = Asn.fromString(&quot;1.10&quot;) // string in asdot+ format is also supported
+				let asE = Asn.fromBinaryString(&#39;1111&#39;) // using the fromBinaryString to create an instance from binary string</p>
 				<p>// converting between different ASN string representations
 					Asn.fromNumber(65526).toASDotPlus() // will give &quot;0.65526&quot;
 					Asn.fromNumber(65546).toASDot() // will give &quot;1.10&quot;
@@ -183,7 +180,8 @@ See the [<span class="hljs-string">ASN documentation</span>](<span class="hljs-l
 				<p>// creating
 					let firstIPv4 = new IPv4(&quot;74.125.43.99&quot;) // Creating an instance using the constructor
 					let secondIPv4 = IPv4.fromBigInteger(bigInt(&quot;1876843053&quot;)) // Using the fromBigInteger convenience method
-				let thirdIPv4 = IPv4.fromDecimalDottedString(&quot;111.222.90.45&quot;) // Using the fromDecimalDottedString convenience method</p>
+					let thirdIPv4 = IPv4.fromDecimalDottedString(&quot;111.222.90.45&quot;) // Using the fromDecimalDottedString convenience method
+				let fourthIPv4 = IPv4.fromBinaryString(&quot;01001010011111010010101101100011&quot;) // using the fromBinaryString convenience method</p>
 				<p>// converting an IPv4 instance to binary string representation
 				firstIPv4.toBinaryString() // will be 01001010011111010010101101100011</p>
 				<p>// comparing IPV4
@@ -198,7 +196,8 @@ See the [<span class="hljs-string">IPv4 documentation</span>](<span class="hljs-
 				<p>// creating
 					let firstIPv6 = new IPv6(&quot;ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff&quot;) // Creating an instance using the constructor
 					let secondIPv6 = IPv6.fromBigInteger(bigInt(&quot;100&quot;)) // Using the fromBigInteger convenience method
-				let thirdIPv6 = IPv6.fromHexadecimalString(&quot;&quot;::&quot;) // Using the fromDecimalDottedString convenience method. Not abbreviated representation of IPv6 string is supported</p>
+					let thirdIPv6 = IPv6.fromHexadecimalString(&quot;&quot;::&quot;) // Using the fromDecimalDottedString convenience method. Not abbreviated representation of IPv6 string is supported
+				let fourthIPv6 = IPv6.fromBinaryString(&quot;01001010011111010010101101100011&quot;) // using the fromBinaryString convenience method</p>
 				<p>// converting an IPv6 instance to binary string representation
 				firstIPv6.toBinaryString() // will be 11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111</p>
 				<p>// comparing IPV6
@@ -241,7 +240,6 @@ See <span class="hljs-keyword">the</span> [IPv6Range documentation](<span class=
 <span class="hljs-comment">### IPNumber and IPRange interfaces</span>
 When working <span class="hljs-keyword">in</span> TypeScript, you have <span class="hljs-keyword">the</span> ability <span class="hljs-built_in">to</span> abstract ASN, IPv4 <span class="hljs-keyword">and</span> IPv6 <span class="hljs-keyword">as</span> <span class="hljs-keyword">an</span> IPNumber, <span class="hljs-keyword">and</span> IPv4Range <span class="hljs-keyword">and</span> 
 IPv6Range <span class="hljs-keyword">as</span> IPRange
-
 </code></pre><p>// representing ASN, IPv4 and IPv6 with the IPNumber interface
 					let ipNumbers: IPNumber[] = [];
 					ipNumbers.push(new Asn(&quot;200&quot;));
@@ -277,27 +275,44 @@ followed by contiguous off bits (<span class="hljs-number">0</span><span class="
 IPv4Subnet <span class="hljs-keyword">and</span> IPv6Subnet. <span class="hljs-keyword">For</span> example:
 
 The following code will throw an exception:
-
 </code></pre><p>import {IPv4Subnet} from &#39;ip-num/IPv4Subnet&#39;
 				import {IPv4Subnet} from &#39;ip-num/IPv4Subnet&#39;</p>
 				<p>let ipv4Subnet = new IPv4Subnet(&quot;10.255.10.3&quot;);
 				let ipv6Subnet = new IPv6Subnet(&quot;3ffe:1900:4545:0003:0200:f8ff:fe21:67cf&quot;);</p>
 				<pre><code>
 <span class="hljs-keyword">While</span> the following <span class="hljs-built_in">code</span> works fine:
-
 </code></pre><p>import {IPv4Subnet} from &#39;ip-num/Subnet&#39;
 				import {IPv6Subnet} from &#39;ip-num/Subnet&#39;</p>
 				<p>let iPv4Subnet = new IPv4Subnet(&quot;255.0.0.0&quot;);
 				let iPv6Subnet = new IPv6Subnet(&quot;ffff:ffff:ffff:ffff:ffff:ffff:0:0&quot;);</p>
-				<pre><code>See the [Subnet documentation](https:<span class="hljs-comment">//ip-num.github.io/ip-num/modules/_subnet_.html) for more information</span>
+				<pre><code>See the [<span class="hljs-string">Subnet documentation</span>](<span class="hljs-link">https://ip-num.github.io/ip-num/modules/_subnet_.html</span>) for more information
 
-### Validation and Utilities
+<span class="hljs-section">### IPv4-Mapped IPv6 Address Support</span>
+IPv4-Compatible IPv6 Address allows embedding an IPv4 address within an IPv6 address. See [<span class="hljs-string">IPv6 Addresses with Embedded IPv4 Addresses</span>](<span class="hljs-link">https://tools.ietf.org/html/rfc4291#section-2.5.5</span>)
 
-Various validation are exposed via the `Validator` <span class="hljs-keyword">module</span>.  `ip-num` also provide various utility operations. These 
-utility operations can be found <span class="hljs-keyword">in</span> `BinaryUtils`, `IPv6Utils`, and `HexadecimalUtils`.
+<span class="hljs-code">`ip-num`</span> offers various ways to create an IPv4-Compatible IPv6 Address:
 
-For example to expand and collapse IPv6 numbers:
+<span class="hljs-section">##### Converting from an existing IPv4</span>
+</code></pre><p>import { IPv4 } from &quot;ip-num/IPv4&quot;;</p>
+				<p>let ipv4 = new IPv4(&quot;74.125.43.99&quot;)
+				ipv4.toIPv4MappedIPv6().toString() // produces ::ffff:4a7d:2b63</p>
+				<pre><code>
+##### <span class="hljs-keyword">From</span> an existing IPv4 <span class="hljs-keyword">using</span> convenience <span class="hljs-function"><span class="hljs-keyword">method</span> <span class="hljs-title">on</span> <span class="hljs-title">IPv6</span></span>
+</code></pre><p>import { IPv6 } from &quot;ip-num/IPv6&quot;;</p>
+				<p>let ipv6 = IPv6.fromIPv4(new IPv4(&quot;74.125.43.99&quot;))
+				ipv6.toString() // produces ::ffff:4a7d:2b63</p>
+				<pre><code>
+##### <span class="hljs-keyword">From</span> dot-decimal notation <span class="hljs-keyword">using</span> convenience <span class="hljs-function"><span class="hljs-keyword">method</span> <span class="hljs-title">on</span> <span class="hljs-title">IPv6</span></span>
+</code></pre><p>import { IPv6 } from &quot;ip-num/IPv6&quot;;</p>
+				<p>let ipv6 = IPv6.fromIPv4DotDecimalString(&quot;74.125.43.99&quot;)
+				ipv6.toString() // produces ::ffff:4a7d:2b63</p>
+				<pre><code>
+<span class="hljs-comment">### Validation and Utilities</span>
 
+Various validation are exposed via the `Validator` module.  `ip-num` also provide various utility operations. These 
+utility operations can be found <span class="hljs-keyword">in</span> `BinaryUtils`, `IPv6Utils`, <span class="hljs-keyword">and</span> `HexadecimalUtils`.
+
+<span class="hljs-keyword">For</span> example <span class="hljs-keyword">to</span> expand <span class="hljs-keyword">and</span> collapse<span class="hljs-built_in"> IPv6 </span>numbers:
 </code></pre><p>import {IPv6Utils} from &#39;ip-num/IPv6Utils&#39;</p>
 				<p>// expanding
 					IPv6Utils.expandIPv6Number(&quot;::&quot;) // Expands to 0000:0000:0000:0000:0000:0000:0000:0000
@@ -307,13 +322,12 @@ For example to expand and collapse IPv6 numbers:
 				IPv6Utils.collapseIPv6Number(&quot;FF01:0:0:0:0:0:0:101&quot;) // Collapses to FF01::101</p>
 				<pre><code>
 To<span class="hljs-built_in"> check </span>if a given string is valid cidr notation:
-
 </code></pre><p>import {Validator} from &#39;ip-num/Validator&#39;</p>
 				<p>let result = Validator.isValidIPv4CidrNotation(&quot;123.234.334.23&quot;)
 					// result =&gt; [false, [&quot;Cidr notation should be in the form [ip number]/[range]&quot;]]
 					let result = Validator.isValidIPv4CidrNotation(&quot;10.0.0.0/8&quot;)
 					// result =&gt; [true, []]
-					<code>`</code>
+					```
 					See the <a href="https://ip-num.github.io/ip-num/classes/_validator_.validator.html">Validator documentation</a> for more information
 					See the <a href="https://ip-num.github.io/ip-num/modules/_binaryutils_.html">BinaryUtils documentation</a> for more information
 					See the <a href="https://ip-num.github.io/ip-num/modules/_ipv6utils_.html">IPv6Utils documentation</a> for more information
@@ -324,13 +338,22 @@ To<span class="hljs-built_in"> check </span>if a given string is valid cidr nota
 				<p>To discuss a new feature or ask a question, open an issue. Find the issue tracker <a href="https://github.com/ip-num/ip-num/issues">here</a></p>
 				<p>Found a bug and you want to provide a fix for it? Then feel free to submit a pull request. It will be appreciated if the changes made are backed with tests.</p>
 				<h2 id="change-log">Change log</h2>
+				<h5 id="v1-1-0">v1.1.0</h5>
+				<ul>
+					<li>Fixed isValidIPv4String() incorrectly returns true for some invalid addresses. <a href="https://github.com/ip-num/ip-num/issues/9">Issue #9</a></li>
+					<li>Improved Validator.isValidIPv6String and added test coverage. <a href="https://github.com/ip-num/ip-num/issues/10">Issue #10</a></li>
+					<li>Added convenient methods for creating IPv4 (<code>IPv4.fromBinaryString</code>) and IPv6 (<code>IPv6.fromBinaryString</code>) from binary string <a href="https://github.com/ip-num/ip-num/issues/11">Issue #11</a></li>
+					<li>Added convenient methods for creating ASN (<code>ASN.fromBinaryString</code>) <a href="https://github.com/ip-num/ip-num/issues/13">Issue #13</a></li>
+					<li>Prepend with &quot;::&quot; if toString value for IPv6 has leading zeros. <a href="https://github.com/ip-num/ip-num/issues/12">Issue #12</a></li>
+					<li>Implemented support for IPv4-Mapped IPv6 Address. <a href="https://github.com/ip-num/ip-num/issues/3">Issue #3</a></li>
+				</ul>
 				<h5 id="v1-0-1">v1.0.1</h5>
 				<ul>
 					<li>Renamed Subnet to SubnetMask <a href="https://github.com/ip-num/ip-num/issues/1">Issue #1</a></li>
 					<li>Fixed the throwing of <em>invalid integer: NaN</em> when invalid IPv4 and IPv6 strings are passed to Validator
 						.isValidIPv4String and Validator.isValidIPv6String validators. Fixed by <a href="https://github.com/saiyeek">saiyeek</a>
-						<a href="https://github.com/ip-num/ip-num/issues/5">Issue #5</a>
-					*</li>
+					<a href="https://github.com/ip-num/ip-num/issues/5">Issue #5</a></li>
+					<li>Fixed <code>Validator.isValidIPv4CidrNotation</code> improper validation of IPv4 CIDR <a href="https://github.com/ip-num/ip-num/issues/6">Issue #6</a></li>
 				</ul>
 			</div>
 		</div>
@@ -339,6 +362,9 @@ To<span class="hljs-built_in"> check </span>if a given string is valid cidr nota
 				<ul>
 					<li class="globals  ">
 						<a href="globals.html"><em>Globals</em></a>
+					</li>
+					<li class="label tsd-is-external">
+						<span>Internals</span>
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="modules/_abstractipnum_.html">"<wbr>AbstractIPNum"</a>
@@ -388,10 +414,13 @@ To<span class="hljs-built_in"> check </span>if a given string is valid cidr nota
 					<li class=" tsd-kind-external-module">
 						<a href="modules/_index_.html">"index"</a>
 					</li>
-					<li class=" tsd-kind-external-module">
+					<li class="label tsd-is-external">
+						<span>Externals</span>
+					</li>
+					<li class=" tsd-kind-external-module tsd-is-external">
 						<a href="modules/_interface_ipnumber_.html">"interface/IPNumber"</a>
 					</li>
-					<li class=" tsd-kind-external-module">
+					<li class=" tsd-kind-external-module tsd-is-external">
 						<a href="modules/_interface_iprange_.html">"interface/IPRange"</a>
 					</li>
 				</ul>

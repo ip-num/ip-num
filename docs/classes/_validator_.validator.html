@@ -96,6 +96,7 @@
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><a href="_validator_.validator.html#cannotsplitsinglerangeerrormessage" class="tsd-kind-icon">cannot<wbr>Split<wbr>Single<wbr>Range<wbr>Error<wbr>Message</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><a href="_validator_.validator.html#invalid16bitasnrangemessage" class="tsd-kind-icon">invalid16<wbr>Bit<wbr>Asn<wbr>Range<wbr>Message</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><a href="_validator_.validator.html#invalidasnrangemessage" class="tsd-kind-icon">invalid<wbr>Asn<wbr>Range<wbr>Message</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><a href="_validator_.validator.html#invalidbinarystringerrormessage" class="tsd-kind-icon">invalid<wbr>Binary<wbr>String<wbr>Error<wbr>Message</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><a href="_validator_.validator.html#invalidhexadecatetcountmessage" class="tsd-kind-icon">invalid<wbr>Hexadecatet<wbr>Count<wbr>Message</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><a href="_validator_.validator.html#invalidhexadecatetmessage" class="tsd-kind-icon">invalid<wbr>Hexadecatet<wbr>Message</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><a href="_validator_.validator.html#invalidipv4cidrnotationmessage" class="tsd-kind-icon">invalidIPv4<wbr>Cidr<wbr>Notation<wbr>Message</a></li>
@@ -113,8 +114,11 @@
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private tsd-is-static"><a href="_validator_.validator.html#ishexadecatet" class="tsd-kind-icon">is<wbr>Hexadecatet</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private tsd-is-static"><a href="_validator_.validator.html#isnumeric" class="tsd-kind-icon">is<wbr>Numeric</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_validator_.validator.html#isvalid16bitasnnumber" class="tsd-kind-icon">is<wbr>Valid16<wbr>Bit<wbr>Asn<wbr>Number</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_validator_.validator.html#isvalidasnnumber" class="tsd-kind-icon">is<wbr>Valid<wbr>Asn<wbr>Number</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_validator_.validator.html#isvalidbinarystring" class="tsd-kind-icon">is<wbr>Valid<wbr>Binary<wbr>String</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_validator_.validator.html#isvalidipv4cidrnotation" class="tsd-kind-icon">is<wbr>ValidIPv4<wbr>Cidr<wbr>Notation</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_validator_.validator.html#isvalidipv4number" class="tsd-kind-icon">is<wbr>ValidIPv4<wbr>Number</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_validator_.validator.html#isvalidipv4octet" class="tsd-kind-icon">is<wbr>ValidIPv4<wbr>Octet</a></li>
@@ -140,7 +144,7 @@
 					<div class="tsd-signature tsd-kind-icon">EIGHT_<wbr>BIT_<wbr>SIZE<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">BigInteger</span><span class="tsd-signature-symbol"> =&nbsp;bigInt(&quot;1&quot;.repeat(8), 2)</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/ea16949/src/Validator.ts#L14">Validator.ts:14</a></li>
+							<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/56b6c9d/src/Validator.ts#L15">Validator.ts:15</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -150,7 +154,7 @@
 					<div class="tsd-signature tsd-kind-icon">IPV4_<wbr>PATTERN<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RegExp</span><span class="tsd-signature-symbol"> =&nbsp;new RegExp(/^(0?[0-9]?[0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.(0?[0-9]?[0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.(0?[0-9]?[0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.(0?[0-9]?[0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])$/)</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/ea16949/src/Validator.ts#L8">Validator.ts:8</a></li>
+							<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/56b6c9d/src/Validator.ts#L9">Validator.ts:9</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -160,7 +164,7 @@
 					<div class="tsd-signature tsd-kind-icon">IPV4_<wbr>RANGE_<wbr>PATTERN<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RegExp</span><span class="tsd-signature-symbol"> =&nbsp;new RegExp(/^(0?[0-9]?[0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.(0?[0-9]?[0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.(0?[0-9]?[0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.(0?[0-9]?[0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(\/)([1-9]|[1-2][0-9]|3[0-2])$/)</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/ea16949/src/Validator.ts#L9">Validator.ts:9</a></li>
+							<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/56b6c9d/src/Validator.ts#L10">Validator.ts:10</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -170,7 +174,7 @@
 					<div class="tsd-signature tsd-kind-icon">IPV4_<wbr>SUBNET_<wbr>MASK_<wbr>BIT_<wbr>PATTERN<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RegExp</span><span class="tsd-signature-symbol"> =&nbsp;new RegExp(/^(1){0,32}(0){0,32}$/)</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/ea16949/src/Validator.ts#L11">Validator.ts:11</a></li>
+							<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/56b6c9d/src/Validator.ts#L12">Validator.ts:12</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -180,7 +184,7 @@
 					<div class="tsd-signature tsd-kind-icon">IPV6_<wbr>RANGE_<wbr>PATTERN<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RegExp</span><span class="tsd-signature-symbol"> =&nbsp;new RegExp(/^s*((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:)))(%.+)?s*(\/([0-9]|[1-9][0-9]|1[0-1][0-9]|12[0-8]))?$/)</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/ea16949/src/Validator.ts#L10">Validator.ts:10</a></li>
+							<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/56b6c9d/src/Validator.ts#L11">Validator.ts:11</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -190,7 +194,7 @@
 					<div class="tsd-signature tsd-kind-icon">IPV6_<wbr>SUBNET_<wbr>MASK_<wbr>BIT_<wbr>PATTERN<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RegExp</span><span class="tsd-signature-symbol"> =&nbsp;new RegExp(/^(1){0,128}(0){0,128}$/)</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/ea16949/src/Validator.ts#L12">Validator.ts:12</a></li>
+							<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/56b6c9d/src/Validator.ts#L13">Validator.ts:13</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -200,7 +204,7 @@
 					<div class="tsd-signature tsd-kind-icon">ONE_<wbr>HUNDRED_<wbr>AND_<wbr>TWENTY_<wbr>EIGHT_<wbr>BIT_<wbr>SIZE<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">BigInteger</span><span class="tsd-signature-symbol"> =&nbsp;bigInt(&quot;1&quot;.repeat(128), 2)</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/ea16949/src/Validator.ts#L17">Validator.ts:17</a></li>
+							<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/56b6c9d/src/Validator.ts#L18">Validator.ts:18</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -210,7 +214,7 @@
 					<div class="tsd-signature tsd-kind-icon">SIXTEEN_<wbr>BIT_<wbr>SIZE<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">BigInteger</span><span class="tsd-signature-symbol"> =&nbsp;bigInt(&quot;1&quot;.repeat(16), 2)</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/ea16949/src/Validator.ts#L15">Validator.ts:15</a></li>
+							<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/56b6c9d/src/Validator.ts#L16">Validator.ts:16</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -220,7 +224,7 @@
 					<div class="tsd-signature tsd-kind-icon">THIRTY_<wbr>TWO_<wbr>BIT_<wbr>SIZE<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">BigInteger</span><span class="tsd-signature-symbol"> =&nbsp;bigInt(&quot;1&quot;.repeat(32), 2)</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/ea16949/src/Validator.ts#L16">Validator.ts:16</a></li>
+							<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/56b6c9d/src/Validator.ts#L17">Validator.ts:17</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -230,7 +234,7 @@
 					<div class="tsd-signature tsd-kind-icon">cannot<wbr>Split<wbr>Single<wbr>Range<wbr>Error<wbr>Message<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;Cannot split an IP range with a single IP number&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/ea16949/src/Validator.ts#L32">Validator.ts:32</a></li>
+							<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/56b6c9d/src/Validator.ts#L33">Validator.ts:33</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -240,7 +244,7 @@
 					<div class="tsd-signature tsd-kind-icon">invalid16<wbr>Bit<wbr>Asn<wbr>Range<wbr>Message<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;ASN number given less than zero or is greater than 16bit&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/ea16949/src/Validator.ts#L20">Validator.ts:20</a></li>
+							<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/56b6c9d/src/Validator.ts#L21">Validator.ts:21</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -250,17 +254,27 @@
 					<div class="tsd-signature tsd-kind-icon">invalid<wbr>Asn<wbr>Range<wbr>Message<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;ASN number given less than zero or is greater than 32bit&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/ea16949/src/Validator.ts#L19">Validator.ts:19</a></li>
+							<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/56b6c9d/src/Validator.ts#L20">Validator.ts:20</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-static">
+					<a name="invalidbinarystringerrormessage" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> invalid<wbr>Binary<wbr>String<wbr>Error<wbr>Message</h3>
+					<div class="tsd-signature tsd-kind-icon">invalid<wbr>Binary<wbr>String<wbr>Error<wbr>Message<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;Binary string should contain only contiguous 1s and 0s&quot;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/56b6c9d/src/Validator.ts#L35">Validator.ts:35</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-static">
 					<a name="invalidhexadecatetcountmessage" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> invalid<wbr>Hexadecatet<wbr>Count<wbr>Message</h3>
-					<div class="tsd-signature tsd-kind-icon">invalid<wbr>Hexadecatet<wbr>Count<wbr>Message<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;An IP6 number cannot have less or greater than 8 octets&quot;</span></div>
+					<div class="tsd-signature tsd-kind-icon">invalid<wbr>Hexadecatet<wbr>Count<wbr>Message<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;An IP6 number must have exactly 8 hexadecatet&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/ea16949/src/Validator.ts#L26">Validator.ts:26</a></li>
+							<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/56b6c9d/src/Validator.ts#L27">Validator.ts:27</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -270,7 +284,7 @@
 					<div class="tsd-signature tsd-kind-icon">invalid<wbr>Hexadecatet<wbr>Message<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;The value given is less than zero or is greater than 16bit&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/ea16949/src/Validator.ts#L24">Validator.ts:24</a></li>
+							<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/56b6c9d/src/Validator.ts#L25">Validator.ts:25</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -280,7 +294,7 @@
 					<div class="tsd-signature tsd-kind-icon">invalidIPv4<wbr>Cidr<wbr>Notation<wbr>Message<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;Cidr notation should be in the form [ip number]/[range]&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/ea16949/src/Validator.ts#L29">Validator.ts:29</a></li>
+							<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/56b6c9d/src/Validator.ts#L30">Validator.ts:30</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -290,7 +304,7 @@
 					<div class="tsd-signature tsd-kind-icon">invalidIPv4<wbr>Number<wbr>Message<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;IPv4 number given less than zero or is greater than 32bit&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/ea16949/src/Validator.ts#L21">Validator.ts:21</a></li>
+							<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/56b6c9d/src/Validator.ts#L22">Validator.ts:22</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -300,7 +314,7 @@
 					<div class="tsd-signature tsd-kind-icon">invalidIPv6<wbr>Cidr<wbr>Notation<wbr>String<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;A Cidr notation string should contain an IPv6 number and prefix&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/ea16949/src/Validator.ts#L30">Validator.ts:30</a></li>
+							<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/56b6c9d/src/Validator.ts#L31">Validator.ts:31</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -310,7 +324,7 @@
 					<div class="tsd-signature tsd-kind-icon">invalidIPv6<wbr>Number<wbr>Message<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;IPv6 number given less than zero or is greater than 128bit&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/ea16949/src/Validator.ts#L22">Validator.ts:22</a></li>
+							<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/56b6c9d/src/Validator.ts#L23">Validator.ts:23</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -320,7 +334,7 @@
 					<div class="tsd-signature tsd-kind-icon">invalid<wbr>Inet<wbr>Num<wbr>Type<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;Given ipNumType must be either InetNumType.IPv4 or InetNumType.IPv6&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/ea16949/src/Validator.ts#L33">Validator.ts:33</a></li>
+							<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/56b6c9d/src/Validator.ts#L34">Validator.ts:34</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -330,7 +344,7 @@
 					<div class="tsd-signature tsd-kind-icon">invalid<wbr>Octet<wbr>Count<wbr>Message<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;An IP4 number cannot have less or greater than 4 octets&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/ea16949/src/Validator.ts#L25">Validator.ts:25</a></li>
+							<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/56b6c9d/src/Validator.ts#L26">Validator.ts:26</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -340,7 +354,7 @@
 					<div class="tsd-signature tsd-kind-icon">invalid<wbr>Octet<wbr>Range<wbr>Message<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;Value given contains an invalid Octet; Value is less than zero or is greater than 8bit&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/ea16949/src/Validator.ts#L23">Validator.ts:23</a></li>
+							<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/56b6c9d/src/Validator.ts#L24">Validator.ts:24</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -350,7 +364,7 @@
 					<div class="tsd-signature tsd-kind-icon">invalid<wbr>Prefix<wbr>Value<wbr>Message<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;A Prefix value cannot be less than 0 or greater than 32&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/ea16949/src/Validator.ts#L28">Validator.ts:28</a></li>
+							<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/56b6c9d/src/Validator.ts#L29">Validator.ts:29</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -360,7 +374,7 @@
 					<div class="tsd-signature tsd-kind-icon">invalid<wbr>Subnet<wbr>Mask<wbr>Message<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;The Subnet Mask is invalid&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/ea16949/src/Validator.ts#L27">Validator.ts:27</a></li>
+							<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/56b6c9d/src/Validator.ts#L28">Validator.ts:28</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -370,13 +384,59 @@
 					<div class="tsd-signature tsd-kind-icon">take<wbr>Out<wbr>OfRange<wbr>Size<wbr>Message<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;$count is greater than $size, the size of the range&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/ea16949/src/Validator.ts#L31">Validator.ts:31</a></li>
+							<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/56b6c9d/src/Validator.ts#L32">Validator.ts:32</a></li>
 						</ul>
 					</aside>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-private tsd-is-static">
+					<a name="ishexadecatet" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> <span class="tsd-flag ts-flagPrivate">Private</span> is<wbr>Hexadecatet</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-private tsd-is-static">
+						<li class="tsd-signature tsd-kind-icon">is<wbr>Hexadecatet<span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/56b6c9d/src/Validator.ts#L274">Validator.ts:274</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>value: <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-private tsd-is-static">
+					<a name="isnumeric" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> <span class="tsd-flag ts-flagPrivate">Private</span> is<wbr>Numeric</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-private tsd-is-static">
+						<li class="tsd-signature tsd-kind-icon">is<wbr>Numeric<span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/56b6c9d/src/Validator.ts#L270">Validator.ts:270</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>value: <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
+						</li>
+					</ul>
+				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
 					<a name="isvalid16bitasnnumber" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> is<wbr>Valid16<wbr>Bit<wbr>Asn<wbr>Number</h3>
@@ -387,7 +447,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/ea16949/src/Validator.ts#L66">Validator.ts:66</a></li>
+									<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/56b6c9d/src/Validator.ts#L68">Validator.ts:68</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -420,7 +480,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/ea16949/src/Validator.ts#L54">Validator.ts:54</a></li>
+									<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/56b6c9d/src/Validator.ts#L56">Validator.ts:56</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -444,6 +504,38 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
+					<a name="isvalidbinarystring" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> is<wbr>Valid<wbr>Binary<wbr>String</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
+						<li class="tsd-signature tsd-kind-icon">is<wbr>Valid<wbr>Binary<wbr>String<span class="tsd-signature-symbol">(</span>binaryString<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">]</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/56b6c9d/src/Validator.ts#L262">Validator.ts:262</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Checks if the given string is a binary string. That is contains only contiguous 1s and 0s</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>binaryString: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the binary string</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">]</span></h4>
+							<p>a tuple representing if valid or not and corresponding message</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
 					<a name="isvalidipv4cidrnotation" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> is<wbr>ValidIPv4<wbr>Cidr<wbr>Notation</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
@@ -453,7 +545,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/ea16949/src/Validator.ts#L214">Validator.ts:214</a></li>
+									<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/56b6c9d/src/Validator.ts#L219">Validator.ts:219</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -486,7 +578,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/ea16949/src/Validator.ts#L78">Validator.ts:78</a></li>
+									<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/56b6c9d/src/Validator.ts#L80">Validator.ts:80</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -519,7 +611,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/ea16949/src/Validator.ts#L101">Validator.ts:101</a></li>
+									<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/56b6c9d/src/Validator.ts#L103">Validator.ts:103</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -551,7 +643,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/ea16949/src/Validator.ts#L125">Validator.ts:125</a></li>
+									<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/56b6c9d/src/Validator.ts#L127">Validator.ts:127</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -584,7 +676,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/ea16949/src/Validator.ts#L187">Validator.ts:187</a></li>
+									<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/56b6c9d/src/Validator.ts#L192">Validator.ts:192</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -617,7 +709,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/ea16949/src/Validator.ts#L246">Validator.ts:246</a></li>
+									<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/56b6c9d/src/Validator.ts#L251">Validator.ts:251</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -650,7 +742,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/ea16949/src/Validator.ts#L113">Validator.ts:113</a></li>
+									<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/56b6c9d/src/Validator.ts#L115">Validator.ts:115</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -683,7 +775,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/ea16949/src/Validator.ts#L90">Validator.ts:90</a></li>
+									<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/56b6c9d/src/Validator.ts#L92">Validator.ts:92</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -716,7 +808,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/ea16949/src/Validator.ts#L147">Validator.ts:147</a></li>
+									<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/56b6c9d/src/Validator.ts#L148">Validator.ts:148</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -749,7 +841,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/ea16949/src/Validator.ts#L200">Validator.ts:200</a></li>
+									<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/56b6c9d/src/Validator.ts#L205">Validator.ts:205</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -776,13 +868,13 @@
 					<a name="isvalidprefixvalue" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> is<wbr>Valid<wbr>Prefix<wbr>Value</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
-						<li class="tsd-signature tsd-kind-icon">is<wbr>Valid<wbr>Prefix<wbr>Value<span class="tsd-signature-symbol">(</span>prefixValue<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, ipNumType<span class="tsd-signature-symbol">: </span><a href="../enums/_ipnumtype_.ipnumtype.html" class="tsd-signature-type">IPNumType</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">]</span></li>
+						<li class="tsd-signature tsd-kind-icon">is<wbr>Valid<wbr>Prefix<wbr>Value<span class="tsd-signature-symbol">(</span>prefixValue<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, ipNumType<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">IPNumType.ASN</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">IPNumType.IPv4</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">IPNumType.IPv6</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">]</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/ea16949/src/Validator.ts#L168">Validator.ts:168</a></li>
+									<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/56b6c9d/src/Validator.ts#L173">Validator.ts:173</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -799,7 +891,7 @@
 									</div>
 								</li>
 								<li>
-									<h5>ipNumType: <a href="../enums/_ipnumtype_.ipnumtype.html" class="tsd-signature-type">IPNumType</a></h5>
+									<h5>ipNumType: <span class="tsd-signature-type">IPNumType.ASN</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">IPNumType.IPv4</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">IPNumType.IPv6</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>The type of IP number</p>
 									</div>
@@ -820,7 +912,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/ea16949/src/Validator.ts#L43">Validator.ts:43</a></li>
+									<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/56b6c9d/src/Validator.ts#L45">Validator.ts:45</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -861,6 +953,9 @@
 				<ul>
 					<li class="globals  ">
 						<a href="../globals.html"><em>Globals</em></a>
+					</li>
+					<li class="label tsd-is-external">
+						<span>Internals</span>
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="../modules/_abstractipnum_.html">"<wbr>AbstractIPNum"</a>
@@ -910,10 +1005,13 @@
 					<li class=" tsd-kind-external-module">
 						<a href="../modules/_index_.html">"index"</a>
 					</li>
-					<li class=" tsd-kind-external-module">
+					<li class="label tsd-is-external">
+						<span>Externals</span>
+					</li>
+					<li class=" tsd-kind-external-module tsd-is-external">
 						<a href="../modules/_interface_ipnumber_.html">"interface/IPNumber"</a>
 					</li>
-					<li class=" tsd-kind-external-module">
+					<li class=" tsd-kind-external-module tsd-is-external">
 						<a href="../modules/_interface_iprange_.html">"interface/IPRange"</a>
 					</li>
 				</ul>
@@ -962,6 +1060,9 @@
 								<a href="_validator_.validator.html#invalidasnrangemessage" class="tsd-kind-icon">invalid<wbr>Asn<wbr>Range<wbr>Message</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-static">
+								<a href="_validator_.validator.html#invalidbinarystringerrormessage" class="tsd-kind-icon">invalid<wbr>Binary<wbr>String<wbr>Error<wbr>Message</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-static">
 								<a href="_validator_.validator.html#invalidhexadecatetcountmessage" class="tsd-kind-icon">invalid<wbr>Hexadecatet<wbr>Count<wbr>Message</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-static">
@@ -997,11 +1098,20 @@
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-static">
 								<a href="_validator_.validator.html#takeoutofrangesizemessage" class="tsd-kind-icon">take<wbr>Out<wbr>OfRange<wbr>Size<wbr>Message</a>
 							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-private tsd-is-static">
+								<a href="_validator_.validator.html#ishexadecatet" class="tsd-kind-icon">is<wbr>Hexadecatet</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-private tsd-is-static">
+								<a href="_validator_.validator.html#isnumeric" class="tsd-kind-icon">is<wbr>Numeric</a>
+							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
 								<a href="_validator_.validator.html#isvalid16bitasnnumber" class="tsd-kind-icon">is<wbr>Valid16<wbr>Bit<wbr>Asn<wbr>Number</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
 								<a href="_validator_.validator.html#isvalidasnnumber" class="tsd-kind-icon">is<wbr>Valid<wbr>Asn<wbr>Number</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
+								<a href="_validator_.validator.html#isvalidbinarystring" class="tsd-kind-icon">is<wbr>Valid<wbr>Binary<wbr>String</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
 								<a href="_validator_.validator.html#isvalidipv4cidrnotation" class="tsd-kind-icon">is<wbr>ValidIPv4<wbr>Cidr<wbr>Notation</a>
