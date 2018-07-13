@@ -105,7 +105,7 @@ export class IPv6 extends AbstractIPNum implements IPNumber {
      * A convenience method for creating an IPv4-Compatible {@link IPv6} Address from a IPv4 represented in
      * dot-decimal notation i.e. 127.0.0.1
      *
-     * @param {IPv4} ipv4 string represented in a dot decimal string
+     * @param {IPv4} ip4DotDecimalString string represented in a dot decimal string
      * @returns {IPv6} the IPv4-Compatible {@link IPv6} Address
      */
     static fromIPv4DotDecimalString(ip4DotDecimalString: string): IPv6 {

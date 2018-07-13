@@ -134,6 +134,7 @@ let asA = Asn.fromNumber(1234) // using the fromNumber factory method to create 
 let asB Asn.fromString("AS1234") // using the fromString factory method to create an instance from string
 let asC = Asn.fromString("1234") // string without the "AS" prefix is also supported
 let asD = Asn.fromString("1.10") // string in asdot+ format is also supported
+let asE = Asn.fromBinaryString('1111') // using the fromBinaryString to create an instance from binary string
 
 // converting between different ASN string representations
 Asn.fromNumber(65526).toASDotPlus() // will give "0.65526"
@@ -158,6 +159,7 @@ import { IPv4 } from "ip-num/IPv4";
 let firstIPv4 = new IPv4("74.125.43.99") // Creating an instance using the constructor
 let secondIPv4 = IPv4.fromBigInteger(bigInt("1876843053")) // Using the fromBigInteger convenience method
 let thirdIPv4 = IPv4.fromDecimalDottedString("111.222.90.45") // Using the fromDecimalDottedString convenience method
+let fourthIPv4 = IPv4.fromBinaryString("01001010011111010010101101100011") // using the fromBinaryString convenience method
 
 // converting an IPv4 instance to binary string representation
 firstIPv4.toBinaryString() // will be 01001010011111010010101101100011
@@ -178,6 +180,7 @@ import { IPv6 } from "ip-num/IPv6";
 let firstIPv6 = new IPv6("ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff") // Creating an instance using the constructor
 let secondIPv6 = IPv6.fromBigInteger(bigInt("100")) // Using the fromBigInteger convenience method
 let thirdIPv6 = IPv6.fromHexadecimalString(""::") // Using the fromDecimalDottedString convenience method. Not abbreviated representation of IPv6 string is supported
+let fourthIPv6 = IPv6.fromBinaryString("01001010011111010010101101100011") // using the fromBinaryString convenience method
    
 // converting an IPv6 instance to binary string representation
 firstIPv6.toBinaryString() // will be 11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111
@@ -299,6 +302,38 @@ let iPv6Subnet = new IPv6Subnet("ffff:ffff:ffff:ffff:ffff:ffff:0:0");
 ``` 
 See the [Subnet documentation](https://ip-num.github.io/ip-num/modules/_subnet_.html) for more information
 
+### IPv4-Mapped IPv6 Address Support
+IPv4-Compatible IPv6 Address allows embedding an IPv4 address within an IPv6 address. See [IPv6 Addresses with Embedded IPv4 Addresses](https://tools.ietf.org/html/rfc4291#section-2.5.5)
+
+`ip-num` offers various ways to create an IPv4-Compatible IPv6 Address:
+
+##### Converting from an existing IPv4
+
+```
+import { IPv4 } from "ip-num/IPv4";
+
+let ipv4 = new IPv4("74.125.43.99")
+ipv4.toIPv4MappedIPv6().toString() // produces ::ffff:4a7d:2b63
+```
+
+##### From an existing IPv4 using convenience method on IPv6
+
+```
+import { IPv6 } from "ip-num/IPv6";
+
+let ipv6 = IPv6.fromIPv4(new IPv4("74.125.43.99"))
+ipv6.toString() // produces ::ffff:4a7d:2b63
+```
+
+##### From dot-decimal notation using convenience method on IPv6
+
+```
+import { IPv6 } from "ip-num/IPv6";
+
+let ipv6 = IPv6.fromIPv4DotDecimalString("74.125.43.99")
+ipv6.toString() // produces ::ffff:4a7d:2b63
+```
+
 ### Validation and Utilities
 
 Various validation are exposed via the `Validator` module.  `ip-num` also provide various utility operations. These 
@@ -345,6 +380,14 @@ Found a bug and you want to provide a fix for it? Then feel free to submit a pul
 
 Change log
 ------------------
+##### v1.1.0
+* Fixed isValidIPv4String() incorrectly returns true for some invalid addresses. [Issue #9](https://github.com/ip-num/ip-num/issues/9)
+* Improved Validator.isValidIPv6String and added test coverage. [Issue #10](https://github.com/ip-num/ip-num/issues/10)
+* Added convenient methods for creating IPv4 (`IPv4.fromBinaryString`) and IPv6 (`IPv6.fromBinaryString`) from binary string [Issue #11](https://github.com/ip-num/ip-num/issues/11)
+* Added convenient methods for creating ASN (`ASN.fromBinaryString`) [Issue #13](https://github.com/ip-num/ip-num/issues/13)
+* Prepend with "::" if toString value for IPv6 has leading zeros. [Issue #12](https://github.com/ip-num/ip-num/issues/12)
+* Implemented support for IPv4-Mapped IPv6 Address. [Issue #3](https://github.com/ip-num/ip-num/issues/3)
+
 ##### v1.0.1
 
 * Renamed Subnet to SubnetMask [Issue #1](https://github.com/ip-num/ip-num/issues/1)
