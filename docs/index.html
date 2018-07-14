@@ -288,9 +288,9 @@ The following code will throw an exception:
 				<pre><code>See the [<span class="hljs-string">Subnet documentation</span>](<span class="hljs-link">https://ip-num.github.io/ip-num/modules/_subnet_.html</span>) for more information
 
 <span class="hljs-section">### IPv4-Mapped IPv6 Address Support</span>
-IPv4-Compatible IPv6 Address allows embedding an IPv4 address within an IPv6 address. See [<span class="hljs-string">IPv6 Addresses with Embedded IPv4 Addresses</span>](<span class="hljs-link">https://tools.ietf.org/html/rfc4291#section-2.5.5</span>)
+IPv4-Mapped IPv6 Address IPv6 allows embedding an IPv4 address within an IPv6 address. See [<span class="hljs-string">IPv6 Addresses with Embedded IPv4 Addresses</span>](<span class="hljs-link">https://tools.ietf.org/html/rfc4291#section-2.5.5</span>)
 
-<span class="hljs-code">`ip-num`</span> offers various ways to create an IPv4-Compatible IPv6 Address:
+<span class="hljs-code">`ip-num`</span> offers various ways to create an IPv4-Mapped IPv6 Address:
 
 <span class="hljs-section">##### Converting from an existing IPv4</span>
 </code></pre><p>import { IPv4 } from &quot;ip-num/IPv4&quot;;</p>
@@ -338,7 +338,7 @@ To<span class="hljs-built_in"> check </span>if a given string is valid cidr nota
 				<p>To discuss a new feature or ask a question, open an issue. Find the issue tracker <a href="https://github.com/ip-num/ip-num/issues">here</a></p>
 				<p>Found a bug and you want to provide a fix for it? Then feel free to submit a pull request. It will be appreciated if the changes made are backed with tests.</p>
 				<h2 id="change-log">Change log</h2>
-				<h5 id="v1-1-0">v1.1.0</h5>
+				<h5 id="v1-1-1">v1.1.1</h5>
 				<ul>
 					<li>Fixed isValidIPv4String() incorrectly returns true for some invalid addresses. <a href="https://github.com/ip-num/ip-num/issues/9">Issue #9</a></li>
 					<li>Improved Validator.isValidIPv6String and added test coverage. <a href="https://github.com/ip-num/ip-num/issues/10">Issue #10</a></li>
@@ -347,6 +347,8 @@ To<span class="hljs-built_in"> check </span>if a given string is valid cidr nota
 					<li>Prepend with &quot;::&quot; if toString value for IPv6 has leading zeros. <a href="https://github.com/ip-num/ip-num/issues/12">Issue #12</a></li>
 					<li>Implemented support for IPv4-Mapped IPv6 Address. <a href="https://github.com/ip-num/ip-num/issues/3">Issue #3</a></li>
 				</ul>
+				<h5 id="v1-1-0">v1.1.0</h5>
+				<p>Version 1.1.0 was Unpublished.</p>
 				<h5 id="v1-0-1">v1.0.1</h5>
 				<ul>
 					<li>Renamed Subnet to SubnetMask <a href="https://github.com/ip-num/ip-num/issues/1">Issue #1</a></li>
