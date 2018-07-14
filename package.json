@@ -1,6 +1,6 @@
 {
   "name": "ip-num",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "A TypeScript library for working with IPv4, IPv6 and ASN numbers. It provides representations of these internet protocol numbers with the ability to perform various IP related operations like parsing, validating etc. on them",
   "main": "./index.js",
   "types": "./index.d.ts",

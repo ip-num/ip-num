@@ -380,13 +380,16 @@ Found a bug and you want to provide a fix for it? Then feel free to submit a pul
 
 Change log
 ------------------
-##### v1.1.0
+##### v1.1.1
 * Fixed isValidIPv4String() incorrectly returns true for some invalid addresses. [Issue #9](https://github.com/ip-num/ip-num/issues/9)
 * Improved Validator.isValidIPv6String and added test coverage. [Issue #10](https://github.com/ip-num/ip-num/issues/10)
 * Added convenient methods for creating IPv4 (`IPv4.fromBinaryString`) and IPv6 (`IPv6.fromBinaryString`) from binary string [Issue #11](https://github.com/ip-num/ip-num/issues/11)
 * Added convenient methods for creating ASN (`ASN.fromBinaryString`) [Issue #13](https://github.com/ip-num/ip-num/issues/13)
 * Prepend with "::" if toString value for IPv6 has leading zeros. [Issue #12](https://github.com/ip-num/ip-num/issues/12)
 * Implemented support for IPv4-Mapped IPv6 Address. [Issue #3](https://github.com/ip-num/ip-num/issues/3)
+
+##### v1.1.0
+Version 1.1.0 was Unpublished.
 
 ##### v1.0.1
 
