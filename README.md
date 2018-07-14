@@ -271,36 +271,36 @@ ipRanges.forEach(iprange => {
 See the [IPNumber documentation](https://ip-num.github.io/ip-num/interfaces/_interface_ipnumber_.ipnumber.html) for more information
 See the [IPRange documentation](https://ip-num.github.io/ip-num/interfaces/_interface_iprange_.iprange.html) for more information
 
-### IPv4Subnet and IPv6Subnet
+### IPv4SubnetMask and IPv6SubnetMask
 
-IPv4Subnet and IPv6Subnet are used to represents subnets in IPv4 and IPv6 
+IPv4SubnetMask and IPv6SubnetMask are used to represents subnet masks in IPv4 and IPv6 
 respectively. 
 
-Subnets are in all respects IP numbers with the only restriction that they must contain contiguous on bits (1's) 
-followed by contiguous off bits (0's). This means IPv4Subnet and IPv6Subnet can perform all the operations available 
-on IPv4 and IPv6. The only difference is that the invariant required for a subnet is enforced in the contructor of 
-IPv4Subnet and IPv6Subnet. For example:
+Subnet masks are in all respects IP numbers with the only restriction that they must contain contiguous on bits (1's) 
+followed by contiguous off bits (0's). This means IPv4SubnetMask and IPv6SubnetMask can perform all the operations 
+available on IPv4 and IPv6. The only difference is that the invariant required for a subnet is enforced in the 
+constructor of IPv4SubnetMask and IPv6SubnetMask. For example:
 
 The following code will throw an exception:
 
 ```
-import {IPv4Subnet} from 'ip-num/IPv4Subnet'
-import {IPv4Subnet} from 'ip-num/IPv4Subnet'
+import {IPv4SubnetMask} from 'ip-num/IPv4SubnetMask'
+import {IPv4SubnetMask} from 'ip-num/IPv4SubnetMask'
 
-let ipv4Subnet = new IPv4Subnet("10.255.10.3");
-let ipv6Subnet = new IPv6Subnet("3ffe:1900:4545:0003:0200:f8ff:fe21:67cf");
+let ipv4SubnetMask = new IPv4SubnetMask("10.255.10.3");
+let ipv6SubnetMask = new IPv6SubnetMask("3ffe:1900:4545:0003:0200:f8ff:fe21:67cf");
 ```
 
 While the following code works fine:
 
 ```
-import {IPv4Subnet} from 'ip-num/Subnet'
-import {IPv6Subnet} from 'ip-num/Subnet'
+import {IPv4SubnetMask} from 'ip-num/SubnetMask'
+import {IPv6SubnetMask} from 'ip-num/SubnetMask'
 
-let iPv4Subnet = new IPv4Subnet("255.0.0.0");
-let iPv6Subnet = new IPv6Subnet("ffff:ffff:ffff:ffff:ffff:ffff:0:0");
+let iPv4SubnetMask = new IPv4SubnetMask("255.0.0.0");
+let iPv6SubnetMask = new IPv6SubnetMask("ffff:ffff:ffff:ffff:ffff:ffff:0:0");
 ``` 
-See the [Subnet documentation](https://ip-num.github.io/ip-num/modules/_subnet_.html) for more information
+See the [SubnetMask documentation](https://ip-num.github.io/ip-num/modules/_subnetmask_.html) for more information
 
 ### IPv4-Mapped IPv6 Address Support
 IPv4-Mapped IPv6 Address IPv6 allows embedding an IPv4 address within an IPv6 address. See [IPv6 Addresses with Embedded IPv4 Addresses](https://tools.ietf.org/html/rfc4291#section-2.5.5)
