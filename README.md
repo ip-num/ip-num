@@ -398,3 +398,11 @@ Version 1.1.0 was Unpublished.
 .isValidIPv4String and Validator.isValidIPv6String validators. Fixed by [saiyeek](https://github.com/saiyeek) 
 [Issue #5](https://github.com/ip-num/ip-num/issues/5)
 * Fixed `Validator.isValidIPv4CidrNotation` improper validation of IPv4 CIDR [Issue #6](https://github.com/ip-num/ip-num/issues/6)
+
+Acknowledgement
+------------------
+Special thanks to JetBrains for supporting the development of `ip-num` with a free IDE licence.  
+
+<img src="https://user-images.githubusercontent.com/272535/43159119-bb6a8946-8f81-11e8-8839-26b9f5a8815f.png" width="100">
+
+You can find more information about JetBrains support for open source projects [here](https://www.jetbrains.com/buy/opensource/)
