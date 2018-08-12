@@ -120,6 +120,14 @@ describe('IPv6Range: ', () => {
             expectedIndex++;
         }
     });
+    it('should be able to use spread syntax on range', () => {
+        let ipv6Range = new IPv6Range(new IPv6("2001:db8::"), new IPv6Prefix(127));
+        let expectedValue = ipv6Range.take(2);
+
+        let iPv6Ranges = [... ipv6Range];
+        expect(iPv6Ranges[0].isEquals(expectedValue[0])).toBe(true);
+        expect(iPv6Ranges[1].isEquals(expectedValue[1])).toBe(true);
+    });
     it('should split IP range correctly', () => {
         let ipv6Range = new IPv6Range(new IPv6("2001:db8::"), new IPv6Prefix(47));
         let splitRanges: Array<IPv6Range> = ipv6Range.split();

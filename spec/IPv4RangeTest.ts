@@ -125,6 +125,17 @@ describe('IPv4Range: ', () => {
             expectedIndex++;
         }
     });
+    it('should be able to use spread syntax on range', () => {
+        let ipv4Range = new IPv4Range(new IPv4("192.198.0.0"), new IPv4Prefix(30));
+        let expectedValue = ipv4Range.take(4);
+
+        let iPv4Ranges = [... ipv4Range];
+
+        expect(iPv4Ranges[0].isEquals(expectedValue[0])).toBe(true);
+        expect(iPv4Ranges[1].isEquals(expectedValue[1])).toBe(true);
+        expect(iPv4Ranges[2].isEquals(expectedValue[2])).toBe(true);
+        expect(iPv4Ranges[3].isEquals(expectedValue[3])).toBe(true);
+    });
     it('should split IP range correctly', () => {
         let ipv4Range = IPv4Range.fromCidr("192.168.208.0/24");
         let splitRanges: Array<IPv4Range> = ipv4Range.split();
