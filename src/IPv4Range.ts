@@ -5,6 +5,7 @@ import {parseBinaryStringToBigInteger} from "./BinaryUtils";
 import {Validator} from "./Validator";
 import * as bigInt from "big-integer";
 import {IPRange} from "./interface/IPRange";
+import {AbstractIpRange} from "./AbstractIpRange";
 
 /**
  * Represents a continuous segment of IPv4 numbers following the
@@ -12,8 +13,8 @@ import {IPRange} from "./interface/IPRange";
  *
  * @see https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing
  */
-export class IPv4Range implements IPRange, IterableIterator<IPv4> {
-    private readonly bitValue: bigInt.BigInteger = bigInt(32);
+export class IPv4Range extends AbstractIpRange implements IPRange, IterableIterator<IPv4> {
+    readonly bitValue: bigInt.BigInteger = bigInt(32);
     private internalCounterValue: IPv4;
 
     /**
@@ -22,7 +23,6 @@ export class IPv4Range implements IPRange, IterableIterator<IPv4> {
      * @param {string} rangeIncidrNotation the range of the IPv4 number in CIDR notation
      * @returns {IPv4Range} the IPv4Range
      */
-    // TODO introduce an abstract class to share some of the logic between IPv4Range and IPv6Range
     static fromCidr(rangeIncidrNotation:string):IPv4Range {
         let [isValid, errorMessages] = Validator.isValidIPv4CidrNotation(rangeIncidrNotation);
         if (!isValid) {
@@ -46,7 +46,8 @@ export class IPv4Range implements IPRange, IterableIterator<IPv4> {
      * @param {IPv4Prefix} cidrPrefix the prefix which is a representation of the number of bits used to mask the
      * given IP number in other to create the range
      */
-    constructor(private readonly ipv4: IPv4, private readonly cidrPrefix: IPv4Prefix) {
+    constructor(private readonly ipv4: IPv4, readonly cidrPrefix: IPv4Prefix) {
+        super();
         this.internalCounterValue = this.getFirst();
     }
 
@@ -56,13 +57,7 @@ export class IPv4Range implements IPRange, IterableIterator<IPv4> {
      * @returns {bigInt.BigInteger} the amount of IPv4 numbers in the range
      */
     public getSize(): bigInt.BigInteger {
-        /**
-         * Using bitwise shit operation this will be
-         * 1 << (this.bitValue - this.prefix.getValue())
-         * Since left shift a number by x is equivalent to multiplying the number by the power x raised to 2
-         * 2 << 4 = 2 * (2 raised to 4)
-          */
-        return bigInt(2).pow(this.bitValue.minus(bigInt(this.cidrPrefix.getValue())));
+        return super.getSize();
     }
 
     /**
@@ -118,18 +113,8 @@ export class IPv4Range implements IPRange, IterableIterator<IPv4> {
      * @param {IPv4Range} otherRange the other IPv4 range to compare with
      * @returns {boolean} true if the two IPv4 ranges are consecutive, false otherwise
      */
-    // TODO move this to the IPRange interface?
     public isConsecutive(otherRange: IPv4Range): boolean {
-        let thisFirst: IPv4 = this.getFirst();
-        let thisLast: IPv4 = this.getLast();
-        let otherFirst: IPv4 = otherRange.getFirst();
-        let otherLast: IPv4 = otherRange.getLast();
-
-        return (
-            thisLast.hasNext() && thisLast.nextIPNumber().isEquals(otherFirst)
-            ||
-            otherLast.hasNext() && otherLast.nextIPNumber().isEquals(thisFirst)
-        )
+        return super.isConsecutive(otherRange);
     }
 
     /**
@@ -140,14 +125,8 @@ export class IPv4Range implements IPRange, IterableIterator<IPv4> {
      * @param {IPv4Range} otherRange the other IPv4 range
      * @returns {boolean} true if the other Ipv4 range is a subset. False otherwise.
      */
-    // TODO move this to the IPRange interface?
     public contains(otherRange: IPv4Range): boolean {
-        let thisFirst: IPv4 = this.getFirst();
-        let thisLast: IPv4 = this.getLast();
-        let otherFirst: IPv4 = otherRange.getFirst();
-        let otherLast: IPv4 = otherRange.getLast();
-
-        return (thisFirst.isLessThanOrEquals(otherFirst) && thisLast.isGreaterThanOrEquals(otherLast));
+        return super.contains(otherRange);
     }
 
     /**
@@ -159,12 +138,7 @@ export class IPv4Range implements IPRange, IterableIterator<IPv4> {
      * @returns {boolean} true if the other Ipv4 range is a container range. False otherwise.
      */
     public inside(otherRange: IPv4Range): boolean {
-        let thisFirst: IPv4 = this.getFirst();
-        let thisLast: IPv4 = this.getLast();
-        let otherFirst: IPv4 = otherRange.getFirst();
-        let otherLast: IPv4 = otherRange.getLast();
-
-        return (otherFirst.isLessThanOrEquals(thisFirst) && otherLast.isGreaterThanOrEquals(thisLast));
+        return super.inside(otherRange);
     }
 
     /**
@@ -172,18 +146,8 @@ export class IPv4Range implements IPRange, IterableIterator<IPv4> {
      * @param {IPv4Range} otherRange the other IPv4 range
      * @returns {boolean} true if the ranges overlap, false otherwise
      */
-    // TODO or confirm than normal ranges cannot overlap
     public isOverlapping(otherRange: IPv4Range): boolean {
-        let thisFirst: IPv4 = this.getFirst();
-        let thisLast: IPv4 = this.getLast();
-        let otherFirst: IPv4 = otherRange.getFirst();
-        let otherLast: IPv4 = otherRange.getLast();
-
-        return (
-            thisLast.isGreaterThan(otherFirst) && thisLast.isLessThanOrEquals(otherLast) && thisFirst.isLessThan(otherFirst)
-            ||
-            otherLast.isGreaterThan(thisFirst) && otherLast.isLessThanOrEquals(thisLast) && otherFirst.isLessThan(otherFirst)
-        );
+        return super.isOverlapping(otherRange);
     }
 
     /**

@@ -6,6 +6,12 @@ import {IPv6SubnetMask} from "./SubnetMask";
 import {binaryStringToHexadecimalString} from "./HexadecimalUtils";
 import {Hexadecatet} from "./Hexadecatet";
 
+
+interface Prefix {
+    value: number;
+    getValue(): number;
+}
+
 /**
  * Represents the prefix portion in the CIDR notation for representing IP ranges
  *
@@ -14,7 +20,7 @@ import {Hexadecatet} from "./Hexadecatet";
  *
  * {@see https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing} for more information on CIDR
  */
-class IPv4Prefix {
+class IPv4Prefix implements Prefix {
     /**
      * The decimal value of the 8bit number representing the prefix
      */
@@ -89,7 +95,7 @@ class IPv4Prefix {
  *
  * {@see https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing} for more information on CIDR
  */
-class IPv6Prefix {
+class IPv6Prefix implements Prefix {
     /**
      * The decimal value of the 16bit number representing the prefix
      */
@@ -160,4 +166,4 @@ class IPv6Prefix {
     }
 }
 
-export {IPv4Prefix, IPv6Prefix}
+export {Prefix, IPv4Prefix, IPv6Prefix}
