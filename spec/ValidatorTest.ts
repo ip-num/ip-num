@@ -58,5 +58,37 @@ describe('Validator: ', () => {
             expect(Validator.isValidPrefixValue(3, IPNumType.ASN)[0]).toBe(false);
             expect(Validator.isValidPrefixValue(3, IPNumType.ASN)[1].some(errorMessage => {return errorMessage === Validator.invalidInetNumType})).toBe(true);
         });
+    });
+
+
+    describe('isValidIPv4RangeString', () => {
+        it('validate valid range string', () => {
+            expect(Validator.isValidIPv4RangeString("10.0.0.0 - 10.0.0.255")[0]).toBe(true);
+            expect(Validator.isValidIPv4RangeString("10.0.0.0-10.0.0.255")[0]).toBe(true);
+        });
+
+        it('validate invalid range string', () => {
+            expect(Validator.isValidIPv4RangeString("10.0.0.0-10.0.0.0")[0]).toBe(false);
+            expect(Validator.isValidIPv4RangeString("10.0.0 - 10.0.0.255")[0]).toBe(false);
+            expect(Validator.isValidIPv4RangeString("10.0.0.0-10.0.0.255.0")[0]).toBe(false);
+            expect(Validator.isValidIPv4RangeString("10.0.0.0")[0]).toBe(false);
+            expect(Validator.isValidIPv4RangeString("10.0.0.255-10.0.0.0")[0]).toBe(false);
+        });
+    });
+
+    describe('isValidIPv6RangeString', () => {
+        it('validate valid range string', () => {
+            expect(Validator.isValidIPv6RangeString("2001:db8:: - 3001:db8::")[0]).toBe(true);
+            expect(Validator.isValidIPv6RangeString("2001:db8::-3001:db8::")[0]).toBe(true);
+        });
+
+        it('validate invalid range string', () => {
+            expect(Validator.isValidIPv6RangeString("10.0.0.0 - 10.0.0.255")[0]).toBe(false);
+            expect(Validator.isValidIPv6RangeString("10.0.0.0-10.0.0.255")[0]).toBe(false);
+            expect(Validator.isValidIPv6RangeString("2001:db8: - 3001:db8::")[0]).toBe(false);
+            expect(Validator.isValidIPv6RangeString("2001:db8:: - 3001:db8")[0]).toBe(false);
+            expect(Validator.isValidIPv6RangeString("3001:db8")[0]).toBe(false);
+            expect(Validator.isValidIPv6RangeString("3001:db8::-2001:db8::")[0]).toBe(false);
+        });
     })
 });

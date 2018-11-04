@@ -28,6 +28,8 @@ export class Validator {
     static invalidSubnetMaskMessage = "The Subnet Mask is invalid";
     static invalidPrefixValueMessage = "A Prefix value cannot be less than 0 or greater than 32";
     static invalidIPv4CidrNotationMessage = "Cidr notation should be in the form [ip number]/[range]";
+    static invalidRangeNotationMessage = "Range notation should be in the form [first ip]-[last ip]";
+    static invalidRangeFirstNotGreaterThanLastMessage = "First IP in [first ip]-[last ip] must be less than Last IP";
     static invalidIPv6CidrNotationString = "A Cidr notation string should contain an IPv6 number and prefix";
     static takeOutOfRangeSizeMessage = "$count is greater than $size, the size of the range";
     static cannotSplitSingleRangeErrorMessage = "Cannot split an IP range with a single IP number";
@@ -234,6 +236,43 @@ export class Validator {
 
         let isValid = validIpv4 && validPrefix;
         let invalidMessage = invalidIpv4Message.concat(invalidPrefixMessage);
+
+        return isValid ? [isValid, []]: [isValid, invalidMessage];
+    }
+
+    static isValidIPv4RangeString(ipv4RangeString: string): [boolean, string[]] {
+        let firstLastValidator = (firstIP: string, lastIP: string) => bigInt(dottedDecimalNotationToBinaryString(firstIP))
+            .greaterOrEquals(dottedDecimalNotationToBinaryString(lastIP));
+
+        return this.isValidRange(ipv4RangeString, Validator.isValidIPv4String, firstLastValidator);
+    }
+
+    static isValidIPv6RangeString(ipv6RangeString: string): [boolean, string[]] {
+        let firstLastValidator = (firstIP: string, lastIP: string) => bigInt(hexadectetNotationToBinaryString(firstIP))
+            .greaterOrEquals(hexadectetNotationToBinaryString(lastIP));
+        return this.isValidRange(ipv6RangeString, Validator.isValidIPv6String, firstLastValidator);
+    }
+
+    private static isValidRange(rangeString: string,
+                                validator: (x:string) => [boolean, string[]],
+                                firstLastValidator: (first:string, last:string) => boolean):[boolean, string[]] {
+        let rangeComponents = rangeString.split("-").map(component => component.trim());
+        if(rangeComponents.length !== 2 || (rangeComponents[0].length === 0 || rangeComponents[1].length === 0)) {
+            return [false, [Validator.invalidRangeNotationMessage]];
+        }
+        let firstIP = rangeComponents[0];
+        let lastIP = rangeComponents[1];
+
+        let [validFirstIP, invalidFirstIPMessage] = validator(firstIP);
+        let [validLastIP, invalidLastIPMessage] = validator(lastIP);
+
+        let isValid = validFirstIP && validLastIP;
+
+        if (isValid && firstLastValidator(firstIP, lastIP)) {
+            return [false, [Validator.invalidRangeFirstNotGreaterThanLastMessage]]
+        }
+
+        let invalidMessage = invalidFirstIPMessage.concat(invalidLastIPMessage);
 
         return isValid ? [isValid, []]: [isValid, invalidMessage];
     }
