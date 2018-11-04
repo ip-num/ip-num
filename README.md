@@ -196,10 +196,10 @@ See the [IPv6 documentation](https://ip-num.github.io/ip-num/classes/_ipv6_.ipv6
 
 ### IPv4 Ranges
 ```
-import {IPv4Range} from "ip-num/IPv4Range";
+import {IPv4CidrRange} from "ip-num/IPv4CidrRange";
 
 // creating an IPv4 range from CIDR notation
-let ipv4Range = IPv4Range.fromCidr("192.198.0.0/24");
+let ipv4Range = IPv4CidrRange.fromCidr("192.198.0.0/24");
 
 // get first and last IPv4 number in the range
 ipv4Range.getFirst().toString() // gives 192.198.0.0
@@ -213,14 +213,14 @@ ipv4Range.split()[0].toCidrString() // returns 192.198.0.0/25
 ipv4Range.split()[1].toCidrString() // returns 192.198.0.128/25
 ```
 
-See the [IPv4Range documentation](https://ip-num.github.io/ip-num/classes/_ipv4range_.ipv4range.html) for more information
+See the [IPv4CidrRange documentation](https://ip-num.github.io/ip-num/classes/_ipv4range_.ipv4range.html) for more information
 
 ### IPv6 Ranges
 ```
-import {IPv6Range} from "ip-num/IPv6Range";
+import {IPv6CidrRange} from "ip-num/IPv6CidrRange";
 
 // creating an IPv6 range from CIDR notation
-let ipv6Range = IPv6Range.fromCidr("2001:db8::/33");
+let ipv6Range = IPv6CidrRange.fromCidr("2001:db8::/33");
 
 // get first and last IPv6 number in the range
 ipv6Range.getFirst().toString() // gives 2001:db8:0:0:0:0:0:0
@@ -234,11 +234,11 @@ ipv6Range.split()[0].toCidrString() // returns 2001:db8:0:0:0:0:0:0/34
 ipv6Range.split()[1].toCidrString() // returns 2001:db8:4000:0:0:0:0:0/34
 ```
 
-See the [IPv6Range documentation](https://ip-num.github.io/ip-num/classes/_ipv6range_.ipv6range.html) for more information
+See the [IPv6CidrRange documentation](https://ip-num.github.io/ip-num/classes/_ipv6range_.ipv6range.html) for more information
 
 ### IPNumber and IPRange interfaces
-When working in TypeScript, you have the ability to abstract ASN, IPv4 and IPv6 as an IPNumber, and IPv4Range and 
-IPv6Range as IPRange
+When working in TypeScript, you have the ability to abstract ASN, IPv4 and IPv6 as an IPNumber, and IPv4CidrRange and 
+IPv6CidrRange as IPRange
 
 ```
 // representing ASN, IPv4 and IPv6 with the IPNumber interface
@@ -255,10 +255,10 @@ ipNumbers.forEach(ip => {
 });
 
 
-// representing IPv4Range and IPv6Range with the IPRange interface
+// representing IPv4CidrRange and IPv6CidrRange with the IPRange interface
 let ipRanges: IPRange[] = [];
-ipRanges.push(IPv4Range.fromCidr("192.198.0.0/24"));
-ipRanges.push(IPv6Range.fromCidr("2001:db8::/33"));
+ipRanges.push(IPv4CidrRange.fromCidr("192.198.0.0/24"));
+ipRanges.push(IPv6CidrRange.fromCidr("2001:db8::/33"));
 
 // console logs 192.198.0.0/24
                 2001:db8:0:0:0:0:0:0/33

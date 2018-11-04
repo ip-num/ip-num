@@ -13,17 +13,17 @@ import {AbstractIpRange} from "./AbstractIpRange";
  *
  * @see https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing
  */
-export class IPv4Range extends AbstractIpRange implements IPRange, IterableIterator<IPv4> {
+export class IPv4CidrRange extends AbstractIpRange implements IPRange, IterableIterator<IPv4> {
     readonly bitValue: bigInt.BigInteger = bigInt(32);
     private internalCounterValue: IPv4;
 
     /**
-     * Convenience method for constructing an instance of an IPV4Range from an IP range represented in CIDR notation
+     * Convenience method for constructing an instance of an IPv4CidrRange from an IP range represented in CIDR notation
      *
      * @param {string} rangeIncidrNotation the range of the IPv4 number in CIDR notation
-     * @returns {IPv4Range} the IPv4Range
+     * @returns {IPv4CidrRange} the IPv4CidrRange
      */
-    static fromCidr(rangeIncidrNotation:string):IPv4Range {
+    static fromCidr(rangeIncidrNotation:string):IPv4CidrRange {
         let [isValid, errorMessages] = Validator.isValidIPv4CidrNotation(rangeIncidrNotation);
         if (!isValid) {
             let messages = errorMessages.filter(message => {return message !== ''});
@@ -32,7 +32,7 @@ export class IPv4Range extends AbstractIpRange implements IPRange, IterableItera
         let cidrComponents: Array<string> = rangeIncidrNotation.split("/");
         let ipString = cidrComponents[0];
         let prefix = parseInt(cidrComponents[1]);
-        return new IPv4Range(IPv4.fromDecimalDottedString(ipString), IPv4Prefix.fromNumber(prefix));
+        return new IPv4CidrRange(IPv4.fromDecimalDottedString(ipString), IPv4Prefix.fromNumber(prefix));
     };
 
     /**
@@ -110,10 +110,10 @@ export class IPv4Range extends AbstractIpRange implements IPRange, IterableItera
      * An adjacent range being one where the end of the given range, when incremented by one marks the start of the
      * other range. Or where the start of the given range, when decreased by one, marks the end of the other range
      *
-     * @param {IPv4Range} otherRange the other IPv4 range to compare with
+     * @param {IPv4CidrRange} otherRange the other IPv4 range to compare with
      * @returns {boolean} true if the two IPv4 ranges are consecutive, false otherwise
      */
-    public isConsecutive(otherRange: IPv4Range): boolean {
+    public isConsecutive(otherRange: IPv4CidrRange): boolean {
         return super.isConsecutive(otherRange);
     }
 
@@ -122,10 +122,10 @@ export class IPv4Range extends AbstractIpRange implements IPRange, IterableItera
      *
      * By a subset range, it means all the values of the given range are contained by this IPv4 range
      *
-     * @param {IPv4Range} otherRange the other IPv4 range
+     * @param {IPv4CidrRange} otherRange the other IPv4 range
      * @returns {boolean} true if the other Ipv4 range is a subset. False otherwise.
      */
-    public contains(otherRange: IPv4Range): boolean {
+    public contains(otherRange: IPv4CidrRange): boolean {
         return super.contains(otherRange);
     }
 
@@ -134,19 +134,19 @@ export class IPv4Range extends AbstractIpRange implements IPRange, IterableItera
      *
      * By container range, it means all the IP number in this current range can be found within the given range.
      *
-     * @param {IPv4Range} otherRange he other IPv4 range
+     * @param {IPv4CidrRange} otherRange he other IPv4 range
      * @returns {boolean} true if the other Ipv4 range is a container range. False otherwise.
      */
-    public inside(otherRange: IPv4Range): boolean {
+    public inside(otherRange: IPv4CidrRange): boolean {
         return super.inside(otherRange);
     }
 
     /**
      * Checks if two IPv4 ranges overlap
-     * @param {IPv4Range} otherRange the other IPv4 range
+     * @param {IPv4CidrRange} otherRange the other IPv4 range
      * @returns {boolean} true if the ranges overlap, false otherwise
      */
-    public isOverlapping(otherRange: IPv4Range): boolean {
+    public isOverlapping(otherRange: IPv4CidrRange): boolean {
         return super.isOverlapping(otherRange);
     }
 
@@ -177,18 +177,18 @@ export class IPv4Range extends AbstractIpRange implements IPRange, IterableItera
     /**
      * Method that splits an IPv4 range into two halves
      *
-     * @returns {Array<IPv4Range>} An array of two {@link IPv4Range}
+     * @returns {Array<IPv4CidrRange>} An array of two {@link IPv4CidrRange}
      */
-    public split() : Array<IPv4Range> {
+    public split() : Array<IPv4CidrRange> {
         let prefixToSplit = this.cidrPrefix.getValue();
         if (prefixToSplit === 32) {
             throw new Error("Cannot split an IP range with a single IP number");
         }
         let splitCidr = IPv4Prefix.fromNumber(prefixToSplit + 1);
         let firstIPOfFirstRange = this.getFirst();
-        let firstRange = new IPv4Range(firstIPOfFirstRange, splitCidr);
+        let firstRange = new IPv4CidrRange(firstIPOfFirstRange, splitCidr);
         let firstIPOfSecondRange = firstRange.getLast().nextIPNumber();
-        let secondRange = new IPv4Range(firstIPOfSecondRange, splitCidr);
+        let secondRange = new IPv4CidrRange(firstIPOfSecondRange, splitCidr);
         return [firstRange, secondRange];
     }
 

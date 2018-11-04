@@ -1,8 +1,8 @@
 import * as bigInt from "big-integer";
 import {Prefix} from "./Prefix";
 import {IPv6} from "./IPv6";
-import {IPv6Range} from "./IPv6Range";
-import {IPv4Range} from "./IPv4Range";
+import {IPv6CidrRange} from "./IPv6CidrRange";
+import {IPv4CidrRange} from "./IPv4CidrRange";
 import {IPv4} from "./IPv4";
 
 /**
@@ -26,7 +26,7 @@ export abstract class AbstractIpRange {
         return bigInt(2).pow(this.bitValue.minus(bigInt(this.cidrPrefix.getValue())));
     }
 
-    public inside(otherRange: IPv6Range | IPv4Range): boolean {
+    public inside(otherRange: IPv6CidrRange | IPv4CidrRange): boolean {
         let thisFirst: IPv6 | IPv4 = this.getFirst();
         let thisLast: IPv6 | IPv4 = this.getLast();
         let otherFirst: IPv6 | IPv4 = otherRange.getFirst();
@@ -35,7 +35,7 @@ export abstract class AbstractIpRange {
         return (otherFirst.isLessThanOrEquals(thisFirst) && otherLast.isGreaterThanOrEquals(thisLast));
     }
 
-    public contains(otherRange: IPv6Range | IPv4Range): boolean {
+    public contains(otherRange: IPv6CidrRange | IPv4CidrRange): boolean {
         let thisFirst: IPv6 | IPv4 = this.getFirst();
         let thisLast: IPv6 | IPv4 = this.getLast();
         let otherFirst: IPv6 | IPv4 = otherRange.getFirst();
@@ -44,7 +44,7 @@ export abstract class AbstractIpRange {
         return (thisFirst.isLessThanOrEquals(otherFirst) && thisLast.isGreaterThanOrEquals(otherLast));
     }
 
-    public isOverlapping(otherRange: IPv6Range | IPv4Range): boolean {
+    public isOverlapping(otherRange: IPv6CidrRange | IPv4CidrRange): boolean {
         let thisFirst: IPv6 | IPv4 = this.getFirst();
         let thisLast: IPv6 | IPv4 = this.getLast();
         let otherFirst: IPv6 | IPv4 = otherRange.getFirst();
@@ -57,7 +57,7 @@ export abstract class AbstractIpRange {
         );
     }
 
-    public isConsecutive(otherRange: IPv6Range | IPv4Range): boolean {
+    public isConsecutive(otherRange: IPv6CidrRange | IPv4CidrRange): boolean {
         let thisFirst: IPv6 | IPv4 = this.getFirst();
         let thisLast: IPv6 | IPv4 = this.getLast();
         let otherFirst: IPv6 | IPv4 = otherRange.getFirst();
