@@ -1,7 +1,7 @@
-import {IPv4CidrRange} from "../src/IPv4CidrRange";
-import {IPv4} from "../src/IPv4";
-import {IPv4Prefix} from "../src/Prefix";
-import {Validator} from "../src/Validator";
+import {IPv4CidrRange} from "../src";
+import {IPv4} from "../src";
+import {IPv4Prefix} from "../src";
+import {Validator} from "../src";
 
 
 describe('IPv4CidrRange: ', () => {
@@ -68,11 +68,6 @@ describe('IPv4CidrRange: ', () => {
 
         expect(firstRange.isConsecutive(anotherSecondRange)).toBe(false);
         expect(anotherSecondRange.isConsecutive(firstRange)).toBe(false);
-    });
-    xit('should correctly tell if ranges are overlapping', () => {
-        // TODO find a way to create overlapping ranges.
-        // TODO or confirm than normal ranges cannot overlap
-
     });
     it('should correctly tell if a range contains another range', () => {
         let containerRange = IPv4CidrRange.fromCidr("192.168.0.0/24");
@@ -144,4 +139,51 @@ describe('IPv4CidrRange: ', () => {
         expect(firstRange.toCidrString()).toBe("192.168.208.0/25");
         expect(secondRange.toCidrString()).toBe("192.168.208.128/25");
     });
+    it('should tell if there is a next consecutive range', () => {
+        let firstRange = new IPv4CidrRange(new IPv4("0.0.0.0"), new IPv4Prefix(1));
+        let secondRange = new IPv4CidrRange(new IPv4("127.255.255.255"), new IPv4Prefix(1));
+        let thirdRange = new IPv4CidrRange(new IPv4("128.0.0.0"), new IPv4Prefix(1));
+        let fourthRange = new IPv4CidrRange(new IPv4("255.255.255.255"), new IPv4Prefix(1));
+
+        expect(firstRange.hasNextRange()).toBe(true);
+        expect(secondRange.hasNextRange()).toBe(true);
+        expect(thirdRange.hasNextRange()).toBe(false);
+        expect(fourthRange.hasNextRange()).toBe(false);
+
+        expect(IPv4CidrRange.fromCidr("192.168.208.0/24").hasNextRange()).toBe(true);
+        expect(IPv4CidrRange.fromCidr("255.255.254.0/24").hasNextRange()).toBe(true);
+        expect(IPv4CidrRange.fromCidr("255.255.255.0/24").hasNextRange()).toBe(false);
+    });
+    it('should tell if there is a next adjacent range', () => {
+        let firstRange = new IPv4CidrRange(new IPv4("0.0.0.0"), new IPv4Prefix(1));
+        let secondRange = new IPv4CidrRange(new IPv4("127.255.255.255"), new IPv4Prefix(1));
+        let thirdRange = new IPv4CidrRange(new IPv4("128.0.0.0"), new IPv4Prefix(1));
+        let fourthRange = new IPv4CidrRange(new IPv4("255.255.255.255"), new IPv4Prefix(1));
+
+        expect(firstRange.hasNextRange()).toBe(true);
+        expect(secondRange.hasNextRange()).toBe(true);
+        expect(thirdRange.hasNextRange()).toBe(false);
+        expect(fourthRange.hasNextRange()).toBe(false);
+
+        expect(IPv4CidrRange.fromCidr("192.168.208.0/24").hasNextRange()).toBe(true);
+        expect(IPv4CidrRange.fromCidr("255.255.254.0/24").hasNextRange()).toBe(true);
+        expect(IPv4CidrRange.fromCidr("255.255.255.0/24").hasNextRange()).toBe(false);
+    });
+    it('should tell if there is a previous adjacent range', () => {
+        let firstRange = new IPv4CidrRange(new IPv4("0.0.0.0"), new IPv4Prefix(1));
+        let secondRange = new IPv4CidrRange(new IPv4("127.255.255.255"), new IPv4Prefix(1));
+        let thirdRange = new IPv4CidrRange(new IPv4("128.0.0.0"), new IPv4Prefix(1));
+        let fourthRange = new IPv4CidrRange(new IPv4("255.255.255.255"), new IPv4Prefix(1));
+
+        expect(firstRange.hasPreviousRange()).toBe(false);
+        expect(secondRange.hasPreviousRange()).toBe(false);
+
+        expect(thirdRange.hasPreviousRange()).toBe(true);
+        expect(fourthRange.hasPreviousRange()).toBe(true);
+
+        expect(IPv4CidrRange.fromCidr("0.0.0.0/24").hasPreviousRange()).toBe(false);
+        expect(IPv4CidrRange.fromCidr("192.168.208.0/24").hasPreviousRange()).toBe(true);
+        expect(IPv4CidrRange.fromCidr("255.255.254.0/24").hasPreviousRange()).toBe(true);
+        expect(IPv4CidrRange.fromCidr("255.255.255.0/24").hasPreviousRange()).toBe(true);
+    })
 });

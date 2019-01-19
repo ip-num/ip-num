@@ -192,6 +192,34 @@ export class IPv4CidrRange extends AbstractIpRange implements IPRange, IterableI
         return [firstRange, secondRange];
     }
 
+    public hasNextRange(): boolean {
+        return super.hasNextRange();
+    }
+
+    public hasPreviousRange(): boolean {
+        return super.hasPreviousRange();
+    }
+
+    public nextRange(): IPv4CidrRange | undefined {
+        if (this.hasNextRange()) {
+            let sizeOfCurrentRange = this.getSize();
+            let startOfNextRange = this.getFirst().getValue().plus(sizeOfCurrentRange);
+            return new IPv4CidrRange(new IPv4(startOfNextRange), this.cidrPrefix)
+        }
+
+        return;
+    }
+
+    public previousRange(): IPv4CidrRange | undefined {
+        if (this.hasPreviousRange()) {
+            let sizeOfCurrentRange = this.getSize();
+            let startOfPreviousRange = this.getFirst().getValue().minus(sizeOfCurrentRange);
+            return new IPv4CidrRange(new IPv4(startOfPreviousRange), this.cidrPrefix)
+        }
+
+        return;
+    }
+
     next(value?: any): IteratorResult<IPv4>;
     next(value?: any): IteratorResult<IPv4>;
     next(value?: any) {

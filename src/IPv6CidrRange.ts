@@ -188,6 +188,31 @@ export class IPv6CidrRange extends AbstractIpRange implements IPRange, IterableI
         return [firstRange, secondRange];
     }
 
+    public hasNextRange(): boolean {
+        return super.hasNextRange();
+    }
+
+    public hasPreviousRange(): boolean {
+        return super.hasPreviousRange();
+    }
+
+    public nextRange(): IPv6CidrRange | undefined {
+        if (this.hasNextRange()) {
+            let sizeOfCurrentRange = this.getSize();
+            let startOfNextRange = this.getFirst().getValue().plus(sizeOfCurrentRange);
+            return new IPv6CidrRange(new IPv6(startOfNextRange), this.cidrPrefix)
+        }
+        return;
+    }
+
+    public previousRange(): IPv6CidrRange | undefined {
+        if (this.hasPreviousRange()) {
+            let sizeOfCurrentRange = this.getSize();
+            let startOfPreviousRange = this.getFirst().getValue().minus(sizeOfCurrentRange);
+            return new IPv6CidrRange(new IPv6(startOfPreviousRange), this.cidrPrefix)
+        }
+        return;
+    }
 
     next(value?: any): IteratorResult<IPv6>;
     next(value?: any): IteratorResult<IPv6>;

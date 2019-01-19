@@ -99,4 +99,32 @@ export interface IPRange {
      * @returns {Array<IPRange>} An array of two {@link IPRange}
      */
     split() : Array<IPRange>
+
+    /**
+     * Returns whether there exists a next adjacent range
+     *
+     * @returns {Boolean} true if adjacent range exists, false otherwise
+     */
+    hasNextRange(): boolean
+
+    /**
+     * Method that returns the next adjacent range
+     *
+     * @returns {IPRange} if a next adjacent range exists or {undefined} if not
+     */
+    nextRange(): undefined | IPRange
+
+    /**
+     * Returns whether there exists a previous adjacent range
+     *
+     * @returns {Boolean} true if previous adjacent range exists, false otherwise
+     */
+    hasPreviousRange(): boolean
+
+    /**
+     * Method that returns the previous adjacent range
+     *
+     * @returns {IPRange} if a previous adjacent range exists or {undefined} if not
+     */
+    previousRange(): undefined | IPRange
 }

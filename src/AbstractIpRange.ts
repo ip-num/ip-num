@@ -70,4 +70,16 @@ export abstract class AbstractIpRange {
         )
     }
 
+    public hasNextRange(): boolean {
+        let sizeOfCurrentRange = this.getSize();
+        return bigInt(2).pow(this.bitValue)
+            .minus(sizeOfCurrentRange)
+            .greaterOrEquals(this.getFirst().getValue().plus(sizeOfCurrentRange));
+    }
+
+    public hasPreviousRange(): boolean {
+        return this.getSize()
+            .lesserOrEquals(this.getFirst().getValue())
+    }
+
 }

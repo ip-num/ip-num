@@ -4,7 +4,6 @@ import {decimalNumberToBinaryString} from "./BinaryUtils";
 import * as bigInt from "big-integer"
 import {IPNumType} from "./IPNumType";
 import {AbstractIPNum} from "./AbstractIPNum";
-import {parseBinaryStringToBigInteger} from "./BinaryUtils";
 
 /**
  * Represents an Autonomous System Number. Which is a number that is used to identify
