@@ -1,6 +1,6 @@
 'use strict';
-import {Validator} from "../src/Validator";
-import {IPNumType} from "../src/IPNumType";
+import {Validator} from "../src";
+import {IPNumType} from "../src";
 
 describe('Validator: ', () => {
     describe('isValidIPv4String ', () => {
@@ -90,5 +90,25 @@ describe('Validator: ', () => {
             expect(Validator.isValidIPv6RangeString("3001:db8")[0]).toBe(false);
             expect(Validator.isValidIPv6RangeString("3001:db8::-2001:db8::")[0]).toBe(false);
         });
+    });
+
+    describe('isValidIPv4CidrRange', () => {
+      it('validate valid ipv4 cidr range', () => {
+        expect(Validator.isValidIPv4CidrRange("10.0.0.0/8")[0]).toBe(true)
+      });
+
+      it('validate invalid ipv4 cidr range', () => {
+        expect(Validator.isValidIPv4CidrRange("10.0.0.1/8")[0]).toBe(false)
+      });
+    });
+
+    describe('isValidIPv6CidrRange', () => {
+      it('validate valid ipv6 cidr range', () => {
+        expect(Validator.isValidIPv6CidrRange("2001:db8:85a3::/64")[0]).toBe(true)
+      });
+
+      it('validate invalid ipv6 cidr range', () => {
+        expect(Validator.isValidIPv6CidrRange("2001:db8:85a3::8a2e:370:7334/64")[0]).toBe(false)
+      });
     })
 });
