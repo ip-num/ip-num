@@ -15,12 +15,11 @@
     "test": "nyc -e .ts jasmine-ts spec/**/*.ts",
     "test:watch": "npm run test -- -w",
     "test:without-coverage": "jasmine-ts spec/**/*.ts",
-    "dprep": "npm run clean && npm run compile && cp package.json README.md ./dist/src && cd ./dist/src && webpack --config ../../webpack.config.js",
-    "dpack": "cd ./dist/src && npm pack",
-    "test-release": "npm run dprep && npm run dpack",
-    "drelease": "cd ./dist/src && npm publish",
-    "docs": "typedoc --out ./docs ./src/ --exclude '**/spec/*.ts' && touch ./docs/.nojekyll",
-    "release": "npm run docs && npm run dprep && cp ip-num.js ip-num.js.map ./docs && npm run drelease"
+    "ipnum-build": "npm run clean && npm run compile && cp package.json README.md ./dist/src && cd ./dist/src && webpack --config ../../webpack.config.js",
+    "ipnum-publish": "cd ./dist/src && npm publish",
+    "ipnum-gendoc": "typedoc --out ./docs ./src/ --exclude '**/spec/*.ts' && touch ./docs/.nojekyll",
+    "ipnum-releasecommit": "git add . && git commit -m 'updating documentation in preparation for release'",
+    "ipnum-release": "npm run ipnum-gendoc && npm run ipnum-build && cp ip-num.js ip-num.js.map ./docs && npm run ipnum-releasecommit && npm run ipnum-publish"
   },
   "nyc": {
     "exclude": [
@@ -48,16 +47,17 @@
   "devDependencies": {
     "@types/jasmine": "2.8.6",
     "@types/node": "10.0.0",
-    "ajv-keywords": "3.2.0",
     "awesome-typescript-loader": "5.0.0",
     "coveralls": "3.0.2",
     "jasmine-node": "1.15.0",
     "jasmine-spec-reporter": "4.2.1",
     "jasmine-ts": "0.2.1",
     "nyc": "11.7.1",
-    "source-map-loader": "^0.2.3",
+    "source-map-loader": "0.2.3",
     "tsunit.external": "2.0.11",
+    "typedoc": "0.14.2",
     "webpack": "4.16.0",
-    "webpack-auto-inject-version": "1.1.0"
+    "webpack-auto-inject-version": "1.1.0",
+    "webpack-cli": "3.3.2"
   }
 }
