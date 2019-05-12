@@ -10,7 +10,7 @@
     "url": "https://github.com/ip-num/ip-num"
   },
   "scripts": {
-    "clean": "rm -rf ./dist",
+    "clean": "rm -rf ./dist/spec ./dist/src",
     "compile": "tsc -p tsconfig.json",
     "test": "nyc -e .ts jasmine-ts spec/**/*.ts",
     "test:watch": "npm run test -- -w",
@@ -18,8 +18,8 @@
     "ipnum-build": "npm run clean && npm run compile && cp package.json README.md ./dist/src && cd ./dist/src && webpack --config ../../webpack.config.js",
     "ipnum-publish": "cd ./dist/src && npm publish",
     "ipnum-gendoc": "typedoc --out ./docs ./src/ --exclude '**/spec/*.ts' && touch ./docs/.nojekyll",
-    "ipnum-releasecommit": "git add . && git commit -m 'updating documentation in preparation for release'",
-    "ipnum-release": "npm run ipnum-gendoc && npm run ipnum-build && npm run ipnum-releasecommit && npm run ipnum-publish"
+    "ipnum-releasecommit": "git add . && git commit -m 'updating documentation and dist for release'",
+    "ipnum-release": "npm run ipnum-gendoc && npm run ipnum-build && npm run ipnum-releasecommit && npm run ipnum-publish && cd ../../ && npm run clean"
   },
   "nyc": {
     "exclude": [
