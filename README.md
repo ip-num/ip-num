@@ -25,15 +25,12 @@ If you want to use `ip-num` from within a Node.js environment, you can install i
 `ip-num` is tested against version 7 - and upwards - of NodeJs.
 
 ### Browser
-If you are using a browser, you can include `ip-num` by linking to it or download it from GitHub
+If you are using a browser, you would have to use a module bundler like [browserify](http://browserify.org/), 
+[parceljs](https://parceljs.org/), [webpack](https://webpack.js.org/) etc. to be able to use ip-num as a front-end module.
 
-```<script src="https://ip-num.github.io/ip-num/ip-num.js"></script>```
+For quick prototyping, you can download the release from github at [https://github.com/ip-num/ip-num/releases](https://github.com/ip-num/ip-num/releases)
 
-The source maps can be found at
-
-```https://ip-num.github.io/ip-num/ip-num.js.map"```
-
-Previous releases can be seen at [https://github.com/ip-num/ip-num/releases](https://github.com/ip-num/ip-num/releases)
+You can then extract the compressed file and include the `ip-num.js` file located in the `dist` folder.
 
 Usage
 ------------------

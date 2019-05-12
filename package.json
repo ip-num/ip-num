@@ -19,7 +19,7 @@
     "ipnum-publish": "cd ./dist/src && npm publish",
     "ipnum-gendoc": "typedoc --out ./docs ./src/ --exclude '**/spec/*.ts' && touch ./docs/.nojekyll",
     "ipnum-releasecommit": "git add . && git commit -m 'updating documentation in preparation for release'",
-    "ipnum-release": "npm run ipnum-gendoc && npm run ipnum-build && cp ip-num.js ip-num.js.map ./docs && npm run ipnum-releasecommit && npm run ipnum-publish"
+    "ipnum-release": "npm run ipnum-gendoc && npm run ipnum-build && npm run ipnum-releasecommit && npm run ipnum-publish"
   },
   "nyc": {
     "exclude": [
