@@ -12,7 +12,7 @@ ip-num
 
 `ip-num`'s source can be found on [GitHub](https://github.com/ip-num/ip-num)
 
-You can have a play at `ip-num`'s API via the JsBin at [http://bit.ly/ipnum-playground](http://bit.ly/ipnum-playground)
+You can have a play at `ip-num`'s API via the Runkit at [http://bit.ly/ipnum-repl](http://bit.ly/ipnum-repl)
 
 Installation
 ----------------
