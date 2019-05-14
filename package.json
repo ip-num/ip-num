@@ -10,16 +10,18 @@
     "url": "https://github.com/ip-num/ip-num"
   },
   "scripts": {
-    "clean": "rm -rf ./dist/spec ./dist/src",
+    "clean": "rm -rf ./dist/spec ./dist/src ip-num-*.tgz && git checkout -- .",
     "compile": "tsc -p tsconfig.json",
     "test": "nyc -e .ts jasmine-ts spec/**/*.ts",
     "test:watch": "npm run test -- -w",
     "test:without-coverage": "jasmine-ts spec/**/*.ts",
-    "ipnum-build": "npm run clean && npm run compile && cp package.json README.md ./dist/src && cd ./dist/src && webpack --config ../../webpack.config.js",
-    "ipnum-publish": "cd ./dist/src && npm publish",
+    "ipnum-testrelease": "npm run ipnum-build && npm pack ./dist/src",
     "ipnum-gendoc": "typedoc --out ./docs ./src/ --exclude '**/spec/*.ts' && touch ./docs/.nojekyll",
+    "ipnum-versionincrement": "run(){ npm version $1; }; run",
+    "ipnum-build": "npm run clean && npm run compile && cp package.json README.md ./dist/src && webpack --config ./webpack.config.js",
     "ipnum-releasecommit": "git add . && git commit -m 'updating documentation and dist for release'",
-    "ipnum-release": "npm run ipnum-gendoc && npm run ipnum-build && npm run ipnum-releasecommit && npm run ipnum-publish && cd ../../ && npm run clean"
+    "ipnum-release-dry-run": "npm run ipnum-versionincrement && npm run ipnum-gendoc && npm run ipnum-build && npm run ipnum-releasecommit && npm publish ./dist/src --dry-run && npm run clean",
+    "ipnum-release": "npm run ipnum-versionincrement && npm run ipnum-gendoc && npm run ipnum-build && npm run ipnum-releasecommit && npm publish ./dist/src && npm run clean"
   },
   "nyc": {
     "exclude": [
@@ -58,6 +60,6 @@
     "typedoc": "0.14.2",
     "webpack": "4.16.0",
     "webpack-auto-inject-version": "1.1.0",
-    "webpack-cli": "3.3.2"
+    "webpack-cli": "^3.3.2"
   }
 }

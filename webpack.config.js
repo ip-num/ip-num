@@ -2,9 +2,9 @@ var webpack = require("webpack");
 var WebpackAutoInject = require('webpack-auto-inject-version');
 
 module.exports = {
-  entry: './index.js',
+  entry: './dist/src/index.js',
   output: {
-    filename: '../../ip-num.js',
+    filename: './ip-num.js',
     library: 'ipnum'
   },
   devtool: "source-map",
