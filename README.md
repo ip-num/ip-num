@@ -377,6 +377,13 @@ Found a bug and you want to provide a fix for it? Then feel free to submit a pul
 
 Change log
 ------------------
+
+##### v1.2.1
+* Introduced AbstractIpRange to abstract over the IPRange (ie: IPv4Range and IPv6Range). [Issue #15](https://github.com/ip-num/ip-num/issues/15) 
+* Extend the IPRange interface. [Issue #20](https://github.com/ip-num/ip-num/issues/20)
+* Add method to IPRange to return the adjacent ranges. [Issue #19](https://github.com/ip-num/ip-num/issues/19)
+* Add ability to validate if a CIDR notation represents a valid range. [Issue #21](https://github.com/ip-num/ip-num/issues/21)
+
 ##### v1.1.1
 * Fixed isValidIPv4String() incorrectly returns true for some invalid addresses. [Issue #9](https://github.com/ip-num/ip-num/issues/9)
 * Improved Validator.isValidIPv6String and added test coverage. [Issue #10](https://github.com/ip-num/ip-num/issues/10)
