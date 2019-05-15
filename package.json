@@ -17,11 +17,13 @@
     "test:without-coverage": "jasmine-ts spec/**/*.ts",
     "ipnum-testrelease": "npm run ipnum-build && npm pack ./dist/src",
     "ipnum-gendoc": "typedoc --out ./docs ./src/ --exclude '**/spec/*.ts' && touch ./docs/.nojekyll",
-    "ipnum-versionincrement": "run(){ npm version $1; }; run",
     "ipnum-build": "npm run clean && npm run compile && cp package.json README.md ./dist/src && webpack --config ./webpack.config.js",
     "ipnum-releasecommit": "git add . && git commit -m 'updating documentation and dist for release'",
-    "ipnum-release-dry-run": "npm run ipnum-versionincrement && npm run ipnum-gendoc && npm run ipnum-build && npm run ipnum-releasecommit && npm publish ./dist/src --dry-run && npm run clean",
-    "ipnum-release": "npm run ipnum-versionincrement && npm run ipnum-gendoc && npm run ipnum-build && npm run ipnum-releasecommit && npm publish ./dist/src && npm run clean"
+    "ipnum-release-dry-run": "npm run ipnum-gendoc && npm run ipnum-build && npm run ipnum-releasecommit && npm publish ./dist/src --dry-run && npm run clean",
+    "ipnum-release": "npm run ipnum-gendoc && npm run ipnum-build && npm run ipnum-releasecommit && npm publish ./dist/src && npm run clean",
+    "ipnum-release-major": "npm version major && npm run ipnum-release",
+    "ipnum-release-minor": "npm version minor && run run ipnum-release",
+    "ipnum-release-patch": "npm version patch && run run ipnum-release"
   },
   "nyc": {
     "exclude": [

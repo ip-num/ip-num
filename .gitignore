@@ -3,5 +3,6 @@
 coverage
 *.iml
 node_modules
+.DS_Store
 
 /spec/support/jasmine.json
