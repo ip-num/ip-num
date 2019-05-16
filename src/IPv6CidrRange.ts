@@ -160,7 +160,7 @@ export class IPv6CidrRange extends AbstractIpRange implements IPRange, IterableI
         let iteratingIPv6 = this.getFirst();
 
         if (bigInt(count).greater(this.getSize())) {
-            throw new Error(`${count} is greater than ${this.getSize()}, the size of the range`);
+            throw new Error(`${count.toString()} is greater than ${this.getSize().toString()}, the size of the range`);
         }
 
         for (var counter = 0; counter < count - 1; counter++) {

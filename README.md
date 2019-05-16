@@ -383,6 +383,7 @@ Change log
 * Extend the IPRange interface. [Issue #20](https://github.com/ip-num/ip-num/issues/20)
 * Add method to IPRange to return the adjacent ranges. [Issue #19](https://github.com/ip-num/ip-num/issues/19)
 * Add ability to validate if a CIDR notation represents a valid range. [Issue #21](https://github.com/ip-num/ip-num/issues/21)
+* Changed target to es5 so as to support Internet Explorer 11. [Issue #22](https://github.com/ip-num/ip-num/issues/22)
 
 ##### v1.1.1
 * Fixed isValidIPv4String() incorrectly returns true for some invalid addresses. [Issue #9](https://github.com/ip-num/ip-num/issues/9)
