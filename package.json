@@ -1,6 +1,6 @@
 {
   "name": "ip-num",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "description": "A TypeScript library for working with IPv4, IPv6 and ASN numbers. It provides representations of these internet protocol numbers with the ability to perform various IP related operations like parsing, validating etc. on them",
   "main": "./index.js",
   "types": "./index.d.ts",
@@ -10,17 +10,20 @@
     "url": "https://github.com/ip-num/ip-num"
   },
   "scripts": {
-    "clean": "rm -rf ./dist",
+    "clean": "rm -rf ./dist/spec ./dist/src ip-num-*.tgz && git checkout -- .",
     "compile": "tsc -p tsconfig.json",
     "test": "nyc -e .ts jasmine-ts spec/**/*.ts",
     "test:watch": "npm run test -- -w",
     "test:without-coverage": "jasmine-ts spec/**/*.ts",
-    "dprep": "npm run clean && npm run compile && cp package.json README.md ./dist/src && cd ./dist/src && webpack --config ../../webpack.config.js",
-    "dpack": "cd ./dist/src && npm pack",
-    "test-release": "npm run dprep && npm run dpack",
-    "drelease": "cd ./dist/src && npm publish",
-    "docs": "typedoc --out ./docs ./src/ --exclude '**/spec/*.ts' && touch ./docs/.nojekyll",
-    "release": "npm run docs && npm run dprep && cp ip-num.js ip-num.js.map ./docs && npm run drelease"
+    "ipnum-testrelease": "npm run ipnum-build && npm pack ./dist/src",
+    "ipnum-gendoc": "typedoc --out ./docs ./src/ --exclude '**/spec/*.ts' && touch ./docs/.nojekyll",
+    "ipnum-build": "npm run clean && npm run compile && cp package.json README.md ./dist/src && webpack --config ./webpack.config.js",
+    "ipnum-releasecommit": "git add . && git commit -m 'updating documentation and dist for release'",
+    "ipnum-release-dry-run": "npm run ipnum-gendoc && npm run ipnum-build && npm run ipnum-releasecommit && npm publish ./dist/src --dry-run && npm run clean",
+    "ipnum-release": "npm run ipnum-gendoc && npm run ipnum-build && npm run ipnum-releasecommit && npm publish ./dist/src && npm run clean",
+    "ipnum-release-major": "npm version major && npm run ipnum-release",
+    "ipnum-release-minor": "npm version minor && npm run ipnum-release",
+    "ipnum-release-patch": "npm version patch && npm run ipnum-release"
   },
   "nyc": {
     "exclude": [
@@ -46,18 +49,19 @@
     "big-integer": "1.6.28"
   },
   "devDependencies": {
-    "@types/jasmine": "2.8.16",
-    "@types/node": "10.12.26",
-    "ajv-keywords": "3.4.0",
-    "awesome-typescript-loader": "5.2.1",
+    "@types/jasmine": "2.8.6",
+    "@types/node": "10.0.0",
+    "awesome-typescript-loader": "5.0.0",
     "coveralls": "3.0.2",
     "jasmine-node": "1.16.2",
     "jasmine-spec-reporter": "4.2.1",
     "jasmine-ts": "0.2.1",
-    "nyc": "11.9.0",
-    "source-map-loader": "0.2.4",
-    "tsunit.external": "2.1.1",
-    "webpack": "4.29.4",
-    "webpack-auto-inject-version": "1.2.2"
+    "nyc": "11.7.1",
+    "source-map-loader": "0.2.3",
+    "tsunit.external": "2.0.11",
+    "typedoc": "0.14.2",
+    "webpack": "4.16.0",
+    "webpack-auto-inject-version": "1.1.0",
+    "webpack-cli": "^3.3.2"
   }
 }

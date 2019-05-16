@@ -5,6 +5,7 @@ import {leftPadWithZeroBit} from "./BinaryUtils";
 import {parseBinaryStringToBigInteger} from "./BinaryUtils";
 import {Validator} from "./Validator";
 import {IPRange} from "./interface/IPRange";
+import {AbstractIpRange} from "./AbstractIpRange";
 
 /**
  * Represents a continuous segment of IPv6 number following the
@@ -12,9 +13,8 @@ import {IPRange} from "./interface/IPRange";
  *
  * @see https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing
  */
-// TODO introduce an abstract class to share some of the logic between IPv4Range and IPv6Range
-export class IPv6Range implements IPRange, IterableIterator<IPv6> {
-    private readonly bitValue: bigInt.BigInteger = bigInt(128);
+export class IPv6CidrRange extends AbstractIpRange implements IPRange, IterableIterator<IPv6> {
+    readonly bitValue: bigInt.BigInteger = bigInt(128);
     private internalCounterValue: IPv6;
 
     /**
@@ -23,7 +23,7 @@ export class IPv6Range implements IPRange, IterableIterator<IPv6> {
      * @param {string} rangeIncidrNotation the range of the IPv6 number in CIDR notation
      * @returns {IPV6Range} the IPV6Range
      */
-    static fromCidr(rangeIncidrNotation:string):IPv6Range {
+    static fromCidr(rangeIncidrNotation:string):IPv6CidrRange {
         let [isValid, message] = Validator.isValidIPv6CidrNotation(rangeIncidrNotation);
         if (!isValid) {
             throw new Error(message.filter(msg => {return msg !== '';}).toString());
@@ -32,7 +32,7 @@ export class IPv6Range implements IPRange, IterableIterator<IPv6> {
         let ipString = cidrComponents[0];
         let prefix = parseInt(cidrComponents[1]);
 
-        return new IPv6Range(IPv6.fromHexadecimalString(ipString), IPv6Prefix.fromNumber(prefix));
+        return new IPv6CidrRange(IPv6.fromHexadecimalString(ipString), IPv6Prefix.fromNumber(prefix));
     };
 
     /**
@@ -41,12 +41,13 @@ export class IPv6Range implements IPRange, IterableIterator<IPv6> {
      * The arguments taken by the constructor is inspired by the CIDR notation which basically consists of the IP
      * number and the prefix.
      *
-     * @param {IPv6} IPv6 the IP number used to construct the range. By convention this is the first IP number in
+     * @param {IPv6} ipv6 the IP number used to construct the range. By convention this is the first IP number in
      * the range, but it could also be any IP number within the range
      * @param {IPv6Prefix} cidrPrefix the prefix which is a representation of the number of bits used to mask the
      * given IPv6 number in other to create the range
      */
-    constructor(private readonly ipv6: IPv6, private readonly cidrPrefix: IPv6Prefix) {
+    constructor(private readonly ipv6: IPv6, readonly cidrPrefix: IPv6Prefix) {
+        super();
         this.internalCounterValue = this.getFirst();
     }
 
@@ -56,13 +57,7 @@ export class IPv6Range implements IPRange, IterableIterator<IPv6> {
      * @returns {bigInt.BigInteger} the amount of IPv6 numbers in the range
      */
     public getSize(): bigInt.BigInteger {
-        /**
-         * Using bitwise shit operation this will be
-         * 1 << (this.bitValue - this.prefix.getValue())
-         * Since left shift a number by x is equivalent to multiplying the number by the power x raised to 2
-         * 2 << 4 = 2 * (2 raised to 4)
-         */
-        return bigInt(2).pow(this.bitValue.minus(bigInt(this.cidrPrefix.getValue())));
+        return super.getSize();
     }
 
     /**
@@ -114,21 +109,11 @@ export class IPv6Range implements IPRange, IterableIterator<IPv6> {
      * An adjacent range being one where the end of the given range, when incremented by one marks the start of the
      * other range. Or where the start of the given range, when decreased by one, marks the end of the other range
      *
-     * @param {IPv6Range} otherRange the other IPv6 range to compare with
+     * @param {IPv6CidrRange} otherRange the other IPv6 range to compare with
      * @returns {boolean} true if the two IPv6 ranges are consecutive, false otherwise
      */
-    // TODO move this to the IPRange interface?
-    public isConsecutive(otherRange: IPv6Range): boolean {
-        let thisFirst: IPv6 = this.getFirst();
-        let thisLast: IPv6 = this.getLast();
-        let otherFirst: IPv6 = otherRange.getFirst();
-        let otherLast: IPv6 = otherRange.getLast();
-
-        return (
-            thisLast.hasNext() && thisLast.nextIPNumber().isEquals(otherFirst)
-            ||
-            otherLast.hasNext() && otherLast.nextIPNumber().isEquals(thisFirst)
-        )
+    public isConsecutive(otherRange: IPv6CidrRange): boolean {
+        return super.isConsecutive(otherRange);
     }
 
     /**
@@ -136,17 +121,11 @@ export class IPv6Range implements IPRange, IterableIterator<IPv6> {
      *
      * By a subset range, it means all the values of the given range are contained by this IPv6 range
      *
-     * @param {IPv6Range} otherRange the other IPv6 range
+     * @param {IPv6CidrRange} otherRange the other IPv6 range
      * @returns {boolean} true if the other Ipv6 range is a subset. False otherwise.
      */
-    // TODO move this to the IPRange interface?
-    public contains(otherRange: IPv6Range): boolean {
-        let thisFirst: IPv6 = this.getFirst();
-        let thisLast: IPv6 = this.getLast();
-        let otherFirst: IPv6 = otherRange.getFirst();
-        let otherLast: IPv6 = otherRange.getLast();
-
-        return (thisFirst.isLessThanOrEquals(otherFirst) && thisLast.isGreaterThanOrEquals(otherLast));
+    public contains(otherRange: IPv6CidrRange): boolean {
+        return super.contains(otherRange);
     }
 
     /**
@@ -154,36 +133,20 @@ export class IPv6Range implements IPRange, IterableIterator<IPv6> {
      *
      * By container range, it means all the IP number in this current range can be found within the given range.
      *
-     * @param {IPv6Range} otherRange he other IPv6 range
+     * @param {IPv6CidrRange} otherRange he other IPv6 range
      * @returns {boolean} true if the other Ipv6 range is a container range. False otherwise.
      */
-    // TODO move this to the IPRange interface?
-    public inside(otherRange: IPv6Range): boolean {
-        let thisFirst: IPv6 = this.getFirst();
-        let thisLast: IPv6 = this.getLast();
-        let otherFirst: IPv6 = otherRange.getFirst();
-        let otherLast: IPv6 = otherRange.getLast();
-
-        return (otherFirst.isLessThanOrEquals(thisFirst) && otherLast.isGreaterThanOrEquals(thisLast));
+    public inside(otherRange: IPv6CidrRange): boolean {
+        return super.inside(otherRange);
     }
 
     /**
      * Checks if two IPv6 ranges overlap
-     * @param {IPv6Range} otherRange the other IPv6 range
+     * @param {IPv6CidrRange} otherRange the other IPv6 range
      * @returns {boolean} true if the ranges overlap, false otherwise
      */
-    // TODO or confirm than normal ranges cannot overlap
-    public isOverlapping(otherRange: IPv6Range): boolean {
-        let thisFirst: IPv6 = this.getFirst();
-        let thisLast: IPv6 = this.getLast();
-        let otherFirst: IPv6 = otherRange.getFirst();
-        let otherLast: IPv6 = otherRange.getLast();
-
-        return (
-            thisLast.isGreaterThan(otherFirst) && thisLast.isLessThanOrEquals(otherLast) && thisFirst.isLessThan(otherFirst)
-            ||
-            otherLast.isGreaterThan(thisFirst) && otherLast.isLessThanOrEquals(thisLast) && otherFirst.isLessThan(otherFirst)
-        );
+    public isOverlapping(otherRange: IPv6CidrRange): boolean {
+        return super.isOverlapping(otherRange);
     }
 
     /**
@@ -197,7 +160,7 @@ export class IPv6Range implements IPRange, IterableIterator<IPv6> {
         let iteratingIPv6 = this.getFirst();
 
         if (bigInt(count).greater(this.getSize())) {
-            throw new Error(`${count} is greater than ${this.getSize()}, the size of the range`);
+            throw new Error(`${count.toString()} is greater than ${this.getSize().toString()}, the size of the range`);
         }
 
         for (var counter = 0; counter < count - 1; counter++) {
@@ -210,21 +173,46 @@ export class IPv6Range implements IPRange, IterableIterator<IPv6> {
     /**
      * Method that splits an IPv6 range into two halves
      *
-     * @returns {Array<IPv6Range>} An array of two {@link IPv6Range}
+     * @returns {Array<IPv6CidrRange>} An array of two {@link IPv6CidrRange}
      */
-    public split() : Array<IPv6Range> {
+    public split() : Array<IPv6CidrRange> {
         let prefixToSplit = this.cidrPrefix.getValue();
         if (prefixToSplit === 128) {
             throw new Error("Cannot split an IP range with a single IP number");
         }
         let splitCidr = IPv6Prefix.fromNumber(prefixToSplit + 1);
         let firstIPOfFirstRange = this.getFirst();
-        let firstRange = new IPv6Range(firstIPOfFirstRange, splitCidr);
+        let firstRange = new IPv6CidrRange(firstIPOfFirstRange, splitCidr);
         let firstIPOfSecondRange = firstRange.getLast().nextIPNumber();
-        let secondRange = new IPv6Range(firstIPOfSecondRange, splitCidr);
+        let secondRange = new IPv6CidrRange(firstIPOfSecondRange, splitCidr);
         return [firstRange, secondRange];
     }
 
+    public hasNextRange(): boolean {
+        return super.hasNextRange();
+    }
+
+    public hasPreviousRange(): boolean {
+        return super.hasPreviousRange();
+    }
+
+    public nextRange(): IPv6CidrRange | undefined {
+        if (this.hasNextRange()) {
+            let sizeOfCurrentRange = this.getSize();
+            let startOfNextRange = this.getFirst().getValue().plus(sizeOfCurrentRange);
+            return new IPv6CidrRange(new IPv6(startOfNextRange), this.cidrPrefix)
+        }
+        return;
+    }
+
+    public previousRange(): IPv6CidrRange | undefined {
+        if (this.hasPreviousRange()) {
+            let sizeOfCurrentRange = this.getSize();
+            let startOfPreviousRange = this.getFirst().getValue().minus(sizeOfCurrentRange);
+            return new IPv6CidrRange(new IPv6(startOfPreviousRange), this.cidrPrefix)
+        }
+        return;
+    }
 
     next(value?: any): IteratorResult<IPv6>;
     next(value?: any): IteratorResult<IPv6>;

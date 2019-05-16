@@ -54,9 +54,77 @@ export interface IPRange {
     take(count: number): Array<IPNumber>
 
     /**
+     * Indicates whether the given IP range is an adjacent range.
+     *
+     * An adjacent range being one where the end of the given range, when incremented by one marks the start of the
+     * other range. Or where the start of the given range, when decreased by one, marks the end of the other range
+     *
+     * @param {IPRange} otherRange the other IP range to compare with
+     * @returns {boolean} true if the two IP ranges are consecutive, false otherwise
+     */
+    isConsecutive(otherRange: IPRange): boolean
+
+
+    /**
+     * Indicates if the given IP range is a subset.
+     *
+     * By a subset range, it means all the values of the given range are contained by this IP range
+     *
+     * @param {IPRange} otherRange the other IP range
+     * @returns {boolean} true if the other Ip range is a subset. False otherwise.
+     */
+    contains(otherRange: IPRange): boolean
+
+
+    /**
+     * Indicate if the given range is a container range.
+     *
+     * By container range, it means all the IP number in this current range can be found within the given range.
+     *
+     * @param {IPRange} otherRange he other IP range
+     * @returns {boolean} true if the other Ip range is a container range. False otherwise.
+     */
+    inside(otherRange: IPRange): boolean
+
+    /**
+     * Checks if two IP ranges overlap
+     * @param {IPRange} otherRange the other IP range
+     * @returns {boolean} true if the ranges overlap, false otherwise
+     */
+    isOverlapping(otherRange: IPRange): boolean
+
+    /**
      * Method that splits an IP range into two halves
      *
      * @returns {Array<IPRange>} An array of two {@link IPRange}
      */
     split() : Array<IPRange>
+
+    /**
+     * Returns whether there exists a next adjacent range
+     *
+     * @returns {Boolean} true if adjacent range exists, false otherwise
+     */
+    hasNextRange(): boolean
+
+    /**
+     * Method that returns the next adjacent range
+     *
+     * @returns {IPRange} if a next adjacent range exists or {undefined} if not
+     */
+    nextRange(): undefined | IPRange
+
+    /**
+     * Returns whether there exists a previous adjacent range
+     *
+     * @returns {Boolean} true if previous adjacent range exists, false otherwise
+     */
+    hasPreviousRange(): boolean
+
+    /**
+     * Method that returns the previous adjacent range
+     *
+     * @returns {IPRange} if a previous adjacent range exists or {undefined} if not
+     */
+    previousRange(): undefined | IPRange
 }

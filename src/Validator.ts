@@ -4,6 +4,9 @@ import * as bigInt from "big-integer";
 import {IPNumType} from "./IPNumType";
 import {hexadectetNotationToBinaryString} from "./IPv6Utils";
 import {expandIPv6Number} from "./IPv6Utils";
+import {IPv4Prefix} from "./Prefix";
+import {IPv6Prefix} from "./Prefix";
+import {colonHexadecimalNotationToBinaryString} from "./HexadecimalUtils";
 
 export class Validator {
     static IPV4_PATTERN: RegExp = new RegExp(/^(0?[0-9]?[0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.(0?[0-9]?[0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.(0?[0-9]?[0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.(0?[0-9]?[0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])$/);
@@ -28,6 +31,9 @@ export class Validator {
     static invalidSubnetMaskMessage = "The Subnet Mask is invalid";
     static invalidPrefixValueMessage = "A Prefix value cannot be less than 0 or greater than 32";
     static invalidIPv4CidrNotationMessage = "Cidr notation should be in the form [ip number]/[range]";
+    static InvalidIPCidrRangeMessage = "Given IP number portion must is not the start of the range";
+    static invalidRangeNotationMessage = "Range notation should be in the form [first ip]-[last ip]";
+    static invalidRangeFirstNotGreaterThanLastMessage = "First IP in [first ip]-[last ip] must be less than Last IP";
     static invalidIPv6CidrNotationString = "A Cidr notation string should contain an IPv6 number and prefix";
     static takeOutOfRangeSizeMessage = "$count is greater than $size, the size of the range";
     static cannotSplitSingleRangeErrorMessage = "Cannot split an IP range with a single IP number";
@@ -234,6 +240,90 @@ export class Validator {
 
         let isValid = validIpv4 && validPrefix;
         let invalidMessage = invalidIpv4Message.concat(invalidPrefixMessage);
+
+        return isValid ? [isValid, []]: [isValid, invalidMessage];
+    }
+
+  /**
+   *  Checks if the given string is a valid IPv4 range in Cidr notation, with the ip number in the cidr notation
+   *  being the start of the range
+   *
+   * @param {string}  ipv4CidrNotation the IPv4 range in Cidr notation
+   *
+   * * @returns {[boolean , string[]]} first value is true if valid Cidr notation, false otherwise. Second
+   * value contains [] or an array of error message when invalid
+   */
+  static isValidIPv4CidrRange(ipv4CidrNotation: string): [boolean, string[]] {
+      return Validator.isValidCidrRange(ipv4CidrNotation, Validator.isValidIPv4CidrNotation, dottedDecimalNotationToBinaryString, IPv4Prefix.fromNumber);
+    }
+
+  /**
+   *  Checks if the given string is a valid IPv6 range in Cidr notation, with the ip number in the cidr notation
+   *  being the start of the range
+   *
+   * @param {string}  ipv6CidrNotation the IPv6 range in Cidr notation
+   *
+   * * @returns {[boolean , string[]]} first value is true if valid Cidr notation, false otherwise. Second
+   * value contains [] or an array of error message when invalid
+   */
+    static isValidIPv6CidrRange(ipv6CidrNotation: string): [boolean, string[]] {
+      return Validator.isValidCidrRange(ipv6CidrNotation, Validator.isValidIPv6CidrNotation, colonHexadecimalNotationToBinaryString, IPv6Prefix.fromNumber);
+    }
+
+
+    private static isValidCidrRange(rangeString: string,
+                                    cidrNotationValidator: (range:string) => [boolean, string[]],
+                                    toBinaryStringConverter: (range: string) => string,
+                                    prefixFactory: (num:number) => IPv4Prefix | IPv6Prefix): [boolean, string[]] {
+      let validationResult = cidrNotationValidator(rangeString);
+
+      if (!validationResult[0]) {
+        return validationResult
+      }
+
+      let cidrComponents = rangeString.split("/");
+      let ip = cidrComponents[0];
+      let range = cidrComponents[1];
+      let ipNumber = bigInt(toBinaryStringConverter(ip), 2);
+      let subnetMask = prefixFactory(parseInt(range)).toSubnetMask();
+      let isValid = ipNumber.and(subnetMask.value).equals(ipNumber);
+
+      return isValid ? [isValid, []]: [isValid, [Validator.InvalidIPCidrRangeMessage]];
+    }
+
+    static isValidIPv4RangeString(ipv4RangeString: string): [boolean, string[]] {
+        let firstLastValidator = (firstIP: string, lastIP: string) => bigInt(dottedDecimalNotationToBinaryString(firstIP))
+            .greaterOrEquals(dottedDecimalNotationToBinaryString(lastIP));
+
+        return this.isValidRange(ipv4RangeString, Validator.isValidIPv4String, firstLastValidator);
+    }
+
+    static isValidIPv6RangeString(ipv6RangeString: string): [boolean, string[]] {
+        let firstLastValidator = (firstIP: string, lastIP: string) => bigInt(hexadectetNotationToBinaryString(firstIP))
+            .greaterOrEquals(hexadectetNotationToBinaryString(lastIP));
+        return this.isValidRange(ipv6RangeString, Validator.isValidIPv6String, firstLastValidator);
+    }
+
+    private static isValidRange(rangeString: string,
+                                validator: (x:string) => [boolean, string[]],
+                                firstLastValidator: (first:string, last:string) => boolean):[boolean, string[]] {
+        let rangeComponents = rangeString.split("-").map(component => component.trim());
+        if(rangeComponents.length !== 2 || (rangeComponents[0].length === 0 || rangeComponents[1].length === 0)) {
+            return [false, [Validator.invalidRangeNotationMessage]];
+        }
+        let firstIP = rangeComponents[0];
+        let lastIP = rangeComponents[1];
+
+        let [validFirstIP, invalidFirstIPMessage] = validator(firstIP);
+        let [validLastIP, invalidLastIPMessage] = validator(lastIP);
+
+        let isValid = validFirstIP && validLastIP;
+
+        if (isValid && firstLastValidator(firstIP, lastIP)) {
+            return [false, [Validator.invalidRangeFirstNotGreaterThanLastMessage]]
+        }
+
+        let invalidMessage = invalidFirstIPMessage.concat(invalidLastIPMessage);
 
         return isValid ? [isValid, []]: [isValid, invalidMessage];
     }

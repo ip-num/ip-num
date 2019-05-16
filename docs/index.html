@@ -208,9 +208,9 @@ See the [<span class="hljs-string">IPv4 documentation</span>](<span class="hljs-
 See the [<span class="hljs-string">IPv6 documentation</span>](<span class="hljs-link">https://ip-num.github.io/ip-num/classes/_ipv6_.ipv6.html</span>) for more information
 
 <span class="hljs-section">### IPv4 Ranges</span>
-</code></pre><p>import {IPv4Range} from &quot;ip-num/IPv4Range&quot;;</p>
+</code></pre><p>import {IPv4CidrRange} from &quot;ip-num/IPv4CidrRange&quot;;</p>
 				<p>// creating an IPv4 range from CIDR notation
-				let ipv4Range = IPv4Range.fromCidr(&quot;192.198.0.0/24&quot;);</p>
+				let ipv4Range = IPv4CidrRange.fromCidr(&quot;192.198.0.0/24&quot;);</p>
 				<p>// get first and last IPv4 number in the range
 					ipv4Range.getFirst().toString() // gives 192.198.0.0
 				ipv4Range.getLast().toString() // gives 192.198.0.255</p>
@@ -220,12 +220,12 @@ See the [<span class="hljs-string">IPv6 documentation</span>](<span class="hljs-
 					ipv4Range.split()[0].toCidrString() // returns 192.198.0.0/25
 				ipv4Range.split()[1].toCidrString() // returns 192.198.0.128/25</p>
 				<pre><code>
-See the [<span class="hljs-string">IPv4Range documentation</span>](<span class="hljs-link">https://ip-num.github.io/ip-num/classes/_ipv4range_.ipv4range.html</span>) for more information
+See the [<span class="hljs-string">IPv4CidrRange documentation</span>](<span class="hljs-link">https://ip-num.github.io/ip-num/classes/_ipv4range_.ipv4range.html</span>) for more information
 
 <span class="hljs-section">### IPv6 Ranges</span>
-</code></pre><p>import {IPv6Range} from &quot;ip-num/IPv6Range&quot;;</p>
+</code></pre><p>import {IPv6CidrRange} from &quot;ip-num/IPv6CidrRange&quot;;</p>
 				<p>// creating an IPv6 range from CIDR notation
-				let ipv6Range = IPv6Range.fromCidr(&quot;2001:db8::/33&quot;);</p>
+				let ipv6Range = IPv6CidrRange.fromCidr(&quot;2001:db8::/33&quot;);</p>
 				<p>// get first and last IPv6 number in the range
 					ipv6Range.getFirst().toString() // gives 2001:db8:0:0:0:0:0:0
 				ipv6Range.getLast().toString() // gives 2001:db8:7fff:ffff:ffff:ffff:ffff:ffff</p>
@@ -235,11 +235,11 @@ See the [<span class="hljs-string">IPv4Range documentation</span>](<span class="
 					ipv6Range.split()[0].toCidrString() // returns 2001:db8:0:0:0:0:0:0/34
 				ipv6Range.split()[1].toCidrString() // returns 2001:db8:4000:0:0:0:0:0/34</p>
 				<pre><code>
-See <span class="hljs-keyword">the</span> [IPv6Range documentation](<span class="hljs-keyword">https</span>://ip-<span class="hljs-built_in">num</span>.github.io/ip-<span class="hljs-built_in">num</span>/classes/<span class="hljs-title">_ipv6range</span>_.ipv6range.html) <span class="hljs-keyword">for</span> more information
+See <span class="hljs-keyword">the</span> [IPv6CidrRange documentation](<span class="hljs-keyword">https</span>://ip-<span class="hljs-built_in">num</span>.github.io/ip-<span class="hljs-built_in">num</span>/classes/<span class="hljs-title">_ipv6range</span>_.ipv6range.html) <span class="hljs-keyword">for</span> more information
 
 <span class="hljs-comment">### IPNumber and IPRange interfaces</span>
-When working <span class="hljs-keyword">in</span> TypeScript, you have <span class="hljs-keyword">the</span> ability <span class="hljs-built_in">to</span> abstract ASN, IPv4 <span class="hljs-keyword">and</span> IPv6 <span class="hljs-keyword">as</span> <span class="hljs-keyword">an</span> IPNumber, <span class="hljs-keyword">and</span> IPv4Range <span class="hljs-keyword">and</span> 
-IPv6Range <span class="hljs-keyword">as</span> IPRange
+When working <span class="hljs-keyword">in</span> TypeScript, you have <span class="hljs-keyword">the</span> ability <span class="hljs-built_in">to</span> abstract ASN, IPv4 <span class="hljs-keyword">and</span> IPv6 <span class="hljs-keyword">as</span> <span class="hljs-keyword">an</span> IPNumber, <span class="hljs-keyword">and</span> IPv4CidrRange <span class="hljs-keyword">and</span>
+IPv6CidrRange <span class="hljs-keyword">as</span> IPRange
 </code></pre><p>// representing ASN, IPv4 and IPv6 with the IPNumber interface
 					let ipNumbers: IPNumber[] = [];
 					ipNumbers.push(new Asn(&quot;200&quot;));
@@ -251,10 +251,10 @@ IPv6Range <span class="hljs-keyword">as</span> IPRange
 					ipNumbers.forEach(ip =&gt; {
 					console.log(ip.toString());
 				});</p>
-				<p>// representing IPv4Range and IPv6Range with the IPRange interface
+				<p>// representing IPv4CidrRange and IPv6CidrRange with the IPRange interface
 					let ipRanges: IPRange[] = [];
-					ipRanges.push(IPv4Range.fromCidr(&quot;192.198.0.0/24&quot;));
-				ipRanges.push(IPv6Range.fromCidr(&quot;2001:db8::/33&quot;));</p>
+					ipRanges.push(IPv4CidrRange.fromCidr(&quot;192.198.0.0/24&quot;));
+				ipRanges.push(IPv6CidrRange.fromCidr(&quot;2001:db8::/33&quot;));</p>
 				<p>// console logs 192.198.0.0/24
 					2001:db8:0:0:0:0:0:0/33
 					ipRanges.forEach(iprange =&gt; {

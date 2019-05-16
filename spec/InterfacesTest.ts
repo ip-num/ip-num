@@ -1,10 +1,10 @@
-import {IPv4Range} from "../src/IPv4Range";
+import {IPv4CidrRange} from "../src/IPv4CidrRange";
 import {IPv4} from "../src/IPv4";
 import {IPNumber} from "../src/interface/IPNumber";
 import {Asn} from "../src/Asn";
 import {IPv6} from "../src/IPv6";
 import {IPRange} from "../src/interface/IPRange";
-import {IPv6Range} from "../src/IPv6Range";
+import {IPv6CidrRange} from "../src/IPv6CidrRange";
 
 
 describe('Interface : ', () => {
@@ -21,10 +21,10 @@ describe('Interface : ', () => {
     });
 
     describe('IPRange', () => {
-        it('should correctly encapsulate IPv4Range and IPv6Range', () => {
+        it('should correctly encapsulate IPv4CidrRange and IPv6CidrRange', () => {
             let ipRanges: IPRange[] = [];
-            ipRanges.push(IPv4Range.fromCidr("192.198.0.0/24"));
-            ipRanges.push(IPv6Range.fromCidr("2001:db8::/33"));
+            ipRanges.push(IPv4CidrRange.fromCidr("192.198.0.0/24"));
+            ipRanges.push(IPv6CidrRange.fromCidr("2001:db8::/33"));
             expect(ipRanges.some(ipRange => { return ipRange.toCidrString() === "192.198.0.0/24"})).toBe(true);
             expect(ipRanges.some(ipRange => { return ipRange.toCidrString() === "2001:db8:0:0:0:0:0:0/33"})).toBe(true);
         });

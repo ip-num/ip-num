@@ -4,7 +4,7 @@
  *
  * @example
  * let ipNum = require("ip-num")
- * ipNum.IPv4Range // gets access to IPv4Range
+ * ipNum.IPv4CidrRange // gets access to IPv4CidrRange
  * ipNum.Asn // gets access to Asn
  */
 export * from './interface/IPNumber'
@@ -16,9 +16,9 @@ export * from './Hexadecatet'
 export * from './HexadecimalUtils'
 export * from './IPNumType'
 export * from './IPv4'
-export * from './IPv4Range'
+export * from './IPv4CidrRange'
 export * from './IPv6'
-export * from './IPv6Range'
+export * from './IPv6CidrRange'
 export * from './IPv6Utils'
 export * from './Octet'
 export * from './Prefix'

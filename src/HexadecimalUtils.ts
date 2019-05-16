@@ -1,4 +1,6 @@
 import * as bigInt from "big-integer/BigInteger";
+import {expandIPv6Number} from "./IPv6Utils";
+import {leftPadWithZeroBit} from "./BinaryUtils";
 
 /**
  * Converts a given BigInteger number to a hexadecimal string
@@ -18,6 +20,39 @@ export let hexadecimalStringToBinaryString = (hexadecimalString: string) : strin
     let inDecimal = bigInt(hexadecimalString, 16);
     return inDecimal.toString(2);
 };
+
+/**
+ * Converts a number in hexadecimal (base 16) to binary hexadecatet string.
+ * This means the bits in the output cannot be more than 16
+ *
+ * @param hexadecimalString {string} the number converted to binary hexadecatet string
+ */
+export let hexadecimalStringToHexadecatetString = (hexadecimalString: string): string => {
+  let binaryString = hexadecimalStringToBinaryString(hexadecimalString);
+
+  let length = binaryString.length;
+  if (length > 16) {
+    throw new Error("Given decimal in binary contains digits greater than an Hexadecatet")
+  }
+  return leftPadWithZeroBit(binaryString, 16);
+};
+
+/**
+ * Given an IPv6 number in hexadecimal notated string, e.g 2001:0db8:0000:0000:0000:0000:0000:0000 converts it to
+ * binary string
+ *
+ * @param hexadecimalString IPv6 string
+ * @returns {string} the binary value of the given ipv6 number in string
+ */
+export let colonHexadecimalNotationToBinaryString = (hexadecimalString: string): string => {
+  let expandedIPv6 = expandIPv6Number(hexadecimalString);
+  let stringHexadecimal = expandedIPv6.split(":");
+
+  return stringHexadecimal.reduce((binaryAsString, hexidecimal) => {
+    return binaryAsString.concat(hexadecimalStringToHexadecatetString(hexidecimal))
+  }, '');
+};
+
 
 /**
  * Converts number in binary string to hexadecimal string
