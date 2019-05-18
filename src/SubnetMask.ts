@@ -3,9 +3,9 @@ import {Validator} from "./Validator";
 import * as bigInt from "big-integer"
 import {dottedDecimalNotationToBinaryString} from "./BinaryUtils";
 import {Hexadecatet} from "./Hexadecatet";
-import {hexadectetNotationToBinaryString} from "./IPv6Utils";
 import {IPv4} from "./IPv4";
 import {IPv6} from "./IPv6";
+import {hexadectetNotationToBinaryString} from "./HexadecimalUtils";
 
 /**
  * The IPv4SubnetMask can be seen as a specialized IPv4 number where, in a 32 bit number, starting from the left, you

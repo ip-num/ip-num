@@ -1,12 +1,11 @@
 'use strict';
 import {dottedDecimalNotationToBinaryString} from "./BinaryUtils";
+import {cidrPrefixToSubnetMaskBinary} from "./BinaryUtils";
 import * as bigInt from "big-integer";
 import {IPNumType} from "./IPNumType";
-import {hexadectetNotationToBinaryString} from "./IPv6Utils";
 import {expandIPv6Number} from "./IPv6Utils";
-import {IPv4Prefix} from "./Prefix";
-import {IPv6Prefix} from "./Prefix";
 import {colonHexadecimalNotationToBinaryString} from "./HexadecimalUtils";
+import {hexadectetNotationToBinaryString} from "./HexadecimalUtils";
 
 export class Validator {
     static IPV4_PATTERN: RegExp = new RegExp(/^(0?[0-9]?[0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.(0?[0-9]?[0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.(0?[0-9]?[0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.(0?[0-9]?[0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])$/);
@@ -254,7 +253,7 @@ export class Validator {
    * value contains [] or an array of error message when invalid
    */
   static isValidIPv4CidrRange(ipv4CidrNotation: string): [boolean, string[]] {
-      return Validator.isValidCidrRange(ipv4CidrNotation, Validator.isValidIPv4CidrNotation, dottedDecimalNotationToBinaryString, IPv4Prefix.fromNumber);
+      return Validator.isValidCidrRange(ipv4CidrNotation, Validator.isValidIPv4CidrNotation, dottedDecimalNotationToBinaryString, (value: number) => cidrPrefixToSubnetMaskBinary(value, IPNumType.IPv4));
     }
 
   /**
@@ -267,14 +266,14 @@ export class Validator {
    * value contains [] or an array of error message when invalid
    */
     static isValidIPv6CidrRange(ipv6CidrNotation: string): [boolean, string[]] {
-      return Validator.isValidCidrRange(ipv6CidrNotation, Validator.isValidIPv6CidrNotation, colonHexadecimalNotationToBinaryString, IPv6Prefix.fromNumber);
+      return Validator.isValidCidrRange(ipv6CidrNotation, Validator.isValidIPv6CidrNotation, colonHexadecimalNotationToBinaryString, (value: number) => cidrPrefixToSubnetMaskBinary(value, IPNumType.IPv6));
     }
 
 
     private static isValidCidrRange(rangeString: string,
                                     cidrNotationValidator: (range:string) => [boolean, string[]],
                                     toBinaryStringConverter: (range: string) => string,
-                                    prefixFactory: (num:number) => IPv4Prefix | IPv6Prefix): [boolean, string[]] {
+                                    prefixFactory: (num:number) => string): [boolean, string[]] {
       let validationResult = cidrNotationValidator(rangeString);
 
       if (!validationResult[0]) {
@@ -285,8 +284,8 @@ export class Validator {
       let ip = cidrComponents[0];
       let range = cidrComponents[1];
       let ipNumber = bigInt(toBinaryStringConverter(ip), 2);
-      let subnetMask = prefixFactory(parseInt(range)).toSubnetMask();
-      let isValid = ipNumber.and(subnetMask.value).equals(ipNumber);
+      let subnetMask = bigInt(prefixFactory(parseInt(range)), 2);
+      let isValid = ipNumber.and(subnetMask).equals(ipNumber);
 
       return isValid ? [isValid, []]: [isValid, [Validator.InvalidIPCidrRangeMessage]];
     }

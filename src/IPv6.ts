@@ -4,13 +4,13 @@ import {Validator} from "./Validator";
 import {bigIntegerNumberToBinaryString} from "./BinaryUtils";
 import {binaryStringToHexadecimalString} from "./HexadecimalUtils";
 import {expandIPv6Number} from "./IPv6Utils";
-import {hexadectetNotationToBinaryString} from "./IPv6Utils";
 import * as bigInt from "big-integer/BigInteger";
 import {AbstractIPNum} from "./AbstractIPNum";
 import {IPNumType} from "./IPNumType";
 import {parseBinaryStringToBigInteger} from "./BinaryUtils";
 import {IPv4} from "./IPv4";
 import {leftPadWithZeroBit} from "./BinaryUtils";
+import {hexadectetNotationToBinaryString} from "./HexadecimalUtils";
 
 
 /**

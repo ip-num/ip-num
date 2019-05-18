@@ -1,5 +1,4 @@
 import {leftPadWithZeroBit} from "./BinaryUtils";
-import {hexadecimalStringToBinaryString} from "./HexadecimalUtils";
 
 /**
  * Expands an IPv6 number in abbreviated format into its full form
@@ -81,18 +80,4 @@ export let collapseIPv6Number = (ipv6String:string):string => {
         return `${contracted}:`;
     }
     return contracted;
-};
-
-
-/**
- * Converts a given IPv6 number expressed in the hexadecimal string notation into a 16 bit binary number in string
- * @param {string} hexadectetString the IPv6 number
- * @returns {string} the IPv6 number converted to binary string
- */
-export let hexadectetNotationToBinaryString = (hexadectetString: string): string => {
-    let expand = expandIPv6Number(hexadectetString);
-    let hexadecimals = expand.split(":");
-    return hexadecimals.reduce((hexadecimalAsString, hexavalue) => {
-        return hexadecimalAsString.concat(leftPadWithZeroBit(hexadecimalStringToBinaryString(hexavalue),16));
-    }, '');
 };

@@ -1,4 +1,5 @@
 import * as bigInt from "big-integer/BigInteger";
+import {IPNumType} from "./IPNumType";
 
 /**
  * Converts a decimal number to binary string
@@ -72,4 +73,24 @@ export let leftPadWithZeroBit = (binaryString: string, finalStringLength: number
         throw new Error(`Given string is already longer than given final length after padding: ${finalStringLength}`);
     }
     return "0".repeat(finalStringLength - binaryString.length).concat(binaryString);
+};
+
+/**
+ * Given the prefix portion of a cidr notation and the type of IP number, returns the subnet mask in binary string
+ *
+ * @param {number} cidrPrefix the prefix part of a cidr notation
+ * @param {IPNumType.IPv4 | IPNumType.IPv6} ipType the type of the ip number in the range the cidr represents
+ */
+export let cidrPrefixToSubnetMaskBinary = (cidrPrefix: number, ipType: IPNumType.IPv4 | IPNumType.IPv6): string => {
+  let cidrUpperValue;
+  if (ipType == IPNumType.IPv4) {
+    cidrUpperValue = 32;
+  } else {
+    cidrUpperValue = 128
+  }
+  if (cidrPrefix > cidrUpperValue) throw `value is greater than ${cidrUpperValue}`;
+
+  let onBits = '1'.repeat(cidrPrefix);
+  let offBits = '0'.repeat(cidrUpperValue - cidrPrefix);
+  return `${onBits}${offBits}`;
 };

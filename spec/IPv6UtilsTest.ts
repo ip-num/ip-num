@@ -1,5 +1,3 @@
-
-
 import * as IPv6Utils from "../src/IPv6Utils";
 
 describe('IPv6 Utils', () => {
@@ -29,16 +27,5 @@ describe('IPv6 Utils', () => {
         expect(IPv6Utils.collapseIPv6Number("2001:0DB8:0000:CD30:0000:0000:0000:0000")).toBe("2001:DB8:0:CD30::");
         expect(IPv6Utils.collapseIPv6Number("2001:0db8:85a3:0000:0000:8a2e:0370:7334")).toBe("2001:db8:85a3::8a2e:370:7334");
         expect(IPv6Utils.collapseIPv6Number("2001:0db8:0000:0000:0000:0000:0002:0001")).toBe("2001:db8::2:1");
-    });
-
-    it('should convert IPv6 in hexadecatet notation to binary string', () => {
-        expect(IPv6Utils.hexadectetNotationToBinaryString("0:0:0:0:0:FFFF:2A68:533A"))
-            .toEqual("00000000000000000000000000000000000000000000000000000000000000000000000000000000111111111111111100101010011010000101001100111010");
-
-        expect(IPv6Utils.hexadectetNotationToBinaryString("::"))
-            .toEqual("00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000");
-
-        expect(IPv6Utils.hexadectetNotationToBinaryString("FFFF:0879:0:0:DDDD:1234:EDED:FFFF"))
-            .toEqual("11111111111111110000100001111001000000000000000000000000000000001101110111011101000100100011010011101101111011011111111111111111")
     });
 });
