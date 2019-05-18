@@ -32,3 +32,9 @@ export declare let colonHexadecimalNotationToBinaryString: (hexadecimalString: s
  * @returns {string} num in hexadecimal string
  */
 export declare let binaryStringToHexadecimalString: (num: string) => string;
+/**
+ * Converts a given IPv6 number expressed in the hexadecimal string notation into a 16 bit binary number in string
+ * @param {string} hexadectetString the IPv6 number
+ * @returns {string} the IPv6 number converted to binary string
+ */
+export declare let hexadectetNotationToBinaryString: (hexadectetString: string) => string;

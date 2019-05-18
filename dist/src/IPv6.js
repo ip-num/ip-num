@@ -31,13 +31,13 @@ var Validator_1 = require("./Validator");
 var BinaryUtils_1 = require("./BinaryUtils");
 var HexadecimalUtils_1 = require("./HexadecimalUtils");
 var IPv6Utils_1 = require("./IPv6Utils");
-var IPv6Utils_2 = require("./IPv6Utils");
 var bigInt = require("big-integer/BigInteger");
 var AbstractIPNum_1 = require("./AbstractIPNum");
 var IPNumType_1 = require("./IPNumType");
 var BinaryUtils_2 = require("./BinaryUtils");
 var IPv4_1 = require("./IPv4");
 var BinaryUtils_3 = require("./BinaryUtils");
+var HexadecimalUtils_2 = require("./HexadecimalUtils");
 /**
  * Represents an IPv6 number. A 128 bit number that is used to uniquely identify a device that is part of a computer
  * network that uses the internet protocol for communication.
@@ -205,7 +205,7 @@ var IPv6 = /** @class */ (function (_super) {
         var hexadecatet = stringHexadecimals.map(function (stringHexadecatet) {
             return Hexadecatet_1.Hexadecatet.fromString(stringHexadecatet);
         });
-        var value = bigInt(IPv6Utils_2.hexadectetNotationToBinaryString(expandedIPv6), 2);
+        var value = bigInt(HexadecimalUtils_2.hexadectetNotationToBinaryString(expandedIPv6), 2);
         return [value, hexadecatet];
     };
     IPv6.prototype.binaryStringToHexadecatets = function (binaryString) {

@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var BinaryUtils_1 = require("./BinaryUtils");
-var HexadecimalUtils_1 = require("./HexadecimalUtils");
 /**
  * Expands an IPv6 number in abbreviated format into its full form
  *
@@ -71,17 +70,5 @@ exports.collapseIPv6Number = function (ipv6String) {
         return contracted + ":";
     }
     return contracted;
-};
-/**
- * Converts a given IPv6 number expressed in the hexadecimal string notation into a 16 bit binary number in string
- * @param {string} hexadectetString the IPv6 number
- * @returns {string} the IPv6 number converted to binary string
- */
-exports.hexadectetNotationToBinaryString = function (hexadectetString) {
-    var expand = exports.expandIPv6Number(hexadectetString);
-    var hexadecimals = expand.split(":");
-    return hexadecimals.reduce(function (hexadecimalAsString, hexavalue) {
-        return hexadecimalAsString.concat(BinaryUtils_1.leftPadWithZeroBit(HexadecimalUtils_1.hexadecimalStringToBinaryString(hexavalue), 16));
-    }, '');
 };
 //# sourceMappingURL=IPv6Utils.js.map

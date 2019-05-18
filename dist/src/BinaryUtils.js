@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var bigInt = require("big-integer/BigInteger");
+var IPNumType_1 = require("./IPNumType");
 /**
  * Converts a decimal number to binary string
  *
@@ -66,5 +67,25 @@ exports.leftPadWithZeroBit = function (binaryString, finalStringLength) {
         throw new Error("Given string is already longer than given final length after padding: " + finalStringLength);
     }
     return "0".repeat(finalStringLength - binaryString.length).concat(binaryString);
+};
+/**
+ * Given the prefix portion of a cidr notation and the type of IP number, returns the subnet mask in binary string
+ *
+ * @param {number} cidrPrefix the prefix part of a cidr notation
+ * @param {IPNumType.IPv4 | IPNumType.IPv6} ipType the type of the ip number in the range the cidr represents
+ */
+exports.cidrPrefixToSubnetMaskBinary = function (cidrPrefix, ipType) {
+    var cidrUpperValue;
+    if (ipType == IPNumType_1.IPNumType.IPv4) {
+        cidrUpperValue = 32;
+    }
+    else {
+        cidrUpperValue = 128;
+    }
+    if (cidrPrefix > cidrUpperValue)
+        throw "value is greater than " + cidrUpperValue;
+    var onBits = '1'.repeat(cidrPrefix);
+    var offBits = '0'.repeat(cidrUpperValue - cidrPrefix);
+    return "" + onBits + offBits;
 };
 //# sourceMappingURL=BinaryUtils.js.map

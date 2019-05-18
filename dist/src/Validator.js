@@ -17,13 +17,12 @@ var __read = (this && this.__read) || function (o, n) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var BinaryUtils_1 = require("./BinaryUtils");
+var BinaryUtils_2 = require("./BinaryUtils");
 var bigInt = require("big-integer");
 var IPNumType_1 = require("./IPNumType");
 var IPv6Utils_1 = require("./IPv6Utils");
-var IPv6Utils_2 = require("./IPv6Utils");
-var Prefix_1 = require("./Prefix");
-var Prefix_2 = require("./Prefix");
 var HexadecimalUtils_1 = require("./HexadecimalUtils");
+var HexadecimalUtils_2 = require("./HexadecimalUtils");
 var Validator = /** @class */ (function () {
     function Validator() {
     }
@@ -129,7 +128,7 @@ var Validator = /** @class */ (function () {
      */
     Validator.isValidIPv6String = function (ipv6String) {
         try {
-            var hexadecimals = IPv6Utils_2.expandIPv6Number(ipv6String).split(":");
+            var hexadecimals = IPv6Utils_1.expandIPv6Number(ipv6String).split(":");
             if (hexadecimals.length != 8) {
                 return [false, [Validator.invalidHexadecatetCountMessage]];
             }
@@ -181,7 +180,7 @@ var Validator = /** @class */ (function () {
      * contains "valid" or an error message when value is invalid
      */
     Validator.isValidIPv6SubnetMask = function (ipv6SubnetMaskString) {
-        var ipv6InBinary = IPv6Utils_1.hexadectetNotationToBinaryString(ipv6SubnetMaskString);
+        var ipv6InBinary = HexadecimalUtils_2.hexadectetNotationToBinaryString(ipv6SubnetMaskString);
         var isValid = Validator.IPV6_SUBNET_MASK_BIT_PATTERN.test(ipv6InBinary);
         return isValid ? [isValid, []] : [isValid, [Validator.invalidSubnetMaskMessage]];
     };
@@ -219,7 +218,7 @@ var Validator = /** @class */ (function () {
      * value contains [] or an array of error message when invalid
      */
     Validator.isValidIPv4CidrRange = function (ipv4CidrNotation) {
-        return Validator.isValidCidrRange(ipv4CidrNotation, Validator.isValidIPv4CidrNotation, BinaryUtils_1.dottedDecimalNotationToBinaryString, Prefix_1.IPv4Prefix.fromNumber);
+        return Validator.isValidCidrRange(ipv4CidrNotation, Validator.isValidIPv4CidrNotation, BinaryUtils_1.dottedDecimalNotationToBinaryString, function (value) { return BinaryUtils_2.cidrPrefixToSubnetMaskBinary(value, IPNumType_1.IPNumType.IPv4); });
     };
     /**
      *  Checks if the given string is a valid IPv6 range in Cidr notation, with the ip number in the cidr notation
@@ -231,7 +230,7 @@ var Validator = /** @class */ (function () {
      * value contains [] or an array of error message when invalid
      */
     Validator.isValidIPv6CidrRange = function (ipv6CidrNotation) {
-        return Validator.isValidCidrRange(ipv6CidrNotation, Validator.isValidIPv6CidrNotation, HexadecimalUtils_1.colonHexadecimalNotationToBinaryString, Prefix_2.IPv6Prefix.fromNumber);
+        return Validator.isValidCidrRange(ipv6CidrNotation, Validator.isValidIPv6CidrNotation, HexadecimalUtils_1.colonHexadecimalNotationToBinaryString, function (value) { return BinaryUtils_2.cidrPrefixToSubnetMaskBinary(value, IPNumType_1.IPNumType.IPv6); });
     };
     Validator.isValidCidrRange = function (rangeString, cidrNotationValidator, toBinaryStringConverter, prefixFactory) {
         var validationResult = cidrNotationValidator(rangeString);
@@ -242,8 +241,8 @@ var Validator = /** @class */ (function () {
         var ip = cidrComponents[0];
         var range = cidrComponents[1];
         var ipNumber = bigInt(toBinaryStringConverter(ip), 2);
-        var subnetMask = prefixFactory(parseInt(range)).toSubnetMask();
-        var isValid = ipNumber.and(subnetMask.value).equals(ipNumber);
+        var subnetMask = bigInt(prefixFactory(parseInt(range)), 2);
+        var isValid = ipNumber.and(subnetMask).equals(ipNumber);
         return isValid ? [isValid, []] : [isValid, [Validator.InvalidIPCidrRangeMessage]];
     };
     Validator.isValidIPv4RangeString = function (ipv4RangeString) {
@@ -252,8 +251,8 @@ var Validator = /** @class */ (function () {
         return this.isValidRange(ipv4RangeString, Validator.isValidIPv4String, firstLastValidator);
     };
     Validator.isValidIPv6RangeString = function (ipv6RangeString) {
-        var firstLastValidator = function (firstIP, lastIP) { return bigInt(IPv6Utils_1.hexadectetNotationToBinaryString(firstIP))
-            .greaterOrEquals(IPv6Utils_1.hexadectetNotationToBinaryString(lastIP)); };
+        var firstLastValidator = function (firstIP, lastIP) { return bigInt(HexadecimalUtils_2.hexadectetNotationToBinaryString(firstIP))
+            .greaterOrEquals(HexadecimalUtils_2.hexadectetNotationToBinaryString(lastIP)); };
         return this.isValidRange(ipv6RangeString, Validator.isValidIPv6String, firstLastValidator);
     };
     Validator.isValidRange = function (rangeString, validator, firstLastValidator) {

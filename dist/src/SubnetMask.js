@@ -31,9 +31,9 @@ var Validator_1 = require("./Validator");
 var bigInt = require("big-integer");
 var BinaryUtils_1 = require("./BinaryUtils");
 var Hexadecatet_1 = require("./Hexadecatet");
-var IPv6Utils_1 = require("./IPv6Utils");
 var IPv4_1 = require("./IPv4");
 var IPv6_1 = require("./IPv6");
+var HexadecimalUtils_1 = require("./HexadecimalUtils");
 /**
  * The IPv4SubnetMask can be seen as a specialized IPv4 number where, in a 32 bit number, starting from the left, you
  * have continuous bits turned on (with 1 value) followed by bits turned off (with 0 value). In networking, it is used
@@ -115,7 +115,7 @@ var IPv6SubnetMask = /** @class */ (function (_super) {
         _this.hexadecatet = stringHexadecimals.map(function (stringHexadecatet) {
             return Hexadecatet_1.Hexadecatet.fromString(stringHexadecatet);
         });
-        _this.value = bigInt(IPv6Utils_1.hexadectetNotationToBinaryString(ipString), 2);
+        _this.value = bigInt(HexadecimalUtils_1.hexadectetNotationToBinaryString(ipString), 2);
         return _this;
         var _a;
     }

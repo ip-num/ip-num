@@ -16,9 +16,3 @@ export declare let expandIPv6Number: (ipv6String: string) => string;
  * @returns {string} the collapsed IPv6 number
  */
 export declare let collapseIPv6Number: (ipv6String: string) => string;
-/**
- * Converts a given IPv6 number expressed in the hexadecimal string notation into a 16 bit binary number in string
- * @param {string} hexadectetString the IPv6 number
- * @returns {string} the IPv6 number converted to binary string
- */
-export declare let hexadectetNotationToBinaryString: (hexadectetString: string) => string;

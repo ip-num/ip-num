@@ -36,7 +36,7 @@ var AbstractIPNum_1 = require("./AbstractIPNum");
  * a group of IP addresses with a common, clearly defined routing policy.
  *
  * @see https://en.wikipedia.org/wiki/Autonomous_system_(Internet)
- * @see https://www.rfc-editor.org/info/rfc4271
+ * @see https://tools.ietf.org/html/rfc5396
  */
 var Asn = /** @class */ (function (_super) {
     __extends(Asn, _super);

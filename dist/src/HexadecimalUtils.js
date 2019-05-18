@@ -58,4 +58,16 @@ exports.binaryStringToHexadecimalString = function (num) {
     var inDecimal = bigInt(num, 2);
     return inDecimal.toString(16);
 };
+/**
+ * Converts a given IPv6 number expressed in the hexadecimal string notation into a 16 bit binary number in string
+ * @param {string} hexadectetString the IPv6 number
+ * @returns {string} the IPv6 number converted to binary string
+ */
+exports.hexadectetNotationToBinaryString = function (hexadectetString) {
+    var expand = IPv6Utils_1.expandIPv6Number(hexadectetString);
+    var hexadecimals = expand.split(":");
+    return hexadecimals.reduce(function (hexadecimalAsString, hexavalue) {
+        return hexadecimalAsString.concat(BinaryUtils_1.leftPadWithZeroBit(exports.hexadecimalStringToBinaryString(hexavalue), 16));
+    }, '');
+};
 //# sourceMappingURL=HexadecimalUtils.js.map

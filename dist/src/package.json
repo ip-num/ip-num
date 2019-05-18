@@ -1,6 +1,6 @@
 {
   "name": "ip-num",
-  "version": "1.2.0",
+  "version": "1.2.1-0",
   "description": "A TypeScript library for working with IPv4, IPv6 and ASN numbers. It provides representations of these internet protocol numbers with the ability to perform various IP related operations like parsing, validating etc. on them",
   "main": "./index.js",
   "types": "./index.d.ts",
@@ -23,7 +23,8 @@
     "ipnum-release": "npm run ipnum-gendoc && npm run ipnum-build && npm run ipnum-releasecommit && npm publish ./dist/src && npm run clean",
     "ipnum-release-major": "npm version major && npm run ipnum-release",
     "ipnum-release-minor": "npm version minor && npm run ipnum-release",
-    "ipnum-release-patch": "npm version patch && npm run ipnum-release"
+    "ipnum-release-patch": "npm version patch && npm run ipnum-release",
+    "ipnum-release-prepatch": "npm version prepatch && npm run ipnum-release"
   },
   "nyc": {
     "exclude": [
@@ -53,7 +54,7 @@
     "@types/node": "10.0.0",
     "awesome-typescript-loader": "5.0.0",
     "coveralls": "3.0.2",
-    "jasmine-node": "1.15.0",
+    "jasmine-node": "1.16.2",
     "jasmine-spec-reporter": "4.2.1",
     "jasmine-ts": "0.2.1",
     "nyc": "11.7.1",
