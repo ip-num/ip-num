@@ -81,14 +81,14 @@ export let leftPadWithZeroBit = (binaryString: string, finalStringLength: number
  * @param {number} cidrPrefix the prefix part of a cidr notation
  * @param {IPNumType.IPv4 | IPNumType.IPv6} ipType the type of the ip number in the range the cidr represents
  */
-export let cidrPrefixToSubnetMaskBinary = (cidrPrefix: number, ipType: IPNumType.IPv4 | IPNumType.IPv6): string => {
+export let cidrPrefixToSubnetMaskBinaryString = (cidrPrefix: number, ipType: IPNumType.IPv4 | IPNumType.IPv6): string => {
   let cidrUpperValue;
   if (ipType == IPNumType.IPv4) {
     cidrUpperValue = 32;
   } else {
     cidrUpperValue = 128
   }
-  if (cidrPrefix > cidrUpperValue) throw `value is greater than ${cidrUpperValue}`;
+  if (cidrPrefix > cidrUpperValue) throw Error(`Value is greater than ${cidrUpperValue}`);
 
   let onBits = '1'.repeat(cidrPrefix);
   let offBits = '0'.repeat(cidrUpperValue - cidrPrefix);

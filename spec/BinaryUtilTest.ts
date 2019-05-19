@@ -1,7 +1,6 @@
-
-
 import * as BinaryUtils from "../src/BinaryUtils";
 import * as bigInt from "big-integer/BigInteger";
+import {IPNumType} from "../src";
 
 describe('Binary Utils', () => {
     it('Should correctly convert decimal to binary', () => {
@@ -47,5 +46,31 @@ describe('Binary Utils', () => {
         expect(()=> {
             BinaryUtils.leftPadWithZeroBit('111111110', 5)
         }).toThrowError(Error, 'Given string is already longer than given final length after padding: 5');
-    })
+    });
+    describe('IPv4 cidr prefix to binary string', () => {
+      it('should convert a 24 prefix', () => {
+        expect(BinaryUtils.cidrPrefixToSubnetMaskBinaryString(24, IPNumType.IPv4)).toBe(`${"1".repeat(24)}${"0".repeat(8)}`)
+      });
+      it('should convert a 32 prefix', () => {
+        expect(BinaryUtils.cidrPrefixToSubnetMaskBinaryString(32, IPNumType.IPv4)).toBe(`${"1".repeat(32)}`)
+      });
+      it('should throw an exception when converting 33 prefix', () => {
+        expect(() => {
+          BinaryUtils.cidrPrefixToSubnetMaskBinaryString(33, IPNumType.IPv4);
+        }).toThrowError(Error, 'Value is greater than 32');
+      });
+    });
+    describe('IPv6 cidr prefix to binary string', () => {
+      it('should convert a 64 prefix', () => {
+      expect(BinaryUtils.cidrPrefixToSubnetMaskBinaryString(64, IPNumType.IPv6)).toBe(`${"1".repeat(64)}${"0".repeat(64)}`)
+      });
+      it('should convert a 128 prefix', () => {
+        expect(BinaryUtils.cidrPrefixToSubnetMaskBinaryString(128, IPNumType.IPv6)).toBe(`${"1".repeat(128)}`)
+      });
+      it('should throw an exception when converting 130 prefix', () => {
+        expect(() => {
+        BinaryUtils.cidrPrefixToSubnetMaskBinaryString(130, IPNumType.IPv6);
+        }).toThrowError(Error, 'Value is greater than 128');
+      });
+    });
 });

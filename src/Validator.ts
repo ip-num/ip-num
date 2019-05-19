@@ -1,6 +1,6 @@
 'use strict';
 import {dottedDecimalNotationToBinaryString} from "./BinaryUtils";
-import {cidrPrefixToSubnetMaskBinary} from "./BinaryUtils";
+import {cidrPrefixToSubnetMaskBinaryString} from "./BinaryUtils";
 import * as bigInt from "big-integer";
 import {IPNumType} from "./IPNumType";
 import {expandIPv6Number} from "./IPv6Utils";
@@ -253,7 +253,7 @@ export class Validator {
    * value contains [] or an array of error message when invalid
    */
   static isValidIPv4CidrRange(ipv4CidrNotation: string): [boolean, string[]] {
-      return Validator.isValidCidrRange(ipv4CidrNotation, Validator.isValidIPv4CidrNotation, dottedDecimalNotationToBinaryString, (value: number) => cidrPrefixToSubnetMaskBinary(value, IPNumType.IPv4));
+      return Validator.isValidCidrRange(ipv4CidrNotation, Validator.isValidIPv4CidrNotation, dottedDecimalNotationToBinaryString, (value: number) => cidrPrefixToSubnetMaskBinaryString(value, IPNumType.IPv4));
     }
 
   /**
@@ -266,7 +266,7 @@ export class Validator {
    * value contains [] or an array of error message when invalid
    */
     static isValidIPv6CidrRange(ipv6CidrNotation: string): [boolean, string[]] {
-      return Validator.isValidCidrRange(ipv6CidrNotation, Validator.isValidIPv6CidrNotation, colonHexadecimalNotationToBinaryString, (value: number) => cidrPrefixToSubnetMaskBinary(value, IPNumType.IPv6));
+      return Validator.isValidCidrRange(ipv6CidrNotation, Validator.isValidIPv6CidrNotation, colonHexadecimalNotationToBinaryString, (value: number) => cidrPrefixToSubnetMaskBinaryString(value, IPNumType.IPv6));
     }
 
 
