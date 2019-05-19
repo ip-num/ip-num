@@ -185,5 +185,11 @@ describe('IPv4CidrRange: ', () => {
         expect(IPv4CidrRange.fromCidr("192.168.208.0/24").hasPreviousRange()).toBe(true);
         expect(IPv4CidrRange.fromCidr("255.255.254.0/24").hasPreviousRange()).toBe(true);
         expect(IPv4CidrRange.fromCidr("255.255.255.0/24").hasPreviousRange()).toBe(true);
+    });
+    it('should return the next adjacent range', () => {
+      expect(IPv4CidrRange.fromCidr("255.255.254.0/24").nextRange()).toEqual(IPv4CidrRange.fromCidr("255.255.255.0/24"))
+    });
+    it('should return the previous adjacent range', () => {
+      expect(IPv4CidrRange.fromCidr("255.255.255.0/24").previousRange()).toEqual(IPv4CidrRange.fromCidr("255.255.254.0/24"))
     })
 });

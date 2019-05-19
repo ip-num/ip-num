@@ -153,5 +153,11 @@ describe('IPv6CidrRange: ', () => {
         expect(secondRange.hasPreviousRange()).toBe(false);
         expect(thirdRange.hasPreviousRange()).toBe(true);
         expect(fourthRange.hasPreviousRange()).toBe(true);
+    });
+    it('should return the next adjacent range', () => {
+      expect(IPv6CidrRange.fromCidr("c000:0:0:1:0:0:0:0/64").nextRange()).toEqual(IPv6CidrRange.fromCidr("c000:0:0:2:0:0:0:0/64"))
+    });
+    it('should return the previous adjacent range', () => {
+      expect(IPv6CidrRange.fromCidr("c000:0:0:2:0:0:0:0/64").previousRange()).toEqual(IPv6CidrRange.fromCidr("c000:0:0:1:0:0:0:0/64"))
     })
 });
