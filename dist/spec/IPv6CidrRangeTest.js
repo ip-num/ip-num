@@ -181,5 +181,11 @@ describe('IPv6CidrRange: ', function () {
         expect(thirdRange.hasPreviousRange()).toBe(true);
         expect(fourthRange.hasPreviousRange()).toBe(true);
     });
+    it('should return the next adjacent range', function () {
+        expect(src_3.IPv6CidrRange.fromCidr("c000:0:0:1:0:0:0:0/64").nextRange()).toEqual(src_3.IPv6CidrRange.fromCidr("c000:0:0:2:0:0:0:0/64"));
+    });
+    it('should return the previous adjacent range', function () {
+        expect(src_3.IPv6CidrRange.fromCidr("c000:0:0:2:0:0:0:0/64").previousRange()).toEqual(src_3.IPv6CidrRange.fromCidr("c000:0:0:1:0:0:0:0/64"));
+    });
 });
 //# sourceMappingURL=IPv6CidrRangeTest.js.map

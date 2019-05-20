@@ -218,7 +218,7 @@ var Validator = /** @class */ (function () {
      * value contains [] or an array of error message when invalid
      */
     Validator.isValidIPv4CidrRange = function (ipv4CidrNotation) {
-        return Validator.isValidCidrRange(ipv4CidrNotation, Validator.isValidIPv4CidrNotation, BinaryUtils_1.dottedDecimalNotationToBinaryString, function (value) { return BinaryUtils_2.cidrPrefixToSubnetMaskBinary(value, IPNumType_1.IPNumType.IPv4); });
+        return Validator.isValidCidrRange(ipv4CidrNotation, Validator.isValidIPv4CidrNotation, BinaryUtils_1.dottedDecimalNotationToBinaryString, function (value) { return BinaryUtils_2.cidrPrefixToSubnetMaskBinaryString(value, IPNumType_1.IPNumType.IPv4); });
     };
     /**
      *  Checks if the given string is a valid IPv6 range in Cidr notation, with the ip number in the cidr notation
@@ -230,7 +230,7 @@ var Validator = /** @class */ (function () {
      * value contains [] or an array of error message when invalid
      */
     Validator.isValidIPv6CidrRange = function (ipv6CidrNotation) {
-        return Validator.isValidCidrRange(ipv6CidrNotation, Validator.isValidIPv6CidrNotation, HexadecimalUtils_1.colonHexadecimalNotationToBinaryString, function (value) { return BinaryUtils_2.cidrPrefixToSubnetMaskBinary(value, IPNumType_1.IPNumType.IPv6); });
+        return Validator.isValidCidrRange(ipv6CidrNotation, Validator.isValidIPv6CidrNotation, HexadecimalUtils_1.colonHexadecimalNotationToBinaryString, function (value) { return BinaryUtils_2.cidrPrefixToSubnetMaskBinaryString(value, IPNumType_1.IPNumType.IPv6); });
     };
     Validator.isValidCidrRange = function (rangeString, cidrNotationValidator, toBinaryStringConverter, prefixFactory) {
         var validationResult = cidrNotationValidator(rangeString);

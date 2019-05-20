@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var BinaryUtils = require("../src/BinaryUtils");
 var bigInt = require("big-integer/BigInteger");
+var src_1 = require("../src");
 describe('Binary Utils', function () {
     it('Should correctly convert decimal to binary', function () {
         expect(BinaryUtils.decimalNumberToBinaryString(1234) === '10011010010').toEqual(true);
@@ -46,6 +47,32 @@ describe('Binary Utils', function () {
         expect(function () {
             BinaryUtils.leftPadWithZeroBit('111111110', 5);
         }).toThrowError(Error, 'Given string is already longer than given final length after padding: 5');
+    });
+    describe('IPv4 cidr prefix to binary string', function () {
+        it('should convert a 24 prefix', function () {
+            expect(BinaryUtils.cidrPrefixToSubnetMaskBinaryString(24, src_1.IPNumType.IPv4)).toBe("" + "1".repeat(24) + "0".repeat(8));
+        });
+        it('should convert a 32 prefix', function () {
+            expect(BinaryUtils.cidrPrefixToSubnetMaskBinaryString(32, src_1.IPNumType.IPv4)).toBe("" + "1".repeat(32));
+        });
+        it('should throw an exception when converting 33 prefix', function () {
+            expect(function () {
+                BinaryUtils.cidrPrefixToSubnetMaskBinaryString(33, src_1.IPNumType.IPv4);
+            }).toThrowError(Error, 'Value is greater than 32');
+        });
+    });
+    describe('IPv6 cidr prefix to binary string', function () {
+        it('should convert a 64 prefix', function () {
+            expect(BinaryUtils.cidrPrefixToSubnetMaskBinaryString(64, src_1.IPNumType.IPv6)).toBe("" + "1".repeat(64) + "0".repeat(64));
+        });
+        it('should convert a 128 prefix', function () {
+            expect(BinaryUtils.cidrPrefixToSubnetMaskBinaryString(128, src_1.IPNumType.IPv6)).toBe("" + "1".repeat(128));
+        });
+        it('should throw an exception when converting 130 prefix', function () {
+            expect(function () {
+                BinaryUtils.cidrPrefixToSubnetMaskBinaryString(130, src_1.IPNumType.IPv6);
+            }).toThrowError(Error, 'Value is greater than 128');
+        });
     });
 });
 //# sourceMappingURL=BinaryUtilTest.js.map

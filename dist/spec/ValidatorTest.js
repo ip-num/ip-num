@@ -85,6 +85,9 @@ describe('Validator: ', function () {
         it('validate invalid ipv4 cidr range', function () {
             expect(src_1.Validator.isValidIPv4CidrRange("10.0.0.1/8")[0]).toBe(false);
         });
+        it('validate invalid ipv4 cidr notation', function () {
+            expect(src_1.Validator.isValidIPv4CidrRange("10.0.0.18")[0]).toBe(false);
+        });
     });
     describe('isValidIPv6CidrRange', function () {
         it('validate valid ipv6 cidr range', function () {
@@ -92,6 +95,9 @@ describe('Validator: ', function () {
         });
         it('validate invalid ipv6 cidr range', function () {
             expect(src_1.Validator.isValidIPv6CidrRange("2001:db8:85a3::8a2e:370:7334/64")[0]).toBe(false);
+        });
+        it('validate invalid ipv6 cidr notation', function () {
+            expect(src_1.Validator.isValidIPv6CidrRange("2001:8a2e:370Q:733464")[0]).toBe(false);
         });
     });
 });

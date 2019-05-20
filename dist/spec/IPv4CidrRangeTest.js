@@ -203,5 +203,11 @@ describe('IPv4CidrRange: ', function () {
         expect(src_1.IPv4CidrRange.fromCidr("255.255.254.0/24").hasPreviousRange()).toBe(true);
         expect(src_1.IPv4CidrRange.fromCidr("255.255.255.0/24").hasPreviousRange()).toBe(true);
     });
+    it('should return the next adjacent range', function () {
+        expect(src_1.IPv4CidrRange.fromCidr("255.255.254.0/24").nextRange()).toEqual(src_1.IPv4CidrRange.fromCidr("255.255.255.0/24"));
+    });
+    it('should return the previous adjacent range', function () {
+        expect(src_1.IPv4CidrRange.fromCidr("255.255.255.0/24").previousRange()).toEqual(src_1.IPv4CidrRange.fromCidr("255.255.254.0/24"));
+    });
 });
 //# sourceMappingURL=IPv4CidrRangeTest.js.map

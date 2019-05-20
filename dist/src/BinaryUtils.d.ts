@@ -49,4 +49,4 @@ export declare let leftPadWithZeroBit: (binaryString: string, finalStringLength:
  * @param {number} cidrPrefix the prefix part of a cidr notation
  * @param {IPNumType.IPv4 | IPNumType.IPv6} ipType the type of the ip number in the range the cidr represents
  */
-export declare let cidrPrefixToSubnetMaskBinary: (cidrPrefix: number, ipType: IPNumType.IPv4 | IPNumType.IPv6) => string;
+export declare let cidrPrefixToSubnetMaskBinaryString: (cidrPrefix: number, ipType: IPNumType.IPv4 | IPNumType.IPv6) => string;

@@ -74,7 +74,7 @@ exports.leftPadWithZeroBit = function (binaryString, finalStringLength) {
  * @param {number} cidrPrefix the prefix part of a cidr notation
  * @param {IPNumType.IPv4 | IPNumType.IPv6} ipType the type of the ip number in the range the cidr represents
  */
-exports.cidrPrefixToSubnetMaskBinary = function (cidrPrefix, ipType) {
+exports.cidrPrefixToSubnetMaskBinaryString = function (cidrPrefix, ipType) {
     var cidrUpperValue;
     if (ipType == IPNumType_1.IPNumType.IPv4) {
         cidrUpperValue = 32;
@@ -83,7 +83,7 @@ exports.cidrPrefixToSubnetMaskBinary = function (cidrPrefix, ipType) {
         cidrUpperValue = 128;
     }
     if (cidrPrefix > cidrUpperValue)
-        throw "value is greater than " + cidrUpperValue;
+        throw Error("Value is greater than " + cidrUpperValue);
     var onBits = '1'.repeat(cidrPrefix);
     var offBits = '0'.repeat(cidrUpperValue - cidrPrefix);
     return "" + onBits + offBits;
