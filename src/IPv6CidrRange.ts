@@ -13,9 +13,8 @@ import {AbstractIpRange} from "./AbstractIpRange";
  *
  * @see https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing
  */
-export class IPv6CidrRange extends AbstractIpRange implements IPRange, IterableIterator<IPv6> {
+export class IPv6CidrRange extends AbstractIpRange implements IPRange {
     readonly bitValue: bigInt.BigInteger = bigInt(128);
-    private internalCounterValue: IPv6;
 
     /**
      * Convenience method for constructing an instance of an IPV6Range from an IP range represented in CIDR notation
@@ -48,7 +47,6 @@ export class IPv6CidrRange extends AbstractIpRange implements IPRange, IterableI
      */
     constructor(private readonly ipv6: IPv6, readonly cidrPrefix: IPv6Prefix) {
         super();
-        this.internalCounterValue = this.getFirst();
     }
 
     /**
@@ -212,27 +210,5 @@ export class IPv6CidrRange extends AbstractIpRange implements IPRange, IterableI
             return new IPv6CidrRange(new IPv6(startOfPreviousRange), this.cidrPrefix)
         }
         return;
-    }
-
-    next(value?: any): IteratorResult<IPv6>;
-    next(value?: any): IteratorResult<IPv6>;
-    next(value?: any) {
-        let returnValue = this.internalCounterValue;
-        this.internalCounterValue = this.internalCounterValue.nextIPNumber();
-
-        if (returnValue.isLessThanOrEquals(this.getLast())) {
-            return {
-                done:false,
-                value: returnValue
-            }
-        } else {
-            return {
-                done:true
-            }
-        }
-    }
-
-    [Symbol.iterator](): IterableIterator<IPv6> {
-        return this;
     }
 }

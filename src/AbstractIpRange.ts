@@ -9,7 +9,7 @@ import {IPv4} from "./IPv4";
  * Provides the implementation of functionality that are common to {@link IPRange}s
  */
 
-export abstract class AbstractIpRange {
+export abstract class AbstractIpRange implements Iterable<IPv4 | IPv6> {
 
     abstract readonly bitValue: bigInt.BigInteger;
     abstract readonly cidrPrefix: Prefix;
@@ -82,4 +82,15 @@ export abstract class AbstractIpRange {
             .lesserOrEquals(this.getFirst().getValue())
     }
 
+  [Symbol.iterator](): Iterator<IPv4 | IPv6> {
+    let lastValue = this.getLast();
+    let returnValue = this.getFirst();
+    function* loopFn() {
+      while(returnValue.isLessThanOrEquals(lastValue)) {
+        yield returnValue;
+        returnValue = returnValue.nextIPNumber();
+      }
+    }
+    return loopFn();
+  }
 }

@@ -13,9 +13,8 @@ import {AbstractIpRange} from "./AbstractIpRange";
  *
  * @see https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing
  */
-export class IPv4CidrRange extends AbstractIpRange implements IPRange, IterableIterator<IPv4> {
+export class IPv4CidrRange extends AbstractIpRange implements IPRange {
     readonly bitValue: bigInt.BigInteger = bigInt(32);
-    private internalCounterValue: IPv4;
 
     /**
      * Convenience method for constructing an instance of an IPv4CidrRange from an IP range represented in CIDR notation
@@ -48,7 +47,6 @@ export class IPv4CidrRange extends AbstractIpRange implements IPRange, IterableI
      */
     constructor(private readonly ipv4: IPv4, readonly cidrPrefix: IPv4Prefix) {
         super();
-        this.internalCounterValue = this.getFirst();
     }
 
     /**
@@ -218,27 +216,5 @@ export class IPv4CidrRange extends AbstractIpRange implements IPRange, IterableI
         }
 
         return;
-    }
-
-    next(value?: any): IteratorResult<IPv4>;
-    next(value?: any): IteratorResult<IPv4>;
-    next(value?: any) {
-        let returnValue = this.internalCounterValue;
-        this.internalCounterValue = this.internalCounterValue.nextIPNumber();
-
-        if (returnValue.isLessThanOrEquals(this.getLast())) {
-            return {
-                done:false,
-                value: returnValue
-            }
-        } else {
-            return {
-                done:true
-            }
-        }
-    }
-
-    [Symbol.iterator](): IterableIterator<IPv4> {
-        return this;
     }
 }
