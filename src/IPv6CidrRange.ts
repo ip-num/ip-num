@@ -19,15 +19,15 @@ export class IPv6CidrRange extends AbstractIpRange implements IPRange {
     /**
      * Convenience method for constructing an instance of an IPV6Range from an IP range represented in CIDR notation
      *
-     * @param {string} rangeIncidrNotation the range of the IPv6 number in CIDR notation
-     * @returns {IPV6Range} the IPV6Range
+     * @param {string} rangeInCidrNotation the range of the IPv6 number in CIDR notation
+     * @returns {IPv6CidrRange} the IPV6Range
      */
-    static fromCidr(rangeIncidrNotation:string):IPv6CidrRange {
-        let [isValid, message] = Validator.isValidIPv6CidrNotation(rangeIncidrNotation);
+    static fromCidr(rangeInCidrNotation:string):IPv6CidrRange {
+        let [isValid, message] = Validator.isValidIPv6CidrNotation(rangeInCidrNotation);
         if (!isValid) {
             throw new Error(message.filter(msg => {return msg !== '';}).toString());
         }
-        let cidrComponents: Array<string> = rangeIncidrNotation.split("/");
+        let cidrComponents: Array<string> = rangeInCidrNotation.split("/");
         let ipString = cidrComponents[0];
         let prefix = parseInt(cidrComponents[1]);
 
