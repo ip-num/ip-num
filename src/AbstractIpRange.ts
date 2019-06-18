@@ -26,6 +26,11 @@ export abstract class AbstractIpRange implements Iterable<IPv4 | IPv6> {
         return bigInt(2).pow(this.bitValue.minus(bigInt(this.cidrPrefix.getValue())));
     }
 
+
+    public toRangeString(): string {
+        return `${this.getFirst()}-${this.getLast()}`
+    }
+
     public inside(otherRange: IPv6CidrRange | IPv4CidrRange): boolean {
         let thisFirst: IPv6 | IPv4 = this.getFirst();
         let thisLast: IPv6 | IPv4 = this.getLast();

@@ -77,7 +77,7 @@ export class IPv4CidrRange extends AbstractIpRange implements IPRange {
      * @returns {string} the range in [first IPv4 number] - [last IPv4 number] format
      */
     public toRangeString(): string {
-        return `${this.getFirst()}-${this.getLast()}`
+        return super.toRangeString();
     }
 
 
