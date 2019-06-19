@@ -43,6 +43,39 @@ describe('IPv4CidrRange: ', () => {
         expect(take[1].toString()).toBe("192.198.0.1");
         expect(take[2].toString()).toBe("192.198.0.2");
     });
+    it('should return the correct list of IPv4 numbers when takeStream is called and looped over using for of', () => {
+      let ipv4CidrRange = new IPv4CidrRange(new IPv4("0.0.0.0"), new IPv4Prefix(0));
+      let ranges = ipv4CidrRange.takeStream(3);
+      let length = 0;
+      for (let iprange of ranges) {
+        length++;
+        expect(["0.0.0.0", "0.0.0.1", "0.0.0.2"].some(range => iprange.toString() === range)).toBe(true);
+      }
+      expect(length).toBe(3);
+    });
+
+    it('should return the correct list of IPv4 numbers when takeStream is called and assigned to variables', () => {
+      let ipv4CidrRange = new IPv4CidrRange(new IPv4("0.0.0.0"), new IPv4Prefix(0));
+      let ranges = ipv4CidrRange.takeStream(3);
+      let [first, second, third] = ranges;
+
+      expect(first.toString()).toBe("0.0.0.0");
+      expect(second.toString()).toBe("0.0.0.1");
+      expect(third.toString()).toBe("0.0.0.2");
+    });
+
+    it('should return all list of IPv4 numbers when takeStream is called without passing in a count', () => {
+        let ipv4CidrRange = new IPv4CidrRange(new IPv4("0.0.0.0"), new IPv4Prefix(30));
+        let ranges = ipv4CidrRange.takeStream();
+        let [first, second, third, fourth, fifth] = ranges;
+
+        expect(first.toString()).toBe("0.0.0.0");
+        expect(second.toString()).toBe("0.0.0.1");
+        expect(third.toString()).toBe("0.0.0.2");
+        expect(fourth.toString()).toBe("0.0.0.3");
+        expect(fifth).toBeUndefined();
+    });
+
     it('should throw an exception when asked to take a value bigger than the size of range', function() {
         let ipv4CidrRange = new IPv4CidrRange(new IPv4("192.198.0.0"), new IPv4Prefix(24));
         let errMessage = Validator.takeOutOfRangeSizeMessage

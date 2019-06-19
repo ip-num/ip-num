@@ -32,6 +32,42 @@ describe('IPv6CidrRange: ', () => {
         expect(take[1].toString()).toBe("2001:db8:0:0:0:0:0:1");
         expect(take[2].toString()).toBe("2001:db8:0:0:0:0:0:2");
     });
+    it('should return the correct list of IPv6 numbers when takeStream is called and looped over using for of', () => {
+      let ipv6CidrRange = new IPv6CidrRange(new IPv6("2001:db8::"), new IPv6Prefix(48));
+      let ranges = ipv6CidrRange.take(3);
+      let length = 0;
+      for (let iprange of ranges) {
+        length++;
+        expect(["2001:db8:0:0:0:0:0:0", "2001:db8:0:0:0:0:0:1", "2001:db8:0:0:0:0:0:2"].some(range => iprange.toString() === range))
+          .toBe(true);
+      }
+
+      expect(length).toBe(3);
+    });
+
+    it('should return the correct list of IPv6 numbers when takeStream is called and assigned to variables', () => {
+      let ipv6CidrRange = new IPv6CidrRange(new IPv6("2001:db8::"), new IPv6Prefix(48));
+      let ranges = ipv6CidrRange.takeStream(3);
+      let [first, second, third] = ranges;
+
+      expect(first.toString()).toBe("2001:db8:0:0:0:0:0:0");
+      expect(second.toString()).toBe("2001:db8:0:0:0:0:0:1");
+      expect(third.toString()).toBe("2001:db8:0:0:0:0:0:2");
+    });
+
+    it('should return all list of IPv6 number when takeStream is called without passing in a count', () => {
+        let ipv6CidrRange = new IPv6CidrRange(new IPv6("2001:db8::"), new IPv6Prefix(126));
+        let ranges = ipv6CidrRange.takeStream();
+
+        let [first, second, third, fourth, fifth] = ranges;
+
+        expect(first.toString()).toBe("2001:db8:0:0:0:0:0:0");
+        expect(second.toString()).toBe("2001:db8:0:0:0:0:0:1");
+        expect(third.toString()).toBe("2001:db8:0:0:0:0:0:2");
+        expect(fourth.toString()).toBe("2001:db8:0:0:0:0:0:3");
+        expect(fifth).toBeUndefined();
+    });
+
     it('should correctly tell if ranges are consecutive', () => {
         let firstRange = new IPv6CidrRange(new IPv6("2001:db8::"), new IPv6Prefix(48));
         let secondRange = new IPv6CidrRange(new IPv6("2001:db8:1::"), new IPv6Prefix(48));
