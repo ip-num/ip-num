@@ -111,15 +111,12 @@ export abstract class AbstractIpRange implements Iterable<IPv4 | IPv6> {
       };
     }
 
-  [Symbol.iterator](): Iterator<IPv4 | IPv6> {
-    let lastValue = this.getLast();
-    let returnValue = this.getFirst();
-    function* loopFn() {
-      while(returnValue.isLessThanOrEquals(lastValue)) {
-        yield returnValue;
-        returnValue = returnValue.nextIPNumber();
-      }
+  *[Symbol.iterator](): Iterator<IPv4 | IPv6> {
+        let lastValue = this.getLast();
+        let returnValue = this.getFirst();
+        while(returnValue.isLessThanOrEquals(lastValue)) {
+            yield returnValue;
+            returnValue = returnValue.nextIPNumber();
+        }
     }
-    return loopFn();
-  }
 }
