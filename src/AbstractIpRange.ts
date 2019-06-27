@@ -97,18 +97,14 @@ export abstract class AbstractIpRange implements Iterable<IPv4 | IPv6> {
      * @param count the number of IP numbers to lazily evaluate.
      * If none is given, the whole IP range is lazily returned.
      */
-    public takeStream(count?: number): Iterable<IPv4 | IPv6> {
+    public *takeStream(count?: number): Iterable<IPv4 | IPv6> {
       let computed = this.getFirst();
       let returnCount = count === undefined ? this.getSize().valueOf() : count;
-      return {
-        *[Symbol.iterator]() {
-          while(returnCount > 0) {
-            returnCount--;
-            yield computed;
-            computed = computed.nextIPNumber();
-          }
-        }
-      };
+      while(returnCount > 0) {
+          returnCount--;
+          yield computed;
+          computed = computed.nextIPNumber();
+      }
     }
 
   *[Symbol.iterator](): Iterator<IPv4 | IPv6> {
