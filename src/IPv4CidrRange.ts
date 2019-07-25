@@ -4,7 +4,6 @@ import {leftPadWithZeroBit} from "./BinaryUtils";
 import {parseBinaryStringToBigInteger} from "./BinaryUtils";
 import {Validator} from "./Validator";
 import * as bigInt from "big-integer";
-import {IPRange} from "./interface/IPRange";
 import {AbstractIpRange} from "./AbstractIpRange";
 
 /**
@@ -13,7 +12,7 @@ import {AbstractIpRange} from "./AbstractIpRange";
  *
  * @see https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing
  */
-export class IPv4CidrRange extends AbstractIpRange implements IPRange {
+export class IPv4CidrRange extends AbstractIpRange {
     readonly bitValue: bigInt.BigInteger = bigInt(32);
 
     /**
@@ -67,7 +66,7 @@ export class IPv4CidrRange extends AbstractIpRange implements IPRange {
      * @returns {string} the IPv4 range in CIDR (Classless Inter-Domain Routing) notation
      */
     public toCidrString(): string {
-        return `${this.ipv4.toString()}/${this.cidrPrefix.toString()}`
+        return super.toCidrString();
     }
 
     /**

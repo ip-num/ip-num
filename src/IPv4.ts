@@ -1,6 +1,5 @@
 import {Octet} from "./Octet";
 import {Validator} from "./Validator";
-import {IPNumber} from "./interface/IPNumber";
 import * as bigInt from "big-integer"
 import {dottedDecimalNotationToBinaryString} from "./BinaryUtils";
 import {bigIntegerNumberToBinaryString} from "./BinaryUtils";
@@ -17,7 +16,7 @@ import {IPv6} from "./IPv6";
  * @see https://en.wikipedia.org/wiki/IPv4
  * @see https://www.rfc-editor.org/info/rfc791
  */
-export class IPv4 extends AbstractIPNum implements IPNumber {
+export class IPv4 extends AbstractIPNum {
     /**
      * The decimal value represented by the IPv4 number in BigInteger
      */

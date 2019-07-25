@@ -7,8 +7,6 @@
  * ipNum.IPv4CidrRange // gets access to IPv4CidrRange
  * ipNum.Asn // gets access to Asn
  */
-export * from './interface/IPNumber'
-export * from './interface/IPRange'
 export * from './AbstractIPNum'
 export * from './Asn'
 export * from './BinaryUtils'

@@ -1,5 +1,4 @@
 import {Validator} from "./Validator"
-import {IPNumber} from "./interface/IPNumber"
 import {decimalNumberToBinaryString} from "./BinaryUtils";
 import * as bigInt from "big-integer"
 import {IPNumType} from "./IPNumType";
@@ -12,7 +11,7 @@ import {AbstractIPNum} from "./AbstractIPNum";
  * @see https://en.wikipedia.org/wiki/Autonomous_system_(Internet)
  * @see https://tools.ietf.org/html/rfc5396
  */
-export class Asn extends AbstractIPNum implements IPNumber {
+export class Asn extends AbstractIPNum {
     /**
      * The decimal value represented by the ASN number in BigInteger
      */
@@ -173,18 +172,18 @@ export class Asn extends AbstractIPNum implements IPNumber {
     /**
      * Returns the next ASN number
      *
-     * @returns {IPNumber} the next ASN number
+     * @returns {AbstractIPNum} the next ASN number
      */
-    nextIPNumber(): IPNumber {
+    nextIPNumber(): AbstractIPNum {
         return new Asn(this.value.valueOf() + 1);
     }
 
     /**
      * Returns the previous ASN number
      *
-     * @returns {IPNumber} the previous ASN number
+     * @returns {AbstractIPNum} the previous ASN number
      */
-    previousIPNumber(): IPNumber {
+    previousIPNumber(): AbstractIPNum {
         return new Asn(this.value.valueOf() - 1)
     }
 

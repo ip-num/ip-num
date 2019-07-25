@@ -88,6 +88,20 @@ export abstract class AbstractIpRange implements Iterable<IPv4 | IPv6> {
     }
 
     /**
+     * Method that returns the IPv4 range in CIDR (Classless Inter-Domain Routing) notation.
+     *
+     * See {@link https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing#CIDR_notation} for more information
+     * on the Classless Inter-Domain Routing notation
+     *
+     * @returns {string} the IPv4 range in CIDR (Classless Inter-Domain Routing) notation
+     */
+    public toCidrString(): string {
+        let first = this.getFirst();
+        return `${first.toString()}/${this.cidrPrefix.toString()}`
+    }
+
+
+    /**
      * Returns a lazily evaluated representation of the IP range that produces IP numbers by either:
      *
      * - iterating over using the for of syntax

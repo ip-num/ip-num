@@ -1,4 +1,3 @@
-import {IPNumber} from "./interface/IPNumber";
 import {Hexadecatet} from "./Hexadecatet";
 import {Validator} from "./Validator";
 import {bigIntegerNumberToBinaryString} from "./BinaryUtils";
@@ -20,7 +19,7 @@ import {hexadectetNotationToBinaryString} from "./HexadecimalUtils";
  * @see https://en.wikipedia.org/wiki/IPv6
  * @see https://www.rfc-editor.org/info/rfc8200
  */
-export class IPv6 extends AbstractIPNum implements IPNumber {
+export class IPv6 extends AbstractIPNum {
     /**
      * The decimal value represented by the IPv6 number in BigInteger
      */
