@@ -8,6 +8,7 @@
  * ipNum.Asn // gets access to Asn
  */
 export * from './AbstractIPNum'
+export * from './AbstractIpRange'
 export * from './Asn'
 export * from './BinaryUtils'
 export * from './Hexadecatet'
