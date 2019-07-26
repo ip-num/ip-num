@@ -45,9 +45,14 @@ describe('IPv6CidrRange: ', () => {
       expect(length).toBe(3);
     });
 
+    // fit("wasup", () => {
+    //     let ipv6CidrRange = new IPv6CidrRange(new IPv6("2001:db8::"), new IPv6Prefix(48));
+    //     let ranges = ipv6CidrRange.toRange();
+    // });
+
     it('should return the correct list of IPv6 numbers when takeStream is called and assigned to variables', () => {
       let ipv6CidrRange = new IPv6CidrRange(new IPv6("2001:db8::"), new IPv6Prefix(48));
-      let ranges = ipv6CidrRange.takeStream(3);
+      let ranges = ipv6CidrRange.toRange().take(3);
       let [first, second, third] = ranges;
 
       expect(first.toString()).toBe("2001:db8:0:0:0:0:0:0");
@@ -57,7 +62,7 @@ describe('IPv6CidrRange: ', () => {
 
     it('should return all list of IPv6 number when takeStream is called without passing in a count', () => {
         let ipv6CidrRange = new IPv6CidrRange(new IPv6("2001:db8::"), new IPv6Prefix(126));
-        let ranges = ipv6CidrRange.takeStream();
+        let ranges = ipv6CidrRange.toRange().take();
 
         let [first, second, third, fourth, fifth] = ranges;
 

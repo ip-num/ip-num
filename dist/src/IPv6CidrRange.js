@@ -57,21 +57,20 @@ var IPv6CidrRange = /** @class */ (function (_super) {
         _this.ipv6 = ipv6;
         _this.cidrPrefix = cidrPrefix;
         _this.bitValue = bigInt(128);
-        _this.internalCounterValue = _this.getFirst();
         return _this;
     }
     /**
      * Convenience method for constructing an instance of an IPV6Range from an IP range represented in CIDR notation
      *
-     * @param {string} rangeIncidrNotation the range of the IPv6 number in CIDR notation
-     * @returns {IPV6Range} the IPV6Range
+     * @param {string} rangeInCidrNotation the range of the IPv6 number in CIDR notation
+     * @returns {IPv6CidrRange} the IPV6Range
      */
-    IPv6CidrRange.fromCidr = function (rangeIncidrNotation) {
-        var _a = __read(Validator_1.Validator.isValidIPv6CidrNotation(rangeIncidrNotation), 2), isValid = _a[0], message = _a[1];
+    IPv6CidrRange.fromCidr = function (rangeInCidrNotation) {
+        var _a = __read(Validator_1.Validator.isValidIPv6CidrNotation(rangeInCidrNotation), 2), isValid = _a[0], message = _a[1];
         if (!isValid) {
             throw new Error(message.filter(function (msg) { return msg !== ''; }).toString());
         }
-        var cidrComponents = rangeIncidrNotation.split("/");
+        var cidrComponents = rangeInCidrNotation.split("/");
         var ipString = cidrComponents[0];
         var prefix = parseInt(cidrComponents[1]);
         return new IPv6CidrRange(IPv6_1.IPv6.fromHexadecimalString(ipString), Prefix_1.IPv6Prefix.fromNumber(prefix));
@@ -83,7 +82,13 @@ var IPv6CidrRange = /** @class */ (function (_super) {
      * @returns {bigInt.BigInteger} the amount of IPv6 numbers in the range
      */
     IPv6CidrRange.prototype.getSize = function () {
-        return _super.prototype.getSize.call(this);
+        /**
+         * Using bitwise shit operation this will be
+         * 1 << (this.bitValue - this.prefix.getValue())
+         * Since left shift a number by x is equivalent to multiplying the number by the power x raised to 2
+         * 2 << 4 = 2 * (2 raised to 4)
+         */
+        return bigInt(2).pow(this.bitValue.minus(bigInt(this.cidrPrefix.getValue())));
     };
     /**
      * Method that returns the IPv6 range in CIDR (Classless Inter-Domain Routing) notation.
@@ -94,7 +99,8 @@ var IPv6CidrRange = /** @class */ (function (_super) {
      * @returns {string} the IPv6 range in CIDR (Classless Inter-Domain Routing) notation
      */
     IPv6CidrRange.prototype.toCidrString = function () {
-        return this.ipv6.toString() + "/" + this.cidrPrefix.toString();
+        var first = this.getFirst();
+        return first.toString() + "/" + this.cidrPrefix.toString();
     };
     /**
      * Method that returns the IPv6 range in string notation where the first IPv6 number and last IPv6 number are
@@ -103,7 +109,7 @@ var IPv6CidrRange = /** @class */ (function (_super) {
      * @returns {string} the range in [first IPv6 number] - [last IPv6 number] format
      */
     IPv6CidrRange.prototype.toRangeString = function () {
-        return this.getFirst() + "-" + this.getLast();
+        return _super.prototype.toRangeString.call(this);
     };
     /**
      * Method that returns the first IPv6 number in the IPv6 range
@@ -222,24 +228,6 @@ var IPv6CidrRange = /** @class */ (function (_super) {
             return new IPv6CidrRange(new IPv6_1.IPv6(startOfPreviousRange), this.cidrPrefix);
         }
         return;
-    };
-    IPv6CidrRange.prototype.next = function (value) {
-        var returnValue = this.internalCounterValue;
-        this.internalCounterValue = this.internalCounterValue.nextIPNumber();
-        if (returnValue.isLessThanOrEquals(this.getLast())) {
-            return {
-                done: false,
-                value: returnValue
-            };
-        }
-        else {
-            return {
-                done: true
-            };
-        }
-    };
-    IPv6CidrRange.prototype[Symbol.iterator] = function () {
-        return this;
     };
     return IPv6CidrRange;
 }(AbstractIpRange_1.AbstractIpRange));

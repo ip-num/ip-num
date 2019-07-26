@@ -1,7 +1,6 @@
 import { IPv4 } from "./IPv4";
 import { IPv4Prefix } from "./Prefix";
 import * as bigInt from "big-integer";
-import { IPRange } from "./interface/IPRange";
 import { AbstractIpRange } from "./AbstractIpRange";
 /**
  * Represents a continuous segment of IPv4 numbers following the
@@ -9,11 +8,10 @@ import { AbstractIpRange } from "./AbstractIpRange";
  *
  * @see https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing
  */
-export declare class IPv4CidrRange extends AbstractIpRange implements IPRange, IterableIterator<IPv4> {
+export declare class IPv4CidrRange extends AbstractIpRange<IPv4> {
     private readonly ipv4;
     readonly cidrPrefix: IPv4Prefix;
     readonly bitValue: bigInt.BigInteger;
-    private internalCounterValue;
     /**
      * Convenience method for constructing an instance of an IPv4CidrRange from an IP range represented in CIDR notation
      *
@@ -118,7 +116,4 @@ export declare class IPv4CidrRange extends AbstractIpRange implements IPRange, I
     hasPreviousRange(): boolean;
     nextRange(): IPv4CidrRange | undefined;
     previousRange(): IPv4CidrRange | undefined;
-    next(value?: any): IteratorResult<IPv4>;
-    next(value?: any): IteratorResult<IPv4>;
-    [Symbol.iterator](): IterableIterator<IPv4>;
 }

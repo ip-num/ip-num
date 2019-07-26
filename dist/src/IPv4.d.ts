@@ -1,5 +1,4 @@
 import { Octet } from "./Octet";
-import { IPNumber } from "./interface/IPNumber";
 import * as bigInt from "big-integer";
 import { AbstractIPNum } from "./AbstractIPNum";
 import { IPNumType } from "./IPNumType";
@@ -11,7 +10,7 @@ import { IPv6 } from "./IPv6";
  * @see https://en.wikipedia.org/wiki/IPv4
  * @see https://www.rfc-editor.org/info/rfc791
  */
-export declare class IPv4 extends AbstractIPNum implements IPNumber {
+export declare class IPv4 extends AbstractIPNum {
     /**
      * The decimal value represented by the IPv4 number in BigInteger
      */

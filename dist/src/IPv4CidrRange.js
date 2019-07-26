@@ -57,7 +57,6 @@ var IPv4CidrRange = /** @class */ (function (_super) {
         _this.ipv4 = ipv4;
         _this.cidrPrefix = cidrPrefix;
         _this.bitValue = bigInt(32);
-        _this.internalCounterValue = _this.getFirst();
         return _this;
     }
     /**
@@ -84,7 +83,13 @@ var IPv4CidrRange = /** @class */ (function (_super) {
      * @returns {bigInt.BigInteger} the amount of IPv4 numbers in the range
      */
     IPv4CidrRange.prototype.getSize = function () {
-        return _super.prototype.getSize.call(this);
+        /**
+         * Using bitwise shit operation this will be
+         * 1 << (this.bitValue - this.prefix.getValue())
+         * Since left shift a number by x is equivalent to multiplying the number by the power x raised to 2
+         * 2 << 4 = 2 * (2 raised to 4)
+         */
+        return bigInt(2).pow(this.bitValue.minus(bigInt(this.cidrPrefix.getValue())));
     };
     /**
      * Method that returns the IPv4 range in CIDR (Classless Inter-Domain Routing) notation.
@@ -95,7 +100,8 @@ var IPv4CidrRange = /** @class */ (function (_super) {
      * @returns {string} the IPv4 range in CIDR (Classless Inter-Domain Routing) notation
      */
     IPv4CidrRange.prototype.toCidrString = function () {
-        return this.ipv4.toString() + "/" + this.cidrPrefix.toString();
+        var first = this.getFirst();
+        return first.toString() + "/" + this.cidrPrefix.toString();
     };
     /**
      * Method that returns the IPv4 range in string notation where the first IPv4 number and last IPv4 number are
@@ -104,7 +110,7 @@ var IPv4CidrRange = /** @class */ (function (_super) {
      * @returns {string} the range in [first IPv4 number] - [last IPv4 number] format
      */
     IPv4CidrRange.prototype.toRangeString = function () {
-        return this.getFirst() + "-" + this.getLast();
+        return _super.prototype.toRangeString.call(this);
     };
     /**
      * Method that returns the first IPv4 number in the IPv4 range
@@ -226,24 +232,6 @@ var IPv4CidrRange = /** @class */ (function (_super) {
             return new IPv4CidrRange(new IPv4_1.IPv4(startOfPreviousRange), this.cidrPrefix);
         }
         return;
-    };
-    IPv4CidrRange.prototype.next = function (value) {
-        var returnValue = this.internalCounterValue;
-        this.internalCounterValue = this.internalCounterValue.nextIPNumber();
-        if (returnValue.isLessThanOrEquals(this.getLast())) {
-            return {
-                done: false,
-                value: returnValue
-            };
-        }
-        else {
-            return {
-                done: true
-            };
-        }
-    };
-    IPv4CidrRange.prototype[Symbol.iterator] = function () {
-        return this;
     };
     return IPv4CidrRange;
 }(AbstractIpRange_1.AbstractIpRange));

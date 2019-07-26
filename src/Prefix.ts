@@ -1,8 +1,8 @@
 import {Validator} from "./Validator";
-import {IPv4SubnetMask} from "./SubnetMask";
+import {IPv4SubnetMask} from "./IPnumbers";
 import {parseBinaryStringToBigInteger} from "./BinaryUtils";
 import {IPNumType} from "./IPNumType";
-import {IPv6SubnetMask} from "./SubnetMask";
+import {IPv6SubnetMask} from "./IPnumbers";
 import {binaryStringToHexadecimalString} from "./HexadecimalUtils";
 import {Hexadecatet} from "./Hexadecatet";
 

@@ -189,7 +189,7 @@ var Asn = /** @class */ (function (_super) {
     /**
      * Returns the next ASN number
      *
-     * @returns {IPNumber} the next ASN number
+     * @returns {AbstractIPNum} the next ASN number
      */
     Asn.prototype.nextIPNumber = function () {
         return new Asn(this.value.valueOf() + 1);
@@ -197,7 +197,7 @@ var Asn = /** @class */ (function (_super) {
     /**
      * Returns the previous ASN number
      *
-     * @returns {IPNumber} the previous ASN number
+     * @returns {AbstractIPNum} the previous ASN number
      */
     Asn.prototype.previousIPNumber = function () {
         return new Asn(this.value.valueOf() - 1);

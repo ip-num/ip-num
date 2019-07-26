@@ -17,10 +17,10 @@ var __read = (this && this.__read) || function (o, n) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var Validator_1 = require("./Validator");
-var SubnetMask_1 = require("./SubnetMask");
+var IPnumbers_1 = require("./IPnumbers");
 var BinaryUtils_1 = require("./BinaryUtils");
 var IPNumType_1 = require("./IPNumType");
-var SubnetMask_2 = require("./SubnetMask");
+var IPnumbers_2 = require("./IPnumbers");
 var HexadecimalUtils_1 = require("./HexadecimalUtils");
 var Hexadecatet_1 = require("./Hexadecatet");
 /**
@@ -83,7 +83,7 @@ var IPv4Prefix = /** @class */ (function () {
     IPv4Prefix.prototype.toSubnetMask = function () {
         var onBits = '1'.repeat(this.value);
         var offBits = '0'.repeat(32 - this.value);
-        return SubnetMask_1.IPv4SubnetMask.fromDecimalDottedString(this.toDecimalNotation("" + onBits + offBits));
+        return IPnumbers_1.IPv4SubnetMask.fromDecimalDottedString(this.toDecimalNotation("" + onBits + offBits));
     };
     IPv4Prefix.prototype.toDecimalNotation = function (bits) {
         return BinaryUtils_1.parseBinaryStringToBigInteger(bits.substr(0, 8)) + "." + BinaryUtils_1.parseBinaryStringToBigInteger(bits.substr(8, 8)) + "." + BinaryUtils_1.parseBinaryStringToBigInteger(bits.substr(16, 8)) + "." + BinaryUtils_1.parseBinaryStringToBigInteger(bits.substr(24, 8));
@@ -151,7 +151,7 @@ var IPv6Prefix = /** @class */ (function () {
     IPv6Prefix.prototype.toSubnetMask = function () {
         var onBits = '1'.repeat(this.value);
         var offBits = '0'.repeat(128 - this.value);
-        return SubnetMask_2.IPv6SubnetMask.fromHexadecimalString(this.toHexadecatetNotation("" + onBits + offBits));
+        return IPnumbers_2.IPv6SubnetMask.fromHexadecimalString(this.toHexadecatetNotation("" + onBits + offBits));
     };
     IPv6Prefix.prototype.toHexadecatetNotation = function (bits) {
         var binaryStrings = bits.match(/.{1,16}/g);

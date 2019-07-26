@@ -1,4 +1,3 @@
-import { IPNumber } from "./interface/IPNumber";
 import * as bigInt from "big-integer";
 import { IPNumType } from "./IPNumType";
 import { AbstractIPNum } from "./AbstractIPNum";
@@ -9,7 +8,7 @@ import { AbstractIPNum } from "./AbstractIPNum";
  * @see https://en.wikipedia.org/wiki/Autonomous_system_(Internet)
  * @see https://tools.ietf.org/html/rfc5396
  */
-export declare class Asn extends AbstractIPNum implements IPNumber {
+export declare class Asn extends AbstractIPNum {
     /**
      * The decimal value represented by the ASN number in BigInteger
      */
@@ -107,15 +106,15 @@ export declare class Asn extends AbstractIPNum implements IPNumber {
     /**
      * Returns the next ASN number
      *
-     * @returns {IPNumber} the next ASN number
+     * @returns {AbstractIPNum} the next ASN number
      */
-    nextIPNumber(): IPNumber;
+    nextIPNumber(): AbstractIPNum;
     /**
      * Returns the previous ASN number
      *
-     * @returns {IPNumber} the previous ASN number
+     * @returns {AbstractIPNum} the previous ASN number
      */
-    previousIPNumber(): IPNumber;
+    previousIPNumber(): AbstractIPNum;
     private static startWithASprefix(word);
     private parseFromDotNotation(rawValue);
 }

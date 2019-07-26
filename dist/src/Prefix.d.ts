@@ -1,5 +1,5 @@
-import { IPv4SubnetMask } from "./SubnetMask";
-import { IPv6SubnetMask } from "./SubnetMask";
+import { IPv4SubnetMask } from "./IPnumbers";
+import { IPv6SubnetMask } from "./IPnumbers";
 interface Prefix {
     value: number;
     getValue(): number;

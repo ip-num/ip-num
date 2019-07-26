@@ -69,6 +69,48 @@ describe('IPv4CidrRange: ', function () {
         expect(take[1].toString()).toBe("192.198.0.1");
         expect(take[2].toString()).toBe("192.198.0.2");
     });
+    it('should return the correct list of IPv4 numbers when takeStream is called and looped over using for of', function () {
+        var ipv4CidrRange = new src_1.IPv4CidrRange(new src_2.IPv4("0.0.0.0"), new src_3.IPv4Prefix(0));
+        var ranges = ipv4CidrRange.toRange().take(3);
+        var length = 0;
+        var _loop_1 = function (iprange) {
+            length++;
+            expect(["0.0.0.0", "0.0.0.1", "0.0.0.2"].some(function (range) { return iprange.toString() === range; })).toBe(true);
+        };
+        try {
+            for (var ranges_1 = __values(ranges), ranges_1_1 = ranges_1.next(); !ranges_1_1.done; ranges_1_1 = ranges_1.next()) {
+                var iprange = ranges_1_1.value;
+                _loop_1(iprange);
+            }
+        }
+        catch (e_1_1) { e_1 = { error: e_1_1 }; }
+        finally {
+            try {
+                if (ranges_1_1 && !ranges_1_1.done && (_a = ranges_1.return)) _a.call(ranges_1);
+            }
+            finally { if (e_1) throw e_1.error; }
+        }
+        expect(length).toBe(3);
+        var e_1, _a;
+    });
+    it('should return the correct list of IPv4 numbers when takeStream is called and assigned to variables', function () {
+        var ipv4CidrRange = new src_1.IPv4CidrRange(new src_2.IPv4("0.0.0.0"), new src_3.IPv4Prefix(0));
+        var ranges = ipv4CidrRange.toRange().take(3);
+        var _a = __read(ranges, 3), first = _a[0], second = _a[1], third = _a[2];
+        expect(first.toString()).toBe("0.0.0.0");
+        expect(second.toString()).toBe("0.0.0.1");
+        expect(third.toString()).toBe("0.0.0.2");
+    });
+    it('should return all list of IPv4 numbers when takeStream is called without passing in a count', function () {
+        var ipv4CidrRange = new src_1.IPv4CidrRange(new src_2.IPv4("0.0.0.0"), new src_3.IPv4Prefix(30));
+        var ranges = ipv4CidrRange.toRange().take();
+        var _a = __read(ranges, 5), first = _a[0], second = _a[1], third = _a[2], fourth = _a[3], fifth = _a[4];
+        expect(first.toString()).toBe("0.0.0.0");
+        expect(second.toString()).toBe("0.0.0.1");
+        expect(third.toString()).toBe("0.0.0.2");
+        expect(fourth.toString()).toBe("0.0.0.3");
+        expect(fifth).toBeUndefined();
+    });
     it('should throw an exception when asked to take a value bigger than the size of range', function () {
         var ipv4CidrRange = new src_1.IPv4CidrRange(new src_2.IPv4("192.198.0.0"), new src_3.IPv4Prefix(24));
         var errMessage = src_4.Validator.takeOutOfRangeSizeMessage
@@ -137,14 +179,14 @@ describe('IPv4CidrRange: ', function () {
                 expectedIndex++;
             }
         }
-        catch (e_1_1) { e_1 = { error: e_1_1 }; }
+        catch (e_2_1) { e_2 = { error: e_2_1 }; }
         finally {
             try {
                 if (ipv4CidrRange_1_1 && !ipv4CidrRange_1_1.done && (_a = ipv4CidrRange_1.return)) _a.call(ipv4CidrRange_1);
             }
-            finally { if (e_1) throw e_1.error; }
+            finally { if (e_2) throw e_2.error; }
         }
-        var e_1, _a;
+        var e_2, _a;
     });
     it('should be able to use spread syntax on range', function () {
         var ipv4CidrRange = new src_1.IPv4CidrRange(new src_2.IPv4("192.198.0.0"), new src_3.IPv4Prefix(30));

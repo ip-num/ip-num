@@ -1,7 +1,6 @@
 import { IPv6Prefix } from "./Prefix";
 import { IPv6 } from "./IPv6";
 import * as bigInt from "big-integer";
-import { IPRange } from "./interface/IPRange";
 import { AbstractIpRange } from "./AbstractIpRange";
 /**
  * Represents a continuous segment of IPv6 number following the
@@ -9,18 +8,17 @@ import { AbstractIpRange } from "./AbstractIpRange";
  *
  * @see https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing
  */
-export declare class IPv6CidrRange extends AbstractIpRange implements IPRange, IterableIterator<IPv6> {
+export declare class IPv6CidrRange extends AbstractIpRange<IPv6> {
     private readonly ipv6;
     readonly cidrPrefix: IPv6Prefix;
     readonly bitValue: bigInt.BigInteger;
-    private internalCounterValue;
     /**
      * Convenience method for constructing an instance of an IPV6Range from an IP range represented in CIDR notation
      *
-     * @param {string} rangeIncidrNotation the range of the IPv6 number in CIDR notation
-     * @returns {IPV6Range} the IPV6Range
+     * @param {string} rangeInCidrNotation the range of the IPv6 number in CIDR notation
+     * @returns {IPv6CidrRange} the IPV6Range
      */
-    static fromCidr(rangeIncidrNotation: string): IPv6CidrRange;
+    static fromCidr(rangeInCidrNotation: string): IPv6CidrRange;
     /**
      * Constructor for creating an instance of an IPv6 range.
      *
@@ -118,7 +116,4 @@ export declare class IPv6CidrRange extends AbstractIpRange implements IPRange, I
     hasPreviousRange(): boolean;
     nextRange(): IPv6CidrRange | undefined;
     previousRange(): IPv6CidrRange | undefined;
-    next(value?: any): IteratorResult<IPv6>;
-    next(value?: any): IteratorResult<IPv6>;
-    [Symbol.iterator](): IterableIterator<IPv6>;
 }
