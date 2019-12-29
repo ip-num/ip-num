@@ -159,6 +159,16 @@ export class IPv6CidrRange extends AbstractIpRange implements IPRange, IterableI
         let iPv6s: Array<IPv6>  = [this.getFirst()];
         let iteratingIPv6 = this.getFirst();
 
+        console.log("Printing via getSize:");
+        console.log(bigInt(count));
+        console.log(this.getSize());
+        console.log("Printing via valueOf");
+        console.log(bigInt(count).valueOf());
+        console.log(this.getSize().valueOf());
+        console.log(bigInt(count).greater(this.getSize()));
+
+        throw new Error("lol");
+
         if (bigInt(count).greater(this.getSize())) {
             throw new Error(`${count.toString()} is greater than ${this.getSize().toString()}, the size of the range`);
         }
@@ -215,8 +225,7 @@ export class IPv6CidrRange extends AbstractIpRange implements IPRange, IterableI
     }
 
     next(value?: any): IteratorResult<IPv6>;
-    next(value?: any): IteratorResult<IPv6>;
-    next(value?: any) {
+    next(value?: any):IteratorResult<IPv6> {
         let returnValue = this.internalCounterValue;
         this.internalCounterValue = this.internalCounterValue.nextIPNumber();
 
@@ -227,7 +236,8 @@ export class IPv6CidrRange extends AbstractIpRange implements IPRange, IterableI
             }
         } else {
             return {
-                done:true
+                done:true,
+                value: undefined
             }
         }
     }

@@ -48,12 +48,14 @@ describe('IPv6CidrRange: ', () => {
         }).toThrowError(Error, Validator.invalidIPv6CidrNotationString);
     });
 
-    it('should throw an exception when asked to take a value bigger than the size of range', function() {
+    fit('should throw an exception when asked to take a value bigger than the size of range', function() {
         let ipv6CidrRange = new IPv6CidrRange(new IPv6("2001:db8::"), new IPv6Prefix(46));
         let errMessage = Validator.takeOutOfRangeSizeMessage
             .replace("$size", ipv6CidrRange.getSize().toString())
             .replace("$count", (ipv6CidrRange.getSize().plus(1)).valueOf().toString());
         expect(() => {
+            console.log("size", ipv6CidrRange.getSize().valueOf());
+            console.log("count", ipv6CidrRange.getSize().plus(1).valueOf());
             ipv6CidrRange.take(ipv6CidrRange.getSize().plus(1).valueOf());
         }).toThrowError(Error, errMessage);
     });

@@ -220,9 +220,9 @@ export class IPv4CidrRange extends AbstractIpRange implements IPRange, IterableI
         return;
     }
 
+
     next(value?: any): IteratorResult<IPv4>;
-    next(value?: any): IteratorResult<IPv4>;
-    next(value?: any) {
+    next(value?: any): IteratorResult<IPv4> {
         let returnValue = this.internalCounterValue;
         this.internalCounterValue = this.internalCounterValue.nextIPNumber();
 
@@ -233,7 +233,8 @@ export class IPv4CidrRange extends AbstractIpRange implements IPRange, IterableI
             }
         } else {
             return {
-                done:true
+                done:true,
+                value: undefined
             }
         }
     }
