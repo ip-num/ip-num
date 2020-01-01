@@ -155,15 +155,15 @@ export class IPv6CidrRange extends AbstractIpRange implements IPRange, IterableI
      * @param {number} count the amount of IPv6 number to take from the IPv6 range
      * @returns {Array<IPv6>} an array of IPv6 number, taken from the IPv6 range
      */
-    public take(count: number): Array<IPv6> {
+    public take(count: bigInt.BigInteger): Array<IPv6> {
         let iPv6s: Array<IPv6>  = [this.getFirst()];
         let iteratingIPv6 = this.getFirst();
 
-        if (bigInt(count).greater(this.getSize())) {
+        if (count.greater(this.getSize())) {
             throw new Error(`${count.toString()} is greater than ${this.getSize().toString()}, the size of the range`);
         }
 
-        for (var counter = 0; counter < count - 1; counter++) {
+        for (var counter = 0; counter < count.minus(1).valueOf(); counter++) {
             iPv6s.push(iteratingIPv6.nextIPNumber());
             iteratingIPv6 = iteratingIPv6.nextIPNumber();
         }
@@ -214,9 +214,7 @@ export class IPv6CidrRange extends AbstractIpRange implements IPRange, IterableI
         return;
     }
 
-    next(value?: any): IteratorResult<IPv6>;
-    next(value?: any): IteratorResult<IPv6>;
-    next(value?: any) {
+    next(value?: any):IteratorResult<IPv6> {
         let returnValue = this.internalCounterValue;
         this.internalCounterValue = this.internalCounterValue.nextIPNumber();
 
@@ -227,7 +225,8 @@ export class IPv6CidrRange extends AbstractIpRange implements IPRange, IterableI
             }
         } else {
             return {
-                done:true
+                done:true,
+                value: returnValue
             }
         }
     }
