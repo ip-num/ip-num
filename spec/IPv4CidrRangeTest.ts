@@ -2,6 +2,7 @@ import {IPv4CidrRange} from "../src";
 import {IPv4} from "../src";
 import {IPv4Prefix} from "../src";
 import {Validator} from "../src";
+import bigInt = require("big-integer");
 
 
 describe('IPv4CidrRange: ', () => {
@@ -38,7 +39,7 @@ describe('IPv4CidrRange: ', () => {
     });
     it('should return the correct list of IPv4 number when take is called', () => {
         let ipv4CidrRange = new IPv4CidrRange(new IPv4("192.198.0.0"), new IPv4Prefix(24));
-        let take = ipv4CidrRange.take(3);
+        let take = ipv4CidrRange.take(bigInt(3));
         expect(take[0].toString()).toBe("192.198.0.0");
         expect(take[1].toString()).toBe("192.198.0.1");
         expect(take[2].toString()).toBe("192.198.0.2");
@@ -49,7 +50,7 @@ describe('IPv4CidrRange: ', () => {
             .replace("$size", ipv4CidrRange.getSize().toString())
             .replace("$count", (ipv4CidrRange.getSize().plus(1)).toString());
         expect(() => {
-            ipv4CidrRange.take(ipv4CidrRange.getSize().plus(1).valueOf());
+            ipv4CidrRange.take(ipv4CidrRange.getSize().plus(1));
         }).toThrowError(Error, errMessage);
     });
     it('should throw an exception when trying to split a range with on IP number', function(){
@@ -113,7 +114,7 @@ describe('IPv4CidrRange: ', () => {
     });
     it('should be able to use for in construct on range', () => {
         let ipv4CidrRange = new IPv4CidrRange(new IPv4("192.198.0.0"), new IPv4Prefix(30));
-        let expectedValue = ipv4CidrRange.take(4);
+        let expectedValue = ipv4CidrRange.take(bigInt(4));
         let expectedIndex = 0;
         for (let value of ipv4CidrRange) {
             expect(value.isEquals(expectedValue[expectedIndex])).toBe(true);
@@ -122,7 +123,7 @@ describe('IPv4CidrRange: ', () => {
     });
     it('should be able to use spread syntax on range', () => {
         let ipv4CidrRange = new IPv4CidrRange(new IPv4("192.198.0.0"), new IPv4Prefix(30));
-        let expectedValue = ipv4CidrRange.take(4);
+        let expectedValue = ipv4CidrRange.take(bigInt(4));
 
         let iPv4CidrRanges = [... ipv4CidrRange];
 

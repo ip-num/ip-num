@@ -156,7 +156,7 @@ export class IPv4CidrRange extends AbstractIpRange implements IPRange, IterableI
      * @param {number} count the amount of IPv4 number to take from the IPv4 range
      * @returns {Array<IPv4>} an array of IPv4 number, taken from the IPv4 range
      */
-    public take(count: number): Array<IPv4> {
+    public take(count: bigInt.BigInteger): Array<IPv4> {
         let ipv4s: Array<IPv4>  = [this.getFirst()];
         let iteratingIPv4 = this.getFirst();
 
@@ -167,7 +167,7 @@ export class IPv4CidrRange extends AbstractIpRange implements IPRange, IterableI
             throw new Error(errMessage);
         }
 
-        for (var counter = 0; counter < count - 1; counter++) {
+        for (var counter = 0; counter < count.minus(1).valueOf(); counter++) {
             ipv4s.push(iteratingIPv4.nextIPNumber());
             iteratingIPv4 = iteratingIPv4.nextIPNumber();
         }
@@ -220,9 +220,8 @@ export class IPv4CidrRange extends AbstractIpRange implements IPRange, IterableI
         return;
     }
 
-    next(value?: any): IteratorResult<IPv4>;
-    next(value?: any): IteratorResult<IPv4>;
-    next(value?: any) {
+
+    next(value?: any): IteratorResult<IPv4> {
         let returnValue = this.internalCounterValue;
         this.internalCounterValue = this.internalCounterValue.nextIPNumber();
 
@@ -233,7 +232,8 @@ export class IPv4CidrRange extends AbstractIpRange implements IPRange, IterableI
             }
         } else {
             return {
-                done:true
+                done:true,
+                value: returnValue
             }
         }
     }
