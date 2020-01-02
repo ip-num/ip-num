@@ -378,6 +378,9 @@ Found a bug and you want to provide a fix for it? Then feel free to submit a pul
 Change log
 ------------------
 
+##### v1.2.1
+* Fixes a cyclic dependency bug. [Issue #24](https://github.com/ip-num/ip-num/issues/24) 
+
 ##### v1.2.0
 * Introduced AbstractIpRange to abstract over the IPRange (ie: IPv4Range and IPv6Range). [Issue #15](https://github.com/ip-num/ip-num/issues/15) 
 * Extend the IPRange interface. [Issue #20](https://github.com/ip-num/ip-num/issues/20)

@@ -107,7 +107,7 @@ export declare class IPv6CidrRange extends AbstractIpRange implements IPRange, I
      * @param {number} count the amount of IPv6 number to take from the IPv6 range
      * @returns {Array<IPv6>} an array of IPv6 number, taken from the IPv6 range
      */
-    take(count: number): Array<IPv6>;
+    take(count: bigInt.BigInteger): Array<IPv6>;
     /**
      * Method that splits an IPv6 range into two halves
      *
@@ -118,7 +118,6 @@ export declare class IPv6CidrRange extends AbstractIpRange implements IPRange, I
     hasPreviousRange(): boolean;
     nextRange(): IPv6CidrRange | undefined;
     previousRange(): IPv6CidrRange | undefined;
-    next(value?: any): IteratorResult<IPv6>;
     next(value?: any): IteratorResult<IPv6>;
     [Symbol.iterator](): IterableIterator<IPv6>;
 }

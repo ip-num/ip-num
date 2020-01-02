@@ -107,7 +107,7 @@ export declare class IPv4CidrRange extends AbstractIpRange implements IPRange, I
      * @param {number} count the amount of IPv4 number to take from the IPv4 range
      * @returns {Array<IPv4>} an array of IPv4 number, taken from the IPv4 range
      */
-    take(count: number): Array<IPv4>;
+    take(count: bigInt.BigInteger): Array<IPv4>;
     /**
      * Method that splits an IPv4 range into two halves
      *
@@ -118,7 +118,6 @@ export declare class IPv4CidrRange extends AbstractIpRange implements IPRange, I
     hasPreviousRange(): boolean;
     nextRange(): IPv4CidrRange | undefined;
     previousRange(): IPv4CidrRange | undefined;
-    next(value?: any): IteratorResult<IPv4>;
     next(value?: any): IteratorResult<IPv4>;
     [Symbol.iterator](): IterableIterator<IPv4>;
 }

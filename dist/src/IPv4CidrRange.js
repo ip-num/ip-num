@@ -182,7 +182,7 @@ var IPv4CidrRange = /** @class */ (function (_super) {
                 .replace("$size", this.getSize().toString());
             throw new Error(errMessage);
         }
-        for (var counter = 0; counter < count - 1; counter++) {
+        for (var counter = 0; counter < count.minus(1).valueOf(); counter++) {
             ipv4s.push(iteratingIPv4.nextIPNumber());
             iteratingIPv4 = iteratingIPv4.nextIPNumber();
         }
@@ -238,7 +238,8 @@ var IPv4CidrRange = /** @class */ (function (_super) {
         }
         else {
             return {
-                done: true
+                done: true,
+                value: returnValue
             };
         }
     };

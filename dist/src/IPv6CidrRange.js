@@ -175,10 +175,10 @@ var IPv6CidrRange = /** @class */ (function (_super) {
     IPv6CidrRange.prototype.take = function (count) {
         var iPv6s = [this.getFirst()];
         var iteratingIPv6 = this.getFirst();
-        if (bigInt(count).greater(this.getSize())) {
+        if (count.greater(this.getSize())) {
             throw new Error(count.toString() + " is greater than " + this.getSize().toString() + ", the size of the range");
         }
-        for (var counter = 0; counter < count - 1; counter++) {
+        for (var counter = 0; counter < count.minus(1).valueOf(); counter++) {
             iPv6s.push(iteratingIPv6.nextIPNumber());
             iteratingIPv6 = iteratingIPv6.nextIPNumber();
         }
@@ -234,7 +234,8 @@ var IPv6CidrRange = /** @class */ (function (_super) {
         }
         else {
             return {
-                done: true
+                done: true,
+                value: returnValue
             };
         }
     };

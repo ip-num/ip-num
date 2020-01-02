@@ -34,6 +34,7 @@ var src_1 = require("../src");
 var src_2 = require("../src");
 var src_3 = require("../src");
 var src_4 = require("../src");
+var bigInt = require("big-integer");
 describe('IPv4CidrRange: ', function () {
     it('should instantiate by calling constructor with IPv4 and prefix', function () {
         var ipv4CidrRange = new src_1.IPv4CidrRange(new src_2.IPv4("192.198.0.0"), new src_3.IPv4Prefix(24));
@@ -64,7 +65,7 @@ describe('IPv4CidrRange: ', function () {
     });
     it('should return the correct list of IPv4 number when take is called', function () {
         var ipv4CidrRange = new src_1.IPv4CidrRange(new src_2.IPv4("192.198.0.0"), new src_3.IPv4Prefix(24));
-        var take = ipv4CidrRange.take(3);
+        var take = ipv4CidrRange.take(bigInt(3));
         expect(take[0].toString()).toBe("192.198.0.0");
         expect(take[1].toString()).toBe("192.198.0.1");
         expect(take[2].toString()).toBe("192.198.0.2");
@@ -75,7 +76,7 @@ describe('IPv4CidrRange: ', function () {
             .replace("$size", ipv4CidrRange.getSize().toString())
             .replace("$count", (ipv4CidrRange.getSize().plus(1)).toString());
         expect(function () {
-            ipv4CidrRange.take(ipv4CidrRange.getSize().plus(1).valueOf());
+            ipv4CidrRange.take(ipv4CidrRange.getSize().plus(1));
         }).toThrowError(Error, errMessage);
     });
     it('should throw an exception when trying to split a range with on IP number', function () {
@@ -128,7 +129,7 @@ describe('IPv4CidrRange: ', function () {
     });
     it('should be able to use for in construct on range', function () {
         var ipv4CidrRange = new src_1.IPv4CidrRange(new src_2.IPv4("192.198.0.0"), new src_3.IPv4Prefix(30));
-        var expectedValue = ipv4CidrRange.take(4);
+        var expectedValue = ipv4CidrRange.take(bigInt(4));
         var expectedIndex = 0;
         try {
             for (var ipv4CidrRange_1 = __values(ipv4CidrRange), ipv4CidrRange_1_1 = ipv4CidrRange_1.next(); !ipv4CidrRange_1_1.done; ipv4CidrRange_1_1 = ipv4CidrRange_1.next()) {
@@ -148,7 +149,7 @@ describe('IPv4CidrRange: ', function () {
     });
     it('should be able to use spread syntax on range', function () {
         var ipv4CidrRange = new src_1.IPv4CidrRange(new src_2.IPv4("192.198.0.0"), new src_3.IPv4Prefix(30));
-        var expectedValue = ipv4CidrRange.take(4);
+        var expectedValue = ipv4CidrRange.take(bigInt(4));
         var iPv4CidrRanges = __spread(ipv4CidrRange);
         expect(iPv4CidrRanges[0].isEquals(expectedValue[0])).toBe(true);
         expect(iPv4CidrRanges[1].isEquals(expectedValue[1])).toBe(true);

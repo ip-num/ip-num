@@ -45,7 +45,7 @@ export interface IPRange {
      * @param {number} count the amount of IP number to take from the IP range
      * @returns {Array<IPNumber>} an array of IP number, taken from the IP range
      */
-    take(count: number): Array<IPNumber>;
+    take(count: bigInt.BigInteger): Array<IPNumber>;
     /**
      * Indicates whether the given IP range is an adjacent range.
      *

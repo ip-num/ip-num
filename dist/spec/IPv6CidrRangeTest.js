@@ -34,6 +34,7 @@ var src_1 = require("../src");
 var src_2 = require("../src");
 var src_3 = require("../src");
 var src_4 = require("../src");
+var bigInt = require("big-integer");
 describe('IPv6CidrRange: ', function () {
     it('should instantiate by calling constructor with IPv4 and prefix', function () {
         var ipv6CidrRange = new src_3.IPv6CidrRange(new src_1.IPv6("::"), new src_2.IPv6Prefix(0));
@@ -57,7 +58,7 @@ describe('IPv6CidrRange: ', function () {
     });
     it('should return the correct list of IPv6 number when take is called', function () {
         var ipv6CidrRange = new src_3.IPv6CidrRange(new src_1.IPv6("2001:db8::"), new src_2.IPv6Prefix(48));
-        var take = ipv6CidrRange.take(3);
+        var take = ipv6CidrRange.take(bigInt(3));
         expect(take[0].toString()).toBe("2001:db8:0:0:0:0:0:0");
         expect(take[1].toString()).toBe("2001:db8:0:0:0:0:0:1");
         expect(take[2].toString()).toBe("2001:db8:0:0:0:0:0:2");
@@ -80,9 +81,9 @@ describe('IPv6CidrRange: ', function () {
         var ipv6CidrRange = new src_3.IPv6CidrRange(new src_1.IPv6("2001:db8::"), new src_2.IPv6Prefix(46));
         var errMessage = src_4.Validator.takeOutOfRangeSizeMessage
             .replace("$size", ipv6CidrRange.getSize().toString())
-            .replace("$count", (ipv6CidrRange.getSize().plus(1)).valueOf().toString());
+            .replace("$count", (ipv6CidrRange.getSize().plus(1)).toString());
         expect(function () {
-            ipv6CidrRange.take(ipv6CidrRange.getSize().plus(1).valueOf());
+            ipv6CidrRange.take(ipv6CidrRange.getSize().plus(1));
         }).toThrowError(Error, errMessage);
     });
     it('should throw an exception when trying to split a range with on IP number', function () {
@@ -128,7 +129,7 @@ describe('IPv6CidrRange: ', function () {
     });
     it('should be able to use for in construct on range', function () {
         var ipv6CidrRange = new src_3.IPv6CidrRange(new src_1.IPv6("2001:db8::"), new src_2.IPv6Prefix(127));
-        var expectedValue = ipv6CidrRange.take(2);
+        var expectedValue = ipv6CidrRange.take(bigInt(2));
         var expectedIndex = 0;
         try {
             for (var ipv6CidrRange_1 = __values(ipv6CidrRange), ipv6CidrRange_1_1 = ipv6CidrRange_1.next(); !ipv6CidrRange_1_1.done; ipv6CidrRange_1_1 = ipv6CidrRange_1.next()) {
@@ -148,7 +149,7 @@ describe('IPv6CidrRange: ', function () {
     });
     it('should be able to use spread syntax on range', function () {
         var ipv6CidrRange = new src_3.IPv6CidrRange(new src_1.IPv6("2001:db8::"), new src_2.IPv6Prefix(127));
-        var expectedValue = ipv6CidrRange.take(2);
+        var expectedValue = ipv6CidrRange.take(bigInt(2));
         var iPv6CidrRanges = __spread(ipv6CidrRange);
         expect(iPv6CidrRanges[0].isEquals(expectedValue[0])).toBe(true);
         expect(iPv6CidrRanges[1].isEquals(expectedValue[1])).toBe(true);
