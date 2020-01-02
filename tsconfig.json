@@ -2,6 +2,7 @@
   "include": ["src/*","spec/*"],
   "compileOnSave": true,
     "compilerOptions": {
+      "skipLibCheck": true,
       "strict": true,
       "moduleResolution": "node",
       "module": "commonjs",
