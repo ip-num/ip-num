@@ -22,7 +22,7 @@ If you want to use `ip-num` from within a Node.js environment, you can install i
 
 ```npm install ip-num```
 
-`ip-num` is tested against version 7 - and upwards - of NodeJs.
+check the `.travis.yml` file for the versions of Node.js `ip-num` is being built and tested with.
 
 ### Browser
 If you are using a browser, you would have to use a module bundler like [browserify](http://browserify.org/), 
