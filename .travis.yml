@@ -1,10 +1,9 @@
 language: node_js
 
 node_js:
-  - 'stable'
-  - '9'
-  - '8'
-  - '7'
+  - '12'
+  - '10'
+  - '11'
 
 script:
  - npm test
