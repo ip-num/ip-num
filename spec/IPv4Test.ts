@@ -2,7 +2,7 @@
  * Created by daderemi on 07/11/16.
  */
 
-import {IPv4} from "../src/IPv4";
+import {IPv4} from "../src/IPNumber";
 import {Validator} from "../src/Validator";
 import * as bigInt from "big-integer";
 

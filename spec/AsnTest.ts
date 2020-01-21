@@ -2,12 +2,10 @@
  * Created by daderemi on 31/07/16.
  */
 
-import {Asn} from "../src/Asn";
+import {Asn} from "../src/IPNumber";
 import {Validator} from "../src/Validator";
 
 import * as bigInt from "big-integer"
-import {AbstractIPNum} from "../src/AbstractIPNum";
-import {binaryStringToHexadecimalString} from "../src";
 
 describe('ASN', () => {
     it('should instantiate by passing number to static method', () => {

@@ -1,8 +1,8 @@
-import {IPv4SubnetMask} from "../src/SubnetMask";
+import {IPv4SubnetMask} from "../src/IPNumber";
 import {Validator} from "../src/Validator";
-import {IPv4} from "../src/IPv4";
-import {IPv6SubnetMask} from "../src/SubnetMask";
-import {IPv6} from "../src/IPv6";
+import {IPv4} from "../src/IPNumber";
+import {IPv6SubnetMask} from "../src/IPNumber";
+import {IPv6} from "../src/IPNumber";
 
 describe('Subnet mask test', function() {
     it('should create an instance of IPv4 subnet mask using fromDecimalDottedString', () => {

@@ -1,7 +1,7 @@
 
 import {Validator} from "../src/Validator";
 import * as bigInt from "big-integer";
-import {IPv6} from "../src/IPv6";
+import {IPv6} from "../src/IPNumber";
 import {IPv4} from "../src";
 
 describe('IPv6: ', () => {
