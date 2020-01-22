@@ -38,7 +38,7 @@ export class Range<T extends IPv4 | IPv6> implements Iterable<IPv4 | IPv6> {
         return `${this.getFirst()}-${this.getLast()}`
     }
 
-    public inside(otherRange: IPv6CidrRange | IPv4CidrRange): boolean {
+    public inside(otherRange: Range<T>): boolean {
         let thisFirst: IPv6 | IPv4 = this.getFirst();
         let thisLast: IPv6 | IPv4 = this.getLast();
         let otherFirst: IPv6 | IPv4 = otherRange.getFirst();
@@ -47,7 +47,7 @@ export class Range<T extends IPv4 | IPv6> implements Iterable<IPv4 | IPv6> {
         return (otherFirst.isLessThanOrEquals(thisFirst) && otherLast.isGreaterThanOrEquals(thisLast));
     }
 
-    public contains(otherRange: IPv6CidrRange | IPv4CidrRange): boolean {
+    public contains(otherRange: Range<T>): boolean {
         let thisFirst: IPv6 | IPv4 = this.getFirst();
         let thisLast: IPv6 | IPv4 = this.getLast();
         let otherFirst: IPv6 | IPv4 = otherRange.getFirst();
@@ -56,7 +56,7 @@ export class Range<T extends IPv4 | IPv6> implements Iterable<IPv4 | IPv6> {
         return (thisFirst.isLessThanOrEquals(otherFirst) && thisLast.isGreaterThanOrEquals(otherLast));
     }
 
-    public isOverlapping(otherRange: IPv6CidrRange | IPv4CidrRange): boolean {
+    public isOverlapping(otherRange: Range<T>): boolean {
         let thisFirst: IPv6 | IPv4 = this.getFirst();
         let thisLast: IPv6 | IPv4 = this.getLast();
         let otherFirst: IPv6 | IPv4 = otherRange.getFirst();
@@ -69,7 +69,7 @@ export class Range<T extends IPv4 | IPv6> implements Iterable<IPv4 | IPv6> {
         );
     }
 
-    public isConsecutive(otherRange: IPv6CidrRange | IPv4CidrRange): boolean {
+    public isConsecutive(otherRange: Range<T>): boolean {
         let thisFirst: IPv6 | IPv4 = this.getFirst();
         let thisLast: IPv6 | IPv4 = this.getLast();
         let otherFirst: IPv6 | IPv4 = otherRange.getFirst();
@@ -127,19 +127,19 @@ export abstract class IPRange<T extends IPv4 | IPv6>  implements Iterable<IPv4 |
     }
 
     public inside(otherRange: IPv6CidrRange | IPv4CidrRange): boolean {
-        return this.toRange().inside(otherRange)
+        return this.toRange().inside(otherRange.toRange())
     }
 
     public contains(otherRange: IPv6CidrRange | IPv4CidrRange): boolean {
-        return this.toRange().contains(otherRange);
+        return this.toRange().contains(otherRange.toRange());
     }
 
     public isOverlapping(otherRange: IPv6CidrRange | IPv4CidrRange): boolean {
-        return this.toRange().isOverlapping(otherRange);
+        return this.toRange().isOverlapping(otherRange.toRange());
     }
 
     public isConsecutive(otherRange: IPv6CidrRange | IPv4CidrRange): boolean {
-        return this.toRange().isConsecutive(otherRange);
+        return this.toRange().isConsecutive(otherRange.toRange());
     }
 
     /**
