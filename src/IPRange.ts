@@ -9,11 +9,16 @@ import {IPv4Prefix} from "./Prefix";
 
 
 
-export class Range<T extends IPv4 | IPv6>  {
-
+export class Range<T extends IPv4 | IPv6> implements Iterable<IPv4 | IPv6> {
     readonly bitValue: bigInt.BigInteger;
+    private currentValue: IPv4 | IPv6;
+
+    static fromCidrRange(cidrRange: IPv6CidrRange | IPv4CidrRange) {
+        return new Range(cidrRange.getFirst(), cidrRange.getLast());
+    }
 
     constructor(private first: T, private last: T) {
+        this.currentValue = first;
         this.bitValue = bigInt(first.bitSize);
     }
 
@@ -86,6 +91,10 @@ export class Range<T extends IPv4 | IPv6>  {
             computed = computed.nextIPNumber();
         }
     }
+
+    *[Symbol.iterator](): IterableIterator<IPv4 | IPv6> {
+        yield* this.take()
+    }
 }
 
 /**
@@ -148,12 +157,7 @@ export abstract class IPRange<T extends IPv4 | IPv6>  implements Iterable<IPv4 |
     }
 
     *[Symbol.iterator](): Iterator<IPv4 | IPv6> {
-        let lastValue: IPv6 | IPv4 = this.getLast();
-        let returnValue: IPv6 | IPv4 = this.getFirst();
-        while(returnValue.isLessThanOrEquals(lastValue)) {
-            yield returnValue;
-            returnValue = returnValue.nextIPNumber();
-        }
+        yield* this.toRange();
     }
 }
 
