@@ -142,6 +142,16 @@ describe('IPv6CidrRange: ', () => {
         expect(firstRange.isOverlapping(containerRange)).toBe(false);
 
     });
+    it('should correctly tell when ranges are equal', () => {
+        let firstRange = new IPv6CidrRange(new IPv6("2001:db8::"), new IPv6Prefix(48));
+        let secondRange = new IPv6CidrRange(new IPv6("2001:db8::"), new IPv6Prefix(48));
+        expect(firstRange.isEquals(secondRange)).toBe(true);
+    });
+    it('should correctly tell when ranges are not equal', () => {
+        let firstRange = new IPv6CidrRange(new IPv6("2001:db8::"), new IPv6Prefix(48));
+        let secondRange = new IPv6CidrRange(new IPv6("2001:db8:1::"), new IPv6Prefix(48));
+        expect(firstRange.isEquals(secondRange)).toBe(false);
+    });
     it('should be able to use for in construct on range', () => {
         let ipv6CidrRange = new IPv6CidrRange(new IPv6("2001:db8::"), new IPv6Prefix(127));
         let expectedValue = ipv6CidrRange.take(bigInt(2));

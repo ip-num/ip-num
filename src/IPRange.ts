@@ -56,6 +56,11 @@ export class Range<T extends IPv4 | IPv6> implements Iterable<IPv4 | IPv6> {
         return (thisFirst.isLessThanOrEquals(otherFirst) && thisLast.isGreaterThanOrEquals(otherLast));
     }
 
+    public isEquals(otherRange: Range<T>): boolean {
+        return this.getFirst().isEquals(otherRange.getFirst())
+            && this.getLast().isEquals(otherRange.getLast());
+    };
+
     public isOverlapping(otherRange: Range<T>): boolean {
         let thisFirst: IPv6 | IPv4 = this.getFirst();
         let thisLast: IPv6 | IPv4 = this.getLast();
@@ -142,6 +147,9 @@ export abstract class IPRange<T extends IPv4 | IPv6>  implements Iterable<IPv4 |
         return this.toRange().isConsecutive(otherRange.toRange());
     }
 
+    public isEquals(otherRange: IPv6CidrRange | IPv4CidrRange): boolean {
+        return this.toRange().isEquals(otherRange.toRange());
+    }
     /**
      * Returns a lazily evaluated representation of the IP range that produces IP numbers by either:
      *

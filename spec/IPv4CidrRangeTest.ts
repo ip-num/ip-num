@@ -144,6 +144,18 @@ describe('IPv4CidrRange: ', () => {
         expect(firstRange.isOverlapping(containerRange)).toBe(false);
 
     });
+    it('should correctly tell when ranges are equal', () => {
+        let firstRange = IPv4CidrRange.fromCidr("192.168.0.0/25");
+        let secondRange = IPv4CidrRange.fromCidr("192.168.0.0/25");
+
+        expect(firstRange.isEquals(secondRange)).toBe(true);
+    });
+    it('should correctly tell when ranges are not equal', () => {
+        let firstRange = IPv4CidrRange.fromCidr("192.168.0.0/25");
+        let secondRange = IPv4CidrRange.fromCidr("192.168.0.128/25");
+
+        expect(firstRange.isEquals(secondRange)).toBe(false);
+    });
     it('should be able to use for in construct on range', () => {
         let ipv4CidrRange = new IPv4CidrRange(new IPv4("192.198.0.0"), new IPv4Prefix(30));
         let expectedValue = ipv4CidrRange.take(bigInt(4));

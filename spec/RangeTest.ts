@@ -49,4 +49,14 @@ describe('Range: ', () => {
         expect(range.getFirst().toString()).toEqual("2001:db8:0:0:0:0:0:0");
         expect(range.getLast().toString()).toEqual("2001:db8:0:ffff:ffff:ffff:ffff:ffff");
     });
+    it("should perform equality check, true", () => {
+        let firstRange = new Range(new IPv4("0.0.0.254"), new IPv4("0.0.1.2"));
+        let secondRange = new Range(new IPv4("0.0.0.254"), new IPv4("0.0.1.2"));
+        expect(firstRange.isEquals(secondRange)).toBe(true);
+    });
+    it("should perform equality check, false", () => {
+        let firstRange = new Range(new IPv4("0.0.0.253"), new IPv4("0.0.1.2"));
+        let secondRange = new Range(new IPv4("0.0.0.254"), new IPv4("0.0.1.2"));
+        expect(firstRange.isEquals(secondRange)).toBe(false);
+    })
 });
