@@ -58,5 +58,31 @@ describe('Range: ', () => {
         let firstRange = new Range(new IPv4("0.0.0.253"), new IPv4("0.0.1.2"));
         let secondRange = new Range(new IPv4("0.0.0.254"), new IPv4("0.0.1.2"));
         expect(firstRange.isEquals(secondRange)).toBe(false);
-    })
+    });
+    it("should perform union of ranges: equal ranges", () => {
+        let firstRange = new Range(new IPv4("0.0.0.254"), new IPv4("0.0.1.2"));
+        let secondRange = new Range(new IPv4("0.0.0.254"), new IPv4("0.0.1.2"));
+        let union = firstRange.union(secondRange);
+        expect(union.isEquals(firstRange)).toBe(true);
+    });
+    it("should perform union of ranges: overlap range left", () => {
+        let firstRange = new Range(new IPv4("0.0.0.0"), new IPv4("0.0.0.2"));
+        let secondRange = new Range(new IPv4("0.0.0.1"), new IPv4("0.0.0.3"));
+
+        let expected = new Range(new IPv4("0.0.0.0"), new IPv4("0.0.0.3"));
+
+        let union = firstRange.union(secondRange);
+
+        expect(union.isEquals(expected)).toBe(true);
+    });
+    it("should perform union of ranges: overlap range right", () => {
+        let firstRange = new Range(new IPv4("0.0.0.1"), new IPv4("0.0.0.3"));
+        let secondRange = new Range(new IPv4("0.0.0.0"), new IPv4("0.0.0.2"));
+
+        let expected = new Range(new IPv4("0.0.0.0"), new IPv4("0.0.0.3"));
+
+        let union = firstRange.union(secondRange);
+
+        expect(union.isEquals(expected)).toBe(true);
+    });
 });

@@ -70,7 +70,7 @@ export class Range<T extends IPv4 | IPv6> implements Iterable<IPv4 | IPv6> {
         return (
             thisLast.isGreaterThan(otherFirst) && thisLast.isLessThanOrEquals(otherLast) && thisFirst.isLessThan(otherFirst)
             ||
-            otherLast.isGreaterThan(thisFirst) && otherLast.isLessThanOrEquals(thisLast) && otherFirst.isLessThan(otherFirst)
+            otherLast.isGreaterThan(thisFirst) && otherLast.isLessThanOrEquals(thisLast) && otherFirst.isLessThan(thisFirst)
         );
     }
 
@@ -85,6 +85,22 @@ export class Range<T extends IPv4 | IPv6> implements Iterable<IPv4 | IPv6> {
             ||
             otherLast.hasNext() && otherLast.nextIPNumber().isEquals(thisFirst)
         )
+    }
+
+    public union(otherRange: Range<T>): Range<T> {
+        if (this.isEquals(otherRange)) {
+            return otherRange;
+        }
+
+        if (this.isOverlapping(otherRange)) {
+            if (this.getFirst().isLessThan(otherRange.getFirst())) {
+                return new Range(this.getFirst(), otherRange.getLast());
+            } else {
+                return new Range(otherRange.getFirst(), this.getLast());
+            }
+        }
+
+        throw new Error("Ranges do not overlap nor are equal")
     }
 
     public *take(count?: number): Iterable<IPv4 | IPv6> {
