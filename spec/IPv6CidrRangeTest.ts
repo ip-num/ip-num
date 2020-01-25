@@ -142,6 +142,20 @@ describe('IPv6CidrRange: ', () => {
         expect(firstRange.isOverlapping(containerRange)).toBe(false);
 
     });
+    it('should correctly tell if ranges can be merged', () => {
+        let firstRange = IPv6CidrRange.fromCidr("2001:db8:0:0:0:0:0:0/48");
+        let secondRange = IPv6CidrRange.fromCidr("2001:db8:1:0:0:0:0:0/48");
+
+        expect(firstRange.isMergeable(secondRange)).toBe(true);
+        expect(secondRange.isMergeable(firstRange)).toBe(true);
+    });
+    it('should correctly tell if ranges cannot be merged', () => {
+        let firstRange = IPv6CidrRange.fromCidr("2001:db8:0:0:0:0:0:0/48");
+        let secondRange = IPv6CidrRange.fromCidr("2004:db8:1:0:0:0:0:0/48");
+        expect(firstRange.isMergeable(secondRange)).toBe(false);
+        expect(secondRange.isMergeable(firstRange)).toBe(false);
+    });
+
     it('should correctly tell when ranges are equal', () => {
         let firstRange = new IPv6CidrRange(new IPv6("2001:db8::"), new IPv6Prefix(48));
         let secondRange = new IPv6CidrRange(new IPv6("2001:db8::"), new IPv6Prefix(48));

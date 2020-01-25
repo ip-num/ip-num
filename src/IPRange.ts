@@ -163,6 +163,10 @@ export abstract class IPRange<T extends IPv4 | IPv6>  implements Iterable<IPv4 |
         return this.toRange().isConsecutive(otherRange.toRange());
     }
 
+    public isMergeable(otherRange: IPv6CidrRange | IPv4CidrRange): boolean {
+        return this.isConsecutive(otherRange) && this.getSize().equals(otherRange.getSize());
+    }
+
     public isEquals(otherRange: IPv6CidrRange | IPv4CidrRange): boolean {
         return this.toRange().isEquals(otherRange.toRange());
     }
