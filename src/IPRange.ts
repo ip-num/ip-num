@@ -155,6 +155,10 @@ export abstract class IPRange<T extends IPv4 | IPv6>  implements Iterable<IPv4 |
         return this.toRange().contains(otherRange.toRange());
     }
 
+    public toRangeString(): string {
+        return this.toRange().toRangeString();
+    }
+
     public isOverlapping(otherRange: IPv6CidrRange | IPv4CidrRange): boolean {
         return this.toRange().isOverlapping(otherRange.toRange());
     }
@@ -266,7 +270,7 @@ export class IPv4CidrRange extends IPRange<IPv4> {
      * @returns {string} the range in [first IPv4 number] - [last IPv4 number] format
      */
     public toRangeString(): string {
-        return super.toRange().toRangeString();
+        return super.toRangeString();
     }
 
 
@@ -486,7 +490,7 @@ export class IPv6CidrRange extends IPRange<IPv6> {
      * @returns {string} the range in [first IPv6 number] - [last IPv6 number] format
      */
     public toRangeString(): string {
-        return super.toRange().toRangeString();
+        return super.toRangeString();
     }
 
     /**
