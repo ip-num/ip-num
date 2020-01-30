@@ -1,10 +1,11 @@
 import {Validator} from "./Validator";
-import {IPv4SubnetMask} from "./IPNumber";
+import {IPv4, IPv4SubnetMask, IPv6} from "./IPNumber";
 import {parseBinaryStringToBigInteger} from "./BinaryUtils";
 import {IPNumType} from "./IPNumType";
 import {IPv6SubnetMask} from "./IPNumber";
 import {binaryStringToHexadecimalString} from "./HexadecimalUtils";
 import {Hexadecatet} from "./Hexadecatet";
+import * as bigInt from "big-integer";
 
 
 interface Prefix {
@@ -36,6 +37,11 @@ class IPv4Prefix implements Prefix {
         return new IPv4Prefix(rawValue);
     };
 
+    static fromRangeSize(rangeSize: bigInt.BigInteger) {
+        let prefixNumber = rangeSize.equals(bigInt.one) ? 32 : 32 - rangeSizeToPrefix(rangeSize, Validator.IPV4_SIZE, "IPv4");
+        return IPv4Prefix.fromNumber(prefixNumber)
+    };
+
     /**
      * Constructor for an instance of IPv4 prefix from a decimal number
      *
@@ -63,7 +69,7 @@ class IPv4Prefix implements Prefix {
 
     /**
      * Gets the decimal value of the IPv4 prefix as string
-     * @returns {string} he decimal value of the IPv4 prefix as string
+     * @returns {string} The decimal value of the IPv4 prefix as string
      */
     public toString(): string {
         return this.value.toString();
@@ -110,6 +116,11 @@ class IPv6Prefix implements Prefix {
     static fromNumber(rawValue:number):IPv6Prefix {
         return new IPv6Prefix(rawValue);
     };
+
+    static fromRangeSize(rangeSize: bigInt.BigInteger): IPv6Prefix {
+        let prefixNumber = rangeSize.equals(bigInt.one) ? 128 : 128 - rangeSizeToPrefix(rangeSize, Validator.IPV6_SIZE, "IPv6");
+        return IPv6Prefix.fromNumber(prefixNumber)
+    }
 
     /**
      * Constructor for an instance of IPv6 prefix from a decimal number
@@ -164,6 +175,35 @@ class IPv6Prefix implements Prefix {
         });
         return hexadecimalStrings.map((value) => { return value.toString()}).join(":");
     }
+}
+
+function rangeSizeToPrefix(rangeSize: bigInt.BigInteger,
+                           rangeMaxSize:bigInt.BigInteger,
+                           iptype: string): number {
+    if (rangeSize.greater(rangeMaxSize) || rangeSize.equals(bigInt(0))) {
+        throw new Error(Validator.invalidIPRangeSizeMessage.replace("$iptype", iptype));
+    }
+
+    let size = rangeSize;
+    let result = 0;
+
+    while (size.isEven()) {
+        if (size.equals(bigInt(2))) {
+            result++;
+            break;
+        }
+        size = size.shiftRight(bigInt(1));
+        if (size.isOdd()) {
+            result = 0;
+            break;
+        }
+        result++;
+    }
+
+    if (result == 0) {
+        throw new Error(Validator.invalidIPRangeSizeForCidrMessage);
+    }
+    return result;
 }
 
 export {Prefix, IPv4Prefix, IPv6Prefix}

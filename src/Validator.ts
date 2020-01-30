@@ -18,6 +18,8 @@ export class Validator {
     static SIXTEEN_BIT_SIZE: bigInt.BigInteger = bigInt("1".repeat(16), 2);
     static THIRTY_TWO_BIT_SIZE: bigInt.BigInteger = bigInt("1".repeat(32), 2);
     static ONE_HUNDRED_AND_TWENTY_EIGHT_BIT_SIZE: bigInt.BigInteger = bigInt("1".repeat(128), 2);
+    static IPV4_SIZE = bigInt("4294967296");
+    static IPV6_SIZE = bigInt("340282366920938463463374607431768211456");
 
     static invalidAsnRangeMessage = "ASN number given less than zero or is greater than 32bit";
     static invalid16BitAsnRangeMessage = "ASN number given less than zero or is greater than 16bit";
@@ -38,6 +40,8 @@ export class Validator {
     static cannotSplitSingleRangeErrorMessage = "Cannot split an IP range with a single IP number";
     static invalidInetNumType = "Given ipNumType must be either InetNumType.IPv4 or InetNumType.IPv6";
     static invalidBinaryStringErrorMessage = "Binary string should contain only contiguous 1s and 0s";
+    static invalidIPRangeSizeMessage = "Given size is zero or greater than maximum size of $iptype";
+    static invalidIPRangeSizeForCidrMessage = "Given size can't be created via cidr prefix";
 
     /**
      * Checks if given ipNumber is in between the given lower and upper bound
@@ -302,6 +306,20 @@ export class Validator {
             .greaterOrEquals(hexadectetNotationToBinaryString(lastIP));
         return this.isValidRange(ipv6RangeString, Validator.isValidIPv6String, firstLastValidator);
     }
+
+    // static isValidIPv4RangeSize(rangeSize: bigInt.BigInteger): boolean {
+    //     if (rangeSize.greater(Validator.IPV4_SIZE) || rangeSize.equals(bigInt(0))) {
+    //         [false, [Validator.invalidIPRangeSizeMessage]];
+    //     }
+    //     let size = rangeSize;
+    //     while (size.isEven()) {
+    //         if (size.isOdd() || size.equals(bigInt(2))) {
+    //             break;
+    //         }
+    //         size = size.shiftRight(bigInt(1));
+    //     }
+    //     return size.isEven();
+    // }
 
     private static isValidRange(rangeString: string,
                                 validator: (x:string) => [boolean, string[]],

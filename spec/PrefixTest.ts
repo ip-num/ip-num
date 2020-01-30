@@ -1,6 +1,7 @@
-import {IPv4Prefix} from "../src/Prefix";
-import {IPv6Prefix} from "../src/Prefix";
-import {Validator} from "../src/Validator";
+import {IPv4Prefix} from "../src";
+import {IPv6Prefix} from "../src";
+import {Validator} from "../src";
+import bigInt = require("big-integer");
 
 // TODO expand test with direct testing
 describe('Prefix Test: ', () => {
@@ -10,9 +11,52 @@ describe('Prefix Test: ', () => {
             expect(new IPv4Prefix(24).getValue()).toEqual(24);
         });
 
-        it('should instantiate by convenient method', () => {
+        it('should instantiate by fromNumber convenient method', () => {
             expect(IPv4Prefix.fromNumber(23).toString()).toEqual("23");
             expect(IPv4Prefix.fromNumber(23).getValue()).toEqual(23);
+        });
+
+        it('should instantiate by fromRangeSize convenient method', () => {
+            expect(IPv4Prefix.fromRangeSize(bigInt(1)).getValue()).toEqual(32);
+            expect(IPv4Prefix.fromRangeSize(bigInt(2)).getValue()).toEqual(31);
+            expect(IPv4Prefix.fromRangeSize(bigInt(4)).getValue()).toEqual(30);
+            expect(IPv4Prefix.fromRangeSize(bigInt(8)).getValue()).toEqual(29);
+            expect(IPv4Prefix.fromRangeSize(bigInt(16)).getValue()).toEqual(28);
+            expect(IPv4Prefix.fromRangeSize(bigInt(32)).getValue()).toEqual(27);
+            expect(IPv4Prefix.fromRangeSize(bigInt(64)).getValue()).toEqual(26);
+            expect(IPv4Prefix.fromRangeSize(bigInt(128)).getValue()).toEqual(25);
+            expect(IPv4Prefix.fromRangeSize(bigInt(256)).getValue()).toEqual(24);
+            expect(IPv4Prefix.fromRangeSize(bigInt(512)).getValue()).toEqual(23);
+        });
+
+        it('should throw exception when fromRangeSize used with invalid size', () => {
+            expect(() => {
+                IPv4Prefix.fromRangeSize(bigInt(5));
+            }).toThrowError(Error, Validator.invalidIPRangeSizeForCidrMessage);
+            expect(() => {
+                IPv4Prefix.fromRangeSize(bigInt(6));
+            }).toThrowError(Error, Validator.invalidIPRangeSizeForCidrMessage);
+            expect(() => {
+                IPv4Prefix.fromRangeSize(bigInt(7));
+            }).toThrowError(Error, Validator.invalidIPRangeSizeForCidrMessage);
+            expect(() => {
+                IPv4Prefix.fromRangeSize(bigInt(14));
+            }).toThrowError(Error, Validator.invalidIPRangeSizeForCidrMessage);
+            expect(() => {
+                IPv4Prefix.fromRangeSize(bigInt(24));
+            }).toThrowError(Error, Validator.invalidIPRangeSizeForCidrMessage);
+            expect(() => {
+                IPv4Prefix.fromRangeSize(bigInt(100));
+            }).toThrowError(Error, Validator.invalidIPRangeSizeForCidrMessage);
+        });
+
+        it('should throw exception if range size is zero or higher than valid value', () => {
+            expect(() => {
+                IPv4Prefix.fromRangeSize(bigInt(0));
+            }).toThrowError(Error, Validator.invalidIPRangeSizeMessage.replace("$iptype", "IPv4"));
+            expect(() => {
+                IPv4Prefix.fromRangeSize(Validator.IPV4_SIZE.plus(1));
+            }).toThrowError(Error, Validator.invalidIPRangeSizeMessage.replace("$iptype", "IPv4"));
         });
 
         it('should throw exception if prefix is an invalid number', () => {
@@ -49,5 +93,49 @@ describe('Prefix Test: ', () => {
                 new IPv6Prefix(200);
             }).toThrowError(Error, Validator.invalidPrefixValueMessage);
         });
+
+        it('should instantiate by fromRangeSize convenient method', () => {
+            expect(IPv6Prefix.fromRangeSize(bigInt(1)).getValue()).toEqual(128);
+            expect(IPv6Prefix.fromRangeSize(bigInt(2)).getValue()).toEqual(127);
+            expect(IPv6Prefix.fromRangeSize(bigInt(4)).getValue()).toEqual(126);
+            expect(IPv6Prefix.fromRangeSize(bigInt(8)).getValue()).toEqual(125);
+            expect(IPv6Prefix.fromRangeSize(bigInt(16)).getValue()).toEqual(124);
+            expect(IPv6Prefix.fromRangeSize(bigInt(32)).getValue()).toEqual(123);
+            expect(IPv6Prefix.fromRangeSize(bigInt(64)).getValue()).toEqual(122);
+            expect(IPv6Prefix.fromRangeSize(bigInt(128)).getValue()).toEqual(121);
+            expect(IPv6Prefix.fromRangeSize(bigInt(256)).getValue()).toEqual(120);
+            expect(IPv6Prefix.fromRangeSize(bigInt(512)).getValue()).toEqual(119);
+        });
+
+        it('should throw exception when fromRangeSize used with invalid size', () => {
+            expect(() => {
+                IPv6Prefix.fromRangeSize(bigInt(5));
+            }).toThrowError(Error, Validator.invalidIPRangeSizeForCidrMessage);
+            expect(() => {
+                IPv6Prefix.fromRangeSize(bigInt(6));
+            }).toThrowError(Error, Validator.invalidIPRangeSizeForCidrMessage);
+            expect(() => {
+                IPv6Prefix.fromRangeSize(bigInt(7));
+            }).toThrowError(Error, Validator.invalidIPRangeSizeForCidrMessage);
+            expect(() => {
+                IPv4Prefix.fromRangeSize(bigInt(14));
+            }).toThrowError(Error, Validator.invalidIPRangeSizeForCidrMessage);
+            expect(() => {
+                IPv6Prefix.fromRangeSize(bigInt(24));
+            }).toThrowError(Error, Validator.invalidIPRangeSizeForCidrMessage);
+            expect(() => {
+                IPv6Prefix.fromRangeSize(bigInt(100));
+            }).toThrowError(Error, Validator.invalidIPRangeSizeForCidrMessage);
+        });
+
+        it('should throw exception if range size is zero or higher than valid value', () => {
+            expect(() => {
+                IPv6Prefix.fromRangeSize(bigInt(0));
+            }).toThrowError(Error, Validator.invalidIPRangeSizeMessage.replace("$iptype", "IPv6"));
+            expect(() => {
+                IPv6Prefix.fromRangeSize(Validator.IPV6_SIZE.plus(1));
+            }).toThrowError(Error, Validator.invalidIPRangeSizeMessage.replace("$iptype", "IPv6"));
+        });
+
     });
 });
