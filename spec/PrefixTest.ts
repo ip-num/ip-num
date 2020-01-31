@@ -29,6 +29,12 @@ describe('Prefix Test: ', () => {
             expect(IPv4Prefix.fromRangeSize(bigInt(512)).getValue()).toEqual(23);
         });
 
+        it('should return size of range', () => {
+            expect(IPv4Prefix.fromRangeSize(bigInt(1)).toRangeSize()).toEqual(bigInt(1));
+            expect(IPv4Prefix.fromRangeSize(bigInt(8)).toRangeSize()).toEqual(bigInt(8));
+            expect(IPv4Prefix.fromRangeSize(bigInt(256)).toRangeSize()).toEqual(bigInt(256));
+        });
+
         it('should throw exception when fromRangeSize used with invalid size', () => {
             expect(() => {
                 IPv4Prefix.fromRangeSize(bigInt(5));
@@ -105,6 +111,12 @@ describe('Prefix Test: ', () => {
             expect(IPv6Prefix.fromRangeSize(bigInt(128)).getValue()).toEqual(121);
             expect(IPv6Prefix.fromRangeSize(bigInt(256)).getValue()).toEqual(120);
             expect(IPv6Prefix.fromRangeSize(bigInt(512)).getValue()).toEqual(119);
+        });
+
+        it('should return size of range', () => {
+            expect(IPv6Prefix.fromRangeSize(bigInt(1)).toRangeSize()).toEqual(bigInt(1));
+            expect(IPv6Prefix.fromRangeSize(bigInt(8)).toRangeSize()).toEqual(bigInt(8));
+            expect(IPv6Prefix.fromRangeSize(bigInt(256)).toRangeSize()).toEqual(bigInt(256));
         });
 
         it('should throw exception when fromRangeSize used with invalid size', () => {

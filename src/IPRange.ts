@@ -122,11 +122,13 @@ export class Range<T extends IPv4 | IPv6> implements Iterable<IPv4 | IPv6> {
  * Provides the implementation of functionality that are common to {@link IPRange}s
  */
 
-export abstract class IPRange<T extends IPv4 | IPv6>  implements Iterable<IPv4 | IPv6> {
+export abstract class IPRange<T extends IPv4 | IPv6, P extends IPv4Prefix | IPv6Prefix>  implements Iterable<IPv4 | IPv6> {
 
     abstract readonly bitValue: bigInt.BigInteger;
+    protected abstract newInstance(num:T, prefix:P) : IPv4CidrRange | IPv6CidrRange;
     abstract getFirst(): T
     abstract getLast(): T
+    abstract getPrefix():P;
     abstract getSize(): bigInt.BigInteger;
     abstract toCidrString(): string | never
 
@@ -174,6 +176,14 @@ export abstract class IPRange<T extends IPv4 | IPv6>  implements Iterable<IPv4 |
     public isEquals(otherRange: IPv6CidrRange | IPv4CidrRange): boolean {
         return this.toRange().isEquals(otherRange.toRange());
     }
+
+    public merge(otherRange: IPv6CidrRange | IPv4CidrRange): IPv6CidrRange | IPv4CidrRange {
+        if (!this.isMergeable(otherRange)) {
+            throw new Error("Cannot merge. Ranges are not consecutive and/or of same size")
+        }
+
+        return this.newInstance(this.getFirst(), this.getPrefix());
+    }
     /**
      * Returns a lazily evaluated representation of the IP range that produces IP numbers by either:
      *
@@ -199,7 +209,7 @@ export abstract class IPRange<T extends IPv4 | IPv6>  implements Iterable<IPv4 |
  *
  * @see https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing
  */
-export class IPv4CidrRange extends IPRange<IPv4> {
+export class IPv4CidrRange extends IPRange<IPv4, IPv4Prefix> {
     readonly bitValue: bigInt.BigInteger = bigInt(32);
 
     /**
@@ -241,13 +251,7 @@ export class IPv4CidrRange extends IPRange<IPv4> {
      * @returns {bigInt.BigInteger} the amount of IPv4 numbers in the range
      */
     public getSize(): bigInt.BigInteger {
-        /**
-         * Using bitwise shit operation this will be
-         * 1 << (this.bitValue - this.prefix.getValue())
-         * Since left shift a number by x is equivalent to multiplying the number by the power x raised to 2
-         * 2 << 4 = 2 * (2 raised to 4)
-         */
-        return bigInt(2).pow(this.bitValue.minus(bigInt(this.cidrPrefix.getValue())));
+        return this.cidrPrefix.toRangeSize();
     }
 
     /**
@@ -293,6 +297,14 @@ export class IPv4CidrRange extends IPRange<IPv4> {
         let subnetAsBigInteger = this.cidrPrefix.toSubnetMask().getValue();
         let invertedSubnet = leftPadWithZeroBit(subnetAsBigInteger.xor(onMask).toString(2), 32);
         return IPv4.fromBigInteger(this.ipv4.getValue().or(parseBinaryStringToBigInteger(invertedSubnet)));
+    }
+
+    protected newInstance(num: IPv4, prefix: IPv4Prefix): IPv4CidrRange {
+        return new IPv4CidrRange(num, prefix)
+    }
+
+    public getPrefix(): IPv4Prefix {
+        return this.cidrPrefix;
     }
 
     /**
@@ -419,7 +431,7 @@ export class IPv4CidrRange extends IPRange<IPv4> {
  *
  * @see https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing
  */
-export class IPv6CidrRange extends IPRange<IPv6> {
+export class IPv6CidrRange extends IPRange<IPv6, IPv6Prefix> {
     readonly bitValue: bigInt.BigInteger = bigInt(128);
 
     /**
@@ -461,13 +473,7 @@ export class IPv6CidrRange extends IPRange<IPv6> {
      * @returns {bigInt.BigInteger} the amount of IPv6 numbers in the range
      */
     public getSize(): bigInt.BigInteger {
-        /**
-         * Using bitwise shit operation this will be
-         * 1 << (this.bitValue - this.prefix.getValue())
-         * Since left shift a number by x is equivalent to multiplying the number by the power x raised to 2
-         * 2 << 4 = 2 * (2 raised to 4)
-         */
-        return bigInt(2).pow(this.bitValue.minus(bigInt(this.cidrPrefix.getValue())));
+        return this.cidrPrefix.toRangeSize();
     }
 
     /**
@@ -512,6 +518,14 @@ export class IPv6CidrRange extends IPRange<IPv6> {
         let subnetMaskAsBigInteger = this.cidrPrefix.toSubnetMask().getValue();
         let invertedSubnetMask = leftPadWithZeroBit(subnetMaskAsBigInteger.xor(onMask).toString(2), 128);
         return IPv6.fromBigInteger(this.ipv6.getValue().or(parseBinaryStringToBigInteger(invertedSubnetMask)));
+    }
+
+    protected newInstance(num: IPv6, prefix: IPv6Prefix): IPv6CidrRange {
+        return new IPv6CidrRange(num, prefix)
+    }
+
+    public getPrefix(): IPv6Prefix {
+        return this.cidrPrefix;
     }
 
     /**

@@ -22,6 +22,7 @@ interface Prefix {
  * {@see https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing} for more information on CIDR
  */
 class IPv4Prefix implements Prefix {
+    private readonly bitValue: bigInt.BigInteger = bigInt(32);
     /**
      * The decimal value of the 8bit number representing the prefix
      */
@@ -88,6 +89,21 @@ class IPv4Prefix implements Prefix {
         return IPv4SubnetMask.fromDecimalDottedString(this.toDecimalNotation(`${onBits}${offBits}`));
     }
 
+    /**
+     * Returns the size (number of IP numbers) of range of this prefix
+     *
+     * @return {BigInteger} the size (number of IP numbers) of range of this prefix
+     */
+    public toRangeSize(): bigInt.BigInteger {
+        /**
+         * Using bitwise shit operation this will be
+         * 1 << (this.bitValue - this.prefix.getValue())
+         * Since left shift a number by x is equivalent to multiplying the number by the power x raised to 2
+         * 2 << 4 = 2 * (2 raised to 4)
+         */
+        return bigInt(2).pow(this.bitValue.minus(bigInt(this.getValue())));
+    }
+
     private toDecimalNotation(bits:string): string {
         return `${parseBinaryStringToBigInteger(bits.substr(0,8))}.${parseBinaryStringToBigInteger(bits.substr(8,8))}.${parseBinaryStringToBigInteger(bits.substr(16,8))}.${parseBinaryStringToBigInteger(bits.substr(24,8))}`
     }
@@ -102,6 +118,7 @@ class IPv4Prefix implements Prefix {
  * {@see https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing} for more information on CIDR
  */
 class IPv6Prefix implements Prefix {
+    private readonly bitValue: bigInt.BigInteger = bigInt(128);
     /**
      * The decimal value of the 16bit number representing the prefix
      */
@@ -166,6 +183,21 @@ class IPv6Prefix implements Prefix {
         let onBits = '1'.repeat(this.value);
         let offBits = '0'.repeat(128 - this.value);
         return IPv6SubnetMask.fromHexadecimalString(this.toHexadecatetNotation(`${onBits}${offBits}`));
+    }
+
+    /**
+     * Returns the size (number of IP numbers) of range of this prefix
+     *
+     * @return {BigInteger} the size (number of IP numbers) of range of this prefix
+     */
+    public toRangeSize(): bigInt.BigInteger {
+        /**
+         * Using bitwise shit operation this will be
+         * 1 << (this.bitValue - this.prefix.getValue())
+         * Since left shift a number by x is equivalent to multiplying the number by the power x raised to 2
+         * 2 << 4 = 2 * (2 raised to 4)
+         */
+        return bigInt(2).pow(this.bitValue.minus(bigInt(this.getValue())));
     }
 
     private toHexadecatetNotation(bits:string): string {
