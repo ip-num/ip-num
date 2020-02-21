@@ -31,10 +31,10 @@ export class Range<T extends IPv4 | IPv6> implements Iterable<IPv4 | IPv6> {
     }
 
     getSize(): bigInt.BigInteger {
-        return this.last.getValue().minus(this.first.getValue());
+        return this.last.getValue().minus(this.first.getValue()).plus(bigInt.one);
     }
 
-    public toRangeString(): string {
+    toRangeString(): string {
         return `${this.getFirst()}-${this.getLast()}`
     }
 
@@ -74,6 +74,14 @@ export class Range<T extends IPv4 | IPv6> implements Iterable<IPv4 | IPv6> {
         );
     }
 
+    public toCidrRange(): IPv4CidrRange | IPv6CidrRange {
+        if (this.isIPv4(this.currentValue)) {
+            return this.toIPv4CidrRange();
+        } else {
+            return this.toIPv6CidrRange();
+        }
+    };
+
     public isConsecutive(otherRange: Range<T>): boolean {
         let thisFirst: IPv6 | IPv4 = this.getFirst();
         let thisLast: IPv6 | IPv4 = this.getLast();
@@ -100,12 +108,18 @@ export class Range<T extends IPv4 | IPv6> implements Iterable<IPv4 | IPv6> {
             }
         }
 
+        if (this.contains(otherRange)) {
+            return this;
+        } else if(otherRange.contains(this)) {
+            return otherRange;
+        }
+
         throw new Error("Ranges do not overlap nor are equal")
     }
 
     public *take(count?: number): Iterable<IPv4 | IPv6> {
         let computed: IPv6 | IPv4 = this.getFirst();
-        let returnCount = count === undefined ? this.getSize().plus(1).valueOf() : count;
+        let returnCount = count === undefined ? this.getSize().valueOf() : count;
         while(returnCount > 0) {
             returnCount--;
             yield computed;
@@ -115,6 +129,29 @@ export class Range<T extends IPv4 | IPv6> implements Iterable<IPv4 | IPv6> {
 
     *[Symbol.iterator](): IterableIterator<IPv4 | IPv6> {
         yield* this.take()
+    }
+
+    private isIPv4(ip: IPv4 | IPv6): ip is IPv4 {
+        return ip.bitSize === 32;
+    }
+
+    private toIPv4CidrRange(): IPv4CidrRange {
+        let candidateRange = new IPv4CidrRange(this.getFirst() as IPv4, IPv4Prefix.fromRangeSize(this.getSize()));
+        if (candidateRange.getFirst().isEquals(this.getFirst())) {
+            return candidateRange;
+        } else {
+            throw new Error("Range cannot be converted to CIDR")
+        }
+
+    }
+
+    private toIPv6CidrRange(): IPv6CidrRange {
+        let candidateRange = new IPv6CidrRange(this.getFirst() as IPv6, IPv6Prefix.fromRangeSize(this.getSize()));
+        if (candidateRange.getFirst().isEquals(this.getFirst())) {
+            return candidateRange;
+        } else {
+            throw new Error("Range cannot be converted to CIDR")
+        }
     }
 }
 
@@ -169,8 +206,14 @@ export abstract class IPRange<T extends IPv4 | IPv6, P extends IPv4Prefix | IPv6
         return this.toRange().isConsecutive(otherRange.toRange());
     }
 
-    public isMergeable(otherRange: IPv6CidrRange | IPv4CidrRange): boolean {
+    public isCidrMergeable(otherRange: IPv6CidrRange | IPv4CidrRange): boolean {
         return this.isConsecutive(otherRange) && this.getSize().equals(otherRange.getSize());
+    }
+
+    public isMergeable(otherRange: IPv6CidrRange | IPv4CidrRange): boolean {
+        return this.isCidrMergeable(otherRange)
+            || this.contains(otherRange)
+        || this.inside(otherRange);
     }
 
     public isEquals(otherRange: IPv6CidrRange | IPv4CidrRange): boolean {
@@ -178,7 +221,7 @@ export abstract class IPRange<T extends IPv4 | IPv6, P extends IPv4Prefix | IPv6
     }
 
     public merge(otherRange: IPv6CidrRange | IPv4CidrRange): IPv6CidrRange | IPv4CidrRange {
-        if (!this.isMergeable(otherRange)) {
+        if (!this.isCidrMergeable(otherRange)) {
             throw new Error("Cannot merge. Ranges are not consecutive and/or of same size")
         }
 

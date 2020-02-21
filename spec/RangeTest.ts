@@ -85,4 +85,74 @@ describe('Range: ', () => {
 
         expect(union.isEquals(expected)).toBe(true);
     });
+
+    it("should perform union of ranges: contains the other", () => {
+        let firstRange = new Range(new IPv4("0.0.0.1"), new IPv4("0.0.0.5"));
+        let secondRange = new Range(new IPv4("0.0.0.2"), new IPv4("0.0.0.4"));
+        let expected = new Range(new IPv4("0.0.0.1"), new IPv4("0.0.0.5"));
+        let union = firstRange.union(secondRange);
+        expect(union.isEquals(expected)).toBe(true);
+    });
+
+    it("should perform union of ranges: contains by the other", () => {
+        let firstRange = new Range(new IPv4("0.0.0.2"), new IPv4("0.0.0.4"));
+        let secondRange = new Range(new IPv4("0.0.0.1"), new IPv4("0.0.0.5"));
+        let expected = new Range(new IPv4("0.0.0.1"), new IPv4("0.0.0.5"));
+        let union = firstRange.union(secondRange);
+        expect(union.isEquals(expected)).toBe(true);
+    });
+
+    it('should convert range to Cidr range IPv4', () => {
+        let convertedRange = new Range(
+            IPv4.fromDecimalDottedString("127.0.0.0"),
+            IPv4.fromDecimalDottedString("127.0.0.255")
+            ).toCidrRange();
+
+        expect(convertedRange.toCidrString()).toEqual("127.0.0.0/24")
+    });
+
+    it('should convert range to Cidr range IPv6', () => {
+        let convertedRange = new Range(
+            IPv6.fromHexadecimalString("2620:0:0:0:0:0:0:0"),
+            IPv6.fromHexadecimalString("2620:0:ffff:ffff:ffff:ffff:ffff:ffff")
+        ).toCidrRange();
+
+        expect(convertedRange.toCidrString()).toEqual("2620:0:0:0:0:0:0:0/32")
+    });
+
+    it('should not convert range to IPv4 Cidr range', () => {
+        expect(() => {
+            new Range(
+                IPv4.fromDecimalDottedString("127.0.0.1"),
+                IPv4.fromDecimalDottedString("127.0.1.0")
+            ).toCidrRange();
+        }).toThrowError(Error, "Range cannot be converted to CIDR");
+    });
+
+    it('should not convert range to IPv6 Cidr range', () => {
+        expect(() => {
+            new Range(
+                IPv6.fromHexadecimalString("2620:0:0:0:0:0:0:1"),
+                IPv6.fromHexadecimalString("2620:0:0:0:0:0:1:0"),
+            ).toCidrRange();
+        }).toThrowError(Error, "Range cannot be converted to CIDR");
+    });
+
+    it('should not convert range to IPv4 Cidr range', () => {
+        expect(() => {
+            new Range(
+                IPv4.fromDecimalDottedString("127.0.0.1"),
+                IPv4.fromDecimalDottedString("127.0.0.255")
+            ).toCidrRange();
+        }).toThrowError(Error, "Given size can't be created via cidr prefix");
+    });
+
+    it('should not convert range to IPv6 Cidr range', () => {
+        expect(() => {
+            new Range(
+                IPv6.fromHexadecimalString("2620:0:0:0:0:0:0:1"),
+                IPv6.fromHexadecimalString("2620:0:ffff:ffff:ffff:ffff:ffff:eeee")
+            ).toCidrRange();
+        }).toThrowError(Error, "Given size can't be created via cidr prefix");
+    });
 });
