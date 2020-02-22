@@ -155,4 +155,14 @@ describe('Range: ', () => {
             ).toCidrRange();
         }).toThrowError(Error, "Given size can't be created via cidr prefix");
     });
+
+    it("should throw error when constructing with first grater than last", () => {
+
+        expect(() => {
+            new Range(
+                IPv6.fromHexadecimalString("2620:0:ffff:ffff:ffff:ffff:ffff:eeee"),
+                IPv6.fromHexadecimalString("2620:0:0:0:0:0:0:1")
+            )
+        }).toThrowError(Error);
+    })
 });

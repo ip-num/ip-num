@@ -8,36 +8,76 @@ import {Validator} from "./Validator";
 import {IPv4Prefix} from "./Prefix";
 
 
-
+/**
+ * Represents a continuous segment of either IPv4 or IPv6 numbers
+ * without adhering to classless inter-domain routing scheme
+ * for allocating IP addresses.
+ */
 export class Range<T extends IPv4 | IPv6> implements Iterable<IPv4 | IPv6> {
     readonly bitValue: bigInt.BigInteger;
-    private currentValue: IPv4 | IPv6;
+    private readonly currentValue: IPv4 | IPv6;
 
+    /**
+     * Convenience method for constructing an instance of {@link Range} from an
+     * instance of either {@link IPv4CidrRange} or {@link IPv6CidrRange}
+     *
+     * @param cidrRange an instance of {@link Range}
+     */
     static fromCidrRange(cidrRange: IPv6CidrRange | IPv4CidrRange) {
         return new Range(cidrRange.getFirst(), cidrRange.getLast());
     }
 
+    /**
+     * Constructor for an instance of {@link Range} from an
+     * instance of either {@link IPv4CidrRange} or {@link IPv6CidrRange}
+     *
+     * Throws an exception if first IP number is not less than given last IP number
+     *
+     * @param first the first IP number of the range
+     * @param last the last IP number of the range
+     */
     constructor(private first: T, private last: T) {
+        if (first.isGreaterThan(last)) {
+             throw new Error(`${first.toString()} should be lower than ${last.toString()}`)
+        }
         this.currentValue = first;
         this.bitValue = bigInt(first.bitSize);
     }
 
+    /**
+     * Returns the first IP number in the range
+     */
     getFirst(): T {
         return this.first;
     }
 
+    /**
+     * Returns the last IP number in the range
+     */
     getLast(): T {
         return this.last;
     }
 
+    /**
+     * Returns the size, which is the number of IP numbers in the range.
+     */
     getSize(): bigInt.BigInteger {
         return this.last.getValue().minus(this.first.getValue()).plus(bigInt.one);
     }
 
+    /**
+     * Converts to a string representation of the range in the form of:
+     * <first-ip>-<last-ip>
+     */
     toRangeString(): string {
         return `${this.getFirst()}-${this.getLast()}`
     }
 
+    /**
+     * Checks if this range is inside another range.
+     *
+     * @param otherRange the other range to check if this range is inside of.
+     */
     public inside(otherRange: Range<T>): boolean {
         let thisFirst: IPv6 | IPv4 = this.getFirst();
         let thisLast: IPv6 | IPv4 = this.getLast();
@@ -47,6 +87,11 @@ export class Range<T extends IPv4 | IPv6> implements Iterable<IPv4 | IPv6> {
         return (otherFirst.isLessThanOrEquals(thisFirst) && otherLast.isGreaterThanOrEquals(thisLast));
     }
 
+    /**
+     * Checks if this range contains the given other range.
+     *
+     * @param otherRange the other range to check if this range contains
+     */
     public contains(otherRange: Range<T>): boolean {
         let thisFirst: IPv6 | IPv4 = this.getFirst();
         let thisLast: IPv6 | IPv4 = this.getLast();
@@ -56,11 +101,25 @@ export class Range<T extends IPv4 | IPv6> implements Iterable<IPv4 | IPv6> {
         return (thisFirst.isLessThanOrEquals(otherFirst) && thisLast.isGreaterThanOrEquals(otherLast));
     }
 
+    /**
+     * Check if this range is equal to the given other range.
+     *
+     * @param otherRange the other range to check if equal to this range.
+     */
     public isEquals(otherRange: Range<T>): boolean {
         return this.getFirst().isEquals(otherRange.getFirst())
             && this.getLast().isEquals(otherRange.getLast());
     };
 
+    /**
+     * Checks of this range overlaps with a given other range.
+     *
+     * This means it checks if part of a range is part of another range without
+     * being totally contained in the other range. Hence Equal or ranges contained inside one
+     * another are not considered as overlapping.
+     *
+     * @param otherRange the other range to check if it overlaps with this range.
+     */
     public isOverlapping(otherRange: Range<T>): boolean {
         let thisFirst: IPv6 | IPv4 = this.getFirst();
         let thisLast: IPv6 | IPv4 = this.getLast();
@@ -74,6 +133,9 @@ export class Range<T extends IPv4 | IPv6> implements Iterable<IPv4 | IPv6> {
         );
     }
 
+    /**
+     * Converts an instance of range to an instance of CIDR range
+     */
     public toCidrRange(): IPv4CidrRange | IPv6CidrRange {
         if (this.isIPv4(this.currentValue)) {
             return this.toIPv4CidrRange();
@@ -82,6 +144,14 @@ export class Range<T extends IPv4 | IPv6> implements Iterable<IPv4 | IPv6> {
         }
     };
 
+    /**
+     * Checks if this range is consecutive with another range.
+     *
+     * This means if the two ranges can be placed side by side, without any gap. Hence Equal
+     * or ranges contained inside one another, or overlapping ranges are not considered as consecutive.
+     *
+     * @param otherRange the other range to check if this range is consecutive to.
+     */
     public isConsecutive(otherRange: Range<T>): boolean {
         let thisFirst: IPv6 | IPv4 = this.getFirst();
         let thisLast: IPv6 | IPv4 = this.getLast();
@@ -95,6 +165,11 @@ export class Range<T extends IPv4 | IPv6> implements Iterable<IPv4 | IPv6> {
         )
     }
 
+    /**
+     * Creates a range that is a union of this range and the given other range.
+     *
+     * @param otherRange the other range to combine with this range
+     */
     public union(otherRange: Range<T>): Range<T> {
         if (this.isEquals(otherRange)) {
             return otherRange;
