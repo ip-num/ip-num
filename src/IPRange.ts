@@ -231,10 +231,10 @@ export class Range<T extends IPv4 | IPv6> implements Iterable<IPv4 | IPv6> {
 }
 
 /**
- * Provides the implementation of functionality that are common to {@link IPRange}s
+ * Provides the implementation of functionality that are common to {@link IPv4CidrRange} and {@link IPv6CidrRange}
  */
 
-export abstract class IPRange<T extends IPv4 | IPv6, P extends IPv4Prefix | IPv6Prefix>  implements Iterable<IPv4 | IPv6> {
+export abstract class AbstractIPRange<T extends IPv4 | IPv6, P extends IPv4Prefix | IPv6Prefix>  implements Iterable<IPv4 | IPv6> {
 
     abstract readonly bitValue: bigInt.BigInteger;
     protected abstract newInstance(num:T, prefix:P) : IPv4CidrRange | IPv6CidrRange;
@@ -327,7 +327,7 @@ export abstract class IPRange<T extends IPv4 | IPv6, P extends IPv4Prefix | IPv6
  *
  * @see https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing
  */
-export class IPv4CidrRange extends IPRange<IPv4, IPv4Prefix> {
+export class IPv4CidrRange extends AbstractIPRange<IPv4, IPv4Prefix> {
     readonly bitValue: bigInt.BigInteger = bigInt(32);
 
     /**
@@ -561,7 +561,7 @@ export class IPv4CidrRange extends IPRange<IPv4, IPv4Prefix> {
  *
  * @see https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing
  */
-export class IPv6CidrRange extends IPRange<IPv6, IPv6Prefix> {
+export class IPv6CidrRange extends AbstractIPRange<IPv6, IPv6Prefix> {
     readonly bitValue: bigInt.BigInteger = bigInt(128);
 
     /**
