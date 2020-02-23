@@ -513,14 +513,23 @@ export class IPv4CidrRange extends IPRange<IPv4, IPv4Prefix> {
         return [firstRange, secondRange];
     }
 
+    /**
+     * Returns true if there is an adjacent IPv4 cidr range of exactly the same size next to this range
+     */
     public hasNextRange(): boolean {
         return super.hasNextRange();
     }
 
+    /**
+     * Returns true if there is an adjacent IPv4 cidr range of exactly the same size previous to this range
+     */
     public hasPreviousRange(): boolean {
         return super.hasPreviousRange();
     }
 
+    /**
+     * Return the next IPv6 cidr range, or undefined if no next range
+     */
     public nextRange(): IPv4CidrRange | undefined {
         if (this.hasNextRange()) {
             let sizeOfCurrentRange = this.getSize();
@@ -531,6 +540,9 @@ export class IPv4CidrRange extends IPRange<IPv4, IPv4Prefix> {
         return;
     }
 
+    /**
+     * Return the previous IPv6 cidr range, or undefined if no next range
+     */
     public previousRange(): IPv4CidrRange | undefined {
         if (this.hasPreviousRange()) {
             let sizeOfCurrentRange = this.getSize();
@@ -714,7 +726,7 @@ export class IPv6CidrRange extends IPRange<IPv6, IPv6Prefix> {
     }
 
     /**
-     * Method that splits an IPv6 range into two halves
+     * Method that splits an IPv6 cidr range into two halves
      *
      * @returns {Array<IPv6CidrRange>} An array of two {@link IPv6CidrRange}
      */
@@ -731,14 +743,23 @@ export class IPv6CidrRange extends IPRange<IPv6, IPv6Prefix> {
         return [firstRange, secondRange];
     }
 
+    /**
+     * Returns true if there is an adjacent IPv6 cidr range of exactly the same size next to this range
+     */
     public hasNextRange(): boolean {
         return super.hasNextRange();
     }
 
+    /**
+     * Returns true if there is an adjacent IPv6 cidr range of exactly the same size previous to this range
+     */
     public hasPreviousRange(): boolean {
         return super.hasPreviousRange();
     }
 
+    /**
+     * Return the next IPv6 cidr range, or undefined if no next range
+     */
     public nextRange(): IPv6CidrRange | undefined {
         if (this.hasNextRange()) {
             let sizeOfCurrentRange = this.getSize();
@@ -748,6 +769,9 @@ export class IPv6CidrRange extends IPRange<IPv6, IPv6Prefix> {
         return;
     }
 
+    /**
+     * Return the previous IPv6 cidr range, or undefined if no next range
+     */
     public previousRange(): IPv6CidrRange | undefined {
         if (this.hasPreviousRange()) {
             let sizeOfCurrentRange = this.getSize();
