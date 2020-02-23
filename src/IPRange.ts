@@ -18,6 +18,16 @@ export class Range<T extends IPv4 | IPv6> implements Iterable<IPv4 | IPv6> {
     private readonly currentValue: IPv4 | IPv6;
 
     /**
+     * Convenience method for constructing an instance of {@link Range} from a
+     * single IP number.
+     *
+     * @param ip The IP number, either IPv4 or IPv6 to construct the range from.
+     */
+    static fromSingleIP(ip: IPv4 | IPv6) {
+        return new Range(ip, ip);
+
+    }
+    /**
      * Convenience method for constructing an instance of {@link Range} from an
      * instance of either {@link IPv4CidrRange} or {@link IPv6CidrRange}
      *

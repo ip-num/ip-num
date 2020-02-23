@@ -1,6 +1,22 @@
 import {IPv4, IPv4CidrRange, IPv4Prefix, IPv6, IPv6CidrRange, IPv6Prefix, Range} from "../src";
+import bigInt = require("big-integer");
+
 
 describe('Range: ', () => {
+
+    it("create from single IPv4", () => {
+        let singleton = Range.fromSingleIP(new IPv4("0.0.0.254"));
+        expect(singleton.getSize().valueOf()).toBe(1);
+        expect(singleton.getFirst().toString()).toBe("0.0.0.254");
+        expect(singleton.getLast().toString()).toBe("0.0.0.254");
+    });
+
+    it("create from single IPv6", () => {
+        let singleton = Range.fromSingleIP(new IPv6("2001:db8:0:ffff:ffff:ffff:ffff:ffff"));
+        expect(singleton.getSize().valueOf()).toBe(1);
+        expect(singleton.getFirst().toString()).toBe("2001:db8:0:ffff:ffff:ffff:ffff:ffff");
+        expect(singleton.getLast().toString()).toBe("2001:db8:0:ffff:ffff:ffff:ffff:ffff");
+    });
 
     it("test for of", () => {
         let range = new Range(new IPv4("0.0.0.254"), new IPv4("0.0.1.2"));
@@ -157,7 +173,6 @@ describe('Range: ', () => {
     });
 
     it("should throw error when constructing with first grater than last", () => {
-
         expect(() => {
             new Range(
                 IPv6.fromHexadecimalString("2620:0:ffff:ffff:ffff:ffff:ffff:eeee"),
