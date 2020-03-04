@@ -1,6 +1,7 @@
 import * as BinaryUtils from "../src/BinaryUtils";
 import * as bigInt from "big-integer/BigInteger";
 import {IPNumType} from "../src";
+import {intLog2} from "../src/BinaryUtils";
 
 describe('Binary Utils', () => {
     it('Should correctly convert decimal to binary', () => {
@@ -73,4 +74,17 @@ describe('Binary Utils', () => {
         }).toThrowError(Error, 'Value is greater than 128');
       });
     });
+
+    describe('log2', () => {
+        it('should calculate the log2 of a number', () => {
+            expect(intLog2(bigInt(8))).toBe(3);
+            expect(intLog2(bigInt(256))).toBe(8);
+        });
+
+        it('should throw an exception when no int log2', () => {
+            expect(() => {
+                intLog2(bigInt(12))
+            }).toThrowError(Error)
+        })
+    })
 });

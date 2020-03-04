@@ -800,3 +800,11 @@ export class IPv6SubnetMask extends IPv6 {
         this.value = bigInt(hexadectetNotationToBinaryString(ipString), 2);
     }
 }
+
+/**
+ * Check is the given IP number is an {@link IPv4} or not
+ * @param ip the IP number to check if it is IPv4.
+ */
+export function isIPv4(ip: IPv4 | IPv6): ip is IPv4 {
+    return ip.bitSize === 32;
+}

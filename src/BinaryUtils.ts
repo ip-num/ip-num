@@ -94,3 +94,29 @@ export let cidrPrefixToSubnetMaskBinaryString = (cidrPrefix: number, ipType: IPN
   let offBits = '0'.repeat(cidrUpperValue - cidrPrefix);
   return `${onBits}${offBits}`;
 };
+
+/**
+ *
+ * @param rangeSize
+ */
+export let intLog2 = (rangeSize:bigInt.BigInteger): number => {
+    let result = 0;
+
+    while (rangeSize.isEven()) {
+        if (rangeSize.equals(bigInt(2))) {
+            result++;
+            break;
+        }
+        rangeSize = rangeSize.shiftRight(bigInt(1));
+        if (rangeSize.isOdd()) {
+            result = 0;
+            break;
+        }
+        result++;
+    }
+
+    if (result == 0) {
+        throw new Error(`The value of log2 for ${rangeSize.toString()} is not an integer`)
+    }
+    return result
+};

@@ -1,8 +1,8 @@
 import * as bigInt from "big-integer";
-import {IPv6} from "./IPNumber";
+import {IPv6, isIPv4} from "./IPNumber";
 import {IPv4} from "./IPNumber";
 import {IPv6Prefix} from "./Prefix";
-import {leftPadWithZeroBit} from "./BinaryUtils";
+import {leftPadWithZeroBit, intLog2} from "./BinaryUtils";
 import {parseBinaryStringToBigInteger} from "./BinaryUtils";
 import {Validator} from "./Validator";
 import {IPv4Prefix} from "./Prefix";
@@ -122,6 +122,34 @@ export class Range<T extends IPv4 | IPv6> implements Iterable<IPv4 | IPv6> {
     };
 
     /**
+     * Check if this range is less than the given range.
+     *
+     * @param otherRange the other range to check if less than.
+     */
+    public isLessThan(otherRange: Range<T>): boolean {
+        if (this.isEquals(otherRange)) {
+            return false;
+        } else {
+            return this.getFirst().isLessThan(otherRange.getFirst())
+                || this.getSize().lt(otherRange.getSize());
+        }
+    }
+
+    /**
+     * Check if this range is greater than the given range.
+     *
+     * @param otherRange the other range to check if greater than.
+     */
+    public isGreaterThan(otherRange: Range<T>): boolean {
+        if (this.isEquals(otherRange)) {
+            return false;
+        } else {
+            return this.getFirst().isGreaterThan(otherRange.getFirst())
+                || this.getSize().gt(otherRange.getSize());
+        }
+    }
+
+    /**
      * Checks of this range overlaps with a given other range.
      *
      * This means it checks if part of a range is part of another range without
@@ -144,10 +172,22 @@ export class Range<T extends IPv4 | IPv6> implements Iterable<IPv4 | IPv6> {
     }
 
     /**
+     * Check if this range can be converted to a CIDR range.
+     */
+    public isCidrAble(): boolean {
+        try {
+            intLog2(this.getSize());
+            return true;
+        } catch (e) {
+            return false;
+        }
+    }
+
+    /**
      * Converts an instance of range to an instance of CIDR range
      */
     public toCidrRange(): IPv4CidrRange | IPv6CidrRange {
-        if (this.isIPv4(this.currentValue)) {
+        if (isIPv4(this.currentValue)) {
             return this.toIPv4CidrRange();
         } else {
             return this.toIPv6CidrRange();
@@ -216,10 +256,6 @@ export class Range<T extends IPv4 | IPv6> implements Iterable<IPv4 | IPv6> {
         yield* this.take()
     }
 
-    private isIPv4(ip: IPv4 | IPv6): ip is IPv4 {
-        return ip.bitSize === 32;
-    }
-
     private toIPv4CidrRange(): IPv4CidrRange {
         let candidateRange = new IPv4CidrRange(this.getFirst() as IPv4, IPv4Prefix.fromRangeSize(this.getSize()));
         if (candidateRange.getFirst().isEquals(this.getFirst())) {
@@ -247,7 +283,7 @@ export class Range<T extends IPv4 | IPv6> implements Iterable<IPv4 | IPv6> {
 export abstract class AbstractIPRange<T extends IPv4 | IPv6, P extends IPv4Prefix | IPv6Prefix>  implements Iterable<IPv4 | IPv6> {
 
     abstract readonly bitValue: bigInt.BigInteger;
-    protected abstract newInstance(num:T, prefix:P) : IPv4CidrRange | IPv6CidrRange;
+    protected abstract newInstance(num:T, prefix: IPv4Prefix | IPv6Prefix) : IPv4CidrRange | IPv6CidrRange;
     abstract getFirst(): T
     abstract getLast(): T
     abstract getPrefix():P;
@@ -307,10 +343,10 @@ export abstract class AbstractIPRange<T extends IPv4 | IPv6, P extends IPv4Prefi
 
     public merge(otherRange: IPv6CidrRange | IPv4CidrRange): IPv6CidrRange | IPv4CidrRange {
         if (!this.isCidrMergeable(otherRange)) {
-            throw new Error("Cannot merge. Ranges are not consecutive and/or of same size")
+            throw new Error(`Cannot merge. Ranges (${this.toRangeString()},${otherRange.toRangeString()}) are not consecutive and/or of same size`)
         }
 
-        return this.newInstance(this.getFirst(), this.getPrefix());
+        return this.newInstance(this.getFirst(), this.getPrefix().merge());
     }
     /**
      * Returns a lazily evaluated representation of the IP range that produces IP numbers by either:

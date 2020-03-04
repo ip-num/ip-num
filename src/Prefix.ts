@@ -1,8 +1,7 @@
 import {Validator} from "./Validator";
-import {IPv4, IPv4SubnetMask, IPv6} from "./IPNumber";
-import {parseBinaryStringToBigInteger} from "./BinaryUtils";
+import {IPv4, IPv4SubnetMask, IPv6, IPv6SubnetMask} from "./IPNumber";
+import {intLog2, parseBinaryStringToBigInteger} from "./BinaryUtils";
 import {IPNumType} from "./IPNumType";
-import {IPv6SubnetMask} from "./IPNumber";
 import {binaryStringToHexadecimalString} from "./HexadecimalUtils";
 import {Hexadecatet} from "./Hexadecatet";
 import * as bigInt from "big-integer";
@@ -11,6 +10,8 @@ import * as bigInt from "big-integer";
 interface Prefix {
     value: number;
     getValue(): number;
+    merge(): Prefix;
+    split(): Prefix;
 }
 
 /**
@@ -22,6 +23,7 @@ interface Prefix {
  * {@see https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing} for more information on CIDR
  */
 class IPv4Prefix implements Prefix {
+
     private readonly bitValue: bigInt.BigInteger = bigInt(32);
     /**
      * The decimal value of the 8bit number representing the prefix
@@ -39,7 +41,7 @@ class IPv4Prefix implements Prefix {
     };
 
     static fromRangeSize(rangeSize: bigInt.BigInteger) {
-        let prefixNumber = rangeSize.equals(bigInt.one) ? 32 : 32 - rangeSizeToPrefix(rangeSize, Validator.IPV4_SIZE, "IPv4");
+        let prefixNumber = rangeSize.equals(bigInt.one) ? 32 : 32 - rangeSizeToPrefix(rangeSize, Validator.IPV4_SIZE);
         return IPv4Prefix.fromNumber(prefixNumber)
     };
 
@@ -104,6 +106,22 @@ class IPv4Prefix implements Prefix {
         return bigInt(2).pow(this.bitValue.minus(bigInt(this.getValue())));
     }
 
+    /**
+     * Returns a prefix for when this prefix is merged
+     * with another prefix of the same size
+     */
+    merge(): IPv4Prefix {
+        return new IPv4Prefix(this.value - 1);
+    }
+
+    /**
+     * Returns a prefix for when this prefix is split
+     * into two equal halves
+     */
+    split(): IPv4Prefix {
+        return new IPv4Prefix(this.value + 1);
+    }
+
     private toDecimalNotation(bits:string): string {
         return `${parseBinaryStringToBigInteger(bits.substr(0,8))}.${parseBinaryStringToBigInteger(bits.substr(8,8))}.${parseBinaryStringToBigInteger(bits.substr(16,8))}.${parseBinaryStringToBigInteger(bits.substr(24,8))}`
     }
@@ -135,7 +153,7 @@ class IPv6Prefix implements Prefix {
     };
 
     static fromRangeSize(rangeSize: bigInt.BigInteger): IPv6Prefix {
-        let prefixNumber = rangeSize.equals(bigInt.one) ? 128 : 128 - rangeSizeToPrefix(rangeSize, Validator.IPV6_SIZE, "IPv6");
+        let prefixNumber = rangeSize.equals(bigInt.one) ? 128 : 128 - rangeSizeToPrefix(rangeSize, Validator.IPV6_SIZE);
         return IPv6Prefix.fromNumber(prefixNumber)
     }
 
@@ -200,6 +218,22 @@ class IPv6Prefix implements Prefix {
         return bigInt(2).pow(this.bitValue.minus(bigInt(this.getValue())));
     }
 
+    /**
+     * Returns a prefix for when this prefix is merged
+     * with another prefix of the same size
+     */
+    merge(): IPv6Prefix {
+        return new IPv6Prefix(this.value - 1);
+    }
+
+    /**
+     * Returns a prefix for when this prefix is split
+     * into two equal halves
+     */
+    split(): IPv6Prefix {
+        return new IPv6Prefix(this.value + 1);
+    }
+
     private toHexadecatetNotation(bits:string): string {
         let binaryStrings: string[] = bits.match(/.{1,16}/g)!;
         let hexadecimalStrings: Hexadecatet[] = binaryStrings.map((binaryString) => {
@@ -210,32 +244,17 @@ class IPv6Prefix implements Prefix {
 }
 
 function rangeSizeToPrefix(rangeSize: bigInt.BigInteger,
-                           rangeMaxSize:bigInt.BigInteger,
-                           iptype: string): number {
+                           rangeMaxSize:bigInt.BigInteger): number {
+    let ipType = rangeMaxSize.greater(Validator.IPV4_SIZE) ? "IPv6" : "IPv4";
     if (rangeSize.greater(rangeMaxSize) || rangeSize.equals(bigInt(0))) {
-        throw new Error(Validator.invalidIPRangeSizeMessage.replace("$iptype", iptype));
+        throw new Error(Validator.invalidIPRangeSizeMessage.replace("$iptype", ipType));
     }
 
-    let size = rangeSize;
-    let result = 0;
-
-    while (size.isEven()) {
-        if (size.equals(bigInt(2))) {
-            result++;
-            break;
-        }
-        size = size.shiftRight(bigInt(1));
-        if (size.isOdd()) {
-            result = 0;
-            break;
-        }
-        result++;
-    }
-
-    if (result == 0) {
+    try {
+        return intLog2(rangeSize);
+    } catch (e) {
         throw new Error(Validator.invalidIPRangeSizeForCidrMessage);
     }
-    return result;
 }
 
 export {Prefix, IPv4Prefix, IPv6Prefix}
