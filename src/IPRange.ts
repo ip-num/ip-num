@@ -242,6 +242,32 @@ export class Range<T extends IPv4 | IPv6> implements Iterable<IPv4 | IPv6> {
         throw new Error("Ranges do not overlap nor are equal")
     }
 
+
+    /**
+     * Returns a sub range of a given size from this range.
+     *
+     * @param offset offset from this range where the subrange should begin
+     * @param size the size of the range
+     */
+    public takeSubRange(offset: bigInt.BigInteger, size: bigInt.BigInteger): Range<IPv4 | IPv6> {
+        if (offset.plus(size).gt(this.getSize())) {
+            throw new Error("Requested range is greater than what can be taken");
+        }
+
+        if (size.eq(bigInt(0))) {
+            throw new Error("Sub range cannot be zero");
+        }
+
+        let valueOfFirstIp = this.getFirst().value.plus(offset);
+        let firstIp: IPv4 | IPv6 = isIPv4(this.getFirst()) ?
+            IPv4.fromBigInteger(valueOfFirstIp) : IPv6.fromBigInteger(valueOfFirstIp);
+
+        let valueOfLastIp = firstIp.value.plus(size.minus(bigInt.one));
+        let lastIp = isIPv4(firstIp)? IPv4.fromBigInteger(valueOfLastIp) : IPv6.fromBigInteger(valueOfLastIp);
+
+        return new Range(firstIp, lastIp);
+    }
+
     public *take(count?: number): Iterable<IPv4 | IPv6> {
         let computed: IPv6 | IPv4 = this.getFirst();
         let returnCount = count === undefined ? this.getSize().valueOf() : count;

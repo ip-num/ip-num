@@ -179,5 +179,116 @@ describe('Range: ', () => {
                 IPv6.fromHexadecimalString("2620:0:0:0:0:0:0:1")
             )
         }).toThrowError(Error);
-    })
+    });
+
+    describe("Make Range", () => {
+        describe("IPv4", () => {
+
+            it("should pick whole range as sub range", () => {
+                let originalRange = new Range(
+                    IPv4.fromDecimalDottedString("127.0.0.0"),
+                    IPv4.fromDecimalDottedString("127.0.0.255")
+                );
+
+                expect(()=>{
+                    let subRange = originalRange.takeSubRange(bigInt.zero, bigInt(0));
+                }).toThrowError(Error, "Sub range cannot be zero");
+            });
+
+            it("should pick whole range as sub range", () => {
+                let originalRange = new Range(
+                    IPv4.fromDecimalDottedString("127.0.0.0"),
+                    IPv4.fromDecimalDottedString("127.0.0.255")
+                );
+
+                let subRange = originalRange.takeSubRange(bigInt.zero, bigInt(256));
+                expect(subRange.toRangeString()).toEqual("127.0.0.0-127.0.0.255");
+            });
+            it("should pick whole range with offset 1", () => {
+                let originalRange = new Range(
+                    IPv4.fromDecimalDottedString("127.0.0.0"),
+                    IPv4.fromDecimalDottedString("127.0.0.255")
+                );
+
+                let subRange = originalRange.takeSubRange(bigInt.one, bigInt(255));
+                expect(subRange.toRangeString()).toEqual("127.0.0.1-127.0.0.255");
+            });
+            it("should throw an exception if size is larger than range", () => {
+                let originalRange = new Range(
+                    IPv4.fromDecimalDottedString("127.0.0.0"),
+                    IPv4.fromDecimalDottedString("127.0.0.255")
+                );
+
+                expect(()=>{
+                    let subRange = originalRange.takeSubRange(bigInt.zero, bigInt(257));
+                }).toThrowError(Error, "Requested range is greater than what can be taken");
+            });
+
+            it("should throw an exception if size is larger than range due to offset", () => {
+                let originalRange = new Range(
+                    IPv4.fromDecimalDottedString("127.0.0.0"),
+                    IPv4.fromDecimalDottedString("127.0.0.255")
+                );
+
+                expect(()=>{
+                    let subRange = originalRange.takeSubRange(bigInt(4), bigInt(256));
+                }).toThrowError(Error, "Requested range is greater than what can be taken");
+            });
+
+        });
+
+        describe("IPv6", () => {
+
+            it("should pick whole range as sub range", () => {
+                let originalRange = new Range(
+                    IPv6.fromHexadecimalString("2001:d00:0:0:0:0:0:0"),
+                    IPv6.fromHexadecimalString("2001:dff:ffff:ffff:ffff:ffff:ffff:ffff")
+                );
+
+                expect(()=>{
+                    let subRange = originalRange.takeSubRange(bigInt.zero, bigInt(0));
+                }).toThrowError(Error, "Sub range cannot be zero");
+            });
+
+            it("should pick whole range as sub range", () => {
+                let originalRange = new Range(
+                    IPv6.fromHexadecimalString("2001:d00:0:0:0:0:0:0"),
+                    IPv6.fromHexadecimalString("2001:dff:ffff:ffff:ffff:ffff:ffff:ffff")
+                );
+
+                let subRange = originalRange.takeSubRange(bigInt.zero, bigInt("20282409603651670423947251286016"));
+                expect(subRange.toRangeString()).toEqual("2001:d00:0:0:0:0:0:0-2001:dff:ffff:ffff:ffff:ffff:ffff:ffff");
+            });
+            it("should pick whole range with offset 1", () => {
+                let originalRange = new Range(
+                    IPv6.fromHexadecimalString("2001:d00:0:0:0:0:0:0"),
+                    IPv6.fromHexadecimalString("2001:dff:ffff:ffff:ffff:ffff:ffff:ffff")
+                );
+
+                let subRange = originalRange.takeSubRange(bigInt.one, bigInt("20282409603651670423947251286015"));
+                expect(subRange.toRangeString()).toEqual("2001:d00:0:0:0:0:0:1-2001:dff:ffff:ffff:ffff:ffff:ffff:ffff");
+            });
+            it("should throw an exception if size is larger than range", () => {
+                let originalRange = new Range(
+                    IPv6.fromHexadecimalString("2001:d00:0:0:0:0:0:0"),
+                    IPv6.fromHexadecimalString("2001:dff:ffff:ffff:ffff:ffff:ffff:ffff")
+                );
+
+                expect(()=>{
+                    let subRange = originalRange.takeSubRange(bigInt.zero, bigInt("20282409603651670423947251286018"));
+                }).toThrowError(Error, "Requested range is greater than what can be taken");
+            });
+
+            it("should throw an exception if size is larger than range due to offset", () => {
+                let originalRange = new Range(
+                    IPv6.fromHexadecimalString("2001:d00:0:0:0:0:0:0"),
+                    IPv6.fromHexadecimalString("2001:dff:ffff:ffff:ffff:ffff:ffff:ffff")
+                );
+
+                expect(()=>{
+                    let subRange = originalRange.takeSubRange(bigInt("20282409603651670423947251286018"), bigInt("20282409603651670423947251286018"));
+                }).toThrowError(Error, "Requested range is greater than what can be taken");
+            });
+        });
+    });
 });
