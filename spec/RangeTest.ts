@@ -291,4 +291,138 @@ describe('Range: ', () => {
             });
         });
     });
+
+    describe("Subtract Range", () => {
+        describe("IPv4", () => {
+            it("it should subtract all", () => {
+                let original = new Range(
+                    IPv4.fromDecimalDottedString("127.0.0.0"),
+                    IPv4.fromDecimalDottedString("127.0.0.255")
+                );
+
+                let toSubtract = new Range(
+                    IPv4.fromDecimalDottedString("127.0.0.0"),
+                    IPv4.fromDecimalDottedString("127.0.0.255")
+                );
+
+                let result = original.subtract(toSubtract);
+                expect(result.length).toEqual(0);
+            });
+
+            it("it should subtract from beginning", () => {
+                let original = new Range(
+                    IPv4.fromDecimalDottedString("127.0.0.0"),
+                    IPv4.fromDecimalDottedString("127.0.0.255")
+                );
+
+                let toSubtract = new Range(
+                    IPv4.fromDecimalDottedString("127.0.0.0"),
+                    IPv4.fromDecimalDottedString("127.0.0.3")
+                );
+
+                let result = original.subtract(toSubtract);
+                expect(result.length).toEqual(1);
+                expect(result[0].toRangeString()).toEqual("127.0.0.4-127.0.0.255");
+            });
+
+            it("it should subtract up to end", () => {
+                let original = new Range(
+                    IPv4.fromDecimalDottedString("127.0.0.0"),
+                    IPv4.fromDecimalDottedString("127.0.0.255")
+                );
+
+                let toSubtract = new Range(
+                    IPv4.fromDecimalDottedString("127.0.0.253"),
+                    IPv4.fromDecimalDottedString("127.0.0.255")
+                );
+
+                let result = original.subtract(toSubtract);
+                expect(result.length).toEqual(1);
+                expect(result[0].toRangeString()).toEqual("127.0.0.0-127.0.0.252");
+            });
+
+            it("it should subtract from middle", () => {
+                let original = new Range(
+                    IPv4.fromDecimalDottedString("127.0.0.0"),
+                    IPv4.fromDecimalDottedString("127.0.0.255")
+                );
+
+                let toSubtract = new Range(
+                    IPv4.fromDecimalDottedString("127.0.0.240"),
+                    IPv4.fromDecimalDottedString("127.0.0.250")
+                );
+
+                let result = original.subtract(toSubtract);
+                expect(result.length).toEqual(2);
+                expect(result[0].toRangeString()).toEqual("127.0.0.0-127.0.0.239");
+                expect(result[1].toRangeString()).toEqual("127.0.0.251-127.0.0.255");
+            });
+        });
+
+        fdescribe("IPv6", () => {
+            it("it should subtract all", () => {
+                let original = new Range(
+                    IPv6.fromHexadecimalString("2620:0:0:0:0:0:0:0"),
+                    IPv6.fromHexadecimalString("2620:0:ffff:ffff:ffff:ffff:ffff:ffff")
+                );
+
+                let toSubtract = new Range(
+                    IPv6.fromHexadecimalString("2620:0:0:0:0:0:0:0"),
+                    IPv6.fromHexadecimalString("2620:0:ffff:ffff:ffff:ffff:ffff:ffff")
+                );
+
+                let result = original.subtract(toSubtract);
+                expect(result.length).toEqual(0);
+            });
+
+            it("it should subtract from beginning", () => {
+                let original = new Range(
+                    IPv6.fromHexadecimalString("2620:0:0:0:0:0:0:0"),
+                    IPv6.fromHexadecimalString("2620:0:ffff:ffff:ffff:ffff:ffff:ffff")
+                );
+
+                let toSubtract = new Range(
+                    IPv6.fromHexadecimalString("2620:0:0:0:0:0:0:3"),
+                    IPv6.fromHexadecimalString("2620:0:ffff:ffff:ffff:ffff:ffff:ffff")
+                );
+
+                let result = original.subtract(toSubtract);
+                expect(result.length).toEqual(1);
+                expect(result[0].toRangeString()).toEqual("2620:0:0:0:0:0:0:0-2620:0:0:0:0:0:0:2");
+            });
+
+            it("it should subtract up to end", () => {
+                let original = new Range(
+                    IPv6.fromHexadecimalString("2620:0:0:0:0:0:0:0"),
+                    IPv6.fromHexadecimalString("2620:0:ffff:ffff:ffff:ffff:ffff:ffff")
+                );
+
+                let toSubtract = new Range(
+                    IPv6.fromHexadecimalString("2620:0:0:0:0:0:0:bbbb"),
+                    IPv6.fromHexadecimalString("2620:0:ffff:ffff:ffff:ffff:ffff:ffff")
+                );
+
+                let result = original.subtract(toSubtract);
+                expect(result.length).toEqual(1);
+                expect(result[0].toRangeString()).toEqual("2620:0:0:0:0:0:0:0-2620:0:0:0:0:0:0:bbba");
+            });
+
+            it("it should subtract from middle", () => {
+                let original = new Range(
+                    IPv6.fromHexadecimalString("2620:0:0:0:0:0:0:0"),
+                    IPv6.fromHexadecimalString("2620:0:ffff:ffff:ffff:ffff:ffff:ffff")
+                );
+
+                let toSubtract = new Range(
+                    IPv6.fromHexadecimalString("2620:0:0:0:0:0:0:200"),
+                    IPv6.fromHexadecimalString("2620:0:0:0:0:0:0:400")
+                );
+
+                let result = original.subtract(toSubtract);
+                expect(result.length).toEqual(2);
+                expect(result[0].toRangeString()).toEqual("2620:0:0:0:0:0:0:0-2620:0:0:0:0:0:0:1ff");
+                expect(result[1].toRangeString()).toEqual("2620:0:0:0:0:0:0:401-2620:0:ffff:ffff:ffff:ffff:ffff:ffff");
+            });
+        });
+    });
 });

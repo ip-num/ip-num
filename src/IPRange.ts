@@ -268,6 +268,27 @@ export class Range<T extends IPv4 | IPv6> implements Iterable<IPv4 | IPv6> {
         return new Range(firstIp, lastIp);
     }
 
+    public subtract(range: Range<T>): Array<Range<IPv4 | IPv6>> {
+        if (range.getSize().gt(this.getSize())) {
+            throw new Error("Range is greater than range to be subtracted from");
+        }
+
+        if (!this.contains(range)) {
+            throw new Error("Range to subtract is not contained in this range");
+        }
+
+        let reminders = [];
+        try {
+            reminders.push(new Range(this.getFirst(), range.getFirst().previousIPNumber()));
+        } catch (e) {}
+
+        try {
+            reminders.push(new Range(range.getLast().nextIPNumber(), this.getLast()));
+        } catch (e) {}
+
+        return reminders;
+    }
+
     public *take(count?: number): Iterable<IPv4 | IPv6> {
         let computed: IPv6 | IPv4 = this.getFirst();
         let returnCount = count === undefined ? this.getSize().valueOf() : count;
