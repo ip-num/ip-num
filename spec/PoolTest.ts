@@ -55,6 +55,24 @@ describe('Pool', () => {
             expect(aggregatedPool.getRanges()[0].toRangeString()).toEqual("0.0.0.0-255.255.255.255");
             expect(aggregatedPool.getRanges().length).toEqual(1);
         });
+
+        it("it should reset pool with given ranges", () => {
+            let arrays: Range<IPv4 | IPv6>[] = new Array<Range<IPv4>>();
+            arrays.push(Range.fromCidrRange(IPv4CidrRange.fromCidr("192.168.0.0/26")));
+            let pool = Pool.fromIPRanges(arrays);
+            expect(pool.getRanges()[0].toRangeString()).toEqual("192.168.0.0-192.168.0.63");
+            pool.resetWith(new Array<Range<IPv4|IPv6>>(Range.fromCidrRange(IPv4CidrRange.fromCidr("192.168.0.160/27"))));
+            expect(pool.getRanges()[0].toRangeString()).toEqual("192.168.0.160-192.168.0.191");
+        });
+
+        it("it should clear pool", () => {
+            let arrays: Range<IPv4 | IPv6>[] = new Array<Range<IPv4>>();
+            arrays.push(Range.fromCidrRange(IPv4CidrRange.fromCidr("192.168.0.0/26")));
+            let pool = Pool.fromIPRanges(arrays);
+            expect(pool.getRanges()[0].toRangeString()).toEqual("192.168.0.0-192.168.0.63");
+            pool.clear();
+            expect(pool.getRanges().length).toEqual(0);
+        });
     });
 
     describe("IPv6", () => {
@@ -102,5 +120,24 @@ describe('Pool', () => {
             expect(aggregatedPool.getRanges()[0].toRangeString()).toEqual("::0-ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff");
             expect(aggregatedPool.getRanges().length).toEqual(1);
         });
+
+        it("it should reset pool with given range", () => {
+            let arrays: Range<IPv4 | IPv6>[] = new Array<Range<IPv6>>();
+            arrays.push(Range.fromCidrRange(IPv6CidrRange.fromCidr("2001:db8:0:0:0:0:0:0/48")));
+            let pool = Pool.fromIPRanges(arrays);
+            expect(pool.getRanges()[0].toRangeString()).toEqual("2001:db8:0:0:0:0:0:0-2001:db8:0:ffff:ffff:ffff:ffff:ffff");
+            pool.resetWith(new Array<Range<IPv4|IPv6>>(Range.fromCidrRange(IPv6CidrRange.fromCidr("2001:db8:1:4000:0:0:0:0/50"))));
+            expect(pool.getRanges()[0].toRangeString()).toEqual("2001:db8:1:4000:0:0:0:0-2001:db8:1:7fff:ffff:ffff:ffff:ffff");
+        });
+
+        it("it should clear pool", () => {
+            let arrays: Range<IPv4 | IPv6>[] = new Array<Range<IPv6>>();
+            arrays.push(Range.fromCidrRange(IPv6CidrRange.fromCidr("2001:db8:0:0:0:0:0:0/48")));
+            let pool = Pool.fromIPRanges(arrays);
+            expect(pool.getRanges()[0].toRangeString()).toEqual("2001:db8:0:0:0:0:0:0-2001:db8:0:ffff:ffff:ffff:ffff:ffff");
+            pool.clear();
+            expect(pool.getRanges().length).toEqual(0);
+        });
+
     });
 });

@@ -1,5 +1,6 @@
 import {Range} from "./IPRange";
 import {IPv4, IPv6} from "./IPNumber";
+import {Prefix} from "./Prefix";
 
 /**
  * Represents a collection of IP {@link Range}'s
@@ -86,6 +87,15 @@ export class Pool<T extends Range<IPv4 | IPv6>> {
             return aggregatedPool;
         }
     }
+
+    public resetWith(ipRanges: Array<Range<IPv4 | IPv6>>) {
+        this.backingSet.clear();
+        this.backingSet = this.backingSet.add(ipRanges);
+    }
+
+    public clear() {
+        this.backingSet.clear();
+    }
 }
 
 class SortedSet<T extends Range<IPv4 | IPv6>> {
@@ -119,14 +129,19 @@ class SortedSet<T extends Range<IPv4 | IPv6>> {
         return this.backingArray;
     }
 
-    public add(item: T): SortedSet<T> {
+    public add(item: Array<T>): SortedSet<T>;
+    public add(item: T): SortedSet<T>;
+    public add(item: T | Array<T>): SortedSet<T> {
         let array = this.backingArray;
         if("push" in item) {
-            array.concat(item);
+            array = array.concat(item);
         } else {
             array.push(item);
         }
-
         return new SortedSet(this.sortArray(array));
+    }
+
+    public clear() {
+        this.backingArray = [];
     }
 }

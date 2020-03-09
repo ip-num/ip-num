@@ -359,7 +359,7 @@ describe('Range: ', () => {
             });
         });
 
-        fdescribe("IPv6", () => {
+        describe("IPv6", () => {
             it("it should subtract all", () => {
                 let original = new Range(
                     IPv6.fromHexadecimalString("2620:0:0:0:0:0:0:0"),
