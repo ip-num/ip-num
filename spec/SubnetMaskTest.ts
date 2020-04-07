@@ -33,6 +33,11 @@ describe('Subnet mask test', function() {
         expect(iPv4SubnetMask.getOctets()).toEqual(new IPv4("255.0.0.0").getOctets());
     });
 
+    it('should return prefix', () => {
+        let iPv4SubnetMask = new IPv4SubnetMask("255.255.0.0");
+        expect(iPv4SubnetMask.prefix).toEqual(16);
+    });
+
 // IPv6
     it('should create an instance of IPv6SubnetMask using fromDecimalDottedString', () => {
         let iPv6SubnetMask = IPv6SubnetMask.fromHexadecimalString("ffff:ffff:ffff:ffff:ffff:ffff:0:0");
@@ -60,5 +65,10 @@ describe('Subnet mask test', function() {
     it('should return getHexadecatet', () => {
         let iPv6Subnet = new IPv6SubnetMask("ffff:ffff:ffff:ffff:ffff:ffff:0:0");
         expect(iPv6Subnet.getHexadecatet()).toEqual(new IPv6("ffff:ffff:ffff:ffff:ffff:ffff:0:0").getHexadecatet());
-    })
+    });
+
+    it('should return prefix', () => {
+        let iPv6Subnet = new IPv6SubnetMask("ffff:ffff:ffff:ffff:ffff:ffff:0:0");
+        expect(iPv6Subnet.prefix).toEqual(96);
+    });
 });

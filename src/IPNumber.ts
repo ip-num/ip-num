@@ -712,6 +712,11 @@ export class IPv4SubnetMask extends IPv4 {
     readonly value: bigInt.BigInteger;
 
     /**
+     * The cidr prefix represented by this subnet mask
+     */
+    readonly prefix: number;
+
+    /**
      * A convenience method for creating an instance of IPv4SubnetMask. The passed strings need to be a valid IPv4
      * number in dot-decimal notation.
      *
@@ -742,7 +747,10 @@ export class IPv4SubnetMask extends IPv4 {
         this.octets = stringOctets.map((rawOctet) => {
             return Octet.fromString(rawOctet)
         });
-        this.value = bigInt(dottedDecimalNotationToBinaryString(ipString), 2);
+
+        let binaryString = dottedDecimalNotationToBinaryString(ipString);
+        this.prefix  = (binaryString.match(/1/g) || []).length;
+        this.value = bigInt(binaryString, 2);
     }
 }
 
@@ -765,6 +773,11 @@ export class IPv6SubnetMask extends IPv6 {
      */
     readonly value: bigInt.BigInteger;
 
+
+    /**
+     * The cidr prefix represented by this subnet mask
+     */
+    readonly prefix: number;
 
     /**
      * A convenience method for creating an instance of IPv6SubnetMask.
@@ -797,6 +810,11 @@ export class IPv6SubnetMask extends IPv6 {
         this.hexadecatet = stringHexadecimals.map((stringHexadecatet) => {
             return Hexadecatet.fromString(stringHexadecatet)
         });
+
+        let binaryString = hexadectetNotationToBinaryString(ipString);
+        this.prefix  = (binaryString.match(/1/g) || []).length;
+        this.value = bigInt(binaryString, 2);
+
         this.value = bigInt(hexadectetNotationToBinaryString(ipString), 2);
     }
 }
