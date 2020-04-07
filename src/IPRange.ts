@@ -2,7 +2,7 @@ import * as bigInt from "big-integer";
 import {IPv6, isIPv4} from "./IPNumber";
 import {IPv4} from "./IPNumber";
 import {IPv6Prefix} from "./Prefix";
-import {leftPadWithZeroBit, intLog2} from "./BinaryUtils";
+import {intLog2, leftPadWithZeroBit} from "./BinaryUtils";
 import {parseBinaryStringToBigInteger} from "./BinaryUtils";
 import {Validator} from "./Validator";
 import {IPv4Prefix} from "./Prefix";
@@ -130,8 +130,10 @@ export class Range<T extends IPv4 | IPv6> implements Iterable<IPv4 | IPv6> {
         if (this.isEquals(otherRange)) {
             return false;
         } else {
-            return this.getFirst().isLessThan(otherRange.getFirst())
-                || this.getSize().lt(otherRange.getSize());
+            if (this.getFirst().isEquals(otherRange.getFirst())) {
+                return this.getSize().lesser(otherRange.getSize())
+            }
+            return this.getFirst().isLessThan(otherRange.getFirst());
         }
     }
 
@@ -144,8 +146,10 @@ export class Range<T extends IPv4 | IPv6> implements Iterable<IPv4 | IPv6> {
         if (this.isEquals(otherRange)) {
             return false;
         } else {
-            return this.getFirst().isGreaterThan(otherRange.getFirst())
-                || this.getSize().gt(otherRange.getSize());
+            if (this.getFirst().isEquals(otherRange.getFirst())) {
+                return this.getSize().greater(otherRange.getSize());
+            }
+            return this.getFirst().isGreaterThan(otherRange.getFirst());
         }
     }
 
@@ -243,6 +247,16 @@ export class Range<T extends IPv4 | IPv6> implements Iterable<IPv4 | IPv6> {
     }
 
 
+    public subtract(otherRange: Range<T>): Range<T> {
+        if (!this.isOverlapping(otherRange)) {
+            throw new Error("Cannot subtract ranges that are not overlapping")
+        }
+        if (!this.isLessThan(otherRange)) {
+            throw new Error("Cannot subtract a larger range from this range")
+        }
+        return new Range(this.getFirst(), otherRange.getLast());
+    }
+
     /**
      * Returns a sub range of a given size from this range.
      *
@@ -268,7 +282,7 @@ export class Range<T extends IPv4 | IPv6> implements Iterable<IPv4 | IPv6> {
         return new Range(firstIp, lastIp);
     }
 
-    public subtract(range: Range<T>): Array<Range<IPv4 | IPv6>> {
+    public difference(range: Range<T>): Array<Range<IPv4 | IPv6>> {
         if (range.getSize().gt(this.getSize())) {
             throw new Error("Range is greater than range to be subtracted from");
         }

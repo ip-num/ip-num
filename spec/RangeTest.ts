@@ -305,7 +305,7 @@ describe('Range: ', () => {
                     IPv4.fromDecimalDottedString("127.0.0.255")
                 );
 
-                let result = original.subtract(toSubtract);
+                let result = original.difference(toSubtract);
                 expect(result.length).toEqual(0);
             });
 
@@ -320,7 +320,7 @@ describe('Range: ', () => {
                     IPv4.fromDecimalDottedString("127.0.0.3")
                 );
 
-                let result = original.subtract(toSubtract);
+                let result = original.difference(toSubtract);
                 expect(result.length).toEqual(1);
                 expect(result[0].toRangeString()).toEqual("127.0.0.4-127.0.0.255");
             });
@@ -336,7 +336,7 @@ describe('Range: ', () => {
                     IPv4.fromDecimalDottedString("127.0.0.255")
                 );
 
-                let result = original.subtract(toSubtract);
+                let result = original.difference(toSubtract);
                 expect(result.length).toEqual(1);
                 expect(result[0].toRangeString()).toEqual("127.0.0.0-127.0.0.252");
             });
@@ -352,11 +352,101 @@ describe('Range: ', () => {
                     IPv4.fromDecimalDottedString("127.0.0.250")
                 );
 
-                let result = original.subtract(toSubtract);
+                let result = original.difference(toSubtract);
                 expect(result.length).toEqual(2);
                 expect(result[0].toRangeString()).toEqual("127.0.0.0-127.0.0.239");
                 expect(result[1].toRangeString()).toEqual("127.0.0.251-127.0.0.255");
             });
+
+            describe("Less than test", () => {
+                it('should tell if less than if first ip is less', () => {
+                    let first = new Range(
+                        IPv4.fromDecimalDottedString("192.168.0.128"),
+                        IPv4.fromDecimalDottedString("192.168.0.159")
+                    );
+
+                    let second = new Range(
+                        IPv4.fromDecimalDottedString("192.168.0.16"),
+                        IPv4.fromDecimalDottedString("192.168.0.63")
+                    );
+
+                    expect(first.isLessThan(second)).toBe(false);
+                    expect(second.isLessThan(first)).toBe(true);
+                });
+                it('should tell if less than based on size if first ip is same', () => {
+                    let first = new Range(
+                        IPv4.fromDecimalDottedString("192.168.0.128"),
+                        IPv4.fromDecimalDottedString("192.168.0.159")
+                    );
+
+                    let second = new Range(
+                        IPv4.fromDecimalDottedString("192.168.0.128"),
+                        IPv4.fromDecimalDottedString("192.168.0.255")
+                    );
+
+                    expect(first.isLessThan(second)).toBe(true);
+                    expect(second.isLessThan(first)).toBe(false);
+                });
+                it('should tell if less than when equals', () => {
+                    let first = new Range(
+                        IPv4.fromDecimalDottedString("192.168.0.128"),
+                        IPv4.fromDecimalDottedString("192.168.0.159")
+                    );
+
+                    let second = new Range(
+                        IPv4.fromDecimalDottedString("192.168.0.128"),
+                        IPv4.fromDecimalDottedString("192.168.0.159")
+                    );
+
+                    expect(first.isLessThan(second)).toBe(false);
+                    expect(second.isLessThan(first)).toBe(false);
+                });
+            });
+            describe("Greater than test", () => {
+                it('should tell if less than if first ip is less', () => {
+                    let first = new Range(
+                        IPv4.fromDecimalDottedString("192.168.0.128"),
+                        IPv4.fromDecimalDottedString("192.168.0.159")
+                    );
+
+                    let second = new Range(
+                        IPv4.fromDecimalDottedString("192.168.0.16"),
+                        IPv4.fromDecimalDottedString("192.168.0.63")
+                    );
+
+                    expect(first.isGreaterThan(second)).toBe(true);
+                    expect(second.isGreaterThan(first)).toBe(false);
+                });
+                it('should tell if less than based on size if first ip is same', () => {
+                    let first = new Range(
+                        IPv4.fromDecimalDottedString("192.168.0.128"),
+                        IPv4.fromDecimalDottedString("192.168.0.159")
+                    );
+
+                    let second = new Range(
+                        IPv4.fromDecimalDottedString("192.168.0.128"),
+                        IPv4.fromDecimalDottedString("192.168.0.255")
+                    );
+
+                    expect(first.isGreaterThan(second)).toBe(false);
+                    expect(second.isGreaterThan(first)).toBe(true);
+                });
+                it('should tell if less than when equals', () => {
+                    let first = new Range(
+                        IPv4.fromDecimalDottedString("192.168.0.128"),
+                        IPv4.fromDecimalDottedString("192.168.0.159")
+                    );
+
+                    let second = new Range(
+                        IPv4.fromDecimalDottedString("192.168.0.128"),
+                        IPv4.fromDecimalDottedString("192.168.0.159")
+                    );
+
+                    expect(first.isGreaterThan(second)).toBe(false);
+                    expect(second.isGreaterThan(first)).toBe(false);
+                });
+            });
+
         });
 
         describe("IPv6", () => {
@@ -371,7 +461,7 @@ describe('Range: ', () => {
                     IPv6.fromHexadecimalString("2620:0:ffff:ffff:ffff:ffff:ffff:ffff")
                 );
 
-                let result = original.subtract(toSubtract);
+                let result = original.difference(toSubtract);
                 expect(result.length).toEqual(0);
             });
 
@@ -386,7 +476,7 @@ describe('Range: ', () => {
                     IPv6.fromHexadecimalString("2620:0:ffff:ffff:ffff:ffff:ffff:ffff")
                 );
 
-                let result = original.subtract(toSubtract);
+                let result = original.difference(toSubtract);
                 expect(result.length).toEqual(1);
                 expect(result[0].toRangeString()).toEqual("2620:0:0:0:0:0:0:0-2620:0:0:0:0:0:0:2");
             });
@@ -402,7 +492,7 @@ describe('Range: ', () => {
                     IPv6.fromHexadecimalString("2620:0:ffff:ffff:ffff:ffff:ffff:ffff")
                 );
 
-                let result = original.subtract(toSubtract);
+                let result = original.difference(toSubtract);
                 expect(result.length).toEqual(1);
                 expect(result[0].toRangeString()).toEqual("2620:0:0:0:0:0:0:0-2620:0:0:0:0:0:0:bbba");
             });
@@ -418,10 +508,99 @@ describe('Range: ', () => {
                     IPv6.fromHexadecimalString("2620:0:0:0:0:0:0:400")
                 );
 
-                let result = original.subtract(toSubtract);
+                let result = original.difference(toSubtract);
                 expect(result.length).toEqual(2);
                 expect(result[0].toRangeString()).toEqual("2620:0:0:0:0:0:0:0-2620:0:0:0:0:0:0:1ff");
                 expect(result[1].toRangeString()).toEqual("2620:0:0:0:0:0:0:401-2620:0:ffff:ffff:ffff:ffff:ffff:ffff");
+            });
+
+            describe("Less than test", () => {
+                it('should tell if less than if first ip is less', () => {
+                    let first = new Range(
+                        IPv6.fromHexadecimalString("3620:0:0:0:0:0:0:0"),
+                        IPv6.fromHexadecimalString("3620:0:ffff:ffff:ffff:ffff:ffff:ffff")
+                    );
+
+                    let second = new Range(
+                        IPv6.fromHexadecimalString("2620:0:0:0:0:0:0:0"),
+                        IPv6.fromHexadecimalString("2620:0:ffff:ffff:ffff:ffff:ffff:ffff")
+                    );
+
+                    expect(first.isLessThan(second)).toBe(false);
+                    expect(second.isLessThan(first)).toBe(true);
+                });
+                it('should tell if less than based on size if first ip is same', () => {
+                    let first = new Range(
+                        IPv6.fromHexadecimalString("3620:0:0:0:0:0:0:0"),
+                        IPv6.fromHexadecimalString("3620:0:0:0:0:0:0:ffff")
+                    );
+
+                    let second = new Range(
+                        IPv6.fromHexadecimalString("3620:0:0:0:0:0:0:0"),
+                        IPv6.fromHexadecimalString("3620:0:ffff:ffff:ffff:ffff:ffff:ffff")
+                    );
+
+                    expect(first.isLessThan(second)).toBe(true);
+                    expect(second.isLessThan(first)).toBe(false);
+                });
+                it('should tell if less than when equals', () => {
+                    let first = new Range(
+                        IPv6.fromHexadecimalString("3620:0:0:0:0:0:0:0"),
+                        IPv6.fromHexadecimalString("3620:0:ffff:ffff:ffff:ffff:ffff:ffff")
+                    );
+
+                    let second = new Range(
+                        IPv6.fromHexadecimalString("3620:0:0:0:0:0:0:0"),
+                        IPv6.fromHexadecimalString("3620:0:ffff:ffff:ffff:ffff:ffff:ffff")
+                    );
+
+                    expect(first.isLessThan(second)).toBe(false);
+                    expect(second.isLessThan(first)).toBe(false);
+                });
+            });
+            describe("Greater than test", () => {
+                it('should tell if less than if first ip is less', () => {
+                    let first = new Range(
+                        IPv6.fromHexadecimalString("3620:0:0:0:0:0:0:0"),
+                        IPv6.fromHexadecimalString("3620:0:ffff:ffff:ffff:ffff:ffff:ffff")
+                    );
+
+                    let second = new Range(
+                        IPv6.fromHexadecimalString("2620:0:0:0:0:0:0:0"),
+                        IPv6.fromHexadecimalString("2620:0:ffff:ffff:ffff:ffff:ffff:ffff")
+                    );
+
+                    expect(first.isGreaterThan(second)).toBe(true);
+                    expect(second.isGreaterThan(first)).toBe(false);
+                });
+                it('should tell if less than based on size if first ip is same', () => {
+                    let first = new Range(
+                        IPv6.fromHexadecimalString("3620:0:0:0:0:0:0:0"),
+                        IPv6.fromHexadecimalString("3620:0:0:0:0:0:0:ffff")
+                    );
+
+                    let second = new Range(
+                        IPv6.fromHexadecimalString("3620:0:0:0:0:0:0:0"),
+                        IPv6.fromHexadecimalString("3620:0:ffff:ffff:ffff:ffff:ffff:ffff")
+                    );
+
+                    expect(first.isGreaterThan(second)).toBe(false);
+                    expect(second.isGreaterThan(first)).toBe(true);
+                });
+                it('should tell if less than when equals', () => {
+                    let first = new Range(
+                        IPv6.fromHexadecimalString("3620:0:0:0:0:0:0:0"),
+                        IPv6.fromHexadecimalString("3620:0:ffff:ffff:ffff:ffff:ffff:ffff")
+                    );
+
+                    let second = new Range(
+                        IPv6.fromHexadecimalString("3620:0:0:0:0:0:0:0"),
+                        IPv6.fromHexadecimalString("3620:0:ffff:ffff:ffff:ffff:ffff:ffff")
+                    );
+
+                    expect(first.isGreaterThan(second)).toBe(false);
+                    expect(second.isGreaterThan(first)).toBe(false);
+                });
             });
         });
     });

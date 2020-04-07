@@ -1,5 +1,6 @@
-import {IPv4, IPv4CidrRange, IPv6, IPv6CidrRange, Range} from "../src";
+import {IPv4, IPv4CidrRange, IPv4Prefix, IPv6, IPv6CidrRange, IPv6Prefix, Range} from "../src";
 import {Pool} from "../src/IPPool";
+import bigInt = require("big-integer");
 
 describe('Pool', () => {
     describe('IPV4', () => {
@@ -73,6 +74,107 @@ describe('Pool', () => {
             pool.clear();
             expect(pool.getRanges().length).toEqual(0);
         });
+
+        it("it should remove range from pool", () => {
+            let arrays: Range<IPv4 | IPv6>[] = new Array<Range<IPv4>>();
+
+            arrays.push(Range.fromCidrRange(IPv4CidrRange.fromCidr("192.168.0.0/26")));
+            let rangeToRemove = Range.fromCidrRange(IPv4CidrRange.fromCidr("192.168.0.64/26"));
+            arrays.push(rangeToRemove);
+            let pool = Pool.fromIPRanges(arrays);
+
+            expect(pool.getRanges().length).toEqual(2);
+            pool.removeExact(rangeToRemove);
+            expect(pool.getRanges().length).toEqual(1);
+            expect(pool.getRanges()[0].toCidrRange().toCidrString()).toEqual("192.168.0.0/26");
+        });
+
+        it("it should not remove range if not in the pool", () => {
+            let arrays: Range<IPv4 | IPv6>[] = new Array<Range<IPv4>>();
+
+            arrays.push(Range.fromCidrRange(IPv4CidrRange.fromCidr("192.168.0.0/26")));
+            arrays.push(Range.fromCidrRange(IPv4CidrRange.fromCidr("192.168.0.64/26")));
+            // not added to the pool
+            let rangeToRemove = Range.fromCidrRange(IPv4CidrRange.fromCidr("192.168.0.128/27"));
+
+            let pool = Pool.fromIPRanges(arrays);
+
+            expect(pool.getRanges().length).toEqual(2);
+            pool.removeExact(rangeToRemove);
+            expect(pool.getRanges().length).toEqual(2);
+            expect(pool.getRanges()[0].toCidrRange().toCidrString()).toEqual("192.168.0.0/26");
+            expect(pool.getRanges()[1].toCidrRange().toCidrString()).toEqual("192.168.0.64/26");
+        });
+
+        it("it should not remove range if range is sub range in the pool", () => {
+            let arrays: Range<IPv4 | IPv6>[] = new Array<Range<IPv4>>();
+
+            arrays.push(Range.fromCidrRange(IPv4CidrRange.fromCidr("192.168.0.0/26")));
+            arrays.push(Range.fromCidrRange(IPv4CidrRange.fromCidr("192.168.0.64/26")));
+            // not added to the pool
+            let rangeToRemove = Range.fromCidrRange(IPv4CidrRange.fromCidr("192.168.0.96/27"));
+
+            let pool = Pool.fromIPRanges(arrays);
+
+            expect(pool.getRanges().length).toEqual(2);
+            pool.removeExact(rangeToRemove);
+            expect(pool.getRanges().length).toEqual(2);
+            expect(pool.getRanges()[0].toCidrRange().toCidrString()).toEqual("192.168.0.0/26");
+            expect(pool.getRanges()[1].toCidrRange().toCidrString()).toEqual("192.168.0.64/26");
+        });
+
+        it("it should return the size of pool", () => {
+            let arrays: Range<IPv4 | IPv6>[] = new Array<Range<IPv4>>();
+
+            arrays.push(Range.fromCidrRange(IPv4CidrRange.fromCidr("192.168.0.0/26")));
+            arrays.push(Range.fromCidrRange(IPv4CidrRange.fromCidr("192.168.0.128/27")));
+            arrays.push(Range.fromCidrRange(IPv4CidrRange.fromCidr("192.168.0.192/26")));
+
+            let pool = Pool.fromIPRanges(arrays);
+
+            expect(pool.getSize()).toEqual(bigInt(160));
+        });
+
+        it('it should get range by prefix', () => {
+            let arrays: Range<IPv4 | IPv6>[] = new Array<Range<IPv4>>();
+
+            arrays.push(Range.fromCidrRange(IPv4CidrRange.fromCidr("192.168.0.0/26")));
+            arrays.push(Range.fromCidrRange(IPv4CidrRange.fromCidr("192.168.0.128/27")));
+            arrays.push(Range.fromCidrRange(IPv4CidrRange.fromCidr("192.168.0.192/26")));
+
+            let pool = Pool.fromIPRanges(arrays);
+            let range = pool.getSingleRange(IPv4Prefix.fromNumber(26));
+            expect(range.toCidrString()).toEqual("192.168.0.0/26");
+            expect(pool.getRanges().length).toEqual(2);
+        });
+
+        it('it should get sub range by prefix', () => {
+            let arrays: Range<IPv4 | IPv6>[] = new Array<Range<IPv4>>();
+
+            arrays.push(Range.fromCidrRange(IPv4CidrRange.fromCidr("192.168.0.0/26")));
+            arrays.push(Range.fromCidrRange(IPv4CidrRange.fromCidr("192.168.0.128/27")));
+            arrays.push(Range.fromCidrRange(IPv4CidrRange.fromCidr("192.168.0.192/26")));
+
+            let pool = Pool.fromIPRanges(arrays);
+            let range = pool.getSingleRange(IPv4Prefix.fromNumber(28));
+            expect(range.toCidrString()).toEqual("192.168.0.0/28");
+            expect(pool.getRanges().length).toEqual(3);
+            expect(pool.getRanges()[0].toRangeString()).toEqual("192.168.0.16-192.168.0.63");
+            expect(pool.getRanges()[1].toCidrRange().toCidrString()).toEqual("192.168.0.128/27");
+            expect(pool.getRanges()[2].toCidrRange().toCidrString()).toEqual("192.168.0.192/26");
+        });
+
+        it('it should throw an exception if requested prefix is bigger than available', () => {
+            let arrays: Range<IPv4 | IPv6>[] = new Array<Range<IPv4>>();
+
+            arrays.push(Range.fromCidrRange(IPv4CidrRange.fromCidr("192.168.0.0/26")));
+            arrays.push(Range.fromCidrRange(IPv4CidrRange.fromCidr("192.168.0.64/26")));
+
+            let pool = Pool.fromIPRanges(arrays);
+            expect(() => {
+                pool.getSingleRange(IPv4Prefix.fromNumber(24));
+            }).toThrowError(Error, "Not enough IP number in the pool for requested prefix: 24")
+        });
     });
 
     describe("IPv6", () => {
@@ -137,6 +239,93 @@ describe('Pool', () => {
             expect(pool.getRanges()[0].toRangeString()).toEqual("2001:db8:0:0:0:0:0:0-2001:db8:0:ffff:ffff:ffff:ffff:ffff");
             pool.clear();
             expect(pool.getRanges().length).toEqual(0);
+        });
+
+
+        it("it should remove range from pool", () => {
+            let arrays: Range<IPv4 | IPv6>[] = new Array<Range<IPv6>>();
+
+            arrays.push(Range.fromCidrRange(IPv6CidrRange.fromCidr("2001:db8:0:0:0:0:0:0/48")));
+            let rangeToRemove = Range.fromCidrRange(IPv6CidrRange.fromCidr("2001:db8:1:0:0:0:0:0/50"));
+            arrays.push(rangeToRemove);
+
+            let pool = Pool.fromIPRanges(arrays);
+
+            expect(pool.getRanges().length).toEqual(2);
+            pool.removeExact(rangeToRemove);
+            expect(pool.getRanges().length).toEqual(1);
+            expect(pool.getRanges()[0].toCidrRange().toCidrString()).toEqual("2001:db8:0:0:0:0:0:0/48");
+        });
+
+        it("it should not remove range if not in the pool", () => {
+            let arrays: Range<IPv4 | IPv6>[] = new Array<Range<IPv6>>();
+
+            arrays.push(Range.fromCidrRange(IPv6CidrRange.fromCidr("2001:db8:0:0:0:0:0:0/48")));
+            arrays.push(Range.fromCidrRange(IPv6CidrRange.fromCidr("2001:db8:1:0:0:0:0:0/50")));
+
+            // not added to the pool
+            let rangeToRemove = Range.fromCidrRange(IPv6CidrRange.fromCidr("2001:db8:1:4000:0:0:0:0/50"));
+
+            let pool = Pool.fromIPRanges(arrays);
+
+            expect(pool.getRanges().length).toEqual(2);
+            pool.removeExact(rangeToRemove);
+            expect(pool.getRanges().length).toEqual(2);
+            expect(pool.getRanges()[0].toCidrRange().toCidrString()).toEqual("2001:db8:0:0:0:0:0:0/48");
+            expect(pool.getRanges()[1].toCidrRange().toCidrString()).toEqual("2001:db8:1:0:0:0:0:0/50");
+        });
+
+        it("it should not remove range if range is sub range in the pool", () => {
+            let arrays: Range<IPv4 | IPv6>[] = new Array<Range<IPv6>>();
+
+            arrays.push(Range.fromCidrRange(IPv6CidrRange.fromCidr("2001:db8:0:0:0:0:0:0/48")));
+            arrays.push(Range.fromCidrRange(IPv6CidrRange.fromCidr("2001:db8:1:0:0:0:0:0/50")));
+
+            // sub range of 2001:db8:1:0:0:0:0:0/50
+            let rangeToRemove = Range.fromCidrRange(IPv6CidrRange.fromCidr("2001:db8:1:0:0:0:0:0/51"));
+
+            let pool = Pool.fromIPRanges(arrays);
+
+            expect(pool.getRanges().length).toEqual(2);
+            pool.removeExact(rangeToRemove);
+            expect(pool.getRanges().length).toEqual(2);
+        });
+
+        it("it should return the size of pool", () => {
+            let arrays: Range<IPv4 | IPv6>[] = new Array<Range<IPv6>>();
+
+            arrays.push(Range.fromCidrRange(IPv6CidrRange.fromCidr("2001:db8:0:0:0:0:0:0/127")));
+            arrays.push(Range.fromCidrRange(IPv6CidrRange.fromCidr("2001:db8:1:0:0:0:0:0/128")));
+
+            let pool = Pool.fromIPRanges(arrays);
+
+            expect(pool.getSize()).toEqual(bigInt(3));
+        });
+
+
+        it('it should get range by prefix', () => {
+            let arrays: Range<IPv4 | IPv6>[] = new Array<Range<IPv6>>();
+
+            arrays.push(Range.fromCidrRange(IPv6CidrRange.fromCidr("2001:db8:0:0:0:0:0:0/127")));
+            arrays.push(Range.fromCidrRange(IPv6CidrRange.fromCidr("2001:db8:1:0:0:0:0:0/128")));
+
+            let pool = Pool.fromIPRanges(arrays);
+
+            let range = pool.getSingleRange(IPv6Prefix.fromNumber(127));
+            expect(range.toCidrString()).toEqual("2001:db8:0:0:0:0:0:0/127");
+            expect(pool.getRanges().length).toEqual(1);
+        });
+
+        it('it should throw an exception if requested prefix is bigger than available', () => {
+            let arrays: Range<IPv4 | IPv6>[] = new Array<Range<IPv4>>();
+
+            arrays.push(Range.fromCidrRange(IPv6CidrRange.fromCidr("2001:db8:0:0:0:0:0:0/48")));
+            arrays.push(Range.fromCidrRange(IPv6CidrRange.fromCidr("2001:db8:1:0:0:0:0:0/50")));
+
+            let pool = Pool.fromIPRanges(arrays);
+            expect(() => {
+                pool.getSingleRange(IPv6Prefix.fromNumber(47));
+            }).toThrowError(Error, "Not enough IP number in the pool for requested prefix: 47")
         });
 
     });

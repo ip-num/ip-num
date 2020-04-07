@@ -1,12 +1,13 @@
-import {Range} from "./IPRange";
+import {IPv4CidrRange, IPv6CidrRange, Range} from "./IPRange";
 import {IPv4, IPv6} from "./IPNumber";
-import {Prefix} from "./Prefix";
+import {IPv4Prefix, IPv6Prefix, Prefix} from "./Prefix";
+import * as bigInt from "big-integer";
 
 /**
  * Represents a collection of IP {@link Range}'s
  */
 export class Pool<T extends Range<IPv4 | IPv6>> {
-    private backingSet: SortedSet<Range<IPv4 | IPv6>> = new SortedSet();
+    private backingSet: SortedSet = new SortedSet();
 
     /**
      * Convenient method for creating an instance from arrays of {@link IPv4} or {@link IPv6}
@@ -88,9 +89,81 @@ export class Pool<T extends Range<IPv4 | IPv6>> {
         }
     }
 
+    /**
+     * Gets a single range of size of the given prefix from pool.
+     * Only returns a range if there is a single range in the pool of same size or greater than given prefix.
+     *
+     * throws exception if the requested range cannot be got from the pool.
+     *
+     * @param prefix prefix range to retrieve
+     */
+    public getSingleRange(prefix: IPv4Prefix | IPv6Prefix): IPv4CidrRange | IPv6CidrRange {
+        if (prefix.toRangeSize().gt(this.getSize())) {
+            throw new Error(`Not enough IP number in the pool for requested prefix: ${prefix}`);
+        }
+        let selectedCidrRange: IPv4CidrRange | IPv6CidrRange | undefined;
+        let error: Error | undefined;
+
+        loop:
+        for (let range of this.getRanges()) {
+            for (var offset = bigInt.zero; offset.lesserOrEquals(range.getSize()); offset.plus(bigInt.one)) {
+                try {
+                    let selectedRange = range.takeSubRange(offset, prefix.toRangeSize());
+                    selectedCidrRange = selectedRange.toCidrRange();
+                    let remaining = range.difference(selectedRange);
+                    this.removeExact(range);
+                    this.add(remaining);
+                    break loop;
+                } catch (e) {
+                    error = e
+                }
+            }
+        }
+
+        if (selectedCidrRange) {
+            return selectedCidrRange;
+        } else {
+            throw error;
+        }
+    }
+
+    /**
+     * Returns the size of IP numbers in the pool
+     */
+    public getSize():  bigInt.BigInteger {
+        return this
+            .aggregate()
+            .getRanges()
+            .reduce((previous, current) => {
+            return previous.plus(current.getSize());
+        }, bigInt.zero);
+    }
+
+    /**
+     * Empties the pool and fill it with given ranges
+     *
+     * @param ipRanges the range to fill the pool with after emptying
+     */
     public resetWith(ipRanges: Array<Range<IPv4 | IPv6>>) {
         this.backingSet.clear();
         this.backingSet = this.backingSet.add(ipRanges);
+    }
+
+    /**
+     * Removes the given range from the pool.
+     * It is a Noop, if the given range does not exist in the pool
+     * @param rangeToRemove range to remove from ppol
+     */
+    public removeExact(rangeToRemove: Range<IPv4 | IPv6>) {
+        this.backingSet = this.backingSet.removeExact(rangeToRemove);
+    }
+
+    public removeOverlapping(rangeToRemove: Range<IPv4 | IPv6>) {
+        this.backingSet = this.backingSet.removeOverlapping(rangeToRemove);
+    }
+
+    public add(range: Array<Range<IPv4 | IPv6>>) {
+        this.backingSet = this.backingSet.add(range);
     }
 
     public clear() {
@@ -98,8 +171,10 @@ export class Pool<T extends Range<IPv4 | IPv6>> {
     }
 }
 
-class SortedSet<T extends Range<IPv4 | IPv6>> {
-    private backingArray: Array<T>;
+type T = Range<IPv4 | IPv6>;
+class SortedSet {
+
+    public backingArray: Array<T>;
 
     private sortArray(array: Array<T>): Array<T> {
         array.sort((a:T, b:T) => {
@@ -129,9 +204,9 @@ class SortedSet<T extends Range<IPv4 | IPv6>> {
         return this.backingArray;
     }
 
-    public add(item: Array<T>): SortedSet<T>;
-    public add(item: T): SortedSet<T>;
-    public add(item: T | Array<T>): SortedSet<T> {
+    public add(item: Array<T>): SortedSet;
+    public add(item: T): SortedSet;
+    public add(item: T | Array<T>): SortedSet {
         let array = this.backingArray;
         if("push" in item) {
             array = array.concat(item);
@@ -139,6 +214,51 @@ class SortedSet<T extends Range<IPv4 | IPv6>> {
             array.push(item);
         }
         return new SortedSet(this.sortArray(array));
+    }
+
+    public removeExact(items: Array<T>): SortedSet;
+    public removeExact(items: T): SortedSet;
+    public removeExact(items: T | Array<T>): SortedSet {
+
+        let filtered = this.backingArray
+            .filter(currentItem => {
+                if ("push" in items) {
+                    return items.find(item => item.isEquals(currentItem)) !== undefined;
+                } else {
+                    return !items.isEquals(currentItem);
+                }
+            });
+
+        return new SortedSet(this.sortArray(filtered));
+    }
+
+    public removeOverlapping(items: Array<T>): SortedSet;
+    public removeOverlapping(items: T): SortedSet;
+    public removeOverlapping(items: T | Array<T>): SortedSet {
+
+        let filtered:Array<Range<IPv4 | IPv6>> = this.backingArray
+            .flatMap(backingItem => {
+
+                if ("push" in items) {
+
+                    return items.flatMap(item => {
+                        if (backingItem.contains(item)) {
+                            return backingItem.difference(item);
+                        } else if (backingItem.inside(item)) {
+                            return new Array<Range<IPv4 | IPv6>>();
+                        } else if (backingItem.isOverlapping(item)) {
+                            return [backingItem.subtract(item)];
+                        } else {
+                            return [item];
+                        }
+                    });
+
+                } else {
+                    return backingItem.difference(items);
+                }
+            });
+
+        return new SortedSet(this.sortArray(filtered));
     }
 
     public clear() {
