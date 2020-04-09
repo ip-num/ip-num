@@ -154,6 +154,57 @@ describe('RangedSet: ', () => {
         expect(union.isEquals(expected)).toBe(true);
     });
 
+
+    it("should preprend", () => {
+        let firstRange = new RangedSet(new IPv4("0.0.0.5"), new IPv4("0.0.0.10"));
+        let secondRange = new RangedSet(new IPv4("0.0.0.1"), new IPv4("0.0.0.4"));
+        let extendedRange = firstRange.prepend(secondRange);
+
+        expect(extendedRange.toRangeString()).toEqual("0.0.0.1-0.0.0.10")
+    });
+
+    it("should throw if ranges not adjacent when preprending", () => {
+        var firstRange = new RangedSet(new IPv4("0.0.0.5"), new IPv4("0.0.0.10"));
+        var secondRange = new RangedSet(new IPv4("0.0.0.1"), new IPv4("0.0.0.5"));
+
+        expect(() => {
+            let extendedRange = firstRange.prepend(secondRange);
+        }).toThrowError(Error);
+
+        var firstRange = new RangedSet(new IPv4("0.0.0.7"), new IPv4("0.0.0.10"));
+        var secondRange = new RangedSet(new IPv4("0.0.0.1"), new IPv4("0.0.0.5"));
+
+        expect(() => {
+            let extendedRange = firstRange.prepend(secondRange);
+        }).toThrowError(Error);
+    });
+
+
+    it("should append", () => {
+        let firstRange = new RangedSet(new IPv4("0.0.0.1"), new IPv4("0.0.0.4"));
+        let secondRange = new RangedSet(new IPv4("0.0.0.5"), new IPv4("0.0.0.10"));
+        let extendedRange = firstRange.append(secondRange);
+
+        expect(extendedRange.toRangeString()).toEqual("0.0.0.1-0.0.0.10")
+    });
+
+    it("should throw if ranges not adjacent when appending", () => {
+        var firstRange = new RangedSet(new IPv4("0.0.0.1"), new IPv4("0.0.0.5"));
+        var secondRange = new RangedSet(new IPv4("0.0.0.5"), new IPv4("0.0.0.10"));
+
+        expect(() => {
+            let extendedRange = firstRange.append(secondRange);
+        }).toThrowError(Error);
+
+        var firstRange = new RangedSet(new IPv4("0.0.0.1"), new IPv4("0.0.0.3"));
+        var secondRange = new RangedSet(new IPv4("0.0.0.9"), new IPv4("0.0.0.10"));
+
+        expect(() => {
+            let extendedRange = firstRange.append(secondRange);
+        }).toThrowError(Error);
+
+    });
+
     it('should convert range to Cidr range IPv4', () => {
         let convertedRange = new RangedSet(
             IPv4.fromDecimalDottedString("127.0.0.0"),

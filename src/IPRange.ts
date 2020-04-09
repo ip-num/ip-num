@@ -271,6 +271,33 @@ export class RangedSet<T extends IPv4 | IPv6> implements Iterable<IPv4 | IPv6> {
         throw new Error("Ranges do not overlap nor are equal")
     }
 
+    /**
+     * Prepends given range with this range.
+     * The last IP in the given range should be adjacent to the first IP in this range
+     *
+     * @param otherRange the other range to prepend
+     */
+    public prepend(otherRange: RangedSet<T>): RangedSet<T>  {
+        if (otherRange.getLast().nextIPNumber().isEquals(this.getFirst())) {
+            return new RangedSet(otherRange.getFirst(), this.getLast())
+        } else {
+            throw new Error("Range to prepend must be adjacent")
+        }
+    }
+
+    /**
+     * Appends given range with this range.
+     * The last IP in this range should be adjacent to the first IP in range to append
+     *
+     * @param otherRange the other range to append
+     */
+    public append(otherRange: RangedSet<T>): RangedSet<T> {
+        if (this.getLast().nextIPNumber().isEquals(otherRange.getFirst())) {
+            return new RangedSet(this.getFirst(), otherRange.getLast());
+        } else {
+            throw new Error("Range to append must be adjacent")
+        }
+    }
 
     public subtract(otherRange: RangedSet<T>): RangedSet<T> {
         if (!this.isOverlapping(otherRange)) {
