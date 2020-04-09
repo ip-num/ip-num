@@ -1,25 +1,25 @@
-import {IPv4, IPv4CidrRange, IPv4Prefix, IPv6, IPv6CidrRange, IPv6Prefix, Range} from "../src";
+import {IPv4, IPv4CidrRange, IPv4Prefix, IPv6, IPv6CidrRange, IPv6Prefix, RangedSet} from "../src";
 import bigInt = require("big-integer");
 
 
 describe('Range: ', () => {
 
     it("create from single IPv4", () => {
-        let singleton = Range.fromSingleIP(new IPv4("0.0.0.254"));
+        let singleton = RangedSet.fromSingleIP(new IPv4("0.0.0.254"));
         expect(singleton.getSize().valueOf()).toBe(1);
         expect(singleton.getFirst().toString()).toBe("0.0.0.254");
         expect(singleton.getLast().toString()).toBe("0.0.0.254");
     });
 
     it("create from single IPv6", () => {
-        let singleton = Range.fromSingleIP(new IPv6("2001:db8:0:ffff:ffff:ffff:ffff:ffff"));
+        let singleton = RangedSet.fromSingleIP(new IPv6("2001:db8:0:ffff:ffff:ffff:ffff:ffff"));
         expect(singleton.getSize().valueOf()).toBe(1);
         expect(singleton.getFirst().toString()).toBe("2001:db8:0:ffff:ffff:ffff:ffff:ffff");
         expect(singleton.getLast().toString()).toBe("2001:db8:0:ffff:ffff:ffff:ffff:ffff");
     });
 
     it("test for of", () => {
-        let range = new Range(new IPv4("0.0.0.254"), new IPv4("0.0.1.2"));
+        let range = new RangedSet(new IPv4("0.0.0.254"), new IPv4("0.0.1.2"));
         let index = 0;
         let expected = ["0.0.0.254","0.0.0.255", "0.0.1.0", "0.0.1.1", "0.0.1.2"];
         for (let ip of range) {
@@ -29,7 +29,7 @@ describe('Range: ', () => {
     });
 
     it('take without count', () => {
-        let range = new Range(new IPv4("0.0.0.254"), new IPv4("0.0.1.2"));
+        let range = new RangedSet(new IPv4("0.0.0.254"), new IPv4("0.0.1.2"));
         let index = 0;
         let expected = ["0.0.0.254","0.0.0.255", "0.0.1.0", "0.0.1.1", "0.0.1.2"];
         for (let ip of range.take()) {
@@ -39,7 +39,7 @@ describe('Range: ', () => {
     });
 
     it('take with count', () => {
-        let range = new Range(new IPv4("0.0.0.0"), new IPv4("255.255.255.255"));
+        let range = new RangedSet(new IPv4("0.0.0.0"), new IPv4("255.255.255.255"));
         let index = 0;
         let expected = ["0.0.0.0","0.0.0.1", "0.0.0.2", "0.0.0.3", "0.0.0.4"];
         for (let ip of range.take(5)) {
@@ -49,7 +49,7 @@ describe('Range: ', () => {
     });
 
     it("fromCidr static constructor for IPv4", () => {
-        let range = Range
+        let range = RangedSet
             .fromCidrRange(
                 new IPv4CidrRange(IPv4.fromDecimalDottedString("127.0.0.0"), IPv4Prefix.fromNumber(24))
             );
@@ -59,43 +59,43 @@ describe('Range: ', () => {
 
     it("fromCidr static constructor for IPv6", () => {
         let ipv6CidrRange = new IPv6CidrRange(new IPv6("2001:db8::"), new IPv6Prefix(48));
-        let range = Range
+        let range = RangedSet
             .fromCidrRange(ipv6CidrRange);
 
         expect(range.getFirst().toString()).toEqual("2001:db8:0:0:0:0:0:0");
         expect(range.getLast().toString()).toEqual("2001:db8:0:ffff:ffff:ffff:ffff:ffff");
     });
     it("should perform equality check, true", () => {
-        let firstRange = new Range(new IPv4("0.0.0.254"), new IPv4("0.0.1.2"));
-        let secondRange = new Range(new IPv4("0.0.0.254"), new IPv4("0.0.1.2"));
+        let firstRange = new RangedSet(new IPv4("0.0.0.254"), new IPv4("0.0.1.2"));
+        let secondRange = new RangedSet(new IPv4("0.0.0.254"), new IPv4("0.0.1.2"));
         expect(firstRange.isEquals(secondRange)).toBe(true);
     });
     it("should perform equality check, false", () => {
-        let firstRange = new Range(new IPv4("0.0.0.253"), new IPv4("0.0.1.2"));
-        let secondRange = new Range(new IPv4("0.0.0.254"), new IPv4("0.0.1.2"));
+        let firstRange = new RangedSet(new IPv4("0.0.0.253"), new IPv4("0.0.1.2"));
+        let secondRange = new RangedSet(new IPv4("0.0.0.254"), new IPv4("0.0.1.2"));
         expect(firstRange.isEquals(secondRange)).toBe(false);
     });
     it("should perform union of ranges: equal ranges", () => {
-        let firstRange = new Range(new IPv4("0.0.0.254"), new IPv4("0.0.1.2"));
-        let secondRange = new Range(new IPv4("0.0.0.254"), new IPv4("0.0.1.2"));
+        let firstRange = new RangedSet(new IPv4("0.0.0.254"), new IPv4("0.0.1.2"));
+        let secondRange = new RangedSet(new IPv4("0.0.0.254"), new IPv4("0.0.1.2"));
         let union = firstRange.union(secondRange);
         expect(union.isEquals(firstRange)).toBe(true);
     });
     it("should perform union of ranges: overlap range left", () => {
-        let firstRange = new Range(new IPv4("0.0.0.0"), new IPv4("0.0.0.2"));
-        let secondRange = new Range(new IPv4("0.0.0.1"), new IPv4("0.0.0.3"));
+        let firstRange = new RangedSet(new IPv4("0.0.0.0"), new IPv4("0.0.0.2"));
+        let secondRange = new RangedSet(new IPv4("0.0.0.1"), new IPv4("0.0.0.3"));
 
-        let expected = new Range(new IPv4("0.0.0.0"), new IPv4("0.0.0.3"));
+        let expected = new RangedSet(new IPv4("0.0.0.0"), new IPv4("0.0.0.3"));
 
         let union = firstRange.union(secondRange);
 
         expect(union.isEquals(expected)).toBe(true);
     });
     it("should perform union of ranges: overlap range right", () => {
-        let firstRange = new Range(new IPv4("0.0.0.1"), new IPv4("0.0.0.3"));
-        let secondRange = new Range(new IPv4("0.0.0.0"), new IPv4("0.0.0.2"));
+        let firstRange = new RangedSet(new IPv4("0.0.0.1"), new IPv4("0.0.0.3"));
+        let secondRange = new RangedSet(new IPv4("0.0.0.0"), new IPv4("0.0.0.2"));
 
-        let expected = new Range(new IPv4("0.0.0.0"), new IPv4("0.0.0.3"));
+        let expected = new RangedSet(new IPv4("0.0.0.0"), new IPv4("0.0.0.3"));
 
         let union = firstRange.union(secondRange);
 
@@ -103,23 +103,23 @@ describe('Range: ', () => {
     });
 
     it("should perform union of ranges: contains the other", () => {
-        let firstRange = new Range(new IPv4("0.0.0.1"), new IPv4("0.0.0.5"));
-        let secondRange = new Range(new IPv4("0.0.0.2"), new IPv4("0.0.0.4"));
-        let expected = new Range(new IPv4("0.0.0.1"), new IPv4("0.0.0.5"));
+        let firstRange = new RangedSet(new IPv4("0.0.0.1"), new IPv4("0.0.0.5"));
+        let secondRange = new RangedSet(new IPv4("0.0.0.2"), new IPv4("0.0.0.4"));
+        let expected = new RangedSet(new IPv4("0.0.0.1"), new IPv4("0.0.0.5"));
         let union = firstRange.union(secondRange);
         expect(union.isEquals(expected)).toBe(true);
     });
 
     it("should perform union of ranges: contains by the other", () => {
-        let firstRange = new Range(new IPv4("0.0.0.2"), new IPv4("0.0.0.4"));
-        let secondRange = new Range(new IPv4("0.0.0.1"), new IPv4("0.0.0.5"));
-        let expected = new Range(new IPv4("0.0.0.1"), new IPv4("0.0.0.5"));
+        let firstRange = new RangedSet(new IPv4("0.0.0.2"), new IPv4("0.0.0.4"));
+        let secondRange = new RangedSet(new IPv4("0.0.0.1"), new IPv4("0.0.0.5"));
+        let expected = new RangedSet(new IPv4("0.0.0.1"), new IPv4("0.0.0.5"));
         let union = firstRange.union(secondRange);
         expect(union.isEquals(expected)).toBe(true);
     });
 
     it('should convert range to Cidr range IPv4', () => {
-        let convertedRange = new Range(
+        let convertedRange = new RangedSet(
             IPv4.fromDecimalDottedString("127.0.0.0"),
             IPv4.fromDecimalDottedString("127.0.0.255")
             ).toCidrRange();
@@ -128,7 +128,7 @@ describe('Range: ', () => {
     });
 
     it('should convert range to Cidr range IPv6', () => {
-        let convertedRange = new Range(
+        let convertedRange = new RangedSet(
             IPv6.fromHexadecimalString("2620:0:0:0:0:0:0:0"),
             IPv6.fromHexadecimalString("2620:0:ffff:ffff:ffff:ffff:ffff:ffff")
         ).toCidrRange();
@@ -138,7 +138,7 @@ describe('Range: ', () => {
 
     it('should not convert range to IPv4 Cidr range', () => {
         expect(() => {
-            new Range(
+            new RangedSet(
                 IPv4.fromDecimalDottedString("127.0.0.1"),
                 IPv4.fromDecimalDottedString("127.0.1.0")
             ).toCidrRange();
@@ -147,7 +147,7 @@ describe('Range: ', () => {
 
     it('should not convert range to IPv6 Cidr range', () => {
         expect(() => {
-            new Range(
+            new RangedSet(
                 IPv6.fromHexadecimalString("2620:0:0:0:0:0:0:1"),
                 IPv6.fromHexadecimalString("2620:0:0:0:0:0:1:0"),
             ).toCidrRange();
@@ -156,7 +156,7 @@ describe('Range: ', () => {
 
     it('should not convert range to IPv4 Cidr range', () => {
         expect(() => {
-            new Range(
+            new RangedSet(
                 IPv4.fromDecimalDottedString("127.0.0.1"),
                 IPv4.fromDecimalDottedString("127.0.0.255")
             ).toCidrRange();
@@ -165,7 +165,7 @@ describe('Range: ', () => {
 
     it('should not convert range to IPv6 Cidr range', () => {
         expect(() => {
-            new Range(
+            new RangedSet(
                 IPv6.fromHexadecimalString("2620:0:0:0:0:0:0:1"),
                 IPv6.fromHexadecimalString("2620:0:ffff:ffff:ffff:ffff:ffff:eeee")
             ).toCidrRange();
@@ -174,7 +174,7 @@ describe('Range: ', () => {
 
     it("should throw error when constructing with first grater than last", () => {
         expect(() => {
-            new Range(
+            new RangedSet(
                 IPv6.fromHexadecimalString("2620:0:ffff:ffff:ffff:ffff:ffff:eeee"),
                 IPv6.fromHexadecimalString("2620:0:0:0:0:0:0:1")
             )
@@ -185,7 +185,7 @@ describe('Range: ', () => {
         describe("IPv4", () => {
 
             it("should pick whole range as sub range", () => {
-                let originalRange = new Range(
+                let originalRange = new RangedSet(
                     IPv4.fromDecimalDottedString("127.0.0.0"),
                     IPv4.fromDecimalDottedString("127.0.0.255")
                 );
@@ -196,7 +196,7 @@ describe('Range: ', () => {
             });
 
             it("should pick whole range as sub range", () => {
-                let originalRange = new Range(
+                let originalRange = new RangedSet(
                     IPv4.fromDecimalDottedString("127.0.0.0"),
                     IPv4.fromDecimalDottedString("127.0.0.255")
                 );
@@ -205,7 +205,7 @@ describe('Range: ', () => {
                 expect(subRange.toRangeString()).toEqual("127.0.0.0-127.0.0.255");
             });
             it("should pick whole range with offset 1", () => {
-                let originalRange = new Range(
+                let originalRange = new RangedSet(
                     IPv4.fromDecimalDottedString("127.0.0.0"),
                     IPv4.fromDecimalDottedString("127.0.0.255")
                 );
@@ -214,7 +214,7 @@ describe('Range: ', () => {
                 expect(subRange.toRangeString()).toEqual("127.0.0.1-127.0.0.255");
             });
             it("should throw an exception if size is larger than range", () => {
-                let originalRange = new Range(
+                let originalRange = new RangedSet(
                     IPv4.fromDecimalDottedString("127.0.0.0"),
                     IPv4.fromDecimalDottedString("127.0.0.255")
                 );
@@ -225,7 +225,7 @@ describe('Range: ', () => {
             });
 
             it("should throw an exception if size is larger than range due to offset", () => {
-                let originalRange = new Range(
+                let originalRange = new RangedSet(
                     IPv4.fromDecimalDottedString("127.0.0.0"),
                     IPv4.fromDecimalDottedString("127.0.0.255")
                 );
@@ -240,7 +240,7 @@ describe('Range: ', () => {
         describe("IPv6", () => {
 
             it("should pick whole range as sub range", () => {
-                let originalRange = new Range(
+                let originalRange = new RangedSet(
                     IPv6.fromHexadecimalString("2001:d00:0:0:0:0:0:0"),
                     IPv6.fromHexadecimalString("2001:dff:ffff:ffff:ffff:ffff:ffff:ffff")
                 );
@@ -251,7 +251,7 @@ describe('Range: ', () => {
             });
 
             it("should pick whole range as sub range", () => {
-                let originalRange = new Range(
+                let originalRange = new RangedSet(
                     IPv6.fromHexadecimalString("2001:d00:0:0:0:0:0:0"),
                     IPv6.fromHexadecimalString("2001:dff:ffff:ffff:ffff:ffff:ffff:ffff")
                 );
@@ -260,7 +260,7 @@ describe('Range: ', () => {
                 expect(subRange.toRangeString()).toEqual("2001:d00:0:0:0:0:0:0-2001:dff:ffff:ffff:ffff:ffff:ffff:ffff");
             });
             it("should pick whole range with offset 1", () => {
-                let originalRange = new Range(
+                let originalRange = new RangedSet(
                     IPv6.fromHexadecimalString("2001:d00:0:0:0:0:0:0"),
                     IPv6.fromHexadecimalString("2001:dff:ffff:ffff:ffff:ffff:ffff:ffff")
                 );
@@ -269,7 +269,7 @@ describe('Range: ', () => {
                 expect(subRange.toRangeString()).toEqual("2001:d00:0:0:0:0:0:1-2001:dff:ffff:ffff:ffff:ffff:ffff:ffff");
             });
             it("should throw an exception if size is larger than range", () => {
-                let originalRange = new Range(
+                let originalRange = new RangedSet(
                     IPv6.fromHexadecimalString("2001:d00:0:0:0:0:0:0"),
                     IPv6.fromHexadecimalString("2001:dff:ffff:ffff:ffff:ffff:ffff:ffff")
                 );
@@ -280,7 +280,7 @@ describe('Range: ', () => {
             });
 
             it("should throw an exception if size is larger than range due to offset", () => {
-                let originalRange = new Range(
+                let originalRange = new RangedSet(
                     IPv6.fromHexadecimalString("2001:d00:0:0:0:0:0:0"),
                     IPv6.fromHexadecimalString("2001:dff:ffff:ffff:ffff:ffff:ffff:ffff")
                 );
@@ -295,12 +295,12 @@ describe('Range: ', () => {
     describe("Subtract Range", () => {
         describe("IPv4", () => {
             it("it should subtract all", () => {
-                let original = new Range(
+                let original = new RangedSet(
                     IPv4.fromDecimalDottedString("127.0.0.0"),
                     IPv4.fromDecimalDottedString("127.0.0.255")
                 );
 
-                let toSubtract = new Range(
+                let toSubtract = new RangedSet(
                     IPv4.fromDecimalDottedString("127.0.0.0"),
                     IPv4.fromDecimalDottedString("127.0.0.255")
                 );
@@ -310,12 +310,12 @@ describe('Range: ', () => {
             });
 
             it("it should subtract from beginning", () => {
-                let original = new Range(
+                let original = new RangedSet(
                     IPv4.fromDecimalDottedString("127.0.0.0"),
                     IPv4.fromDecimalDottedString("127.0.0.255")
                 );
 
-                let toSubtract = new Range(
+                let toSubtract = new RangedSet(
                     IPv4.fromDecimalDottedString("127.0.0.0"),
                     IPv4.fromDecimalDottedString("127.0.0.3")
                 );
@@ -326,12 +326,12 @@ describe('Range: ', () => {
             });
 
             it("it should subtract up to end", () => {
-                let original = new Range(
+                let original = new RangedSet(
                     IPv4.fromDecimalDottedString("127.0.0.0"),
                     IPv4.fromDecimalDottedString("127.0.0.255")
                 );
 
-                let toSubtract = new Range(
+                let toSubtract = new RangedSet(
                     IPv4.fromDecimalDottedString("127.0.0.253"),
                     IPv4.fromDecimalDottedString("127.0.0.255")
                 );
@@ -342,12 +342,12 @@ describe('Range: ', () => {
             });
 
             it("it should subtract from middle", () => {
-                let original = new Range(
+                let original = new RangedSet(
                     IPv4.fromDecimalDottedString("127.0.0.0"),
                     IPv4.fromDecimalDottedString("127.0.0.255")
                 );
 
-                let toSubtract = new Range(
+                let toSubtract = new RangedSet(
                     IPv4.fromDecimalDottedString("127.0.0.240"),
                     IPv4.fromDecimalDottedString("127.0.0.250")
                 );
@@ -360,12 +360,12 @@ describe('Range: ', () => {
 
             describe("Less than test", () => {
                 it('should tell if less than if first ip is less', () => {
-                    let first = new Range(
+                    let first = new RangedSet(
                         IPv4.fromDecimalDottedString("192.168.0.128"),
                         IPv4.fromDecimalDottedString("192.168.0.159")
                     );
 
-                    let second = new Range(
+                    let second = new RangedSet(
                         IPv4.fromDecimalDottedString("192.168.0.16"),
                         IPv4.fromDecimalDottedString("192.168.0.63")
                     );
@@ -374,12 +374,12 @@ describe('Range: ', () => {
                     expect(second.isLessThan(first)).toBe(true);
                 });
                 it('should tell if less than based on size if first ip is same', () => {
-                    let first = new Range(
+                    let first = new RangedSet(
                         IPv4.fromDecimalDottedString("192.168.0.128"),
                         IPv4.fromDecimalDottedString("192.168.0.159")
                     );
 
-                    let second = new Range(
+                    let second = new RangedSet(
                         IPv4.fromDecimalDottedString("192.168.0.128"),
                         IPv4.fromDecimalDottedString("192.168.0.255")
                     );
@@ -388,12 +388,12 @@ describe('Range: ', () => {
                     expect(second.isLessThan(first)).toBe(false);
                 });
                 it('should tell if less than when equals', () => {
-                    let first = new Range(
+                    let first = new RangedSet(
                         IPv4.fromDecimalDottedString("192.168.0.128"),
                         IPv4.fromDecimalDottedString("192.168.0.159")
                     );
 
-                    let second = new Range(
+                    let second = new RangedSet(
                         IPv4.fromDecimalDottedString("192.168.0.128"),
                         IPv4.fromDecimalDottedString("192.168.0.159")
                     );
@@ -404,12 +404,12 @@ describe('Range: ', () => {
             });
             describe("Greater than test", () => {
                 it('should tell if less than if first ip is less', () => {
-                    let first = new Range(
+                    let first = new RangedSet(
                         IPv4.fromDecimalDottedString("192.168.0.128"),
                         IPv4.fromDecimalDottedString("192.168.0.159")
                     );
 
-                    let second = new Range(
+                    let second = new RangedSet(
                         IPv4.fromDecimalDottedString("192.168.0.16"),
                         IPv4.fromDecimalDottedString("192.168.0.63")
                     );
@@ -418,12 +418,12 @@ describe('Range: ', () => {
                     expect(second.isGreaterThan(first)).toBe(false);
                 });
                 it('should tell if less than based on size if first ip is same', () => {
-                    let first = new Range(
+                    let first = new RangedSet(
                         IPv4.fromDecimalDottedString("192.168.0.128"),
                         IPv4.fromDecimalDottedString("192.168.0.159")
                     );
 
-                    let second = new Range(
+                    let second = new RangedSet(
                         IPv4.fromDecimalDottedString("192.168.0.128"),
                         IPv4.fromDecimalDottedString("192.168.0.255")
                     );
@@ -432,12 +432,12 @@ describe('Range: ', () => {
                     expect(second.isGreaterThan(first)).toBe(true);
                 });
                 it('should tell if less than when equals', () => {
-                    let first = new Range(
+                    let first = new RangedSet(
                         IPv4.fromDecimalDottedString("192.168.0.128"),
                         IPv4.fromDecimalDottedString("192.168.0.159")
                     );
 
-                    let second = new Range(
+                    let second = new RangedSet(
                         IPv4.fromDecimalDottedString("192.168.0.128"),
                         IPv4.fromDecimalDottedString("192.168.0.159")
                     );
@@ -451,12 +451,12 @@ describe('Range: ', () => {
 
         describe("IPv6", () => {
             it("it should subtract all", () => {
-                let original = new Range(
+                let original = new RangedSet(
                     IPv6.fromHexadecimalString("2620:0:0:0:0:0:0:0"),
                     IPv6.fromHexadecimalString("2620:0:ffff:ffff:ffff:ffff:ffff:ffff")
                 );
 
-                let toSubtract = new Range(
+                let toSubtract = new RangedSet(
                     IPv6.fromHexadecimalString("2620:0:0:0:0:0:0:0"),
                     IPv6.fromHexadecimalString("2620:0:ffff:ffff:ffff:ffff:ffff:ffff")
                 );
@@ -466,12 +466,12 @@ describe('Range: ', () => {
             });
 
             it("it should subtract from beginning", () => {
-                let original = new Range(
+                let original = new RangedSet(
                     IPv6.fromHexadecimalString("2620:0:0:0:0:0:0:0"),
                     IPv6.fromHexadecimalString("2620:0:ffff:ffff:ffff:ffff:ffff:ffff")
                 );
 
-                let toSubtract = new Range(
+                let toSubtract = new RangedSet(
                     IPv6.fromHexadecimalString("2620:0:0:0:0:0:0:3"),
                     IPv6.fromHexadecimalString("2620:0:ffff:ffff:ffff:ffff:ffff:ffff")
                 );
@@ -482,12 +482,12 @@ describe('Range: ', () => {
             });
 
             it("it should subtract up to end", () => {
-                let original = new Range(
+                let original = new RangedSet(
                     IPv6.fromHexadecimalString("2620:0:0:0:0:0:0:0"),
                     IPv6.fromHexadecimalString("2620:0:ffff:ffff:ffff:ffff:ffff:ffff")
                 );
 
-                let toSubtract = new Range(
+                let toSubtract = new RangedSet(
                     IPv6.fromHexadecimalString("2620:0:0:0:0:0:0:bbbb"),
                     IPv6.fromHexadecimalString("2620:0:ffff:ffff:ffff:ffff:ffff:ffff")
                 );
@@ -498,12 +498,12 @@ describe('Range: ', () => {
             });
 
             it("it should subtract from middle", () => {
-                let original = new Range(
+                let original = new RangedSet(
                     IPv6.fromHexadecimalString("2620:0:0:0:0:0:0:0"),
                     IPv6.fromHexadecimalString("2620:0:ffff:ffff:ffff:ffff:ffff:ffff")
                 );
 
-                let toSubtract = new Range(
+                let toSubtract = new RangedSet(
                     IPv6.fromHexadecimalString("2620:0:0:0:0:0:0:200"),
                     IPv6.fromHexadecimalString("2620:0:0:0:0:0:0:400")
                 );
@@ -516,12 +516,12 @@ describe('Range: ', () => {
 
             describe("Less than test", () => {
                 it('should tell if less than if first ip is less', () => {
-                    let first = new Range(
+                    let first = new RangedSet(
                         IPv6.fromHexadecimalString("3620:0:0:0:0:0:0:0"),
                         IPv6.fromHexadecimalString("3620:0:ffff:ffff:ffff:ffff:ffff:ffff")
                     );
 
-                    let second = new Range(
+                    let second = new RangedSet(
                         IPv6.fromHexadecimalString("2620:0:0:0:0:0:0:0"),
                         IPv6.fromHexadecimalString("2620:0:ffff:ffff:ffff:ffff:ffff:ffff")
                     );
@@ -530,12 +530,12 @@ describe('Range: ', () => {
                     expect(second.isLessThan(first)).toBe(true);
                 });
                 it('should tell if less than based on size if first ip is same', () => {
-                    let first = new Range(
+                    let first = new RangedSet(
                         IPv6.fromHexadecimalString("3620:0:0:0:0:0:0:0"),
                         IPv6.fromHexadecimalString("3620:0:0:0:0:0:0:ffff")
                     );
 
-                    let second = new Range(
+                    let second = new RangedSet(
                         IPv6.fromHexadecimalString("3620:0:0:0:0:0:0:0"),
                         IPv6.fromHexadecimalString("3620:0:ffff:ffff:ffff:ffff:ffff:ffff")
                     );
@@ -544,12 +544,12 @@ describe('Range: ', () => {
                     expect(second.isLessThan(first)).toBe(false);
                 });
                 it('should tell if less than when equals', () => {
-                    let first = new Range(
+                    let first = new RangedSet(
                         IPv6.fromHexadecimalString("3620:0:0:0:0:0:0:0"),
                         IPv6.fromHexadecimalString("3620:0:ffff:ffff:ffff:ffff:ffff:ffff")
                     );
 
-                    let second = new Range(
+                    let second = new RangedSet(
                         IPv6.fromHexadecimalString("3620:0:0:0:0:0:0:0"),
                         IPv6.fromHexadecimalString("3620:0:ffff:ffff:ffff:ffff:ffff:ffff")
                     );
@@ -560,12 +560,12 @@ describe('Range: ', () => {
             });
             describe("Greater than test", () => {
                 it('should tell if less than if first ip is less', () => {
-                    let first = new Range(
+                    let first = new RangedSet(
                         IPv6.fromHexadecimalString("3620:0:0:0:0:0:0:0"),
                         IPv6.fromHexadecimalString("3620:0:ffff:ffff:ffff:ffff:ffff:ffff")
                     );
 
-                    let second = new Range(
+                    let second = new RangedSet(
                         IPv6.fromHexadecimalString("2620:0:0:0:0:0:0:0"),
                         IPv6.fromHexadecimalString("2620:0:ffff:ffff:ffff:ffff:ffff:ffff")
                     );
@@ -574,12 +574,12 @@ describe('Range: ', () => {
                     expect(second.isGreaterThan(first)).toBe(false);
                 });
                 it('should tell if less than based on size if first ip is same', () => {
-                    let first = new Range(
+                    let first = new RangedSet(
                         IPv6.fromHexadecimalString("3620:0:0:0:0:0:0:0"),
                         IPv6.fromHexadecimalString("3620:0:0:0:0:0:0:ffff")
                     );
 
-                    let second = new Range(
+                    let second = new RangedSet(
                         IPv6.fromHexadecimalString("3620:0:0:0:0:0:0:0"),
                         IPv6.fromHexadecimalString("3620:0:ffff:ffff:ffff:ffff:ffff:ffff")
                     );
@@ -588,12 +588,12 @@ describe('Range: ', () => {
                     expect(second.isGreaterThan(first)).toBe(true);
                 });
                 it('should tell if less than when equals', () => {
-                    let first = new Range(
+                    let first = new RangedSet(
                         IPv6.fromHexadecimalString("3620:0:0:0:0:0:0:0"),
                         IPv6.fromHexadecimalString("3620:0:ffff:ffff:ffff:ffff:ffff:ffff")
                     );
 
-                    let second = new Range(
+                    let second = new RangedSet(
                         IPv6.fromHexadecimalString("3620:0:0:0:0:0:0:0"),
                         IPv6.fromHexadecimalString("3620:0:ffff:ffff:ffff:ffff:ffff:ffff")
                     );

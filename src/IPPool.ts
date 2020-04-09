@@ -1,52 +1,52 @@
-import {IPv4CidrRange, IPv6CidrRange, Range} from "./IPRange";
+import {IPv4CidrRange, IPv6CidrRange, RangedSet} from "./IPRange";
 import {IPv4, IPv6} from "./IPNumber";
 import {IPv4Prefix, IPv6Prefix, Prefix} from "./Prefix";
 import * as bigInt from "big-integer";
 
 /**
- * Represents a collection of IP {@link Range}'s
+ * Represents a collection of IP {@link RangedSet}'s
  */
-export class Pool<T extends Range<IPv4 | IPv6>> {
+export class Pool<T extends RangedSet<IPv4 | IPv6>> {
     private backingSet: SortedSet = new SortedSet();
 
     /**
      * Convenient method for creating an instance from arrays of {@link IPv4} or {@link IPv6}
      * @param ipNumbers the arrays of {@link IPv4} or {@link IPv6} that will make up the pool.
      */
-    public static fromIPNumbers(ipNumbers: Array<IPv4 | IPv6>): Pool<Range<IPv4 | IPv6>> {
-        let ranges: Array<Range<IPv4 | IPv6>> = ipNumbers.map((ip:IPv4 | IPv6) => {
-            return Range.fromSingleIP(ip);
+    public static fromIPNumbers(ipNumbers: Array<IPv4 | IPv6>): Pool<RangedSet<IPv4 | IPv6>> {
+        let ranges: Array<RangedSet<IPv4 | IPv6>> = ipNumbers.map((ip:IPv4 | IPv6) => {
+            return RangedSet.fromSingleIP(ip);
         });
 
         return new Pool(ranges);
     }
 
     /**
-     * Convenient method for creating an instance from arrays of {@link Range}.
+     * Convenient method for creating an instance from arrays of {@link RangedSet}.
      *
-     * @param ipRanges the arrays of {@link Range}'s that will make up the pool.
+     * @param ipRanges the arrays of {@link RangedSet}'s that will make up the pool.
      */
-    public static fromIPRanges(ipRanges: Array<Range<IPv4 | IPv6>>): Pool<Range<IPv4 | IPv6>> {
+    public static fromIPRanges(ipRanges: Array<RangedSet<IPv4 | IPv6>>): Pool<RangedSet<IPv4 | IPv6>> {
         return new Pool(ipRanges);
     }
 
     /**
      * Constructor for an IP pool.
      *
-     * Creates a Pool of IP ranges from supplied {@link Range}'s
+     * Creates a Pool of IP ranges from supplied {@link RangedSet}'s
      *
      * @param ranges the array of IP ranges that would make up the pool.
      */
-    constructor(ranges: Array<Range<IPv4 | IPv6>>) {
+    constructor(ranges: Array<RangedSet<IPv4 | IPv6>>) {
         ranges.forEach(range => {
             this.backingSet.add(range);
         })
     }
 
     /**
-     * Returns an array of {@link Range}'s that is contained within the pool
+     * Returns an array of {@link RangedSet}'s that is contained within the pool
      */
-    public getRanges(): Array<Range<IPv4 | IPv6>> {
+    public getRanges(): Array<RangedSet<IPv4 | IPv6>> {
         return this.backingSet.asArray();
     }
 
@@ -54,9 +54,9 @@ export class Pool<T extends Range<IPv4 | IPv6>> {
      * Returns an new {@link Pool} with all the IP ranges aggregated
      */
     public aggregate(): Pool<T> {
-        let sortedRanges:Array<Range<IPv4 | IPv6>> = this.backingSet.asArray();
-        let mergedRanges = sortedRanges.reduce<Array<Range<IPv4 | IPv6>>>
-        ((accumulator:Array<Range<IPv4 | IPv6>>, currentRange: Range<IPv4 | IPv6>, currentIndex: number, array: Range<IPv4 | IPv6>[]) => {
+        let sortedRanges:Array<RangedSet<IPv4 | IPv6>> = this.backingSet.asArray();
+        let mergedRanges = sortedRanges.reduce<Array<RangedSet<IPv4 | IPv6>>>
+        ((accumulator:Array<RangedSet<IPv4 | IPv6>>, currentRange: RangedSet<IPv4 | IPv6>, currentIndex: number, array: RangedSet<IPv4 | IPv6>[]) => {
             if (accumulator.length == 0) {
                 accumulator.push(currentRange);
                 return accumulator;
@@ -144,7 +144,7 @@ export class Pool<T extends Range<IPv4 | IPv6>> {
      *
      * @param ipRanges the range to fill the pool with after emptying
      */
-    public resetWith(ipRanges: Array<Range<IPv4 | IPv6>>) {
+    public resetWith(ipRanges: Array<RangedSet<IPv4 | IPv6>>) {
         this.backingSet.clear();
         this.backingSet = this.backingSet.add(ipRanges);
     }
@@ -154,15 +154,15 @@ export class Pool<T extends Range<IPv4 | IPv6>> {
      * It is a Noop, if the given range does not exist in the pool
      * @param rangeToRemove range to remove from ppol
      */
-    public removeExact(rangeToRemove: Range<IPv4 | IPv6>) {
+    public removeExact(rangeToRemove: RangedSet<IPv4 | IPv6>) {
         this.backingSet = this.backingSet.removeExact(rangeToRemove);
     }
 
-    public removeOverlapping(rangeToRemove: Range<IPv4 | IPv6>) {
+    public removeOverlapping(rangeToRemove: RangedSet<IPv4 | IPv6>) {
         this.backingSet = this.backingSet.removeOverlapping(rangeToRemove);
     }
 
-    public add(range: Array<Range<IPv4 | IPv6>>) {
+    public add(range: Array<RangedSet<IPv4 | IPv6>>) {
         this.backingSet = this.backingSet.add(range);
     }
 
@@ -171,7 +171,7 @@ export class Pool<T extends Range<IPv4 | IPv6>> {
     }
 }
 
-type T = Range<IPv4 | IPv6>;
+type T = RangedSet<IPv4 | IPv6>;
 class SortedSet {
 
     public backingArray: Array<T>;
@@ -236,7 +236,7 @@ class SortedSet {
     public removeOverlapping(items: T): SortedSet;
     public removeOverlapping(items: T | Array<T>): SortedSet {
 
-        let filtered:Array<Range<IPv4 | IPv6>> = this.backingArray
+        let filtered:Array<RangedSet<IPv4 | IPv6>> = this.backingArray
             .flatMap(backingItem => {
 
                 if ("push" in items) {
@@ -245,7 +245,7 @@ class SortedSet {
                         if (backingItem.contains(item)) {
                             return backingItem.difference(item);
                         } else if (backingItem.inside(item)) {
-                            return new Array<Range<IPv4 | IPv6>>();
+                            return new Array<RangedSet<IPv4 | IPv6>>();
                         } else if (backingItem.isOverlapping(item)) {
                             return [backingItem.subtract(item)];
                         } else {
