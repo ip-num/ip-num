@@ -38,6 +38,31 @@ export class RangedSet<T extends IPv4 | IPv6> implements Iterable<IPv4 | IPv6> {
     }
 
     /**
+     * Convenience method for constructing an instance of {@link RangedSet} from
+     * a range string in the form of firstIp-lastIp
+     *
+     * @param rangeString  string in the form of firstIp-lastIp
+     */
+    static fromRangeString(rangeString: String) {
+        let ips = rangeString.split("-").map(ip => ip.trim());
+
+        if (ips.length !== 2) {
+            throw new Error("Argument should be in the format firstip-lastip");
+        }
+
+        let firstIPstring = ips[0];
+        let lastIPstring = ips[1];
+
+        if (Validator.isValidIPv4String(firstIPstring)[0] && Validator.isValidIPv4String(lastIPstring)[0]) {
+            return new RangedSet(IPv4.fromDecimalDottedString(firstIPstring), IPv4.fromDecimalDottedString(lastIPstring))
+        } else if (Validator.isValidIPv6String(firstIPstring)[0] && Validator.isValidIPv6String(lastIPstring)[0]) {
+            return new RangedSet(IPv6.fromHexadecimalString(firstIPstring), IPv6.fromHexadecimalString(lastIPstring))
+        } else {
+            throw new Error("First IP and Last IP should be valid and same type");
+        }
+    }
+
+    /**
      * Constructor for an instance of {@link RangedSet} from an
      * instance of either {@link IPv4CidrRange} or {@link IPv6CidrRange}
      *

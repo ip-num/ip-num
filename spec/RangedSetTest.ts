@@ -2,13 +2,49 @@ import {IPv4, IPv4CidrRange, IPv4Prefix, IPv6, IPv6CidrRange, IPv6Prefix, Ranged
 import bigInt = require("big-integer");
 
 
-describe('Range: ', () => {
+describe('RangedSet: ', () => {
 
     it("create from single IPv4", () => {
         let singleton = RangedSet.fromSingleIP(new IPv4("0.0.0.254"));
         expect(singleton.getSize().valueOf()).toBe(1);
         expect(singleton.getFirst().toString()).toBe("0.0.0.254");
         expect(singleton.getLast().toString()).toBe("0.0.0.254");
+    });
+
+    it("create from range string", () => {
+        let rangedSet= RangedSet.fromRangeString("127.0.0.0-127.0.0.255");
+        expect(rangedSet.getFirst().toString()).toEqual("127.0.0.0");
+        expect(rangedSet.getLast().toString()).toEqual("127.0.0.255");
+    });
+
+    it("create from range string with spaces", () => {
+        let rangedSet= RangedSet.fromRangeString("127.0.0.0 - 127.0.0.255");
+        expect(rangedSet.getFirst().toString()).toEqual("127.0.0.0");
+        expect(rangedSet.getLast().toString()).toEqual("127.0.0.255");
+    });
+
+    it("throw if create string is not well formed I", () => {
+        expect(() => {
+            let rangedSet= RangedSet.fromRangeString("127.0.0.0127.0.0.255");
+        }).toThrowError(Error, "Argument should be in the format firstip-lastip");
+    });
+
+    it("throw if create string is not well formed II", () => {
+        expect(() => {
+            let rangedSet= RangedSet.fromRangeString("127.0.0.0--127.0.0.255");
+        }).toThrowError(Error, "Argument should be in the format firstip-lastip");
+    });
+
+    it("throw if create string is not well formed II", () => {
+        expect(() => {
+            let rangedSet= RangedSet.fromRangeString("127.0.0-127.0.0");
+        }).toThrowError(Error, "First IP and Last IP should be valid and same type");
+    });
+
+    it("throw if create string is not well formed II", () => {
+        expect(() => {
+            let rangedSet= RangedSet.fromRangeString("127.0.0.0-2001:db8:0:ffff:ffff:ffff:ffff:ffff");
+        }).toThrowError(Error, "First IP and Last IP should be valid and same type");
     });
 
     it("create from single IPv6", () => {
@@ -450,6 +486,37 @@ describe('Range: ', () => {
         });
 
         describe("IPv6", () => {
+
+            it("create from range string", () => {
+                let rangedSet= RangedSet.fromRangeString("2620:0:0:0:0:0:0:0-2620:0:ffff:ffff:ffff:ffff:ffff:ffff");
+                expect(rangedSet.getFirst().toString()).toEqual("2620:0:0:0:0:0:0:0");
+                expect(rangedSet.getLast().toString()).toEqual("2620:0:ffff:ffff:ffff:ffff:ffff:ffff");
+            });
+
+            it("create from range string with spaces", () => {
+                let rangedSet= RangedSet.fromRangeString("2620:0:0:0:0:0:0:0 - 2620:0:ffff:ffff:ffff:ffff:ffff:ffff");
+                expect(rangedSet.getFirst().toString()).toEqual("2620:0:0:0:0:0:0:0");
+                expect(rangedSet.getLast().toString()).toEqual("2620:0:ffff:ffff:ffff:ffff:ffff:ffff");
+            });
+
+            it("throw if create string is not well formed I", () => {
+                expect(() => {
+                    let rangedSet= RangedSet.fromRangeString("2620:0:0:0:0:0:0:02620:0:ffff:ffff:ffff:ffff:ffff:ffff");
+                }).toThrowError(Error, "Argument should be in the format firstip-lastip");
+            });
+
+            it("throw if create string is not well formed II", () => {
+                expect(() => {
+                    let rangedSet= RangedSet.fromRangeString("2620:0:0:0:0:0:0:0 -- 2620:0:ffff:ffff:ffff:ffff:ffff:ffff");
+                }).toThrowError(Error, "Argument should be in the format firstip-lastip");
+            });
+
+            it("throw if create string is not well formed II", () => {
+                expect(() => {
+                    let rangedSet= RangedSet.fromRangeString("2620::::0:0 - 2620:0:ffff:ffff:ffff:ffff:ffff:ffff");
+                }).toThrowError(Error, "First IP and Last IP should be valid and same type");
+            });
+
             it("it should subtract all", () => {
                 let original = new RangedSet(
                     IPv6.fromHexadecimalString("2620:0:0:0:0:0:0:0"),
