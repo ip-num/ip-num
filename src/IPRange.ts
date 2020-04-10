@@ -43,20 +43,25 @@ export class RangedSet<T extends IPv4 | IPv6> implements Iterable<IPv4 | IPv6> {
      *
      * @param rangeString  string in the form of firstIp-lastIp
      */
-    static fromRangeString(rangeString: String) {
+    static fromRangeString(rangeString: string) {
         let ips = rangeString.split("-").map(ip => ip.trim());
 
         if (ips.length !== 2) {
             throw new Error("Argument should be in the format firstip-lastip");
         }
 
-        let firstIPstring = ips[0];
-        let lastIPstring = ips[1];
+        let [firstIPString, lastIPString] = ips;
 
-        if (Validator.isValidIPv4String(firstIPstring)[0] && Validator.isValidIPv4String(lastIPstring)[0]) {
-            return new RangedSet(IPv4.fromDecimalDottedString(firstIPstring), IPv4.fromDecimalDottedString(lastIPstring))
-        } else if (Validator.isValidIPv6String(firstIPstring)[0] && Validator.isValidIPv6String(lastIPstring)[0]) {
-            return new RangedSet(IPv6.fromHexadecimalString(firstIPstring), IPv6.fromHexadecimalString(lastIPstring))
+        let [isValidFirstIPv4, ] = Validator.isValidIPv4String(firstIPString);
+        let [isValidSecondIPv4, ] = Validator.isValidIPv4String(lastIPString);
+
+        let [isValidFirstIPv6, ] = Validator.isValidIPv6String(firstIPString);
+        let [isValidLastIPv6, ] = Validator.isValidIPv6String(lastIPString);
+
+        if (isValidFirstIPv4 && isValidSecondIPv4) {
+            return new RangedSet(IPv4.fromDecimalDottedString(firstIPString), IPv4.fromDecimalDottedString(lastIPString))
+        } else if (isValidFirstIPv6 && isValidLastIPv6) {
+            return new RangedSet(IPv6.fromHexadecimalString(firstIPString), IPv6.fromHexadecimalString(lastIPString))
         } else {
             throw new Error("First IP and Last IP should be valid and same type");
         }
