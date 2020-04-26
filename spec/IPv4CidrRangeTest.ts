@@ -45,7 +45,7 @@ describe('IPv4CidrRange: ', () => {
     });
     it('should return the correct list of IPv4 numbers when takeStream is called and looped over using for of', () => {
       let ipv4CidrRange = new IPv4CidrRange(new IPv4("0.0.0.0"), new IPv4Prefix(0));
-      let ranges = ipv4CidrRange.toRange().take(3);
+      let ranges = ipv4CidrRange.toRangeSet().take(3);
       let length = 0;
       for (let iprange of ranges) {
         length++;
@@ -56,7 +56,7 @@ describe('IPv4CidrRange: ', () => {
 
     it('should return the correct list of IPv4 numbers when takeStream is called and assigned to variables', () => {
       let ipv4CidrRange = new IPv4CidrRange(new IPv4("0.0.0.0"), new IPv4Prefix(0));
-      let ranges = ipv4CidrRange.toRange().take(3);
+      let ranges = ipv4CidrRange.toRangeSet().take(3);
       let [first, second, third] = ranges;
 
       expect(first.toString()).toBe("0.0.0.0");
@@ -66,7 +66,7 @@ describe('IPv4CidrRange: ', () => {
 
     it('should return all list of IPv4 numbers when takeStream is called without passing in a count', () => {
         let ipv4CidrRange = new IPv4CidrRange(new IPv4("0.0.0.0"), new IPv4Prefix(30));
-        let ranges = ipv4CidrRange.toRange().take();
+        let ranges = ipv4CidrRange.toRangeSet().take();
         let [first, second, third, fourth, fifth] = ranges;
 
         expect(first.toString()).toBe("0.0.0.0");

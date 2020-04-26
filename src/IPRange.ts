@@ -421,28 +421,28 @@ export abstract class AbstractIPRange<T extends IPv4 | IPv6, P extends IPv4Prefi
     }
 
 
-    public toRange(): RangedSet<IPv4 | IPv6> {
+    public toRangeSet(): RangedSet<IPv4 | IPv6> {
         return new RangedSet(this.getFirst(), this.getLast());
     }
 
     public inside(otherRange: IPv6CidrRange | IPv4CidrRange): boolean {
-        return this.toRange().inside(otherRange.toRange())
+        return this.toRangeSet().inside(otherRange.toRangeSet())
     }
 
     public contains(otherRange: IPv6CidrRange | IPv4CidrRange): boolean {
-        return this.toRange().contains(otherRange.toRange());
+        return this.toRangeSet().contains(otherRange.toRangeSet());
     }
 
     public toRangeString(): string {
-        return this.toRange().toRangeString();
+        return this.toRangeSet().toRangeString();
     }
 
     public isOverlapping(otherRange: IPv6CidrRange | IPv4CidrRange): boolean {
-        return this.toRange().isOverlapping(otherRange.toRange());
+        return this.toRangeSet().isOverlapping(otherRange.toRangeSet());
     }
 
     public isConsecutive(otherRange: IPv6CidrRange | IPv4CidrRange): boolean {
-        return this.toRange().isConsecutive(otherRange.toRange());
+        return this.toRangeSet().isConsecutive(otherRange.toRangeSet());
     }
 
     public isCidrMergeable(otherRange: IPv6CidrRange | IPv4CidrRange): boolean {
@@ -456,7 +456,7 @@ export abstract class AbstractIPRange<T extends IPv4 | IPv6, P extends IPv4Prefi
     }
 
     public isEquals(otherRange: IPv6CidrRange | IPv4CidrRange): boolean {
-        return this.toRange().isEquals(otherRange.toRange());
+        return this.toRangeSet().isEquals(otherRange.toRangeSet());
     }
 
     public merge(otherRange: IPv6CidrRange | IPv4CidrRange): IPv6CidrRange | IPv4CidrRange {
@@ -477,11 +477,11 @@ export abstract class AbstractIPRange<T extends IPv4 | IPv6, P extends IPv4Prefi
      * If none is given, the whole IP range is lazily returned.
      */
     public *takeStream(count?: number): Iterable<IPv4 | IPv6> {
-        return this.toRange().take(count);
+        return this.toRangeSet().take(count);
     }
 
     *[Symbol.iterator](): Iterator<IPv4 | IPv6> {
-        yield* this.toRange();
+        yield* this.toRangeSet();
     }
 }
 

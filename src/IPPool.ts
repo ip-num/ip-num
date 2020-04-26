@@ -26,8 +26,23 @@ export class Pool<T extends RangedSet<IPv4 | IPv6>> {
      *
      * @param ipRanges the arrays of {@link RangedSet}'s that will make up the pool.
      */
-    public static fromIPRanges(ipRanges: Array<RangedSet<IPv4 | IPv6>>): Pool<RangedSet<IPv4 | IPv6>> {
+    // TODO: TSE: This makes it possible to create an instance containing both Range set of IPv4 and IPv6
+    public static fromRangeSet(ipRanges: Array<RangedSet<IPv4 | IPv6>>): Pool<RangedSet<IPv4 | IPv6>> {
         return new Pool(ipRanges);
+    }
+
+    /**
+     * Convenient method for creating an instance from arrays of {@link IPv4CidrRange} or {@link IPv6CidrRange}.
+     *
+     * @param cidrRanges the arrays of {@link IPv4CidrRange} or {@link IPv6CidrRange} that will make up the pool.
+     */
+    public static fromCidrRange(cidrRanges: IPv4CidrRange[] | IPv6CidrRange[]) : Pool<RangedSet<IPv4 | IPv6>> {
+        let cidr: Array<IPv4CidrRange | IPv6CidrRange> = cidrRanges as (IPv4CidrRange | IPv6CidrRange)[];
+        let rangeSet:RangedSet<IPv4 | IPv6>[] = cidr.map((range:IPv4CidrRange | IPv6CidrRange) => {
+            return range.toRangeSet();
+        })
+
+        return new Pool(rangeSet);
     }
 
     /**
@@ -67,7 +82,7 @@ export class Pool<T extends RangedSet<IPv4 | IPv6>> {
 
                 if (previousCidrRange.isCidrMergeable(currentCidrRange)) {
                     let merged = previousCidrRange.merge(currentCidrRange);
-                    accumulator.push(merged.toRange());
+                    accumulator.push(merged.toRangeSet());
                     return accumulator;
                 } else {
                     if (!previous.contains(currentRange)) {
@@ -81,7 +96,7 @@ export class Pool<T extends RangedSet<IPv4 | IPv6>> {
             }
         }, []);
 
-        let aggregatedPool = Pool.fromIPRanges(mergedRanges);
+        let aggregatedPool = Pool.fromRangeSet(mergedRanges);
         if (aggregatedPool.getRanges().length !== this.getRanges().length) {
             return aggregatedPool.aggregate();
         } else {
@@ -106,17 +121,15 @@ export class Pool<T extends RangedSet<IPv4 | IPv6>> {
 
         loop:
         for (let range of this.getRanges()) {
-            for (var offset = bigInt.zero; offset.lesserOrEquals(range.getSize()); offset.plus(bigInt.one)) {
-                try {
-                    let selectedRange = range.takeSubRange(offset, prefix.toRangeSize());
-                    selectedCidrRange = selectedRange.toCidrRange();
-                    let remaining = range.difference(selectedRange);
-                    this.removeExact(range);
-                    this.add(remaining);
-                    break loop;
-                } catch (e) {
-                    error = e
-                }
+            for (var offset = bigInt.zero; offset.lesserOrEquals(range.getSize()); offset.plus(bigInt.one)) try {
+                let selectedRange = range.takeSubRange(offset, prefix.toRangeSize());
+                selectedCidrRange = selectedRange.toCidrRange();
+                let remaining = range.difference(selectedRange);
+                this.removeExact(range);
+                this.add(remaining);
+                break loop;
+            } catch (e) {
+                error = e
             }
         }
 
