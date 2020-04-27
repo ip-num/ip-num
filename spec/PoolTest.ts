@@ -4,6 +4,14 @@ import bigInt = require("big-integer");
 
 describe('Pool', () => {
     describe('IPV4', () => {
+        it('Should create from IP Numbers', () => {
+            let pool = Pool
+                .fromIPNumbers([IPv4.fromDecimalDottedString("10.0.0.1"), IPv4.fromDecimalDottedString("10.0.0.2")]);
+            let ranges = pool.getRanges();
+            expect(ranges[0].toCidrRange().toCidrString()).toEqual("10.0.0.1/32")
+            expect(ranges[1].toCidrRange().toCidrString()).toEqual("10.0.0.2/32")
+        });
+
         it('Should create from CIDR', () => {
             let pool = Pool
                 .fromCidrRange([IPv4CidrRange.fromCidr("192.168.178.0/24"), IPv4CidrRange.fromCidr("10.0.0.0/24")]);

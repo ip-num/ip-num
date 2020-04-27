@@ -3,18 +3,19 @@ import {IPv4, IPv6} from "./IPNumber";
 import {IPv4Prefix, IPv6Prefix, Prefix} from "./Prefix";
 import * as bigInt from "big-integer";
 
+type RangeType = RangedSet<IPv4> | RangedSet<IPv6>;
 /**
  * Represents a collection of IP {@link RangedSet}'s
  */
-export class Pool<T extends RangedSet<IPv4 | IPv6>> {
+export class Pool<T extends RangeType> {
     private backingSet: SortedSet = new SortedSet();
 
     /**
      * Convenient method for creating an instance from arrays of {@link IPv4} or {@link IPv6}
      * @param ipNumbers the arrays of {@link IPv4} or {@link IPv6} that will make up the pool.
      */
-    public static fromIPNumbers(ipNumbers: Array<IPv4 | IPv6>): Pool<RangedSet<IPv4 | IPv6>> {
-        let ranges: Array<RangedSet<IPv4 | IPv6>> = ipNumbers.map((ip:IPv4 | IPv6) => {
+    public static fromIPNumbers(ipNumbers: Array<IPv4> | Array<IPv6>): Pool<RangeType> {
+        let ranges: Array<RangedSet<IPv4 | IPv6>> = (ipNumbers as Array<IPv4 | IPv6>).map((ip:(IPv4 | IPv6)) => {
             return RangedSet.fromSingleIP(ip);
         });
 
@@ -27,7 +28,7 @@ export class Pool<T extends RangedSet<IPv4 | IPv6>> {
      * @param ipRanges the arrays of {@link RangedSet}'s that will make up the pool.
      */
     // TODO: TSE: This makes it possible to create an instance containing both Range set of IPv4 and IPv6
-    public static fromRangeSet(ipRanges: Array<RangedSet<IPv4 | IPv6>>): Pool<RangedSet<IPv4 | IPv6>> {
+    public static fromRangeSet(ipRanges: Array<RangedSet<IPv4 | IPv6>>): Pool<RangeType> {
         return new Pool(ipRanges);
     }
 
@@ -36,7 +37,7 @@ export class Pool<T extends RangedSet<IPv4 | IPv6>> {
      *
      * @param cidrRanges the arrays of {@link IPv4CidrRange} or {@link IPv6CidrRange} that will make up the pool.
      */
-    public static fromCidrRange(cidrRanges: IPv4CidrRange[] | IPv6CidrRange[]) : Pool<RangedSet<IPv4 | IPv6>> {
+    public static fromCidrRange(cidrRanges: IPv4CidrRange[] | IPv6CidrRange[]) : Pool<RangeType> {
         let cidr: Array<IPv4CidrRange | IPv6CidrRange> = cidrRanges as (IPv4CidrRange | IPv6CidrRange)[];
         let rangeSet:RangedSet<IPv4 | IPv6>[] = cidr.map((range:IPv4CidrRange | IPv6CidrRange) => {
             return range.toRangeSet();
