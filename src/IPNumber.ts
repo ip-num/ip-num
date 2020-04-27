@@ -180,6 +180,16 @@ export class IPv4 extends AbstractIPNum {
     }
 
     /**
+     * Alias for IPv4.fromDecimalDottedString.
+     *
+     * @param {string} ipString the IP number in dot-decimal notation
+     * @returns {IPv4} the IPv4 instance
+     */
+    static fromString(ipString: string): IPv4 {
+        return IPv4.fromDecimalDottedString(ipString);
+    }
+
+    /**
      * A convenience method for creating an {@link IPv4} from binary string
      *
      * @param {string} ipBinaryString the binary string representing the IPv4 number to be created
@@ -558,6 +568,16 @@ export class IPv6 extends AbstractIPNum {
      */
     static fromHexadecimalString(ipString: string) : IPv6 {
         return new IPv6(ipString);
+    }
+
+    /**
+     * Alias for IPv6.fromHexadecimalString
+     *
+     * @param {string} ipString the IP number in hexadecatet
+     * @returns {IPv6} the IPv6 instance
+     */
+    static fromString(ipString: string) : IPv6 {
+        return IPv6.fromHexadecimalString(ipString);
     }
 
     /**
