@@ -8,6 +8,8 @@ import {Validator} from "./Validator";
 import {IPv4Prefix} from "./Prefix";
 
 
+type InferRangeTypeFromIPType<T> = T extends IPv4 ? IPv4CidrRange : IPv6CidrRange;
+export type InferIPTypeFromRangeType<T> = T extends IPv4CidrRange ? IPv4 : IPv6;
 /**
  * Represents a continuous segment of either IPv4 or IPv6 numbers
  * without adhering to classless inter-domain routing scheme
@@ -33,8 +35,11 @@ export class RangedSet<T extends IPv4 | IPv6> implements Iterable<IPv4 | IPv6> {
      *
      * @param cidrRange an instance of {@link RangedSet}
      */
-    static fromCidrRange(cidrRange: IPv6CidrRange | IPv4CidrRange) {
-        return new RangedSet(cidrRange.getFirst(), cidrRange.getLast());
+    static fromCidrRange<U extends IPv6CidrRange | IPv4CidrRange>(cidrRange: U): RangedSet<InferIPTypeFromRangeType<U>> {
+        return new RangedSet(
+            cidrRange.getFirst() as InferIPTypeFromRangeType<U>,
+            cidrRange.getLast() as InferIPTypeFromRangeType<U>
+        );
     }
 
     /**
@@ -510,7 +515,7 @@ export class IPv4CidrRange extends AbstractIPRange<IPv4, IPv4Prefix> {
         let ipString = cidrComponents[0];
         let prefix = parseInt(cidrComponents[1]);
         return new IPv4CidrRange(IPv4.fromDecimalDottedString(ipString), IPv4Prefix.fromNumber(prefix));
-    };
+    }
 
     /**
      * Constructor for creating an instance of an IPv4 range.
