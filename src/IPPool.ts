@@ -1,6 +1,6 @@
 import {IPv4CidrRange, IPv6CidrRange, RangedSet} from "./IPRange";
 import {IPv4, IPv6} from "./IPNumber";
-import {IPv4Prefix, IPv6Prefix, Prefix} from "./Prefix";
+import {IPv4Prefix, IPv6Prefix} from "./Prefix";
 import * as bigInt from "big-integer";
 
 type RangeType = RangedSet<IPv4> | RangedSet<IPv6>;
@@ -113,7 +113,7 @@ export class Pool<T extends RangeType> {
      *
      * @param prefix prefix range to retrieve
      */
-    public getSingleRange(prefix: IPv4Prefix | IPv6Prefix): IPv4CidrRange | IPv6CidrRange {
+    public getSingleCidrRange(prefix: IPv4Prefix | IPv6Prefix): IPv4CidrRange | IPv6CidrRange {
         if (prefix.toRangeSize().gt(this.getSize())) {
             throw new Error(`Not enough IP number in the pool for requested prefix: ${prefix}`);
         }

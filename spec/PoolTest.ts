@@ -169,7 +169,7 @@ describe('Pool', () => {
             arrays.push(RangedSet.fromCidrRange(IPv4CidrRange.fromCidr("192.168.0.192/26")));
 
             let pool = Pool.fromRangeSet(arrays);
-            let range = pool.getSingleRange(IPv4Prefix.fromNumber(26));
+            let range = pool.getSingleCidrRange(IPv4Prefix.fromNumber(26));
             expect(range.toCidrString()).toEqual("192.168.0.0/26");
             expect(pool.getRanges().length).toEqual(2);
         });
@@ -182,7 +182,7 @@ describe('Pool', () => {
             arrays.push(RangedSet.fromCidrRange(IPv4CidrRange.fromCidr("192.168.0.192/26")));
 
             let pool = Pool.fromRangeSet(arrays);
-            let range = pool.getSingleRange(IPv4Prefix.fromNumber(28));
+            let range = pool.getSingleCidrRange(IPv4Prefix.fromNumber(28));
             expect(range.toCidrString()).toEqual("192.168.0.0/28");
             expect(pool.getRanges().length).toEqual(3);
             expect(pool.getRanges()[0].toRangeString()).toEqual("192.168.0.16-192.168.0.63");
@@ -198,7 +198,7 @@ describe('Pool', () => {
 
             let pool = Pool.fromRangeSet(arrays);
             expect(() => {
-                pool.getSingleRange(IPv4Prefix.fromNumber(24));
+                pool.getSingleCidrRange(IPv4Prefix.fromNumber(24));
             }).toThrowError(Error, "Not enough IP number in the pool for requested prefix: 24")
         });
     });
@@ -338,7 +338,7 @@ describe('Pool', () => {
 
             let pool = Pool.fromRangeSet(arrays);
 
-            let range = pool.getSingleRange(IPv6Prefix.fromNumber(127));
+            let range = pool.getSingleCidrRange(IPv6Prefix.fromNumber(127));
             expect(range.toCidrString()).toEqual("2001:db8:0:0:0:0:0:0/127");
             expect(pool.getRanges().length).toEqual(1);
         });
@@ -351,7 +351,7 @@ describe('Pool', () => {
 
             let pool = Pool.fromRangeSet(arrays);
             expect(() => {
-                pool.getSingleRange(IPv6Prefix.fromNumber(47));
+                pool.getSingleCidrRange(IPv6Prefix.fromNumber(47));
             }).toThrowError(Error, "Not enough IP number in the pool for requested prefix: 47")
         });
 
