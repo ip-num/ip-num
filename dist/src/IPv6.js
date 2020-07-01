@@ -210,7 +210,7 @@ var IPv6 = /** @class */ (function (_super) {
     };
     IPv6.prototype.binaryStringToHexadecatets = function (binaryString) {
         var hexadecimalString = HexadecimalUtils_1.binaryStringToHexadecimalString(binaryString);
-        while (hexadecimalString.length < 32) {
+        while (hexadecimalString.length % 4 != 0) {
             hexadecimalString = '0' + hexadecimalString;
         }
         var hexadecimalStrings = hexadecimalString.match(/.{1,4}/g);
