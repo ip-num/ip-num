@@ -153,5 +153,9 @@ describe('IPv6: ', function () {
         var firstValue = new IPv6_1.IPv6("::");
         expect(firstValue.toBinaryString()).toEqual("00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000");
     });
+    it('should create right IPv6 address', function () {
+        var value = new IPv6_1.IPv6(bigInt("65536"));
+        expect(value.toString()).toEqual("::1:0");
+    });
 });
 //# sourceMappingURL=IPv6Test.js.map

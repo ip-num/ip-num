@@ -201,8 +201,11 @@ export class IPv6 extends AbstractIPNum implements IPNumber {
 
     private binaryStringToHexadecatets(binaryString: string): Hexadecatet[] {
         let hexadecimalString = binaryStringToHexadecimalString(binaryString);
+        while (hexadecimalString.length % 4 != 0) {
+            hexadecimalString = '0' + hexadecimalString;
+        }
         let hexadecimalStrings: string[] = hexadecimalString.match(/.{1,4}/g)!;
-        return hexadecimalStrings.map((stringHexadecatet)=> {
+        return hexadecimalStrings.map((stringHexadecatet) => {
             return Hexadecatet.fromString(stringHexadecatet);
         });
     }
