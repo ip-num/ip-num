@@ -23,7 +23,7 @@ describe('Pool', () => {
 
         it('Should create from CIDR', () => {
             let pool = Pool
-                .fromCidrRange([IPv4CidrRange.fromCidr("192.168.178.0/24"), IPv4CidrRange.fromCidr("10.0.0.0/24")]);
+                .fromCidrRanges([IPv4CidrRange.fromCidr("192.168.178.0/24"), IPv4CidrRange.fromCidr("10.0.0.0/24")]);
             let ranges = pool.getRanges();
             expect(ranges[1].toCidrRange().toCidrString()).toBe("192.168.178.0/24")
             expect(ranges[0].toCidrRange().toCidrString()).toBe("10.0.0.0/24")

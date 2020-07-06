@@ -37,7 +37,7 @@ export class Pool<T extends RangeType> {
      *
      * @param cidrRanges the arrays of {@link IPv4CidrRange} or {@link IPv6CidrRange} that will make up the pool.
      */
-    public static fromCidrRange(cidrRanges: IPv4CidrRange[] | IPv6CidrRange[]) : Pool<RangeType> {
+    public static fromCidrRanges(cidrRanges: IPv4CidrRange[] | IPv6CidrRange[]) : Pool<RangeType> {
         let cidr: Array<IPv4CidrRange | IPv6CidrRange> = cidrRanges as (IPv4CidrRange | IPv6CidrRange)[];
         let rangeSet:RangedSet<IPv4 | IPv6>[] = cidr.map((range:IPv4CidrRange | IPv6CidrRange) => {
             return range.toRangeSet();
@@ -139,6 +139,17 @@ export class Pool<T extends RangeType> {
         } else {
             throw error;
         }
+    }
+
+    /**
+     * Gets a single or multiple ranges that fulfils the given prefix from the pool.
+     *
+     * throws exception if the requested range cannot be got from the pool.
+     *
+     * @param prefix prefix range to retrieve
+     */
+    public getMultipleCidrRanges(prefix: IPv4Prefix | IPv6Prefix): IPv4CidrRange[] | IPv6CidrRange[]  {
+        throw new Error();
     }
 
     /**
