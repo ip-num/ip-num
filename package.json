@@ -50,19 +50,19 @@
     "big-integer": "1.6.48"
   },
   "devDependencies": {
-    "@types/jasmine": "2.8.6",
-    "@types/node": "13.1.0",
+    "@types/jasmine": "^3.5.11",
+    "@types/node": "^14.0.18",
     "awesome-typescript-loader": "5.2.1",
-    "coveralls": "3.0.9",
+    "coveralls": "^3.1.0",
     "jasmine-node": "3.0.0",
     "jasmine-spec-reporter": "4.2.1",
     "jasmine-ts": "0.2.1",
-    "nyc": "15.0.0",
-    "source-map-loader": "0.2.4",
+    "nyc": "^15.1.0",
+    "source-map-loader": "^1.0.1",
     "tsunit.external": "2.1.1",
-    "typedoc": "0.15.5",
-    "webpack": "4.41.4",
+    "typedoc": "^0.17.8",
+    "webpack": "^4.43.0",
     "webpack-auto-inject-version": "1.2.2",
-    "webpack-cli": "3.3.10"
+    "webpack-cli": "^3.3.12"
   }
 }
