@@ -50,7 +50,7 @@ declare class IPv4Prefix implements Prefix {
      * @returns {IPv4SubnetMask} the subnet mask representation of the prefix
      */
     toSubnetMask(): IPv4SubnetMask;
-    private toDecimalNotation(bits);
+    private toDecimalNotation;
 }
 /**
  * Represents the prefix portion in the CIDR notation for representing IP ranges
@@ -98,6 +98,6 @@ declare class IPv6Prefix implements Prefix {
      * @returns {IPv6SubnetMask} the subnet mask representation of the prefix
      */
     toSubnetMask(): IPv6SubnetMask;
-    private toHexadecatetNotation(bits);
+    private toHexadecatetNotation;
 }
 export { Prefix, IPv4Prefix, IPv6Prefix };

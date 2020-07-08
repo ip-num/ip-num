@@ -16,6 +16,7 @@ var __read = (this && this.__read) || function (o, n) {
     return ar;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Hexadecatet = void 0;
 var Validator_1 = require("./Validator");
 var bigInt = require("big-integer");
 /**

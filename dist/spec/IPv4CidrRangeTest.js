@@ -1,13 +1,14 @@
 "use strict";
-var __values = (this && this.__values) || function (o) {
-    var m = typeof Symbol === "function" && o[Symbol.iterator], i = 0;
+var __values = (this && this.__values) || function(o) {
+    var s = typeof Symbol === "function" && Symbol.iterator, m = s && o[s], i = 0;
     if (m) return m.call(o);
-    return {
+    if (o && typeof o.length === "number") return {
         next: function () {
             if (o && i >= o.length) o = void 0;
             return { value: o && o[i++], done: !o };
         }
     };
+    throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
 };
 var __read = (this && this.__read) || function (o, n) {
     var m = typeof Symbol === "function" && o[Symbol.iterator];
@@ -128,6 +129,7 @@ describe('IPv4CidrRange: ', function () {
         expect(firstRange.isOverlapping(containerRange)).toBe(false);
     });
     it('should be able to use for in construct on range', function () {
+        var e_1, _a;
         var ipv4CidrRange = new src_1.IPv4CidrRange(new src_2.IPv4("192.198.0.0"), new src_3.IPv4Prefix(30));
         var expectedValue = ipv4CidrRange.take(bigInt(4));
         var expectedIndex = 0;
@@ -145,7 +147,6 @@ describe('IPv4CidrRange: ', function () {
             }
             finally { if (e_1) throw e_1.error; }
         }
-        var e_1, _a;
     });
     it('should be able to use spread syntax on range', function () {
         var ipv4CidrRange = new src_1.IPv4CidrRange(new src_2.IPv4("192.198.0.0"), new src_3.IPv4Prefix(30));

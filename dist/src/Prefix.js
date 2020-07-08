@@ -16,6 +16,7 @@ var __read = (this && this.__read) || function (o, n) {
     return ar;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.IPv6Prefix = exports.IPv4Prefix = void 0;
 var Validator_1 = require("./Validator");
 var SubnetMask_1 = require("./SubnetMask");
 var BinaryUtils_1 = require("./BinaryUtils");
@@ -39,6 +40,7 @@ var IPv4Prefix = /** @class */ (function () {
      * @returns {IPv4Prefix} the instance of an IPv4 prefix
      */
     function IPv4Prefix(rawValue) {
+        var _a;
         var isValid;
         var message;
         _a = __read(Validator_1.Validator.isValidPrefixValue(rawValue, IPNumType_1.IPNumType.IPv4), 2), isValid = _a[0], message = _a[1];
@@ -46,7 +48,6 @@ var IPv4Prefix = /** @class */ (function () {
             throw new Error(message.filter(function (msg) { return msg !== ''; }).toString());
         }
         this.value = rawValue;
-        var _a;
     }
     /**
      * Convenience method for constructing an instance of IPv4 prefix from a decimal number
@@ -107,6 +108,7 @@ var IPv6Prefix = /** @class */ (function () {
      * @returns {IPv4Prefix} the instance of an IPv6 prefix
      */
     function IPv6Prefix(rawValue) {
+        var _a;
         var isValid;
         var message;
         _a = __read(Validator_1.Validator.isValidPrefixValue(rawValue, IPNumType_1.IPNumType.IPv6), 2), isValid = _a[0], message = _a[1];
@@ -114,7 +116,6 @@ var IPv6Prefix = /** @class */ (function () {
             throw new Error(message.filter(function (msg) { return msg !== ''; }).toString());
         }
         this.value = rawValue;
-        var _a;
     }
     /**
      * Convenience method for constructing an instance of IPv46 prefix from a decimal number

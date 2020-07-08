@@ -6,15 +6,15 @@ export declare abstract class AbstractIPNum {
     /**
      * The decimal value represented by the IP number in BigInteger
      */
-    readonly abstract value: bigInt.BigInteger;
+    abstract readonly value: bigInt.BigInteger;
     /**
      * The number of bits needed to represents the value of the IP number
      */
-    readonly abstract bitSize: number;
+    abstract readonly bitSize: number;
     /**
      * The maximum bit size (i.e. binary value) of the IP number in BigInteger
      */
-    readonly abstract maximumBitSize: bigInt.BigInteger;
+    abstract readonly maximumBitSize: bigInt.BigInteger;
     /**
      * Gets the numeric value of an IP number as {@link BigInteger}
      *

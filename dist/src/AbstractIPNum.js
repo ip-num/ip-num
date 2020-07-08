@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.AbstractIPNum = void 0;
 var bigInt = require("big-integer");
 var BinaryUtils_1 = require("./BinaryUtils");
 /**

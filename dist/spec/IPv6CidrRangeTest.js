@@ -1,13 +1,14 @@
 "use strict";
-var __values = (this && this.__values) || function (o) {
-    var m = typeof Symbol === "function" && o[Symbol.iterator], i = 0;
+var __values = (this && this.__values) || function(o) {
+    var s = typeof Symbol === "function" && Symbol.iterator, m = s && o[s], i = 0;
     if (m) return m.call(o);
-    return {
+    if (o && typeof o.length === "number") return {
         next: function () {
             if (o && i >= o.length) o = void 0;
             return { value: o && o[i++], done: !o };
         }
     };
+    throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
 };
 var __read = (this && this.__read) || function (o, n) {
     var m = typeof Symbol === "function" && o[Symbol.iterator];
@@ -128,6 +129,7 @@ describe('IPv6CidrRange: ', function () {
         expect(firstRange.isOverlapping(containerRange)).toBe(false);
     });
     it('should be able to use for in construct on range', function () {
+        var e_1, _a;
         var ipv6CidrRange = new src_3.IPv6CidrRange(new src_1.IPv6("2001:db8::"), new src_2.IPv6Prefix(127));
         var expectedValue = ipv6CidrRange.take(bigInt(2));
         var expectedIndex = 0;
@@ -145,7 +147,6 @@ describe('IPv6CidrRange: ', function () {
             }
             finally { if (e_1) throw e_1.error; }
         }
-        var e_1, _a;
     });
     it('should be able to use spread syntax on range', function () {
         var ipv6CidrRange = new src_3.IPv6CidrRange(new src_1.IPv6("2001:db8::"), new src_2.IPv6Prefix(127));

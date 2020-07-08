@@ -111,7 +111,7 @@ export declare class IPv6 extends AbstractIPNum implements IPNumber {
      * @returns {IPv6} the previous IPv6 number
      */
     previousIPNumber(): IPv6;
-    private constructFromBigIntegerValue(ipv6Number);
-    private constructFromHexadecimalDottedString(expandedIPv6);
-    private binaryStringToHexadecatets(binaryString);
+    private constructFromBigIntegerValue;
+    private constructFromHexadecimalDottedString;
+    private binaryStringToHexadecatets;
 }

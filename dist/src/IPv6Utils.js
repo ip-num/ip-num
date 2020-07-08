@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.collapseIPv6Number = exports.expandIPv6Number = void 0;
 var BinaryUtils_1 = require("./BinaryUtils");
 /**
  * Expands an IPv6 number in abbreviated format into its full form

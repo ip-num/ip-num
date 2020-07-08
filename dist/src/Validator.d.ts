@@ -37,7 +37,7 @@ export declare class Validator {
      * @param upperBound upper bound
      * @returns {boolean} true if ipNumber is between lower and upper bound
      */
-    private static isWithinRange(ipNumber, lowerBound, upperBound);
+    private static isWithinRange;
     /**
      * Checks if the number given is within the value considered valid for an ASN number
      *
@@ -154,10 +154,10 @@ export declare class Validator {
      * value contains [] or an array of error message when invalid
      */
     static isValidIPv6CidrRange(ipv6CidrNotation: string): [boolean, string[]];
-    private static isValidCidrRange(rangeString, cidrNotationValidator, toBinaryStringConverter, prefixFactory);
+    private static isValidCidrRange;
     static isValidIPv4RangeString(ipv4RangeString: string): [boolean, string[]];
     static isValidIPv6RangeString(ipv6RangeString: string): [boolean, string[]];
-    private static isValidRange(rangeString, validator, firstLastValidator);
+    private static isValidRange;
     /**
      * Checks if the given string is a valid IPv6 range in Cidr notation
      *
@@ -174,6 +174,6 @@ export declare class Validator {
      * @returns {(boolean|string)[]} a tuple representing if valid or not and corresponding message
      */
     static isValidBinaryString(binaryString: string): [boolean, string[]];
-    private static isNumeric(value);
-    private static isHexadecatet(value);
+    private static isNumeric;
+    private static isHexadecatet;
 }
