@@ -12,7 +12,7 @@
   "scripts": {
     "clean": "rm -rf ./dist/spec ./dist/src ip-num-*.tgz && git checkout -- .",
     "compile": "tsc -p tsconfig.json",
-    "test": "nyc -e .ts jasmine-ts spec/**/*.ts",
+    "test": "nyc -e .ts jasmine-ts spec/**/*.ts --config=jasmine.json",
     "test:watch": "npm run test -- -w",
     "test:without-coverage": "jasmine-ts spec/**/*.ts",
     "ipnum-testrelease": "npm run ipnum-build && npm pack ./dist/src",
@@ -64,6 +64,8 @@
     "typescript": "3.9.6",
     "webpack": "4.43.0",
     "webpack-auto-inject-version": "1.2.2",
-    "webpack-cli": "3.3.12"
+    "webpack-cli": "3.3.12",
+    "ts-node": "8.10.2",
+    "jasmine": "3.5.0"
   }
 }
