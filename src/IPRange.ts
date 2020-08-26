@@ -1,5 +1,5 @@
 import * as bigInt from "big-integer";
-import {IPv6, isIPv4} from "./IPNumber";
+import {IPv6, isIPv4, AbstractIPNum} from "./IPNumber";
 import {IPv4} from "./IPNumber";
 import {IPv6Prefix} from "./Prefix";
 import {intLog2, leftPadWithZeroBit} from "./BinaryUtils";
@@ -15,9 +15,11 @@ export type InferIPTypeFromRangeType<T> = T extends IPv4CidrRange ? IPv4 : IPv6;
  * without adhering to classless inter-domain routing scheme
  * for allocating IP addresses.
  */
-export class RangedSet<T extends IPv4 | IPv6> implements Iterable<IPv4 | IPv6> {
+export class RangedSet<T extends AbstractIPNum> implements Iterable<AbstractIPNum> {
     readonly bitValue: bigInt.BigInteger;
-    private readonly currentValue: IPv4 | IPv6;
+    private readonly currentValue: T;
+    private readonly first: T;
+    private readonly last: T;
 
     /**
      * Convenience method for constructing an instance of {@link RangedSet} from a
@@ -25,7 +27,7 @@ export class RangedSet<T extends IPv4 | IPv6> implements Iterable<IPv4 | IPv6> {
      *
      * @param ip The IP number, either IPv4 or IPv6 to construct the range from.
      */
-    static fromSingleIP(ip: IPv4 | IPv6) {
+    static fromSingleIP<T extends AbstractIPNum>(ip: T) {
         return new RangedSet(ip, ip);
 
     }
@@ -81,7 +83,9 @@ export class RangedSet<T extends IPv4 | IPv6> implements Iterable<IPv4 | IPv6> {
      * @param first the first IP number of the range
      * @param last the last IP number of the range
      */
-    constructor(private first: T, private last: T) {
+    constructor(first: T, last: T) {
+        this.first = first;
+        this.last = last;
         if (first.isGreaterThan(last)) {
              throw new Error(`${first.toString()} should be lower than ${last.toString()}`)
         }
@@ -124,10 +128,10 @@ export class RangedSet<T extends IPv4 | IPv6> implements Iterable<IPv4 | IPv6> {
      * @param otherRange the other range to check if this range is inside of.
      */
     public inside(otherRange: RangedSet<T>): boolean {
-        let thisFirst: IPv6 | IPv4 = this.getFirst();
-        let thisLast: IPv6 | IPv4 = this.getLast();
-        let otherFirst: IPv6 | IPv4 = otherRange.getFirst();
-        let otherLast: IPv6 | IPv4 = otherRange.getLast();
+        let thisFirst: T = this.getFirst();
+        let thisLast: T = this.getLast();
+        let otherFirst: T = otherRange.getFirst();
+        let otherLast: T = otherRange.getLast();
 
         return (otherFirst.isLessThanOrEquals(thisFirst) && otherLast.isGreaterThanOrEquals(thisLast));
     }
@@ -137,11 +141,11 @@ export class RangedSet<T extends IPv4 | IPv6> implements Iterable<IPv4 | IPv6> {
      *
      * @param otherRange the other range to check if this range contains
      */
-    public contains(otherRange: RangedSet<T>): boolean {
-        let thisFirst: IPv6 | IPv4 = this.getFirst();
-        let thisLast: IPv6 | IPv4 = this.getLast();
-        let otherFirst: IPv6 | IPv4 = otherRange.getFirst();
-        let otherLast: IPv6 | IPv4 = otherRange.getLast();
+    public contains(otherRange: RangedSet<AbstractIPNum>): boolean {
+        let thisFirst: AbstractIPNum = this.getFirst();
+        let thisLast: AbstractIPNum = this.getLast();
+        let otherFirst: AbstractIPNum = otherRange.getFirst();
+        let otherLast: AbstractIPNum = otherRange.getLast();
 
         return (thisFirst.isLessThanOrEquals(otherFirst) && thisLast.isGreaterThanOrEquals(otherLast));
     }
@@ -198,10 +202,10 @@ export class RangedSet<T extends IPv4 | IPv6> implements Iterable<IPv4 | IPv6> {
      * @param otherRange the other range to check if it overlaps with this range.
      */
     public isOverlapping(otherRange: RangedSet<T>): boolean {
-        let thisFirst: IPv6 | IPv4 = this.getFirst();
-        let thisLast: IPv6 | IPv4 = this.getLast();
-        let otherFirst: IPv6 | IPv4 = otherRange.getFirst();
-        let otherLast: IPv6 | IPv4 = otherRange.getLast();
+        let thisFirst: T = this.getFirst();
+        let thisLast: T = this.getLast();
+        let otherFirst: T = otherRange.getFirst();
+        let otherLast: T = otherRange.getLast();
 
         return (
             thisLast.isGreaterThan(otherFirst) && thisLast.isLessThanOrEquals(otherLast) && thisFirst.isLessThan(otherFirst)
@@ -242,10 +246,10 @@ export class RangedSet<T extends IPv4 | IPv6> implements Iterable<IPv4 | IPv6> {
      * @param otherRange the other range to check if this range is consecutive to.
      */
     public isConsecutive(otherRange: RangedSet<T>): boolean {
-        let thisFirst: IPv6 | IPv4 = this.getFirst();
-        let thisLast: IPv6 | IPv4 = this.getLast();
-        let otherFirst: IPv6 | IPv4 = otherRange.getFirst();
-        let otherLast: IPv6 | IPv4 = otherRange.getLast();
+        let thisFirst: T = this.getFirst();
+        let thisLast: T = this.getLast();
+        let otherFirst: T = otherRange.getFirst();
+        let otherLast: T = otherRange.getLast();
 
         return (
             thisLast.hasNext() && thisLast.nextIPNumber().isEquals(otherFirst)
@@ -325,7 +329,7 @@ export class RangedSet<T extends IPv4 | IPv6> implements Iterable<IPv4 | IPv6> {
      * @param offset offset from this range where the subrange should begin
      * @param size the size of the range
      */
-    public takeSubRange(offset: bigInt.BigInteger, size: bigInt.BigInteger): RangedSet<IPv4 | IPv6> {
+    public takeSubRange(offset: bigInt.BigInteger, size: bigInt.BigInteger): RangedSet<AbstractIPNum> {
         if (offset.plus(size).gt(this.getSize())) {
             throw new Error("Requested range is greater than what can be taken");
         }
@@ -335,7 +339,7 @@ export class RangedSet<T extends IPv4 | IPv6> implements Iterable<IPv4 | IPv6> {
         }
 
         let valueOfFirstIp = this.getFirst().value.plus(offset);
-        let firstIp: IPv4 | IPv6 = isIPv4(this.getFirst()) ?
+        let firstIp: AbstractIPNum = isIPv4(this.getFirst()) ?
             IPv4.fromBigInteger(valueOfFirstIp) : IPv6.fromBigInteger(valueOfFirstIp);
 
         let valueOfLastIp = firstIp.value.plus(size.minus(bigInt.one));
@@ -344,7 +348,7 @@ export class RangedSet<T extends IPv4 | IPv6> implements Iterable<IPv4 | IPv6> {
         return new RangedSet(firstIp, lastIp);
     }
 
-    public difference(range: RangedSet<T>): Array<RangedSet<IPv4 | IPv6>> {
+    public difference(range: RangedSet<AbstractIPNum>): Array<RangedSet<AbstractIPNum>> {
         if (range.getSize().gt(this.getSize())) {
             throw new Error("Range is greater than range to be subtracted from");
         }
@@ -365,8 +369,8 @@ export class RangedSet<T extends IPv4 | IPv6> implements Iterable<IPv4 | IPv6> {
         return reminders;
     }
 
-    public *take(count?: number): Iterable<IPv4 | IPv6> {
-        let computed: IPv6 | IPv4 = this.getFirst();
+    public *take(count?: number): Iterable<AbstractIPNum> {
+        let computed: AbstractIPNum = this.getFirst();
         let returnCount = count === undefined ? this.getSize().valueOf() : count;
         while(returnCount > 0) {
             returnCount--;
@@ -375,12 +379,14 @@ export class RangedSet<T extends IPv4 | IPv6> implements Iterable<IPv4 | IPv6> {
         }
     }
 
-    *[Symbol.iterator](): IterableIterator<IPv4 | IPv6> {
+    *[Symbol.iterator](): IterableIterator<AbstractIPNum> {
         yield* this.take()
     }
 
     private toIPv4CidrRange(): IPv4CidrRange {
-        let candidateRange = new IPv4CidrRange(this.getFirst() as IPv4, IPv4Prefix.fromRangeSize(this.getSize()));
+
+        let candidateRange = new IPv4CidrRange(IPv4.fromBigInteger(this.getFirst().getValue()),
+            IPv4Prefix.fromRangeSize(this.getSize()));
         if (candidateRange.getFirst().isEquals(this.getFirst())) {
             return candidateRange;
         } else {
@@ -390,7 +396,8 @@ export class RangedSet<T extends IPv4 | IPv6> implements Iterable<IPv4 | IPv6> {
     }
 
     private toIPv6CidrRange(): IPv6CidrRange {
-        let candidateRange = new IPv6CidrRange(this.getFirst() as IPv6, IPv6Prefix.fromRangeSize(this.getSize()));
+        let candidateRange = new IPv6CidrRange(IPv6.fromBigInteger(this.getFirst().getValue()),
+            IPv6Prefix.fromRangeSize(this.getSize()));
         if (candidateRange.getFirst().isEquals(this.getFirst())) {
             return candidateRange;
         } else {
@@ -403,7 +410,7 @@ export class RangedSet<T extends IPv4 | IPv6> implements Iterable<IPv4 | IPv6> {
  * Provides the implementation of functionality that are common to {@link IPv4CidrRange} and {@link IPv6CidrRange}
  */
 
-export abstract class AbstractIPRange<T extends IPv4 | IPv6, P extends IPv4Prefix | IPv6Prefix>  implements Iterable<IPv4 | IPv6> {
+export abstract class AbstractIPRange<T extends AbstractIPNum, P extends IPv4Prefix | IPv6Prefix>  implements Iterable<AbstractIPNum> {
 
     abstract readonly bitValue: bigInt.BigInteger;
     protected abstract newInstance(num:T, prefix: IPv4Prefix | IPv6Prefix) : IPv4CidrRange | IPv6CidrRange;
@@ -426,7 +433,7 @@ export abstract class AbstractIPRange<T extends IPv4 | IPv6, P extends IPv4Prefi
     }
 
 
-    public toRangeSet(): RangedSet<IPv4 | IPv6> {
+    public toRangeSet(): RangedSet<AbstractIPNum> {
         return new RangedSet(this.getFirst(), this.getLast());
     }
 
@@ -481,11 +488,11 @@ export abstract class AbstractIPRange<T extends IPv4 | IPv6, P extends IPv4Prefi
      * @param count the number of IP numbers to lazily evaluate.
      * If none is given, the whole IP range is lazily returned.
      */
-    public *takeStream(count?: number): Iterable<IPv4 | IPv6> {
+    public *takeStream(count?: number): Iterable<AbstractIPNum> {
         return this.toRangeSet().take(count);
     }
 
-    *[Symbol.iterator](): Iterator<IPv4 | IPv6> {
+    *[Symbol.iterator](): Iterator<AbstractIPNum> {
         yield* this.toRangeSet();
     }
 }

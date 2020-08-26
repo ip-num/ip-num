@@ -30,6 +30,9 @@ export abstract class AbstractIPNum {
      */
     abstract readonly maximumBitSize: bigInt.BigInteger;
 
+    abstract nextIPNumber(): AbstractIPNum;
+    abstract previousIPNumber(): AbstractIPNum;
+
     /**
      * Gets the numeric value of an IP number as {@link BigInteger}
      *
@@ -491,7 +494,7 @@ export class Asn extends AbstractIPNum {
      *
      * @returns {AbstractIPNum} the previous ASN number
      */
-    previousIPNumber(): AbstractIPNum {
+    previousIPNumber(): Asn {
         return new Asn(this.value.valueOf() - 1)
     }
 
@@ -843,6 +846,6 @@ export class IPv6SubnetMask extends IPv6 {
  * Check is the given IP number is an {@link IPv4} or not
  * @param ip the IP number to check if it is IPv4.
  */
-export function isIPv4(ip: IPv4 | IPv6): ip is IPv4 {
+export function isIPv4(ip: AbstractIPNum): ip is IPv4 {
     return ip.bitSize === 32;
 }
