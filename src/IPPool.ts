@@ -14,7 +14,7 @@ export class Pool<T extends RangeType> {
      * Convenient method for creating an instance from arrays of {@link IPv4} or {@link IPv6}
      * @param ipNumbers the arrays of {@link IPv4} or {@link IPv6} that will make up the pool.
      */
-    public static fromIPNumbers(ipNumbers: Array<AbstractIPNum>): Pool<RangeType> {
+    public static fromIPNumbers(ipNumbers: Array<IPv4> | Array<IPv6>): Pool<RangeType> {
         let ranges: Array<RangedSet<AbstractIPNum>> = (ipNumbers as Array<AbstractIPNum>).map((ip:(AbstractIPNum)) => {
             return RangedSet.fromSingleIP(ip);
         });

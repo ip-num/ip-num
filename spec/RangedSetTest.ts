@@ -35,13 +35,13 @@ describe('RangedSet: ', () => {
         }).toThrowError(Error, "Argument should be in the format firstip-lastip");
     });
 
-    it("throw if create string is not well formed II", () => {
+    it("throw if create string is not well formed III", () => {
         expect(() => {
             let rangedSet= RangedSet.fromRangeString("127.0.0-127.0.0");
         }).toThrowError(Error, "First IP and Last IP should be valid and same type");
     });
 
-    it("throw if create string is not well formed II", () => {
+    it("throw if create string is not well formed IV", () => {
         expect(() => {
             let rangedSet= RangedSet.fromRangeString("127.0.0.0-2001:db8:0:ffff:ffff:ffff:ffff:ffff");
         }).toThrowError(Error, "First IP and Last IP should be valid and same type");

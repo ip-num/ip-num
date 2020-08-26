@@ -8,7 +8,6 @@ import {Validator} from "./Validator";
 import {IPv4Prefix} from "./Prefix";
 
 
-type InferRangeTypeFromIPType<T> = T extends IPv4 ? IPv4CidrRange : IPv6CidrRange;
 export type InferIPTypeFromRangeType<T> = T extends IPv4CidrRange ? IPv4 : IPv6;
 /**
  * Represents a continuous segment of either IPv4 or IPv6 numbers
@@ -29,7 +28,6 @@ export class RangedSet<T extends AbstractIPNum> implements Iterable<AbstractIPNu
      */
     static fromSingleIP<T extends AbstractIPNum>(ip: T) {
         return new RangedSet(ip, ip);
-
     }
     /**
      * Convenience method for constructing an instance of {@link RangedSet} from an
