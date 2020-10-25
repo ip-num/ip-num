@@ -407,7 +407,6 @@ export class RangedSet<T extends AbstractIPNum> implements Iterable<AbstractIPNu
 /**
  * Provides the implementation of functionality that are common to {@link IPv4CidrRange} and {@link IPv6CidrRange}
  */
-
 export abstract class AbstractIPRange<T extends AbstractIPNum, P extends IPv4Prefix | IPv6Prefix>  implements Iterable<AbstractIPNum> {
 
     abstract readonly bitValue: bigInt.BigInteger;

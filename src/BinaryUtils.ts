@@ -96,19 +96,22 @@ export let cidrPrefixToSubnetMaskBinaryString = (cidrPrefix: number, ipType: IPN
 };
 
 /**
+ * Calculates the log, to base 2 of given number.
  *
- * @param rangeSize
+ * @throws Error if number cannot be converted to log base 2
+ * @param givenNumber the number to calculate log base 2
+ * @return the log base 2 of given number
  */
-export let intLog2 = (rangeSize:bigInt.BigInteger): number => {
+export let intLog2 = (givenNumber:bigInt.BigInteger): number => {
     let result = 0;
 
-    while (rangeSize.isEven()) {
-        if (rangeSize.equals(bigInt(2))) {
+    while (givenNumber.isEven()) {
+        if (givenNumber.equals(bigInt(2))) {
             result++;
             break;
         }
-        rangeSize = rangeSize.shiftRight(bigInt(1));
-        if (rangeSize.isOdd()) {
+        givenNumber = givenNumber.shiftRight(bigInt(1));
+        if (givenNumber.isOdd()) {
             result = 0;
             break;
         }
@@ -116,7 +119,7 @@ export let intLog2 = (rangeSize:bigInt.BigInteger): number => {
     }
 
     if (result == 0) {
-        throw new Error(`The value of log2 for ${rangeSize.toString()} is not an integer`)
+        throw new Error(`The value of log2 for ${givenNumber.toString()} is not an integer`)
     }
     return result
 };

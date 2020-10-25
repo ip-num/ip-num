@@ -4,7 +4,7 @@ import * as bigInt from "big-integer"
 /**
  * A base 16 (hexadecimal) representation of a 16 bit value.
  *
- * It consists of four (base 16) number.
+ * It consists of four (base 16) number. ie FFFF
  *
  * It is used to represents the components of an IPv6 address
  */
