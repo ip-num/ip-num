@@ -76,12 +76,12 @@ export let leftPadWithZeroBit = (binaryString: string, finalStringLength: number
 };
 
 /**
- * Given the prefix portion of a cidr notation and the type of IP number, returns the subnet mask in binary string
+ * Given the prefix portion of a cidr notation and the type of IP number, returns the mask in binary string
  *
  * @param {number} cidrPrefix the prefix part of a cidr notation
  * @param {IPNumType.IPv4 | IPNumType.IPv6} ipType the type of the ip number in the range the cidr represents
  */
-export let cidrPrefixToSubnetMaskBinaryString = (cidrPrefix: number, ipType: IPNumType.IPv4 | IPNumType.IPv6): string => {
+export let cidrPrefixToMaskBinaryString = (cidrPrefix: number, ipType: IPNumType.IPv4 | IPNumType.IPv6): string => {
   let cidrUpperValue;
   if (ipType == IPNumType.IPv4) {
     cidrUpperValue = 32;

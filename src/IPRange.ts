@@ -575,7 +575,7 @@ export class IPv4CidrRange extends AbstractIPRange<IPv4, IPv4Prefix> {
      * @returns {IPv4} the first IPv4 number in the IPv4 range
      */
     public getFirst(): IPv4 {
-        return IPv4.fromBigInteger(this.ipv4.getValue().and(this.cidrPrefix.toSubnetMask().getValue()));
+        return IPv4.fromBigInteger(this.ipv4.getValue().and(this.cidrPrefix.toMask().getValue()));
     }
 
     /**
@@ -585,9 +585,9 @@ export class IPv4CidrRange extends AbstractIPRange<IPv4, IPv4Prefix> {
      */
     public getLast(): IPv4 {
         let onMask = bigInt("1".repeat(32), 2);
-        let subnetAsBigInteger = this.cidrPrefix.toSubnetMask().getValue();
-        let invertedSubnet = leftPadWithZeroBit(subnetAsBigInteger.xor(onMask).toString(2), 32);
-        return IPv4.fromBigInteger(this.ipv4.getValue().or(parseBinaryStringToBigInteger(invertedSubnet)));
+        let subnetAsBigInteger = this.cidrPrefix.toMask().getValue();
+        let invertedMask = leftPadWithZeroBit(subnetAsBigInteger.xor(onMask).toString(2), 32);
+        return IPv4.fromBigInteger(this.ipv4.getValue().or(parseBinaryStringToBigInteger(invertedMask)));
     }
 
     protected newInstance(num: IPv4, prefix: IPv4Prefix): IPv4CidrRange {
@@ -808,7 +808,7 @@ export class IPv6CidrRange extends AbstractIPRange<IPv6, IPv6Prefix> {
      * @returns {IPv6} the first IPv6 number in the IPv6 range
      */
     public getFirst(): IPv6 {
-        return IPv6.fromBigInteger(this.ipv6.getValue().and(this.cidrPrefix.toSubnetMask().getValue()));
+        return IPv6.fromBigInteger(this.ipv6.getValue().and(this.cidrPrefix.toMask().getValue()));
     }
 
     /**
@@ -818,9 +818,9 @@ export class IPv6CidrRange extends AbstractIPRange<IPv6, IPv6Prefix> {
      */
     public getLast(): IPv6 {
         let onMask = bigInt("1".repeat(128), 2);
-        let subnetMaskAsBigInteger = this.cidrPrefix.toSubnetMask().getValue();
-        let invertedSubnetMask = leftPadWithZeroBit(subnetMaskAsBigInteger.xor(onMask).toString(2), 128);
-        return IPv6.fromBigInteger(this.ipv6.getValue().or(parseBinaryStringToBigInteger(invertedSubnetMask)));
+        let maskAsBigInteger = this.cidrPrefix.toMask().getValue();
+        let invertedMask = leftPadWithZeroBit(maskAsBigInteger.xor(onMask).toString(2), 128);
+        return IPv6.fromBigInteger(this.ipv6.getValue().or(parseBinaryStringToBigInteger(invertedMask)));
     }
 
     protected newInstance(num: IPv6, prefix: IPv6Prefix): IPv6CidrRange {

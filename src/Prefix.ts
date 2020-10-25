@@ -1,5 +1,5 @@
 import {Validator} from "./Validator";
-import {IPv4, IPv4SubnetMask, IPv6, IPv6SubnetMask} from "./IPNumber";
+import {IPv4, IPv4Mask, IPv6, IPv6Mask} from "./IPNumber";
 import {intLog2, parseBinaryStringToBigInteger} from "./BinaryUtils";
 import {IPNumType} from "./IPNumType";
 import {binaryStringToHexadecimalString} from "./HexadecimalUtils";
@@ -17,7 +17,7 @@ interface Prefix {
 /**
  * Represents the prefix portion in the CIDR notation for representing IP ranges
  *
- * The IPv4 prefix portion represents the subnet mask. It is the number of continuous bits turned on (with value 1)
+ * The IPv4 prefix portion represents the mask. It is the number of continuous bits turned on (with value 1)
  * counting from the left side of an 8 bit value.
  *
  * {@see https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing} for more information on CIDR
@@ -79,16 +79,16 @@ class IPv4Prefix implements Prefix {
     }
 
     /**
-     * Converts the IPv4 prefix to a {@link IPv4SubnetMask}
+     * Converts the IPv4 prefix to a {@link IPv4Mask}
      *
-     * The IPv4 Subnet mask is the representation of the prefix in the dot-decimal notation
+     * The IPv4 mask is the representation of the prefix in the dot-decimal notation
      *
-     * @returns {IPv4SubnetMask} the subnet mask representation of the prefix
+     * @returns {IPv4Mask} the mask representation of the prefix
      */
-    public toSubnetMask(): IPv4SubnetMask {
+    public toMask(): IPv4Mask {
         let onBits = '1'.repeat(this.value);
         let offBits = '0'.repeat(32 - this.value);
-        return IPv4SubnetMask.fromDecimalDottedString(this.toDecimalNotation(`${onBits}${offBits}`));
+        return IPv4Mask.fromDecimalDottedString(this.toDecimalNotation(`${onBits}${offBits}`));
     }
 
     /**
@@ -130,7 +130,7 @@ class IPv4Prefix implements Prefix {
 /**
  * Represents the prefix portion in the CIDR notation for representing IP ranges
  *
- * The IPv6 prefix portion represents the subnet mask. It is the number of continuous bits turned on (with value 1)
+ * The IPv6 prefix portion represents the mask. It is the number of continuous bits turned on (with value 1)
  * counting from the left side of an 128 bit value.
  *
  * {@see https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing} for more information on CIDR
@@ -191,16 +191,16 @@ class IPv6Prefix implements Prefix {
     }
 
     /**
-     * Converts the IPv6 prefix to a {@link IPv6SubnetMask}
+     * Converts the IPv6 prefix to a {@link IPv6Mask}
      *
-     * The IPv6 Subnet mask is the representation of the prefix in 8 groups of 16 bit values represented in hexadecimal
+     * The IPv6 mask is the representation of the prefix in 8 groups of 16 bit values represented in hexadecimal
      *
-     * @returns {IPv6SubnetMask} the subnet mask representation of the prefix
+     * @returns {IPv6Mask} the mask representation of the prefix
      */
-    public toSubnetMask(): IPv6SubnetMask {
+    public toMask(): IPv6Mask {
         let onBits = '1'.repeat(this.value);
         let offBits = '0'.repeat(128 - this.value);
-        return IPv6SubnetMask.fromHexadecimalString(this.toHexadecatetNotation(`${onBits}${offBits}`));
+        return IPv6Mask.fromHexadecimalString(this.toHexadecatetNotation(`${onBits}${offBits}`));
     }
 
     /**

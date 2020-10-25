@@ -73,23 +73,23 @@ describe('Prefix Test: ', () => {
 
         it('should convert correctly to subnet', () => {
             // TODO add other subnet
-            expect(IPv4Prefix.fromNumber(16).toSubnetMask().toString()).toEqual("255.255.0.0");
-            expect(IPv4Prefix.fromNumber(17).toSubnetMask().toString()).toEqual("255.255.128.0");
-            expect(IPv4Prefix.fromNumber(18).toSubnetMask().toString()).toEqual("255.255.192.0");
-            expect(IPv4Prefix.fromNumber(19).toSubnetMask().toString()).toEqual("255.255.224.0");
-            expect(IPv4Prefix.fromNumber(20).toSubnetMask().toString()).toEqual("255.255.240.0");
-            expect(IPv4Prefix.fromNumber(21).toSubnetMask().toString()).toEqual("255.255.248.0");
-            expect(IPv4Prefix.fromNumber(22).toSubnetMask().toString()).toEqual("255.255.252.0");
-            expect(IPv4Prefix.fromNumber(23).toSubnetMask().toString()).toEqual("255.255.254.0");
-            expect(IPv4Prefix.fromNumber(24).toSubnetMask().toString()).toEqual("255.255.255.0");
-            expect(IPv4Prefix.fromNumber(25).toSubnetMask().toString()).toEqual("255.255.255.128");
-            expect(IPv4Prefix.fromNumber(26).toSubnetMask().toString()).toEqual("255.255.255.192");
-            expect(IPv4Prefix.fromNumber(27).toSubnetMask().toString()).toEqual("255.255.255.224");
-            expect(IPv4Prefix.fromNumber(28).toSubnetMask().toString()).toEqual("255.255.255.240");
-            expect(IPv4Prefix.fromNumber(29).toSubnetMask().toString()).toEqual("255.255.255.248");
-            expect(IPv4Prefix.fromNumber(30).toSubnetMask().toString()).toEqual("255.255.255.252");
-            expect(IPv4Prefix.fromNumber(31).toSubnetMask().toString()).toEqual("255.255.255.254");
-            expect(IPv4Prefix.fromNumber(32).toSubnetMask().toString()).toEqual("255.255.255.255");
+            expect(IPv4Prefix.fromNumber(16).toMask().toString()).toEqual("255.255.0.0");
+            expect(IPv4Prefix.fromNumber(17).toMask().toString()).toEqual("255.255.128.0");
+            expect(IPv4Prefix.fromNumber(18).toMask().toString()).toEqual("255.255.192.0");
+            expect(IPv4Prefix.fromNumber(19).toMask().toString()).toEqual("255.255.224.0");
+            expect(IPv4Prefix.fromNumber(20).toMask().toString()).toEqual("255.255.240.0");
+            expect(IPv4Prefix.fromNumber(21).toMask().toString()).toEqual("255.255.248.0");
+            expect(IPv4Prefix.fromNumber(22).toMask().toString()).toEqual("255.255.252.0");
+            expect(IPv4Prefix.fromNumber(23).toMask().toString()).toEqual("255.255.254.0");
+            expect(IPv4Prefix.fromNumber(24).toMask().toString()).toEqual("255.255.255.0");
+            expect(IPv4Prefix.fromNumber(25).toMask().toString()).toEqual("255.255.255.128");
+            expect(IPv4Prefix.fromNumber(26).toMask().toString()).toEqual("255.255.255.192");
+            expect(IPv4Prefix.fromNumber(27).toMask().toString()).toEqual("255.255.255.224");
+            expect(IPv4Prefix.fromNumber(28).toMask().toString()).toEqual("255.255.255.240");
+            expect(IPv4Prefix.fromNumber(29).toMask().toString()).toEqual("255.255.255.248");
+            expect(IPv4Prefix.fromNumber(30).toMask().toString()).toEqual("255.255.255.252");
+            expect(IPv4Prefix.fromNumber(31).toMask().toString()).toEqual("255.255.255.254");
+            expect(IPv4Prefix.fromNumber(32).toMask().toString()).toEqual("255.255.255.255");
         });
     });
 
