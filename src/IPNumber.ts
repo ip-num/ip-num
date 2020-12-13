@@ -14,7 +14,8 @@ import {hexadectetNotationToBinaryString} from "./HexadecimalUtils";
 
 
 /**
- * Provides the implementation of functionality that are common to {@link IPNumber}'s
+ * Provides the implementation of functionality that are common
+ * to {@link IPv4}, {@link IPv6}, {@link IPv4Mask} and {@link IPv6Mask}
  */
 export abstract class AbstractIPNum {
     /**
