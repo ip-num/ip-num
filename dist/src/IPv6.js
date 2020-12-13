@@ -1,8 +1,11 @@
 "use strict";
 var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
     return function (d, b) {
         extendStatics(d, b);
         function __() { this.constructor = d; }
@@ -26,6 +29,7 @@ var __read = (this && this.__read) || function (o, n) {
     return ar;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.IPv6 = void 0;
 var Hexadecatet_1 = require("./Hexadecatet");
 var Validator_1 = require("./Validator");
 var BinaryUtils_1 = require("./BinaryUtils");
@@ -210,6 +214,9 @@ var IPv6 = /** @class */ (function (_super) {
     };
     IPv6.prototype.binaryStringToHexadecatets = function (binaryString) {
         var hexadecimalString = HexadecimalUtils_1.binaryStringToHexadecimalString(binaryString);
+        while (hexadecimalString.length % 4 != 0) {
+            hexadecimalString = '0' + hexadecimalString;
+        }
         var hexadecimalStrings = hexadecimalString.match(/.{1,4}/g);
         return hexadecimalStrings.map(function (stringHexadecatet) {
             return Hexadecatet_1.Hexadecatet.fromString(stringHexadecatet);

@@ -197,4 +197,9 @@ describe('IPv6: ', () => {
         let firstValue = new IPv6("::");
         expect(firstValue.toBinaryString()).toEqual("00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000");
     });
+
+    it('should create right IPv6 address', () => {
+        let value = new IPv6(bigInt("65536"));
+        expect(value.toString()).toEqual("::1:0")
+    });
 });

@@ -116,6 +116,6 @@ export declare class Asn extends AbstractIPNum implements IPNumber {
      * @returns {IPNumber} the previous ASN number
      */
     previousIPNumber(): IPNumber;
-    private static startWithASprefix(word);
-    private parseFromDotNotation(rawValue);
+    private static startWithASprefix;
+    private parseFromDotNotation;
 }

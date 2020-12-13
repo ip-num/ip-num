@@ -8,8 +8,8 @@ import { IPv4 } from "./IPv4";
  * Provides the implementation of functionality that are common to {@link IPRange}s
  */
 export declare abstract class AbstractIpRange {
-    readonly abstract bitValue: bigInt.BigInteger;
-    readonly abstract cidrPrefix: Prefix;
+    abstract readonly bitValue: bigInt.BigInteger;
+    abstract readonly cidrPrefix: Prefix;
     abstract getFirst(): IPv6 | IPv4;
     abstract getLast(): IPv6 | IPv4;
     getSize(): bigInt.BigInteger;

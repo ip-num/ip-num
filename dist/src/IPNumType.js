@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.IPNumType = void 0;
 var IPNumType;
 (function (IPNumType) {
     IPNumType[IPNumType["ASN"] = 0] = "ASN";

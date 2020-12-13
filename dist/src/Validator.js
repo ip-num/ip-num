@@ -16,6 +16,7 @@ var __read = (this && this.__read) || function (o, n) {
     return ar;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Validator = void 0;
 var BinaryUtils_1 = require("./BinaryUtils");
 var BinaryUtils_2 = require("./BinaryUtils");
 var bigInt = require("big-integer");

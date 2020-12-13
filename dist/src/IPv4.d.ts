@@ -106,7 +106,7 @@ export declare class IPv4 extends AbstractIPNum implements IPNumber {
      * @returns {IPv6} an IPv6 number with the IPv4 embedded within it
      */
     toIPv4MappedIPv6(): IPv6;
-    private constructFromDecimalDottedString(ipString);
-    private constructFromBigIntegerValue(ipv4Number);
-    private binaryStringToDecimalOctets(ipv4BinaryString);
+    private constructFromDecimalDottedString;
+    private constructFromBigIntegerValue;
+    private binaryStringToDecimalOctets;
 }

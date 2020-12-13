@@ -1,6 +1,6 @@
 {
   "name": "ip-num",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "A TypeScript library for working with IPv4, IPv6 and ASN numbers. It provides representations of these internet protocol numbers with the ability to perform various IP related operations like parsing, validating etc. on them",
   "main": "./index.js",
   "types": "./index.d.ts",
@@ -12,7 +12,7 @@
   "scripts": {
     "clean": "rm -rf ./dist/spec ./dist/src ip-num-*.tgz && git checkout -- .",
     "compile": "tsc -p tsconfig.json",
-    "test": "nyc -e .ts jasmine-ts spec/**/*.ts",
+    "test": "nyc -e .ts jasmine-ts spec/**/*.ts --config=jasmine.json",
     "test:watch": "npm run test -- -w",
     "test:without-coverage": "jasmine-ts spec/**/*.ts",
     "ipnum-testrelease": "npm run ipnum-build && npm pack ./dist/src",
@@ -50,19 +50,22 @@
     "big-integer": "1.6.48"
   },
   "devDependencies": {
-    "@types/jasmine": "2.8.6",
-    "@types/node": "13.1.0",
+    "@types/jasmine": "3.5.11",
+    "@types/node": "^14.0.20",
     "awesome-typescript-loader": "5.2.1",
-    "coveralls": "3.0.9",
+    "coveralls": "3.1.0",
     "jasmine-node": "3.0.0",
-    "jasmine-spec-reporter": "4.2.1",
-    "jasmine-ts": "0.2.1",
-    "nyc": "15.0.0",
-    "source-map-loader": "0.2.4",
+    "jasmine-spec-reporter": "^5.0.2",
+    "jasmine-ts": "0.3.0",
+    "nyc": "15.1.0",
+    "source-map-loader": "1.0.1",
     "tsunit.external": "2.1.1",
-    "typedoc": "0.15.5",
-    "webpack": "4.41.4",
+    "typedoc": "0.17.8",
+    "typescript": "3.9.6",
+    "webpack": "4.43.0",
     "webpack-auto-inject-version": "1.2.2",
-    "webpack-cli": "3.3.10"
+    "webpack-cli": "3.3.12",
+    "ts-node": "8.10.2",
+    "jasmine": "3.5.0"
   }
 }

@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.AbstractIpRange = void 0;
 var bigInt = require("big-integer");
 /**
  * Provides the implementation of functionality that are common to {@link IPRange}s

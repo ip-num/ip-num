@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.cidrPrefixToSubnetMaskBinaryString = exports.leftPadWithZeroBit = exports.dottedDecimalNotationToBinaryString = exports.parseBinaryStringToBigInteger = exports.decimalNumberToOctetString = exports.bigIntegerNumberToBinaryString = exports.decimalNumberToBinaryString = void 0;
 var bigInt = require("big-integer/BigInteger");
 var IPNumType_1 = require("./IPNumType");
 /**
