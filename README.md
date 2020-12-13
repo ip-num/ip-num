@@ -306,6 +306,7 @@ import {IPv6CidrRange} from "ip-num/IPRange";
 import {IPv4Prefix} from "ip-num/Prefix";
 import {IPv6Prefix} from "ip-num/Prefix";
 
+
 // representing ASN, IPv4 and IPv6 as a AbstractIPNum
 let ipNumbers: AbstractIPNum[] = [];
 ipNumbers.push(new Asn("200"));
