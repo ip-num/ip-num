@@ -10,7 +10,7 @@ var BinaryUtils_1 = require("./BinaryUtils");
  * @param {string} ipv6String the abbreviated IPv6 address to expand
  * @returns {string} the expanded IPv6 address
  */
-exports.expandIPv6Number = function (ipv6String) {
+var expandIPv6Number = function (ipv6String) {
     var expandWithZero = function (hexadecimalArray) {
         var paddedArray = hexadecimalArray.map(function (hexadecimal) {
             return BinaryUtils_1.leftPadWithZeroBit(hexadecimal, 4);
@@ -47,6 +47,7 @@ exports.expandIPv6Number = function (ipv6String) {
         return expandWithZero(ipv6String.split(":"));
     }
 };
+exports.expandIPv6Number = expandIPv6Number;
 /**
  * Collapses an IPv6 number in full format into its abbreviated form
  *
@@ -55,7 +56,7 @@ exports.expandIPv6Number = function (ipv6String) {
  * @param {string} ipv6String the full form IPv6 number to collapse
  * @returns {string} the collapsed IPv6 number
  */
-exports.collapseIPv6Number = function (ipv6String) {
+var collapseIPv6Number = function (ipv6String) {
     var hexadecimals = ipv6String.split(":");
     var hexadecimalsWithoutLeadingZeros = hexadecimals.map(function (hexidecimal) {
         var withoutLeadingZero = hexidecimal.replace(/^0+/, '');
@@ -72,4 +73,5 @@ exports.collapseIPv6Number = function (ipv6String) {
     }
     return contracted;
 };
+exports.collapseIPv6Number = collapseIPv6Number;
 //# sourceMappingURL=IPv6Utils.js.map

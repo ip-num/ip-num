@@ -44,9 +44,17 @@ export declare let dottedDecimalNotationToBinaryString: (dottedDecimal: string) 
  */
 export declare let leftPadWithZeroBit: (binaryString: string, finalStringLength: number) => string;
 /**
- * Given the prefix portion of a cidr notation and the type of IP number, returns the subnet mask in binary string
+ * Given the prefix portion of a cidr notation and the type of IP number, returns the mask in binary string
  *
  * @param {number} cidrPrefix the prefix part of a cidr notation
  * @param {IPNumType.IPv4 | IPNumType.IPv6} ipType the type of the ip number in the range the cidr represents
  */
-export declare let cidrPrefixToSubnetMaskBinaryString: (cidrPrefix: number, ipType: IPNumType.IPv4 | IPNumType.IPv6) => string;
+export declare let cidrPrefixToMaskBinaryString: (cidrPrefix: number, ipType: IPNumType.IPv4 | IPNumType.IPv6) => string;
+/**
+ * Calculates the log, to base 2 of given number.
+ *
+ * @throws Error if number cannot be converted to log base 2
+ * @param givenNumber the number to calculate log base 2
+ * @return the log base 2 of given number
+ */
+export declare let intLog2: (givenNumber: bigInt.BigInteger) => number;

@@ -378,6 +378,8 @@ Found a bug and you want to provide a fix for it? Then feel free to submit a pul
 Change log
 ------------------
 
+View latest releases [here](https://github.com/ip-num/ip-num/releases)
+
 ##### v1.2.1
 * Fixes a cyclic dependency bug. [Issue #24](https://github.com/ip-num/ip-num/issues/24) 
 
