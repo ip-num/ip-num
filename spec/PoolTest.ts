@@ -1,5 +1,4 @@
 import {
-    InferIPTypeFromRangeType,
     IPv4,
     IPv4CidrRange,
     IPv4Prefix,

@@ -74,9 +74,9 @@
 					<div class="lead">
 						<p>Represents the prefix portion in the CIDR notation for representing IP ranges</p>
 					</div>
-					<p>The IPv4 prefix portion represents the subnet mask. It is the number of continuous bits turned on (with value 1)
+					<p>The IPv4 prefix portion represents the mask. It is the number of continuous bits turned on (with value 1)
 					counting from the left side of an 8 bit value.</p>
-					<p>{@see <a href="https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing}">https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing}</a> for more information on CIDR</p>
+					<p>{@see <a href="https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing%7D">https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing}</a> for more information on CIDR</p>
 				</div>
 			</section>
 			<section class="tsd-panel tsd-hierarchy">
@@ -85,6 +85,12 @@
 					<li>
 						<span class="target">IPv4Prefix</span>
 					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel">
+				<h3>Implements</h3>
+				<ul class="tsd-hierarchy">
+					<li><a href="../interfaces/_prefix_.prefix.html" class="tsd-signature-type">Prefix</a></li>
 				</ul>
 			</section>
 			<section class="tsd-panel-group tsd-index-group">
@@ -100,6 +106,7 @@
 						<section class="tsd-index-section tsd-is-not-exported">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private tsd-is-not-exported"><a href="_prefix_.ipv4prefix.html#bitvalue" class="tsd-kind-icon">bit<wbr>Value</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-not-exported"><a href="_prefix_.ipv4prefix.html#value" class="tsd-kind-icon">value</a></li>
 							</ul>
 						</section>
@@ -107,10 +114,14 @@
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-not-exported"><a href="_prefix_.ipv4prefix.html#getvalue" class="tsd-kind-icon">get<wbr>Value</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-not-exported"><a href="_prefix_.ipv4prefix.html#merge" class="tsd-kind-icon">merge</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-not-exported"><a href="_prefix_.ipv4prefix.html#split" class="tsd-kind-icon">split</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private tsd-is-not-exported"><a href="_prefix_.ipv4prefix.html#todecimalnotation" class="tsd-kind-icon">to<wbr>Decimal<wbr>Notation</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-not-exported"><a href="_prefix_.ipv4prefix.html#tomask" class="tsd-kind-icon">to<wbr>Mask</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-not-exported"><a href="_prefix_.ipv4prefix.html#torangesize" class="tsd-kind-icon">to<wbr>Range<wbr>Size</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-not-exported"><a href="_prefix_.ipv4prefix.html#tostring" class="tsd-kind-icon">to<wbr>String</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-not-exported"><a href="_prefix_.ipv4prefix.html#tosubnetmask" class="tsd-kind-icon">to<wbr>Subnet<wbr>Mask</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static tsd-is-not-exported"><a href="_prefix_.ipv4prefix.html#fromnumber" class="tsd-kind-icon">from<wbr>Number</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static tsd-is-not-exported"><a href="_prefix_.ipv4prefix.html#fromrangesize" class="tsd-kind-icon">from<wbr>Range<wbr>Size</a></li>
 							</ul>
 						</section>
 					</div>
@@ -128,7 +139,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/efccd34/src/Prefix.ts#L31">Prefix.ts:31</a></li>
+									<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/14ffb14/src/Prefix.ts#L46">Prefix.ts:46</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -155,13 +166,24 @@
 			</section>
 			<section class="tsd-panel-group tsd-member-group tsd-is-not-exported">
 				<h2>Properties</h2>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private tsd-is-not-exported">
+					<a name="bitvalue" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> bit<wbr>Value</h3>
+					<div class="tsd-signature tsd-kind-icon">bit<wbr>Value<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">BigInteger</span><span class="tsd-signature-symbol"> =&nbsp;bigInt(32)</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/14ffb14/src/Prefix.ts#L27">Prefix.ts:27</a></li>
+						</ul>
+					</aside>
+				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-not-exported">
 					<a name="value" class="tsd-anchor"></a>
 					<h3>value</h3>
 					<div class="tsd-signature tsd-kind-icon">value<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
+						<p>Implementation of <a href="../interfaces/_prefix_.prefix.html">Prefix</a>.<a href="../interfaces/_prefix_.prefix.html#value">value</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/efccd34/src/Prefix.ts#L21">Prefix.ts:21</a></li>
+							<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/14ffb14/src/Prefix.ts#L31">Prefix.ts:31</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -182,8 +204,9 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Implementation of <a href="../interfaces/_prefix_.prefix.html">Prefix</a>.<a href="../interfaces/_prefix_.prefix.html#getvalue">getValue</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/efccd34/src/Prefix.ts#L54">Prefix.ts:54</a></li>
+									<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/14ffb14/src/Prefix.ts#L69">Prefix.ts:69</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -193,6 +216,54 @@
 							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
 							<p>the decimal value of the IPv4 prefix</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-not-exported">
+					<a name="merge" class="tsd-anchor"></a>
+					<h3>merge</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-not-exported">
+						<li class="tsd-signature tsd-kind-icon">merge<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_prefix_.ipv4prefix.html" class="tsd-signature-type">IPv4Prefix</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Implementation of <a href="../interfaces/_prefix_.prefix.html">Prefix</a>.<a href="../interfaces/_prefix_.prefix.html#merge">merge</a></p>
+								<ul>
+									<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/14ffb14/src/Prefix.ts#L113">Prefix.ts:113</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns a prefix for when this prefix is merged
+									with another prefix of the same size</p>
+								</div>
+							</div>
+							<h4 class="tsd-returns-title">Returns <a href="_prefix_.ipv4prefix.html" class="tsd-signature-type">IPv4Prefix</a></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-not-exported">
+					<a name="split" class="tsd-anchor"></a>
+					<h3>split</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-not-exported">
+						<li class="tsd-signature tsd-kind-icon">split<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_prefix_.ipv4prefix.html" class="tsd-signature-type">IPv4Prefix</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Implementation of <a href="../interfaces/_prefix_.prefix.html">Prefix</a>.<a href="../interfaces/_prefix_.prefix.html#split">split</a></p>
+								<ul>
+									<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/14ffb14/src/Prefix.ts#L121">Prefix.ts:121</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns a prefix for when this prefix is split
+									into two equal halves</p>
+								</div>
+							</div>
+							<h4 class="tsd-returns-title">Returns <a href="_prefix_.ipv4prefix.html" class="tsd-signature-type">IPv4Prefix</a></h4>
 						</li>
 					</ul>
 				</section>
@@ -206,7 +277,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/efccd34/src/Prefix.ts#L79">Prefix.ts:79</a></li>
+									<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/14ffb14/src/Prefix.ts#L125">Prefix.ts:125</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -220,6 +291,53 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-not-exported">
+					<a name="tomask" class="tsd-anchor"></a>
+					<h3>to<wbr>Mask</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-not-exported">
+						<li class="tsd-signature tsd-kind-icon">to<wbr>Mask<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_ipnumber_.ipv4mask.html" class="tsd-signature-type">IPv4Mask</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/14ffb14/src/Prefix.ts#L88">Prefix.ts:88</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Converts the IPv4 prefix to a <a href="_ipnumber_.ipv4mask.html">IPv4Mask</a></p>
+								</div>
+								<p>The IPv4 mask is the representation of the prefix in the dot-decimal notation</p>
+							</div>
+							<h4 class="tsd-returns-title">Returns <a href="_ipnumber_.ipv4mask.html" class="tsd-signature-type">IPv4Mask</a></h4>
+							<p>the mask representation of the prefix</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-not-exported">
+					<a name="torangesize" class="tsd-anchor"></a>
+					<h3>to<wbr>Range<wbr>Size</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-not-exported">
+						<li class="tsd-signature tsd-kind-icon">to<wbr>Range<wbr>Size<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">BigInteger</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/14ffb14/src/Prefix.ts#L99">Prefix.ts:99</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns the size (number of IP numbers) of range of this prefix</p>
+								</div>
+							</div>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">BigInteger</span></h4>
+							<p>the size (number of IP numbers) of range of this prefix</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-not-exported">
 					<a name="tostring" class="tsd-anchor"></a>
 					<h3>to<wbr>String</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-not-exported">
@@ -229,7 +347,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/efccd34/src/Prefix.ts#L62">Prefix.ts:62</a></li>
+									<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/14ffb14/src/Prefix.ts#L77">Prefix.ts:77</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -238,31 +356,7 @@
 								</div>
 							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
-							<p>he decimal value of the IPv4 prefix as string</p>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-not-exported">
-					<a name="tosubnetmask" class="tsd-anchor"></a>
-					<h3>to<wbr>Subnet<wbr>Mask</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-not-exported">
-						<li class="tsd-signature tsd-kind-icon">to<wbr>Subnet<wbr>Mask<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_subnetmask_.ipv4subnetmask.html" class="tsd-signature-type">IPv4SubnetMask</a></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/efccd34/src/Prefix.ts#L73">Prefix.ts:73</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Converts the IPv4 prefix to a <a href="_subnetmask_.ipv4subnetmask.html">IPv4SubnetMask</a></p>
-								</div>
-								<p>The IPv4 Subnet mask is the representation of the prefix in the dot-decimal notation</p>
-							</div>
-							<h4 class="tsd-returns-title">Returns <a href="_subnetmask_.ipv4subnetmask.html" class="tsd-signature-type">IPv4SubnetMask</a></h4>
-							<p>the subnet mask representation of the prefix</p>
+							<p>The decimal value of the IPv4 prefix as string</p>
 						</li>
 					</ul>
 				</section>
@@ -276,7 +370,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/efccd34/src/Prefix.ts#L29">Prefix.ts:29</a></li>
+									<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/14ffb14/src/Prefix.ts#L39">Prefix.ts:39</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -298,6 +392,29 @@
 						</li>
 					</ul>
 				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static tsd-is-not-exported">
+					<a name="fromrangesize" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> from<wbr>Range<wbr>Size</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static tsd-is-not-exported">
+						<li class="tsd-signature tsd-kind-icon">from<wbr>Range<wbr>Size<span class="tsd-signature-symbol">(</span>rangeSize<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">BigInteger</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_prefix_.ipv4prefix.html" class="tsd-signature-type">IPv4Prefix</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/ip-num/ip-num/blob/14ffb14/src/Prefix.ts#L43">Prefix.ts:43</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>rangeSize: <span class="tsd-signature-type">BigInteger</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="_prefix_.ipv4prefix.html" class="tsd-signature-type">IPv4Prefix</a></h4>
+						</li>
+					</ul>
+				</section>
 			</section>
 		</div>
 		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
@@ -306,65 +423,41 @@
 					<li class="globals  ">
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
-					<li class="label tsd-is-external">
-						<span>Internals</span>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_binaryutils_.html">&quot;<wbr>Binary<wbr>Utils&quot;</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="../modules/_abstractipnum_.html">"<wbr>AbstractIPNum"</a>
+						<a href="../modules/_hexadecatet_.html">&quot;<wbr>Hexadecatet&quot;</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="../modules/_asn_.html">"<wbr>Asn"</a>
+						<a href="../modules/_hexadecimalutils_.html">&quot;<wbr>Hexadecimal<wbr>Utils&quot;</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="../modules/_binaryutils_.html">"<wbr>Binary<wbr>Utils"</a>
+						<a href="../modules/_ipnumtype_.html">&quot;IPNum<wbr>Type&quot;</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="../modules/_hexadecatet_.html">"<wbr>Hexadecatet"</a>
+						<a href="../modules/_ipnumber_.html">&quot;IPNumber&quot;</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="../modules/_hexadecimalutils_.html">"<wbr>Hexadecimal<wbr>Utils"</a>
+						<a href="../modules/_ippool_.html">&quot;IPPool&quot;</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="../modules/_ipnumtype_.html">"IPNum<wbr>Type"</a>
+						<a href="../modules/_iprange_.html">&quot;IPRange&quot;</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="../modules/_ipv4_.html">"IPv4"</a>
+						<a href="../modules/_ipv6utils_.html">&quot;IPv6<wbr>Utils&quot;</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="../modules/_ipv4range_.html">"IPv4<wbr>Range"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_ipv6_.html">"IPv6"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_ipv6range_.html">"IPv6<wbr>Range"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_ipv6utils_.html">"IPv6<wbr>Utils"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_octet_.html">"<wbr>Octet"</a>
+						<a href="../modules/_octet_.html">&quot;<wbr>Octet&quot;</a>
 					</li>
 					<li class="current tsd-kind-external-module">
-						<a href="../modules/_prefix_.html">"<wbr>Prefix"</a>
+						<a href="../modules/_prefix_.html">&quot;<wbr>Prefix&quot;</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="../modules/_subnetmask_.html">"<wbr>Subnet<wbr>Mask"</a>
+						<a href="../modules/_validator_.html">&quot;<wbr>Validator&quot;</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="../modules/_validator_.html">"<wbr>Validator"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_index_.html">"index"</a>
-					</li>
-					<li class="label tsd-is-external">
-						<span>Externals</span>
-					</li>
-					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="../modules/_interface_ipnumber_.html">"interface/IPNumber"</a>
-					</li>
-					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="../modules/_interface_iprange_.html">"interface/IPRange"</a>
+						<a href="../modules/_index_.html">&quot;index&quot;</a>
 					</li>
 				</ul>
 			</nav>
@@ -378,23 +471,38 @@
 							<li class=" tsd-kind-constructor tsd-parent-kind-class tsd-is-not-exported">
 								<a href="_prefix_.ipv4prefix.html#constructor" class="tsd-kind-icon">constructor</a>
 							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private tsd-is-not-exported">
+								<a href="_prefix_.ipv4prefix.html#bitvalue" class="tsd-kind-icon">bit<wbr>Value</a>
+							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-not-exported">
 								<a href="_prefix_.ipv4prefix.html#value" class="tsd-kind-icon">value</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-not-exported">
 								<a href="_prefix_.ipv4prefix.html#getvalue" class="tsd-kind-icon">get<wbr>Value</a>
 							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-not-exported">
+								<a href="_prefix_.ipv4prefix.html#merge" class="tsd-kind-icon">merge</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-not-exported">
+								<a href="_prefix_.ipv4prefix.html#split" class="tsd-kind-icon">split</a>
+							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-private tsd-is-not-exported">
 								<a href="_prefix_.ipv4prefix.html#todecimalnotation" class="tsd-kind-icon">to<wbr>Decimal<wbr>Notation</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-not-exported">
-								<a href="_prefix_.ipv4prefix.html#tostring" class="tsd-kind-icon">to<wbr>String</a>
+								<a href="_prefix_.ipv4prefix.html#tomask" class="tsd-kind-icon">to<wbr>Mask</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-not-exported">
-								<a href="_prefix_.ipv4prefix.html#tosubnetmask" class="tsd-kind-icon">to<wbr>Subnet<wbr>Mask</a>
+								<a href="_prefix_.ipv4prefix.html#torangesize" class="tsd-kind-icon">to<wbr>Range<wbr>Size</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-not-exported">
+								<a href="_prefix_.ipv4prefix.html#tostring" class="tsd-kind-icon">to<wbr>String</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static tsd-is-not-exported">
 								<a href="_prefix_.ipv4prefix.html#fromnumber" class="tsd-kind-icon">from<wbr>Number</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static tsd-is-not-exported">
+								<a href="_prefix_.ipv4prefix.html#fromrangesize" class="tsd-kind-icon">from<wbr>Range<wbr>Size</a>
 							</li>
 						</ul>
 					</li>
@@ -402,6 +510,12 @@
 				<ul class="after-current">
 					<li class=" tsd-kind-class tsd-parent-kind-external-module tsd-is-not-exported">
 						<a href="_prefix_.ipv6prefix.html" class="tsd-kind-icon">IPv6<wbr>Prefix</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-is-not-exported">
+						<a href="../interfaces/_prefix_.prefix.html" class="tsd-kind-icon">Prefix</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-not-exported">
+						<a href="../modules/_prefix_.html#rangesizetoprefix" class="tsd-kind-icon">range<wbr>Size<wbr>ToPrefix</a>
 					</li>
 				</ul>
 			</nav>
@@ -420,6 +534,7 @@
 				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
 				<li class="tsd-kind-index-signature"><span class="tsd-kind-icon">Index signature</span></li>
 				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
+				<li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
@@ -468,7 +583,7 @@
 	</div>
 </footer>
 <div class="container tsd-generator">
-	<p>Generated using <a href="http://typedoc.org/" target="_blank">TypeDoc</a></p>
+	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
 </div>
 <div class="overlay"></div>
 <script src="../assets/js/main.js"></script>

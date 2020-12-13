@@ -4,7 +4,7 @@ import {Asn} from "../src/IPNumber";
 import {IPv6} from "../src/IPNumber";
 import {IPv6CidrRange} from "../src/IPRange";
 import {AbstractIPNum, IPv4Prefix, IPv6Prefix} from "../src";
-import {AbstractIPRange} from "../src/IPRange";
+import {AbstractIPRange} from "../src";
 
 
 describe('Interface : ', () => {
