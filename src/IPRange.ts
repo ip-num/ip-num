@@ -139,11 +139,11 @@ export class RangedSet<T extends AbstractIPNum> implements Iterable<AbstractIPNu
      *
      * @param otherRange the other range to check if this range contains
      */
-    public contains(otherRange: RangedSet<AbstractIPNum>): boolean {
-        let thisFirst: AbstractIPNum = this.getFirst();
-        let thisLast: AbstractIPNum = this.getLast();
-        let otherFirst: AbstractIPNum = otherRange.getFirst();
-        let otherLast: AbstractIPNum = otherRange.getLast();
+    public contains(otherRange: RangedSet<T>): boolean {
+        let thisFirst: T = this.getFirst();
+        let thisLast: T = this.getLast();
+        let otherFirst: T = otherRange.getFirst();
+        let otherLast: T = otherRange.getLast();
 
         return (thisFirst.isLessThanOrEquals(otherFirst) && thisLast.isGreaterThanOrEquals(otherLast));
     }
@@ -346,7 +346,7 @@ export class RangedSet<T extends AbstractIPNum> implements Iterable<AbstractIPNu
         return new RangedSet(firstIp, lastIp);
     }
 
-    public difference(range: RangedSet<AbstractIPNum>): Array<RangedSet<AbstractIPNum>> {
+    public difference(range: RangedSet<T>): Array<RangedSet<AbstractIPNum>> {
         if (range.getSize().gt(this.getSize())) {
             throw new Error("Range is greater than range to be subtracted from");
         }
