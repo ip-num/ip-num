@@ -175,11 +175,7 @@ var RangedSet = /** @class */ (function () {
      * @param otherRange the other range to check if this range is inside of.
      */
     RangedSet.prototype.inside = function (otherRange) {
-        var thisFirst = this.getFirst();
-        var thisLast = this.getLast();
-        var otherFirst = otherRange.getFirst();
-        var otherLast = otherRange.getLast();
-        return (otherFirst.isLessThanOrEquals(thisFirst) && otherLast.isGreaterThanOrEquals(thisLast));
+        return !this.contains(otherRange);
     };
     /**
      * Checks if this range contains the given other range.

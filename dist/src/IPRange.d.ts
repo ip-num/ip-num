@@ -73,7 +73,7 @@ export declare class RangedSet<T extends AbstractIPNum> implements Iterable<Abst
      *
      * @param otherRange the other range to check if this range contains
      */
-    contains(otherRange: RangedSet<AbstractIPNum>): boolean;
+    contains(otherRange: RangedSet<T>): boolean;
     /**
      * Check if this range is equal to the given other range.
      *
@@ -147,7 +147,7 @@ export declare class RangedSet<T extends AbstractIPNum> implements Iterable<Abst
      * @param size the size of the range
      */
     takeSubRange(offset: bigInt.BigInteger, size: bigInt.BigInteger): RangedSet<AbstractIPNum>;
-    difference(range: RangedSet<AbstractIPNum>): Array<RangedSet<AbstractIPNum>>;
+    difference(range: RangedSet<T>): Array<RangedSet<AbstractIPNum>>;
     take(count?: number): Iterable<AbstractIPNum>;
     [Symbol.iterator](): IterableIterator<AbstractIPNum>;
     private toIPv4CidrRange;
