@@ -126,12 +126,7 @@ export class RangedSet<T extends AbstractIPNum> implements Iterable<AbstractIPNu
      * @param otherRange the other range to check if this range is inside of.
      */
     public inside(otherRange: RangedSet<T>): boolean {
-        let thisFirst: T = this.getFirst();
-        let thisLast: T = this.getLast();
-        let otherFirst: T = otherRange.getFirst();
-        let otherLast: T = otherRange.getLast();
-
-        return (otherFirst.isLessThanOrEquals(thisFirst) && otherLast.isGreaterThanOrEquals(thisLast));
+        return !this.contains(otherRange);
     }
 
     /**
