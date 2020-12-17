@@ -258,7 +258,7 @@ export class RangedSet<T extends AbstractIPNum> implements Iterable<AbstractIPNu
      */
     public union(otherRange: RangedSet<T>): RangedSet<T> {
         if (this.isEquals(otherRange)) {
-            return otherRange;
+            return new RangedSet(otherRange.getFirst(), otherRange.getLast());
         }
 
         if (this.isOverlapping(otherRange)) {
@@ -270,9 +270,9 @@ export class RangedSet<T extends AbstractIPNum> implements Iterable<AbstractIPNu
         }
 
         if (this.contains(otherRange)) {
-            return this;
+            return new RangedSet(this.getFirst(), this.getLast());
         } else if(otherRange.contains(this)) {
-            return otherRange;
+            return new RangedSet(otherRange.getFirst(), otherRange.getLast());
         }
 
         throw new Error("Ranges do not overlap nor are equal")
