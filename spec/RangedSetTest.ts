@@ -154,18 +154,29 @@ describe('RangedSet: ', () => {
         expect(union.isEquals(expected)).toBe(true);
     });
 
-   it("should perform proper inside and contains test ", () => {
+   it("should realise intersecting range does not contains each other", () => {
         let oneToTen     = new RangedSet(new IPv4("0.0.0.1"), new IPv4("0.0.0.10"));
         let fiveToFifteen = new RangedSet(new IPv4("0.0.0.5"), new IPv4("0.0.0.15"));
-        let zeroToTwenty  = new RangedSet(new IPv4("0.0.0.0"), new IPv4("0.0.0.20"));
         expect(oneToTen.contains(fiveToFifteen)).toBe(false);
-        expect(oneToTen.inside(fiveToFifteen)).toBe(false);
-
-        expect(oneToTen.inside(zeroToTwenty)).toBe(true);
-        expect(zeroToTwenty.inside(oneToTen)).toBe(true);
-
     });
 
+   it("should realise intersecting range are not inside each other", () => {
+        let oneToTen     = new RangedSet(new IPv4("0.0.0.1"), new IPv4("0.0.0.10"));
+        let fiveToFifteen = new RangedSet(new IPv4("0.0.0.5"), new IPv4("0.0.0.15"));
+        expect(oneToTen.inside(fiveToFifteen)).toBe(false);
+    });
+
+   it("should realise smaller range are inside larger containing  range", () => {
+        let oneToTen     = new RangedSet(new IPv4("0.0.0.1"), new IPv4("0.0.0.10"));
+        let zeroToTwenty  = new RangedSet(new IPv4("0.0.0.0"), new IPv4("0.0.0.20"));
+        expect(oneToTen.inside(zeroToTwenty)).toBe(true);
+    });
+
+   it("should realise larger range contains smaller range", () => {
+        let oneToTen     = new RangedSet(new IPv4("0.0.0.1"), new IPv4("0.0.0.10"));
+        let zeroToTwenty  = new RangedSet(new IPv4("0.0.0.0"), new IPv4("0.0.0.20"));
+        expect(zeroToTwenty.contains(oneToTen)).toBe(true);
+    });
 
     it("should preprend", () => {
         let firstRange = new RangedSet(new IPv4("0.0.0.5"), new IPv4("0.0.0.10"));
