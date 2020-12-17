@@ -47,7 +47,7 @@
   "author": "Dadepo Aderemi",
   "license": "MIT",
   "dependencies": {
-    "big-integer": "1.6.48"
+    "big-integer": "^1.6.48"
   },
   "devDependencies": {
     "@types/jasmine": "3.5.11",
