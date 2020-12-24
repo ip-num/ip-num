@@ -201,7 +201,7 @@ describe('Pool', () => {
             }).toThrowError(Error, "Not enough IP number in the pool for requested prefix: 24")
         });
 
-        it("should get multiple prefixes", () => {
+        it("should get a single prefix when asking multiple prefixes", () => {
             let arrays: RangedSet<IPv4>[] = new Array<RangedSet<IPv4>>();
 
             // 192.168.0.128 - 192.168.0.159 - 32
@@ -223,6 +223,28 @@ describe('Pool', () => {
             expect(pool.getRanges().length).toEqual(1)
             expect(pool.getRanges()[0].toCidrRange().toCidrString()).toEqual("192.168.0.128/27")
         });
+    });
+
+    it("should get a multiple prefix that adds up to requested prefix", () => {
+        let arrays: RangedSet<IPv4>[] = new Array<RangedSet<IPv4>>();
+
+
+        arrays.push(RangedSet.fromCidrRange(IPv4CidrRange.fromCidr("192.168.0.0/27")));
+        arrays.push(RangedSet.fromCidrRange(IPv4CidrRange.fromCidr("192.168.0.128/27")));
+        arrays.push(RangedSet.fromCidrRange(IPv4CidrRange.fromCidr("192.168.0.160/27")));
+        arrays.push(RangedSet.fromCidrRange(IPv4CidrRange.fromCidr("192.168.0.192/27")));
+
+        let pool = Pool.fromRangeSet(arrays);
+
+        expect(pool.getRanges().length).toEqual(4)
+
+        let cidrRanges = pool.getMultipleCidrRanges(IPv4Prefix.fromNumber(26));
+
+        expect(cidrRanges[0].toCidrString()).toEqual("192.168.0.0/27")
+        expect(cidrRanges[1].toCidrString()).toEqual("192.168.0.128/27")
+        expect(pool.getRanges().length).toEqual(2)
+        expect(pool.getRanges()[0].toCidrRange().toCidrString()).toEqual("192.168.0.160/27")
+        expect(pool.getRanges()[1].toCidrRange().toCidrString()).toEqual("192.168.0.192/27")
     });
 
     describe("IPv6", () => {
