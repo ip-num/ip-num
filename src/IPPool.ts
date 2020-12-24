@@ -1,6 +1,6 @@
-import {IPv4CidrRange, IPv6CidrRange, RangedSet} from "./IPRange";
+import {AbstractIPRange, IPv4CidrRange, IPv6CidrRange, RangedSet} from "./IPRange";
 import {AbstractIPNum, IPv4, IPv6} from "./IPNumber";
-import {IPv4Prefix, IPv6Prefix} from "./Prefix";
+import {IPv4Prefix, IPv6Prefix, Prefix} from "./Prefix";
 import * as bigInt from "big-integer";
 
 type RangeType = RangedSet<IPv4> | RangedSet<IPv6>;
@@ -122,7 +122,7 @@ export class Pool<T extends RangeType> {
 
         loop:
         for (let range of this.getRanges()) {
-            for (var offset = bigInt.zero; offset.lesserOrEquals(range.getSize()); offset.plus(bigInt.one)) try {
+            for (var offset = bigInt.zero; offset.lesserOrEquals(range.getSize()); offset = offset.plus(bigInt.one)) try {
                 let selectedRange = range.takeSubRange(offset, prefix.toRangeSize());
                 selectedCidrRange = selectedRange.toCidrRange();
                 let remaining = range.difference(selectedRange);
@@ -148,8 +148,34 @@ export class Pool<T extends RangeType> {
      *
      * @param prefix prefix range to retrieve
      */
-    public getMultipleCidrRanges(prefix: IPv4Prefix | IPv6Prefix): IPv4CidrRange[] | IPv6CidrRange[]  {
-        throw new Error();
+    public getMultipleCidrRanges(prefix: IPv4Prefix | IPv6Prefix): AbstractIPRange<AbstractIPNum, IPv4Prefix | IPv6Prefix>[]  {
+        if (prefix.toRangeSize().greater(this.getSize())) {
+            throw new Error("Prefix greater than pool");
+        }
+
+        let go = (prefix: IPv4Prefix | IPv6Prefix, accummulated: AbstractIPRange<AbstractIPNum, IPv4Prefix | IPv6Prefix>[]): AbstractIPRange<AbstractIPNum, IPv4Prefix | IPv6Prefix>[] => {
+            try {
+                let singleCidrRange:IPv4CidrRange | IPv6CidrRange = this.getSingleCidrRange(prefix);
+                accummulated.push(singleCidrRange);
+                let currentSize = accummulated.reduce((previous, current) => {
+                    return previous.plus(current.getSize());
+                }, bigInt.zero);
+                if (prefix.toRangeSize().equals(currentSize)) {
+                    return accummulated
+                } else {
+                    return go(prefix, accummulated)
+                }
+            } catch (e) {
+                if (prefix.getValue() !== 1) {
+                    let lowerPrefix = IPv4Prefix.fromNumber(prefix.getValue() - 1)
+                    console.log("after exception", prefix.toString(), accummulated);
+                    return go(lowerPrefix, accummulated);
+                } else {
+                    throw Error();
+                }
+            }
+        }
+        return go(prefix, []);
     }
 
     /**
