@@ -4,8 +4,8 @@ import {IPv4Prefix, IPv6Prefix, Prefix} from "./Prefix";
 import * as bigInt from "big-integer";
 
 type RangeType = RangedSet<IPv4> | RangedSet<IPv6>;
-export type InferCidrRangeFromPrefix<T> = T extends IPv4Prefix ? IPv4CidrRange : IPv6CidrRange;
-export type InferCidrRangesFromPrefix<T> = T extends IPv4Prefix ? Array<IPv4CidrRange> : Array<IPv6CidrRange>;
+export type IPCidrRange<T> = T extends IPv4Prefix ? IPv4CidrRange : IPv6CidrRange;
+export type IPCidrRangeArray<T> = T extends IPv4Prefix ? Array<IPv4CidrRange> : Array<IPv6CidrRange>;
 /**
  * Represents a collection of IP {@link RangedSet}'s
  */
@@ -115,7 +115,7 @@ export class Pool<T extends RangeType> {
      *
      * @param prefix prefix range to retrieve
      */
-    public getSingleCidrRange<T extends IPv4Prefix | IPv6Prefix>(prefix: T): InferCidrRangeFromPrefix<T> {
+    public getSingleCidrRange<T extends IPv4Prefix | IPv6Prefix>(prefix: T): IPCidrRange<T> {
         if (prefix.toRangeSize().gt(this.getSize())) {
             throw new Error(`Not enough IP number in the pool for requested prefix: ${prefix}`);
         }
@@ -137,7 +137,7 @@ export class Pool<T extends RangeType> {
         }
 
         if (selectedCidrRange) {
-            return selectedCidrRange as InferCidrRangeFromPrefix<T>;
+            return selectedCidrRange as IPCidrRange<T>;
         } else {
             throw error;
         }
@@ -150,7 +150,7 @@ export class Pool<T extends RangeType> {
      *
      * @param reqprefix prefix range to retrieve
      */
-    public getMultipleCidrRanges<T extends IPv4Prefix | IPv6Prefix>(reqprefix: T): InferCidrRangesFromPrefix<T>  {
+    public getMultipleCidrRanges<T extends IPv4Prefix | IPv6Prefix>(reqprefix: T): IPCidrRangeArray<T>  {
         if (reqprefix.toRangeSize().greater(this.getSize())) {
             throw new Error("Prefix greater than pool");
         }
@@ -165,7 +165,7 @@ export class Pool<T extends RangeType> {
                     return previous.plus(current.getSize());
                 }, bigInt.zero);
                 if (reqprefix.toRangeSize().equals(currentSize)) {
-                    return accummulated as InferCidrRangesFromPrefix<T>;
+                    return accummulated as IPCidrRangeArray<T>;
                 } else {
                     return go(reqprefix, prefix, accummulated)
                 }
@@ -178,7 +178,7 @@ export class Pool<T extends RangeType> {
                 }
             }
         }
-        return go(reqprefix, reqprefix, []) as InferCidrRangesFromPrefix<T>;
+        return go(reqprefix, reqprefix, []) as IPCidrRangeArray<T>;
     }
 
     /**
