@@ -341,6 +341,13 @@ export class RangedSet<T extends AbstractIPNum> implements Iterable<AbstractIPNu
         return new RangedSet(firstIp, lastIp);
     }
 
+    /**
+     * Performs a subtraction operation, where the passed range is removed from the original range.
+     *
+     * The return range from the subtraction operation could be a single or multiple ranges
+     *
+     * @param range
+     */
     public difference(range: RangedSet<T>): Array<RangedSet<AbstractIPNum>> {
         if (range.getSize().gt(this.getSize())) {
             throw new Error("Range is greater than range to be subtracted from");

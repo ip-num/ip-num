@@ -204,22 +204,37 @@ export class Pool<T extends RangeType> {
     }
 
     /**
-     * Removes the given range from the pool.
+     * Removes the given range from the pool. It only removes if the exact range exist in the pool.
      * It is a Noop, if the given range does not exist in the pool
+     *
      * @param rangeToRemove range to remove from ppol
      */
     public removeExact(rangeToRemove: RangedSet<AbstractIPNum>) {
         this.backingSet = this.backingSet.removeExact(rangeToRemove);
     }
 
+    /**
+     * Removes the given range from the pool. If the given range overlaps, then it removes the overlapping portion.
+     * It is a Noop, if the given range does not exist or overlap in the pool
+     *
+     * @param rangeToRemove range to remove from ppol
+     */
     public removeOverlapping(rangeToRemove: RangedSet<AbstractIPNum>) {
         this.backingSet = this.backingSet.removeOverlapping(rangeToRemove);
     }
 
+    /**
+     * Adds the given range to the pool.
+     *
+     * @param range to add to pool.
+     */
     public add(range: Array<RangedSet<AbstractIPNum>>) {
         this.backingSet = this.backingSet.add(range);
     }
 
+    /**
+     * Removes all ranges from pool
+     */
     public clear() {
         this.backingSet.clear();
     }
