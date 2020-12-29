@@ -223,54 +223,76 @@ describe('Pool', () => {
             expect(pool.getRanges().length).toEqual(1)
             expect(pool.getRanges()[0].toCidrRange().toCidrString()).toEqual("192.168.0.128/27")
         });
+        it("should get a multiple prefix that adds up to requested prefix", () => {
+            let arrays: RangedSet<IPv4>[] = new Array<RangedSet<IPv4>>();
+
+
+            arrays.push(RangedSet.fromCidrRange(IPv4CidrRange.fromCidr("192.168.0.0/27")));
+            arrays.push(RangedSet.fromCidrRange(IPv4CidrRange.fromCidr("192.168.0.128/27")));
+            arrays.push(RangedSet.fromCidrRange(IPv4CidrRange.fromCidr("192.168.0.160/27")));
+            arrays.push(RangedSet.fromCidrRange(IPv4CidrRange.fromCidr("192.168.0.192/27")));
+
+            let pool = Pool.fromRangeSet(arrays);
+
+            expect(pool.getRanges().length).toEqual(4)
+
+            let cidrRanges = pool.getMultipleCidrRanges(IPv4Prefix.fromNumber(26));
+
+            expect(cidrRanges[0].toCidrString()).toEqual("192.168.0.0/27")
+            expect(cidrRanges[1].toCidrString()).toEqual("192.168.0.128/27")
+            expect(pool.getRanges().length).toEqual(2)
+            expect(pool.getRanges()[0].toCidrRange().toCidrString()).toEqual("192.168.0.160/27")
+            expect(pool.getRanges()[1].toCidrRange().toCidrString()).toEqual("192.168.0.192/27")
+        });
+
+        it("should get a sorted multiple prefix that adds up to requested prefix", () => {
+            let arrays: RangedSet<IPv4>[] = new Array<RangedSet<IPv4>>();
+
+
+            arrays.push(RangedSet.fromCidrRange(IPv4CidrRange.fromCidr("192.168.0.0/27"))); // pick this and
+            arrays.push(RangedSet.fromCidrRange(IPv4CidrRange.fromCidr("192.168.0.160/27")));
+            arrays.push(RangedSet.fromCidrRange(IPv4CidrRange.fromCidr("192.168.0.128/27"))); // this
+            arrays.push(RangedSet.fromCidrRange(IPv4CidrRange.fromCidr("192.168.0.192/27")));
+
+            let pool = Pool.fromRangeSet(arrays);
+
+            expect(pool.getRanges().length).toEqual(4)
+
+            let cidrRanges = pool.getMultipleCidrRanges(IPv4Prefix.fromNumber(26));
+
+            expect(cidrRanges[0].toCidrString()).toEqual("192.168.0.0/27")
+            expect(cidrRanges[1].toCidrString()).toEqual("192.168.0.128/27")
+            expect(pool.getRanges().length).toEqual(2)
+            expect(pool.getRanges()[0].toCidrRange().toCidrString()).toEqual("192.168.0.160/27")
+            expect(pool.getRanges()[1].toCidrRange().toCidrString()).toEqual("192.168.0.192/27")
+        });
     });
-
-    it("should get a multiple prefix that adds up to requested prefix", () => {
-        let arrays: RangedSet<IPv4>[] = new Array<RangedSet<IPv4>>();
-
-
-        arrays.push(RangedSet.fromCidrRange(IPv4CidrRange.fromCidr("192.168.0.0/27")));
-        arrays.push(RangedSet.fromCidrRange(IPv4CidrRange.fromCidr("192.168.0.128/27")));
-        arrays.push(RangedSet.fromCidrRange(IPv4CidrRange.fromCidr("192.168.0.160/27")));
-        arrays.push(RangedSet.fromCidrRange(IPv4CidrRange.fromCidr("192.168.0.192/27")));
-
-        let pool = Pool.fromRangeSet(arrays);
-
-        expect(pool.getRanges().length).toEqual(4)
-
-        let cidrRanges = pool.getMultipleCidrRanges(IPv4Prefix.fromNumber(26));
-
-        expect(cidrRanges[0].toCidrString()).toEqual("192.168.0.0/27")
-        expect(cidrRanges[1].toCidrString()).toEqual("192.168.0.128/27")
-        expect(pool.getRanges().length).toEqual(2)
-        expect(pool.getRanges()[0].toCidrRange().toCidrString()).toEqual("192.168.0.160/27")
-        expect(pool.getRanges()[1].toCidrRange().toCidrString()).toEqual("192.168.0.192/27")
-    });
-
-    it("should get a sorted multiple prefix that adds up to requested prefix", () => {
-        let arrays: RangedSet<IPv4>[] = new Array<RangedSet<IPv4>>();
-
-
-        arrays.push(RangedSet.fromCidrRange(IPv4CidrRange.fromCidr("192.168.0.0/27"))); // pick this and
-        arrays.push(RangedSet.fromCidrRange(IPv4CidrRange.fromCidr("192.168.0.160/27")));
-        arrays.push(RangedSet.fromCidrRange(IPv4CidrRange.fromCidr("192.168.0.128/27"))); // this
-        arrays.push(RangedSet.fromCidrRange(IPv4CidrRange.fromCidr("192.168.0.192/27")));
-
-        let pool = Pool.fromRangeSet(arrays);
-
-        expect(pool.getRanges().length).toEqual(4)
-
-        let cidrRanges = pool.getMultipleCidrRanges(IPv4Prefix.fromNumber(26));
-
-        expect(cidrRanges[0].toCidrString()).toEqual("192.168.0.0/27")
-        expect(cidrRanges[1].toCidrString()).toEqual("192.168.0.128/27")
-        expect(pool.getRanges().length).toEqual(2)
-        expect(pool.getRanges()[0].toCidrRange().toCidrString()).toEqual("192.168.0.160/27")
-        expect(pool.getRanges()[1].toCidrRange().toCidrString()).toEqual("192.168.0.192/27")
-    });
-
 
     describe("IPv6", () => {
+
+        it('Should create from IP Numbers', () => {
+            let pool = Pool
+                .fromIPNumbers([IPv6.fromHexadecimalString("2620:0:0:0:0:0:0:0"),
+                    IPv6.fromHexadecimalString("2620:0:ffff:ffff:ffff:ffff:ffff:ffff")]);
+            let ranges = pool.getRanges();
+
+            expect(ranges[0].toCidrRange().toCidrString()).toEqual("2620:0:0:0:0:0:0:0/128")
+            expect(ranges[1].toCidrRange().toCidrString()).toEqual("2620:0:ffff:ffff:ffff:ffff:ffff:ffff/128")
+        });
+
+        it('Should create from CIDR', () => {
+            let pool = Pool
+                .fromCidrRanges([
+                    IPv6CidrRange.fromCidr("2620:0:0:0:0:0:0:0/128"),
+                    IPv6CidrRange.fromCidr("2620:0:ffff:ffff:ffff:ffff:ffff:ffff/128")
+                ]);
+
+            let ranges = pool.getRanges();
+            expect(ranges[0].toCidrRange().toCidrString()).toBe("2620:0:0:0:0:0:0:0/128")
+            expect(ranges[1].toCidrRange().toCidrString()).toBe("2620:0:ffff:ffff:ffff:ffff:ffff:ffff/128")
+
+        });
+
         it("it should fully aggregate", () => {
             let arrays: RangedSet<IPv6>[] = new Array<RangedSet<IPv6>>();
 
@@ -317,7 +339,7 @@ describe('Pool', () => {
             expect(aggregatedPool.getRanges().length).toEqual(1);
         });
 
-        it("it should reset pool with given range", () => {
+        it("it should reset pool with given ranges", () => {
             let arrays: RangedSet<IPv6>[] = new Array<RangedSet<IPv6>>();
             arrays.push(RangedSet.fromCidrRange(IPv6CidrRange.fromCidr("2001:db8:0:0:0:0:0:0/48")));
             let pool = Pool.fromRangeSet(arrays);
@@ -408,6 +430,27 @@ describe('Pool', () => {
             let range = pool.getSingleCidrRange(IPv6Prefix.fromNumber(127));
             expect(range.toCidrString()).toEqual("2001:db8:0:0:0:0:0:0/127");
             expect(pool.getRanges().length).toEqual(1);
+        });
+
+        it('it should get sub range by prefix', () => {
+            let arrays: RangedSet<IPv6>[] = new Array<RangedSet<IPv6>>();
+
+            arrays.push(RangedSet.fromCidrRange(IPv6CidrRange.fromCidr("2001:db8:0:0:0:0:0:0/48")));
+
+            arrays.push(RangedSet.fromCidrRange(IPv6CidrRange.fromCidr("2001:db8:1:4000:0:0:0:0/50")));
+            arrays.push(RangedSet.fromCidrRange(IPv6CidrRange.fromCidr("2001:db8:1:8000:0:0:0:0/49")));
+            arrays.push(RangedSet.fromCidrRange(IPv6CidrRange.fromCidr("2001:db8:1:8000:0:0:0:0/49")));
+
+
+
+            let pool = Pool.fromRangeSet(arrays);
+            let range = pool.getSingleCidrRange(IPv6Prefix.fromNumber(50));
+            expect(range.toCidrString()).toEqual("2001:db8:0:0:0:0:0:0/50");
+            expect(pool.getRanges().length).toEqual(4);
+            expect(pool.getRanges()[0].toRangeString()).toEqual("2001:db8:0:4000:0:0:0:0-2001:db8:0:ffff:ffff:ffff:ffff:ffff");
+            expect(pool.getRanges()[1].toCidrRange().toCidrString()).toEqual("2001:db8:1:4000:0:0:0:0/50");
+            expect(pool.getRanges()[2].toCidrRange().toCidrString()).toEqual("2001:db8:1:8000:0:0:0:0/49");
+            expect(pool.getRanges()[3].toCidrRange().toCidrString()).toEqual("2001:db8:1:8000:0:0:0:0/49");
         });
 
         it('it should throw an exception if requested prefix is bigger than available', () => {

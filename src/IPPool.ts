@@ -114,6 +114,7 @@ export class Pool<T extends RangeType> {
      * throws exception if the requested range cannot be got from the pool.
      *
      * @param prefix prefix range to retrieve
+     * TODO TSE
      */
     public getSingleCidrRange<T extends IPv4Prefix | IPv6Prefix>(prefix: T): IPCidrRange<T> {
         if (prefix.toRangeSize().gt(this.getSize())) {
