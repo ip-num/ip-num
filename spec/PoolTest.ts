@@ -223,6 +223,7 @@ describe('Pool', () => {
             expect(pool.getRanges().length).toEqual(1)
             expect(pool.getRanges()[0].toCidrRange().toCidrString()).toEqual("192.168.0.128/27")
         });
+
         it("should get a multiple prefix that adds up to requested prefix", () => {
             let arrays: RangedSet<IPv4>[] = new Array<RangedSet<IPv4>>();
 
@@ -464,6 +465,31 @@ describe('Pool', () => {
                 pool.getSingleCidrRange(IPv6Prefix.fromNumber(47));
             }).toThrowError(Error, "Not enough IP number in the pool for requested prefix: 47")
         });
+
+
+        it("should get a multiple prefix that adds up to requested prefix", () => {
+            let arrays: RangedSet<IPv6>[] = new Array<RangedSet<IPv6>>();
+
+            // 2001:db8:0:0:0:0:0:0 - 2001:db8:0:7fff:ffff:ffff:ffff:ffff
+            arrays.push(RangedSet.fromCidrRange(IPv6CidrRange.fromCidr("2001:db8:0:0:0:0:0:0/49")));
+            // 2001:db8:1:0:0:0:0:0 - 2001:db8:1:7fff:ffff:ffff:ffff:ffff
+            arrays.push(RangedSet.fromCidrRange(IPv6CidrRange.fromCidr("2001:db8:1:0:0:0:0:0/49")));
+            arrays.push(RangedSet.fromCidrRange(IPv6CidrRange.fromCidr("2002:db8:0:0:0:0:0:0/49")));
+            arrays.push(RangedSet.fromCidrRange(IPv6CidrRange.fromCidr("2002:db8:1:0:0:0:0:0/49")));
+
+
+            let pool = Pool.fromRangeSet(arrays);
+
+            expect(pool.getRanges().length).toEqual(4)
+
+            let cidrRanges = pool.getMultipleCidrRanges(IPv6Prefix.fromNumber(48));
+            expect(pool.getRanges().length).toEqual(2);
+            expect(cidrRanges[0].toCidrString()).toEqual("2001:db8:0:0:0:0:0:0/49")
+            expect(cidrRanges[1].toCidrString()).toEqual("2001:db8:1:0:0:0:0:0/49")
+            expect(pool.getRanges()[0].toCidrRange().toCidrString()).toEqual("2002:db8:0:0:0:0:0:0/49")
+            expect(pool.getRanges()[1].toCidrRange().toCidrString()).toEqual("2002:db8:1:0:0:0:0:0/49")
+        });
+
 
     });
 });

@@ -324,7 +324,7 @@ export class RangedSet<T extends AbstractIPNum> implements Iterable<AbstractIPNu
      */
     public takeSubRange(offset: bigInt.BigInteger, size: bigInt.BigInteger): RangedSet<AbstractIPNum> {
         if (offset.plus(size).gt(this.getSize())) {
-            throw new Error("Requested range is greater than what can be taken");
+            throw new RangeError("Requested range is greater than what can be taken");
         }
 
         if (size.eq(bigInt(0))) {

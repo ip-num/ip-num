@@ -23,7 +23,7 @@ interface Prefix {
  * {@see https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing} for more information on CIDR
  */
 class IPv4Prefix implements Prefix {
-
+    type: "IPv4" = "IPv4"
     private readonly bitValue: bigInt.BigInteger = bigInt(32);
     /**
      * The decimal value of the 8bit number representing the prefix
@@ -136,6 +136,7 @@ class IPv4Prefix implements Prefix {
  * {@see https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing} for more information on CIDR
  */
 class IPv6Prefix implements Prefix {
+    type: "IPv6" = "IPv6"
     private readonly bitValue: bigInt.BigInteger = bigInt(128);
     /**
      * The decimal value of the 16bit number representing the prefix
@@ -257,4 +258,13 @@ function rangeSizeToPrefix(rangeSize: bigInt.BigInteger,
     }
 }
 
-export {Prefix, IPv4Prefix, IPv6Prefix}
+
+/**
+ * Check is the given Prefix is an {@link IPv4Prefix} or not
+ * @param prefix the IP prefix to check if it is IPv4Prefix.
+ */
+function isIPv4Prefix(prefix: IPv4Prefix | IPv6Prefix): prefix is IPv4Prefix {
+    return prefix.type === "IPv4";
+}
+
+export {Prefix, IPv4Prefix, IPv6Prefix, isIPv4Prefix}

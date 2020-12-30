@@ -1,6 +1,6 @@
 import {AbstractIPRange, IPv4CidrRange, IPv6CidrRange, RangedSet} from "./IPRange";
 import {AbstractIPNum, IPv4, IPv6} from "./IPNumber";
-import {IPv4Prefix, IPv6Prefix, Prefix} from "./Prefix";
+import {IPv4Prefix, IPv6Prefix, isIPv4Prefix, Prefix} from "./Prefix";
 import * as bigInt from "big-integer";
 
 type RangeType = RangedSet<IPv4> | RangedSet<IPv6>;
@@ -125,7 +125,7 @@ export class Pool<T extends RangeType> {
 
         loop:
         for (let range of this.getRanges()) {
-            for (var offset = bigInt.zero; offset.lesserOrEquals(range.getSize()); offset = offset.plus(bigInt.one)) try {
+            for (var offset = bigInt.zero; offset.plus(prefix.toRangeSize()).lesserOrEquals(range.getSize()); offset = offset.plus(bigInt.one)) try {
                 let selectedRange = range.takeSubRange(offset, prefix.toRangeSize());
                 selectedCidrRange = selectedRange.toCidrRange();
                 let remaining = range.difference(selectedRange);
@@ -133,6 +133,9 @@ export class Pool<T extends RangeType> {
                 this.add(remaining);
                 break loop;
             } catch (e) {
+                if (e instanceof RangeError) {
+                    continue loop;
+                }
                 error = e
             }
         }
@@ -155,7 +158,6 @@ export class Pool<T extends RangeType> {
         if (reqprefix.toRangeSize().greater(this.getSize())) {
             throw new Error("Prefix greater than pool");
         }
-
         let go = (reqprefix: IPv4Prefix | IPv6Prefix,
                   prefix: IPv4Prefix | IPv6Prefix,
                   accummulated: AbstractIPRange<AbstractIPNum, IPv4Prefix | IPv6Prefix>[]): AbstractIPRange<AbstractIPNum, IPv4Prefix | IPv6Prefix>[] => {
@@ -172,7 +174,8 @@ export class Pool<T extends RangeType> {
                 }
             } catch (e) {
                 if (prefix.getValue() !== 1) {
-                    let lowerPrefix = IPv4Prefix.fromNumber(prefix.getValue() + 1)
+                    let lowerPrefix = isIPv4Prefix(prefix) ?
+                        IPv4Prefix.fromNumber(prefix.getValue() + 1) : IPv6Prefix.fromNumber(prefix.getValue() + 1)
                     return go(reqprefix, lowerPrefix, accummulated);
                 } else {
                     throw Error();
