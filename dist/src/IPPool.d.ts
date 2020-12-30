@@ -3,6 +3,8 @@ import { AbstractIPNum, IPv4, IPv6 } from "./IPNumber";
 import { IPv4Prefix, IPv6Prefix } from "./Prefix";
 import * as bigInt from "big-integer";
 declare type RangeType = RangedSet<IPv4> | RangedSet<IPv6>;
+export declare type IPCidrRange<T> = T extends IPv4Prefix ? IPv4CidrRange : IPv6CidrRange;
+export declare type IPCidrRangeArray<T> = T extends IPv4Prefix ? Array<IPv4CidrRange> : Array<IPv6CidrRange>;
 /**
  * Represents a collection of IP {@link RangedSet}'s
  */
@@ -48,16 +50,17 @@ export declare class Pool<T extends RangeType> {
      * throws exception if the requested range cannot be got from the pool.
      *
      * @param prefix prefix range to retrieve
+     * TODO TSE
      */
-    getSingleCidrRange(prefix: IPv4Prefix | IPv6Prefix): IPv4CidrRange | IPv6CidrRange;
+    getSingleCidrRange<T extends IPv4Prefix | IPv6Prefix>(prefix: T): IPCidrRange<T>;
     /**
      * Gets a single or multiple ranges that fulfils the given prefix from the pool.
      *
      * throws exception if the requested range cannot be got from the pool.
      *
-     * @param prefix prefix range to retrieve
+     * @param reqprefix prefix range to retrieve
      */
-    getMultipleCidrRanges(prefix: IPv4Prefix | IPv6Prefix): IPv4CidrRange[] | IPv6CidrRange[];
+    getMultipleCidrRanges<T extends IPv4Prefix | IPv6Prefix>(reqprefix: T): IPCidrRangeArray<T>;
     /**
      * Returns the size of IP numbers in the pool
      */
@@ -69,13 +72,28 @@ export declare class Pool<T extends RangeType> {
      */
     resetWith(ipRanges: Array<RangedSet<IPv4 | IPv6>>): void;
     /**
-     * Removes the given range from the pool.
+     * Removes the given range from the pool. It only removes if the exact range exist in the pool.
      * It is a Noop, if the given range does not exist in the pool
+     *
      * @param rangeToRemove range to remove from ppol
      */
     removeExact(rangeToRemove: RangedSet<AbstractIPNum>): void;
+    /**
+     * Removes the given range from the pool. If the given range overlaps, then it removes the overlapping portion.
+     * It is a Noop, if the given range does not exist or overlap in the pool
+     *
+     * @param rangeToRemove range to remove from ppol
+     */
     removeOverlapping(rangeToRemove: RangedSet<AbstractIPNum>): void;
+    /**
+     * Adds the given range to the pool.
+     *
+     * @param range to add to pool.
+     */
     add(range: Array<RangedSet<AbstractIPNum>>): void;
+    /**
+     * Removes all ranges from pool
+     */
     clear(): void;
 }
 export {};

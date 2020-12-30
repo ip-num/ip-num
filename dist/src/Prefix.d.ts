@@ -15,6 +15,7 @@ interface Prefix {
  * {@see https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing} for more information on CIDR
  */
 declare class IPv4Prefix implements Prefix {
+    type: "IPv4";
     private readonly bitValue;
     /**
      * The decimal value of the 8bit number representing the prefix
@@ -81,6 +82,7 @@ declare class IPv4Prefix implements Prefix {
  * {@see https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing} for more information on CIDR
  */
 declare class IPv6Prefix implements Prefix {
+    type: "IPv6";
     private readonly bitValue;
     /**
      * The decimal value of the 16bit number representing the prefix
@@ -138,4 +140,9 @@ declare class IPv6Prefix implements Prefix {
     split(): IPv6Prefix;
     private toHexadecatetNotation;
 }
-export { Prefix, IPv4Prefix, IPv6Prefix };
+/**
+ * Check is the given Prefix is an {@link IPv4Prefix} or not
+ * @param prefix the IP prefix to check if it is IPv4Prefix.
+ */
+declare function isIPv4Prefix(prefix: IPv4Prefix | IPv6Prefix): prefix is IPv4Prefix;
+export { Prefix, IPv4Prefix, IPv6Prefix, isIPv4Prefix };

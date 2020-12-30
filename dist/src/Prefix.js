@@ -16,7 +16,7 @@ var __read = (this && this.__read) || function (o, n) {
     return ar;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.IPv6Prefix = exports.IPv4Prefix = void 0;
+exports.isIPv4Prefix = exports.IPv6Prefix = exports.IPv4Prefix = void 0;
 var Validator_1 = require("./Validator");
 var IPNumber_1 = require("./IPNumber");
 var BinaryUtils_1 = require("./BinaryUtils");
@@ -41,6 +41,7 @@ var IPv4Prefix = /** @class */ (function () {
      */
     function IPv4Prefix(rawValue) {
         var _a;
+        this.type = "IPv4";
         this.bitValue = bigInt(32);
         var isValid;
         var message;
@@ -143,6 +144,7 @@ var IPv6Prefix = /** @class */ (function () {
      */
     function IPv6Prefix(rawValue) {
         var _a;
+        this.type = "IPv6";
         this.bitValue = bigInt(128);
         var isValid;
         var message;
@@ -243,4 +245,12 @@ function rangeSizeToPrefix(rangeSize, rangeMaxSize) {
         throw new Error(Validator_1.Validator.invalidIPRangeSizeForCidrMessage);
     }
 }
+/**
+ * Check is the given Prefix is an {@link IPv4Prefix} or not
+ * @param prefix the IP prefix to check if it is IPv4Prefix.
+ */
+function isIPv4Prefix(prefix) {
+    return prefix.type === "IPv4";
+}
+exports.isIPv4Prefix = isIPv4Prefix;
 //# sourceMappingURL=Prefix.js.map

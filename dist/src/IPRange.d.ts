@@ -3,7 +3,7 @@ import { IPv6, AbstractIPNum } from "./IPNumber";
 import { IPv4 } from "./IPNumber";
 import { IPv6Prefix } from "./Prefix";
 import { IPv4Prefix } from "./Prefix";
-export declare type InferIPTypeFromRangeType<T> = T extends IPv4CidrRange ? IPv4 : IPv6;
+export declare type IP<T> = T extends IPv4CidrRange ? IPv4 : IPv6;
 /**
  * Represents a continuous segment of either IPv4 or IPv6 numbers
  * without adhering to classless inter-domain routing scheme
@@ -27,7 +27,7 @@ export declare class RangedSet<T extends AbstractIPNum> implements Iterable<Abst
      *
      * @param cidrRange an instance of {@link RangedSet}
      */
-    static fromCidrRange<U extends IPv6CidrRange | IPv4CidrRange>(cidrRange: U): RangedSet<InferIPTypeFromRangeType<U>>;
+    static fromCidrRange<U extends IPv6CidrRange | IPv4CidrRange>(cidrRange: U): RangedSet<IP<U>>;
     /**
      * Convenience method for constructing an instance of {@link RangedSet} from
      * a range string in the form of firstIp-lastIp
@@ -147,6 +147,13 @@ export declare class RangedSet<T extends AbstractIPNum> implements Iterable<Abst
      * @param size the size of the range
      */
     takeSubRange(offset: bigInt.BigInteger, size: bigInt.BigInteger): RangedSet<AbstractIPNum>;
+    /**
+     * Performs a subtraction operation, where the passed range is removed from the original range.
+     *
+     * The return range from the subtraction operation could be a single or multiple ranges
+     *
+     * @param range
+     */
     difference(range: RangedSet<T>): Array<RangedSet<AbstractIPNum>>;
     take(count?: number): Iterable<AbstractIPNum>;
     [Symbol.iterator](): IterableIterator<AbstractIPNum>;

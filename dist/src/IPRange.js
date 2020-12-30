@@ -3,7 +3,7 @@ var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
@@ -175,7 +175,7 @@ var RangedSet = /** @class */ (function () {
      * @param otherRange the other range to check if this range is inside of.
      */
     RangedSet.prototype.inside = function (otherRange) {
-        return !this.contains(otherRange);
+        return otherRange.contains(this);
     };
     /**
      * Checks if this range contains the given other range.
@@ -297,7 +297,7 @@ var RangedSet = /** @class */ (function () {
      */
     RangedSet.prototype.union = function (otherRange) {
         if (this.isEquals(otherRange)) {
-            return otherRange;
+            return new RangedSet(otherRange.getFirst(), otherRange.getLast());
         }
         if (this.isOverlapping(otherRange)) {
             if (this.getFirst().isLessThan(otherRange.getFirst())) {
@@ -308,10 +308,10 @@ var RangedSet = /** @class */ (function () {
             }
         }
         if (this.contains(otherRange)) {
-            return this;
+            return new RangedSet(this.getFirst(), this.getLast());
         }
         else if (otherRange.contains(this)) {
-            return otherRange;
+            return new RangedSet(otherRange.getFirst(), otherRange.getLast());
         }
         throw new Error("Ranges do not overlap nor are equal");
     };
@@ -360,7 +360,7 @@ var RangedSet = /** @class */ (function () {
      */
     RangedSet.prototype.takeSubRange = function (offset, size) {
         if (offset.plus(size).gt(this.getSize())) {
-            throw new Error("Requested range is greater than what can be taken");
+            throw new RangeError("Requested range is greater than what can be taken");
         }
         if (size.eq(bigInt(0))) {
             throw new Error("Sub range cannot be zero");
@@ -372,6 +372,13 @@ var RangedSet = /** @class */ (function () {
         var lastIp = IPNumber_1.isIPv4(firstIp) ? IPNumber_2.IPv4.fromBigInteger(valueOfLastIp) : IPNumber_1.IPv6.fromBigInteger(valueOfLastIp);
         return new RangedSet(firstIp, lastIp);
     };
+    /**
+     * Performs a subtraction operation, where the passed range is removed from the original range.
+     *
+     * The return range from the subtraction operation could be a single or multiple ranges
+     *
+     * @param range
+     */
     RangedSet.prototype.difference = function (range) {
         if (range.getSize().gt(this.getSize())) {
             throw new Error("Range is greater than range to be subtracted from");

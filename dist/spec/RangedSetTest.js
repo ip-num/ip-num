@@ -173,6 +173,26 @@ describe('RangedSet: ', function () {
         var union = firstRange.union(secondRange);
         expect(union.isEquals(expected)).toBe(true);
     });
+    it("should realise intersecting range does not contains each other", function () {
+        var oneToTen = new src_1.RangedSet(new src_1.IPv4("0.0.0.1"), new src_1.IPv4("0.0.0.10"));
+        var fiveToFifteen = new src_1.RangedSet(new src_1.IPv4("0.0.0.5"), new src_1.IPv4("0.0.0.15"));
+        expect(oneToTen.contains(fiveToFifteen)).toBe(false);
+    });
+    it("should realise intersecting range are not inside each other", function () {
+        var oneToTen = new src_1.RangedSet(new src_1.IPv4("0.0.0.1"), new src_1.IPv4("0.0.0.10"));
+        var fiveToFifteen = new src_1.RangedSet(new src_1.IPv4("0.0.0.5"), new src_1.IPv4("0.0.0.15"));
+        expect(oneToTen.inside(fiveToFifteen)).toBe(false);
+    });
+    it("should realise smaller range are inside larger containing  range", function () {
+        var oneToTen = new src_1.RangedSet(new src_1.IPv4("0.0.0.1"), new src_1.IPv4("0.0.0.10"));
+        var zeroToTwenty = new src_1.RangedSet(new src_1.IPv4("0.0.0.0"), new src_1.IPv4("0.0.0.20"));
+        expect(oneToTen.inside(zeroToTwenty)).toBe(true);
+    });
+    it("should realise larger range contains smaller range", function () {
+        var oneToTen = new src_1.RangedSet(new src_1.IPv4("0.0.0.1"), new src_1.IPv4("0.0.0.10"));
+        var zeroToTwenty = new src_1.RangedSet(new src_1.IPv4("0.0.0.0"), new src_1.IPv4("0.0.0.20"));
+        expect(zeroToTwenty.contains(oneToTen)).toBe(true);
+    });
     it("should preprend", function () {
         var firstRange = new src_1.RangedSet(new src_1.IPv4("0.0.0.5"), new src_1.IPv4("0.0.0.10"));
         var secondRange = new src_1.RangedSet(new src_1.IPv4("0.0.0.1"), new src_1.IPv4("0.0.0.4"));

@@ -13,6 +13,7 @@ var __values = (this && this.__values) || function(o) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Pool = void 0;
 var IPRange_1 = require("./IPRange");
+var Prefix_1 = require("./Prefix");
 var bigInt = require("big-integer");
 /**
  * Represents a collection of IP {@link RangedSet}'s
@@ -115,6 +116,7 @@ var Pool = /** @class */ (function () {
      * throws exception if the requested range cannot be got from the pool.
      *
      * @param prefix prefix range to retrieve
+     * TODO TSE
      */
     Pool.prototype.getSingleCidrRange = function (prefix) {
         var e_1, _a;
@@ -126,7 +128,7 @@ var Pool = /** @class */ (function () {
         try {
             loop: for (var _b = __values(this.getRanges()), _c = _b.next(); !_c.done; _c = _b.next()) {
                 var range = _c.value;
-                for (var offset = bigInt.zero; offset.lesserOrEquals(range.getSize()); offset.plus(bigInt.one))
+                for (var offset = bigInt.zero; offset.plus(prefix.toRangeSize()).lesserOrEquals(range.getSize()); offset = offset.plus(bigInt.one))
                     try {
                         var selectedRange = range.takeSubRange(offset, prefix.toRangeSize());
                         selectedCidrRange = selectedRange.toCidrRange();
@@ -136,6 +138,9 @@ var Pool = /** @class */ (function () {
                         break loop;
                     }
                     catch (e) {
+                        if (e instanceof RangeError) {
+                            continue loop;
+                        }
                         error = e;
                     }
             }
@@ -151,7 +156,7 @@ var Pool = /** @class */ (function () {
             return selectedCidrRange;
         }
         else {
-            throw error;
+            throw (error === undefined ? new Error("No range big enough in the pool for requested prefix: " + prefix) : error);
         }
     };
     /**
@@ -159,10 +164,39 @@ var Pool = /** @class */ (function () {
      *
      * throws exception if the requested range cannot be got from the pool.
      *
-     * @param prefix prefix range to retrieve
+     * @param reqprefix prefix range to retrieve
      */
-    Pool.prototype.getMultipleCidrRanges = function (prefix) {
-        throw new Error();
+    Pool.prototype.getMultipleCidrRanges = function (reqprefix) {
+        var _this = this;
+        if (reqprefix.toRangeSize().greater(this.getSize())) {
+            throw new Error("Prefix greater than pool");
+        }
+        var go = function (reqprefix, prefix, accummulated) {
+            try {
+                var singleCidrRange = _this.getSingleCidrRange(prefix);
+                accummulated.push(singleCidrRange);
+                var currentSize = accummulated.reduce(function (previous, current) {
+                    return previous.plus(current.getSize());
+                }, bigInt.zero);
+                if (reqprefix.toRangeSize().equals(currentSize)) {
+                    return accummulated;
+                }
+                else {
+                    return go(reqprefix, prefix, accummulated);
+                }
+            }
+            catch (e) {
+                if (prefix.getValue() !== 1) {
+                    var lowerPrefix = Prefix_1.isIPv4Prefix(prefix) ?
+                        Prefix_1.IPv4Prefix.fromNumber(prefix.getValue() + 1) : Prefix_1.IPv6Prefix.fromNumber(prefix.getValue() + 1);
+                    return go(reqprefix, lowerPrefix, accummulated);
+                }
+                else {
+                    throw Error();
+                }
+            }
+        };
+        return go(reqprefix, reqprefix, []);
     };
     /**
      * Returns the size of IP numbers in the pool
@@ -185,19 +219,34 @@ var Pool = /** @class */ (function () {
         this.backingSet = this.backingSet.add(ipRanges);
     };
     /**
-     * Removes the given range from the pool.
+     * Removes the given range from the pool. It only removes if the exact range exist in the pool.
      * It is a Noop, if the given range does not exist in the pool
+     *
      * @param rangeToRemove range to remove from ppol
      */
     Pool.prototype.removeExact = function (rangeToRemove) {
         this.backingSet = this.backingSet.removeExact(rangeToRemove);
     };
+    /**
+     * Removes the given range from the pool. If the given range overlaps, then it removes the overlapping portion.
+     * It is a Noop, if the given range does not exist or overlap in the pool
+     *
+     * @param rangeToRemove range to remove from ppol
+     */
     Pool.prototype.removeOverlapping = function (rangeToRemove) {
         this.backingSet = this.backingSet.removeOverlapping(rangeToRemove);
     };
+    /**
+     * Adds the given range to the pool.
+     *
+     * @param range to add to pool.
+     */
     Pool.prototype.add = function (range) {
         this.backingSet = this.backingSet.add(range);
     };
+    /**
+     * Removes all ranges from pool
+     */
     Pool.prototype.clear = function () {
         this.backingSet.clear();
     };
