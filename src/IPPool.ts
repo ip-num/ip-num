@@ -143,7 +143,7 @@ export class Pool<T extends RangeType> {
         if (selectedCidrRange) {
             return selectedCidrRange as IPCidrRange<T>;
         } else {
-            throw error;
+            throw (error === undefined ? new Error(`No range big enough in the pool for requested prefix: ${prefix}`) : error);
         }
     }
 

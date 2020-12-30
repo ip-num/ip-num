@@ -173,6 +173,23 @@ describe('Pool', () => {
             expect(pool.getRanges().length).toEqual(2);
         });
 
+        it('it should through exception: pool big enough, but no range big enough for prefix', () => {
+            let arrays: RangedSet<IPv4>[] = new Array<RangedSet<IPv4>>();
+
+            // 192.168.0.0 - 192.168.0.63 - 64
+            arrays.push(RangedSet.fromCidrRange(IPv4CidrRange.fromCidr("192.168.0.0/26")));
+            // 192.168.0.128 - 192.168.0.159 - 32
+            arrays.push(RangedSet.fromCidrRange(IPv4CidrRange.fromCidr("192.168.0.128/27")));
+            // 192.168.0.192 - 192.168.0.255 - 64
+            arrays.push(RangedSet.fromCidrRange(IPv4CidrRange.fromCidr("192.168.0.192/26")));
+
+            let pool = Pool.fromRangeSet(arrays);
+
+            expect(() => {
+                pool.getSingleCidrRange(IPv4Prefix.fromNumber(25)); //128
+            }).toThrowError(Error, "No range big enough in the pool for requested prefix: 25")
+        });
+
         it('it should get sub range by prefix', () => {
             let arrays: RangedSet<IPv4>[] = new Array<RangedSet<IPv4>>();
 
@@ -432,6 +449,21 @@ describe('Pool', () => {
             expect(range.toCidrString()).toEqual("2001:db8:0:0:0:0:0:0/127");
             expect(pool.getRanges().length).toEqual(1);
         });
+
+        it('it should through exception: pool big enough, but no range big enough for prefix', () => {
+            let arrays: RangedSet<IPv6>[] = new Array<RangedSet<IPv6>>();
+
+            arrays.push(RangedSet.fromCidrRange(IPv6CidrRange.fromCidr("2001:db8:1:8000:0:0:0:0/49")));
+            arrays.push(RangedSet.fromCidrRange(IPv6CidrRange.fromCidr("2001:db8:1:4000:0:0:0:0/50")));
+            arrays.push(RangedSet.fromCidrRange(IPv6CidrRange.fromCidr("2002:db8:1:8000:0:0:0:0/49")));
+
+            let pool = Pool.fromRangeSet(arrays);
+
+            expect(() => {
+                pool.getSingleCidrRange(IPv6Prefix.fromNumber(48));
+            }).toThrowError(Error, "No range big enough in the pool for requested prefix: 48")
+        });
+
 
         it('it should get sub range by prefix', () => {
             let arrays: RangedSet<IPv6>[] = new Array<RangedSet<IPv6>>();
