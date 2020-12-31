@@ -222,12 +222,15 @@ export class Pool<T extends RangeType> {
 
     /**
      * Removes the given range from the pool. If the given range overlaps, then it removes the overlapping portion.
-     * It is a Noop, if the given range does not exist or overlap in the pool
+     * It is a Noop and returns false, if the given range does not exist in the pool. Returns true otherwise
      *
      * @param rangeToRemove range to remove from ppol
      */
     public removeOverlapping(rangeToRemove: RangedSet<AbstractIPNum>) {
-        this.backingSet = this.backingSet.removeOverlapping(rangeToRemove);
+        let updatedSet = this.backingSet.removeOverlapping(rangeToRemove);
+        let isUpdated = !this.backingSet.isEquals(updatedSet);
+        this.backingSet = updatedSet;
+        return isUpdated;
     }
 
     /**
@@ -339,7 +342,12 @@ class SortedSet {
                     });
 
                 } else {
-                    return backingItem.difference(items);
+                    try {
+                        return backingItem.difference(items);
+                    } catch (e) {
+                        return backingItem;
+                    }
+
                 }
             });
 

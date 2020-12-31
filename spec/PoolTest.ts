@@ -115,6 +115,21 @@ describe('Pool', () => {
             expect(pool.getRanges()[0].toCidrRange().toCidrString()).toEqual("192.168.0.0/26");
         });
 
+        it("it should remove range from pool using removeOverlapping", () => {
+            let arrays: RangedSet<IPv4>[] = new Array<RangedSet<IPv4>>();
+
+            arrays.push(RangedSet.fromCidrRange(IPv4CidrRange.fromCidr("192.168.0.0/26")));
+            let rangeToRemove = RangedSet.fromCidrRange(IPv4CidrRange.fromCidr("192.168.0.64/26"));
+            arrays.push(rangeToRemove);
+            let pool = Pool.fromRangeSet(arrays);
+
+            expect(pool.getRanges().length).toEqual(2);
+            let isRemoved = pool.removeOverlapping(rangeToRemove);
+            expect(isRemoved).toBeTrue();
+            expect(pool.getRanges().length).toEqual(1);
+            expect(pool.getRanges()[0].toCidrRange().toCidrString()).toEqual("192.168.0.0/26");
+        });
+
         it("it should not remove range if not in the pool", () => {
             let arrays: RangedSet<IPv4>[] = new Array<RangedSet<IPv4>>();
 
@@ -127,6 +142,24 @@ describe('Pool', () => {
 
             expect(pool.getRanges().length).toEqual(2);
             let isRemoved = pool.removeExact(rangeToRemove);
+            expect(isRemoved).toBeFalse();
+            expect(pool.getRanges().length).toEqual(2);
+            expect(pool.getRanges()[0].toCidrRange().toCidrString()).toEqual("192.168.0.0/26");
+            expect(pool.getRanges()[1].toCidrRange().toCidrString()).toEqual("192.168.0.64/26");
+        });
+
+        it("it should not remove range if not in the pool using removeOverlapping", () => {
+            let arrays: RangedSet<IPv4>[] = new Array<RangedSet<IPv4>>();
+
+            arrays.push(RangedSet.fromCidrRange(IPv4CidrRange.fromCidr("192.168.0.0/26")));
+            arrays.push(RangedSet.fromCidrRange(IPv4CidrRange.fromCidr("192.168.0.64/26")));
+            // not added to the pool
+            let rangeToRemove = RangedSet.fromCidrRange(IPv4CidrRange.fromCidr("192.168.0.128/27"));
+
+            let pool = Pool.fromRangeSet(arrays);
+
+            expect(pool.getRanges().length).toEqual(2);
+            let isRemoved = pool.removeOverlapping(rangeToRemove);
             expect(isRemoved).toBeFalse();
             expect(pool.getRanges().length).toEqual(2);
             expect(pool.getRanges()[0].toCidrRange().toCidrString()).toEqual("192.168.0.0/26");
@@ -149,6 +182,27 @@ describe('Pool', () => {
             expect(pool.getRanges().length).toEqual(2);
             expect(pool.getRanges()[0].toCidrRange().toCidrString()).toEqual("192.168.0.0/26");
             expect(pool.getRanges()[1].toCidrRange().toCidrString()).toEqual("192.168.0.64/26");
+        });
+
+        it("it should remove range if range is sub range in the pool using removeOverlapping", () => {
+            let arrays: RangedSet<IPv4>[] = new Array<RangedSet<IPv4>>();
+
+            // 192.168.0.0 - 192.168.0.63
+            arrays.push(RangedSet.fromCidrRange(IPv4CidrRange.fromCidr("192.168.0.0/26")));
+            // 192.168.0.64 - 192.168.0.127
+            arrays.push(RangedSet.fromCidrRange(IPv4CidrRange.fromCidr("192.168.0.64/26")));
+            // not added to the pool
+            // 192.168.0.96 - 192.168.0.127
+            let rangeToRemove = RangedSet.fromCidrRange(IPv4CidrRange.fromCidr("192.168.0.96/27"));
+
+            let pool = Pool.fromRangeSet(arrays);
+
+            expect(pool.getRanges().length).toEqual(2);
+            let isRemoved = pool.removeOverlapping(rangeToRemove);
+            expect(isRemoved).toBeTrue();
+            expect(pool.getRanges().length).toEqual(2);
+            expect(pool.getRanges()[0].toCidrRange().toCidrString()).toEqual("192.168.0.0/26");
+            expect(pool.getRanges()[1].toCidrRange().toCidrString()).toEqual("192.168.0.64/27");
         });
 
         it("it should return the size of pool", () => {
@@ -395,6 +449,22 @@ describe('Pool', () => {
             expect(pool.getRanges()[0].toCidrRange().toCidrString()).toEqual("2001:db8:0:0:0:0:0:0/48");
         });
 
+        it("it should remove range from pool using removeOverlapping", () => {
+            let arrays: RangedSet<IPv6>[] = new Array<RangedSet<IPv6>>();
+
+            arrays.push(RangedSet.fromCidrRange(IPv6CidrRange.fromCidr("2001:db8:0:0:0:0:0:0/48")));
+            let rangeToRemove = RangedSet.fromCidrRange(IPv6CidrRange.fromCidr("2001:db8:1:0:0:0:0:0/50"));
+            arrays.push(rangeToRemove);
+
+            let pool = Pool.fromRangeSet(arrays);
+
+            expect(pool.getRanges().length).toEqual(2);
+            let isRemoved = pool.removeOverlapping(rangeToRemove);
+            expect(isRemoved).toBeTrue();
+            expect(pool.getRanges().length).toEqual(1);
+            expect(pool.getRanges()[0].toCidrRange().toCidrString()).toEqual("2001:db8:0:0:0:0:0:0/48");
+        });
+
         it("it should not remove range if not in the pool", () => {
             let arrays: RangedSet<IPv6>[] = new Array<RangedSet<IPv6>>();
 
@@ -408,6 +478,25 @@ describe('Pool', () => {
 
             expect(pool.getRanges().length).toEqual(2);
             let isRemoved = pool.removeExact(rangeToRemove);
+            expect(isRemoved).toBeFalse();
+            expect(pool.getRanges().length).toEqual(2);
+            expect(pool.getRanges()[0].toCidrRange().toCidrString()).toEqual("2001:db8:0:0:0:0:0:0/48");
+            expect(pool.getRanges()[1].toCidrRange().toCidrString()).toEqual("2001:db8:1:0:0:0:0:0/50");
+        });
+
+        it("it should not remove range if not in the pool using removeOverlapping", () => {
+            let arrays: RangedSet<IPv6>[] = new Array<RangedSet<IPv6>>();
+
+            arrays.push(RangedSet.fromCidrRange(IPv6CidrRange.fromCidr("2001:db8:0:0:0:0:0:0/48")));
+            arrays.push(RangedSet.fromCidrRange(IPv6CidrRange.fromCidr("2001:db8:1:0:0:0:0:0/50")));
+
+            // not added to the pool
+            let rangeToRemove = RangedSet.fromCidrRange(IPv6CidrRange.fromCidr("2001:db8:1:4000:0:0:0:0/50"));
+
+            let pool = Pool.fromRangeSet(arrays);
+
+            expect(pool.getRanges().length).toEqual(2);
+            let isRemoved = pool.removeOverlapping(rangeToRemove);
             expect(isRemoved).toBeFalse();
             expect(pool.getRanges().length).toEqual(2);
             expect(pool.getRanges()[0].toCidrRange().toCidrString()).toEqual("2001:db8:0:0:0:0:0:0/48");
@@ -429,6 +518,25 @@ describe('Pool', () => {
             let isRemoved = pool.removeExact(rangeToRemove);
             expect(isRemoved).toBeFalse();
             expect(pool.getRanges().length).toEqual(2);
+        });
+
+        it("it should remove range if range is sub range in the pool using removeOverlapping", () => {
+            let arrays: RangedSet<IPv6>[] = new Array<RangedSet<IPv6>>();
+
+            arrays.push(RangedSet.fromCidrRange(IPv6CidrRange.fromCidr("2001:db8:0:0:0:0:0:0/48")));
+            arrays.push(RangedSet.fromCidrRange(IPv6CidrRange.fromCidr("2001:db8:1:0:0:0:0:0/50")));
+
+            // sub range of 2001:db8:1:0:0:0:0:0/50
+            let rangeToRemove = RangedSet.fromCidrRange(IPv6CidrRange.fromCidr("2001:db8:1:0:0:0:0:0/51"));
+
+            let pool = Pool.fromRangeSet(arrays);
+
+            expect(pool.getRanges().length).toEqual(2);
+            let isRemoved = pool.removeOverlapping(rangeToRemove);
+            expect(isRemoved).toBeTrue();
+            expect(pool.getRanges().length).toEqual(2);
+            expect(pool.getRanges()[0].toCidrRange().toCidrString()).toEqual("2001:db8:0:0:0:0:0:0/48");
+            expect(pool.getRanges()[1].toCidrRange().toCidrString()).toEqual("2001:db8:1:2000:0:0:0:0/51");
         });
 
         it("it should return the size of pool", () => {
