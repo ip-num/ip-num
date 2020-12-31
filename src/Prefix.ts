@@ -98,7 +98,7 @@ class IPv4Prefix implements Prefix {
      */
     public toRangeSize(): bigInt.BigInteger {
         /**
-         * Using bitwise shit operation this will be
+         * Using bitwise shift operation this will be
          * 1 << (this.bitValue - this.prefix.getValue())
          * Since left shift a number by x is equivalent to multiplying the number by the power x raised to 2
          * 2 << 4 = 2 * (2 raised to 4)
@@ -211,7 +211,7 @@ class IPv6Prefix implements Prefix {
      */
     public toRangeSize(): bigInt.BigInteger {
         /**
-         * Using bitwise shit operation this will be
+         * Using bitwise shift operation this will be
          * 1 << (this.bitValue - this.prefix.getValue())
          * Since left shift a number by x is equivalent to multiplying the number by the power x raised to 2
          * 2 << 4 = 2 * (2 raised to 4)
