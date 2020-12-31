@@ -116,7 +116,7 @@ export class Pool<T extends RangeType> {
      * @param prefix prefix range to retrieve
      * TODO TSE
      */
-    public getSingleCidrRange<T extends IPv4Prefix | IPv6Prefix>(prefix: T): IPCidrRange<T> {
+    public getCidrRange<T extends IPv4Prefix | IPv6Prefix>(prefix: T): IPCidrRange<T> {
         if (prefix.toRangeSize().gt(this.getSize())) {
             throw new Error(`Not enough IP number in the pool for requested prefix: ${prefix}`);
         }
@@ -154,7 +154,7 @@ export class Pool<T extends RangeType> {
      *
      * @param reqprefix prefix range to retrieve
      */
-    public getMultipleCidrRanges<T extends IPv4Prefix | IPv6Prefix>(reqprefix: T): IPCidrRangeArray<T>  {
+    public getCidrRanges<T extends IPv4Prefix | IPv6Prefix>(reqprefix: T): IPCidrRangeArray<T>  {
         if (reqprefix.toRangeSize().greater(this.getSize())) {
             throw new Error("Prefix greater than pool");
         }
@@ -162,7 +162,7 @@ export class Pool<T extends RangeType> {
                   prefix: IPv4Prefix | IPv6Prefix,
                   accummulated: AbstractIPRange<AbstractIPNum, IPv4Prefix | IPv6Prefix>[]): AbstractIPRange<AbstractIPNum, IPv4Prefix | IPv6Prefix>[] => {
             try {
-                let singleCidrRange = this.getSingleCidrRange(prefix);
+                let singleCidrRange = this.getCidrRange(prefix);
                 accummulated.push(singleCidrRange);
                 let currentSize = accummulated.reduce((previous, current) => {
                     return previous.plus(current.getSize());
