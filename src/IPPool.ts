@@ -209,12 +209,15 @@ export class Pool<T extends RangeType> {
 
     /**
      * Removes the given range from the pool. It only removes if the exact range exist in the pool.
-     * It is a Noop, if the given range does not exist in the pool
+     * It is a Noop and returns false, if the given range does not exist in the pool. Returns true otherwise
      *
      * @param rangeToRemove range to remove from ppol
      */
-    public removeExact(rangeToRemove: RangedSet<AbstractIPNum>) {
-        this.backingSet = this.backingSet.removeExact(rangeToRemove);
+    public removeExact(rangeToRemove: RangedSet<AbstractIPNum>): boolean {
+        let updatedSet = this.backingSet.removeExact(rangeToRemove);
+        let isUpdated = !this.backingSet.isEquals(updatedSet);
+        this.backingSet = updatedSet;
+        return isUpdated;
     }
 
     /**
@@ -275,6 +278,15 @@ class SortedSet {
 
     public asArray(): Array<T> {
         return this.backingArray;
+    }
+
+    public isEquals(other:SortedSet): boolean {
+        if (this.backingArray.length !== other.asArray().length) {
+            return false;
+        }
+        return this.backingArray.every((value, index) => {
+            return value.getSize().equals(other.asArray()[index].getSize())
+        })
     }
 
     public add(item: Array<T>): SortedSet;

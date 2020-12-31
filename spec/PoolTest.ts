@@ -109,7 +109,8 @@ describe('Pool', () => {
             let pool = Pool.fromRangeSet(arrays);
 
             expect(pool.getRanges().length).toEqual(2);
-            pool.removeExact(rangeToRemove);
+            let isRemoved = pool.removeExact(rangeToRemove);
+            expect(isRemoved).toBeTrue();
             expect(pool.getRanges().length).toEqual(1);
             expect(pool.getRanges()[0].toCidrRange().toCidrString()).toEqual("192.168.0.0/26");
         });
@@ -125,7 +126,8 @@ describe('Pool', () => {
             let pool = Pool.fromRangeSet(arrays);
 
             expect(pool.getRanges().length).toEqual(2);
-            pool.removeExact(rangeToRemove);
+            let isRemoved = pool.removeExact(rangeToRemove);
+            expect(isRemoved).toBeFalse();
             expect(pool.getRanges().length).toEqual(2);
             expect(pool.getRanges()[0].toCidrRange().toCidrString()).toEqual("192.168.0.0/26");
             expect(pool.getRanges()[1].toCidrRange().toCidrString()).toEqual("192.168.0.64/26");
@@ -142,7 +144,8 @@ describe('Pool', () => {
             let pool = Pool.fromRangeSet(arrays);
 
             expect(pool.getRanges().length).toEqual(2);
-            pool.removeExact(rangeToRemove);
+            let isRemoved = pool.removeExact(rangeToRemove);
+            expect(isRemoved).toBeFalse();
             expect(pool.getRanges().length).toEqual(2);
             expect(pool.getRanges()[0].toCidrRange().toCidrString()).toEqual("192.168.0.0/26");
             expect(pool.getRanges()[1].toCidrRange().toCidrString()).toEqual("192.168.0.64/26");
@@ -386,7 +389,8 @@ describe('Pool', () => {
             let pool = Pool.fromRangeSet(arrays);
 
             expect(pool.getRanges().length).toEqual(2);
-            pool.removeExact(rangeToRemove);
+            let isRemoved = pool.removeExact(rangeToRemove);
+            expect(isRemoved).toBeTrue();
             expect(pool.getRanges().length).toEqual(1);
             expect(pool.getRanges()[0].toCidrRange().toCidrString()).toEqual("2001:db8:0:0:0:0:0:0/48");
         });
@@ -403,7 +407,8 @@ describe('Pool', () => {
             let pool = Pool.fromRangeSet(arrays);
 
             expect(pool.getRanges().length).toEqual(2);
-            pool.removeExact(rangeToRemove);
+            let isRemoved = pool.removeExact(rangeToRemove);
+            expect(isRemoved).toBeFalse();
             expect(pool.getRanges().length).toEqual(2);
             expect(pool.getRanges()[0].toCidrRange().toCidrString()).toEqual("2001:db8:0:0:0:0:0:0/48");
             expect(pool.getRanges()[1].toCidrRange().toCidrString()).toEqual("2001:db8:1:0:0:0:0:0/50");
@@ -421,7 +426,8 @@ describe('Pool', () => {
             let pool = Pool.fromRangeSet(arrays);
 
             expect(pool.getRanges().length).toEqual(2);
-            pool.removeExact(rangeToRemove);
+            let isRemoved = pool.removeExact(rangeToRemove);
+            expect(isRemoved).toBeFalse();
             expect(pool.getRanges().length).toEqual(2);
         });
 
