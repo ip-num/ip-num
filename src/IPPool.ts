@@ -173,13 +173,9 @@ export class Pool<T extends RangeType> {
                     return go(reqprefix, prefix, accummulated)
                 }
             } catch (e) {
-                if (prefix.getValue() !== 1) {
-                    let lowerPrefix = isIPv4Prefix(prefix) ?
-                        IPv4Prefix.fromNumber(prefix.getValue() + 1) : IPv6Prefix.fromNumber(prefix.getValue() + 1)
-                    return go(reqprefix, lowerPrefix, accummulated);
-                } else {
-                    throw Error();
-                }
+                let lowerPrefix = isIPv4Prefix(prefix) ?
+                    IPv4Prefix.fromNumber(prefix.getValue() + 1) : IPv6Prefix.fromNumber(prefix.getValue() + 1)
+                return go(reqprefix, lowerPrefix, accummulated);
             }
         }
         return go(reqprefix, reqprefix, []) as IPCidrRangeArray<T>;
