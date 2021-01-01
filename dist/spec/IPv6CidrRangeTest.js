@@ -39,7 +39,7 @@ var bigInt = require("big-integer");
 describe('IPv6CidrRange: ', function () {
     it('should instantiate by calling constructor with IPv4 and prefix', function () {
         var ipv6CidrRange = new src_3.IPv6CidrRange(new src_1.IPv6("::"), new src_2.IPv6Prefix(0));
-        expect(ipv6CidrRange.toCidrString()).toEqual("0:0:0:0:0:0:0:0/0");
+        expect(ipv6CidrRange.toCidrString()).toEqual("::0/0");
     });
     it('should instantiate from string in cidr notation', function () {
         var ipv6CidrRange = src_3.IPv6CidrRange.fromCidr("2001:db8::/33");
@@ -63,6 +63,49 @@ describe('IPv6CidrRange: ', function () {
         expect(take[0].toString()).toBe("2001:db8:0:0:0:0:0:0");
         expect(take[1].toString()).toBe("2001:db8:0:0:0:0:0:1");
         expect(take[2].toString()).toBe("2001:db8:0:0:0:0:0:2");
+    });
+    it('should return the correct list of IPv6 numbers when takeStream is called and looped over using for of', function () {
+        var e_1, _a;
+        var ipv6CidrRange = new src_3.IPv6CidrRange(new src_1.IPv6("2001:db8::"), new src_2.IPv6Prefix(48));
+        var ranges = ipv6CidrRange.take(bigInt(3));
+        var length = 0;
+        var _loop_1 = function (iprange) {
+            length++;
+            expect(["2001:db8:0:0:0:0:0:0", "2001:db8:0:0:0:0:0:1", "2001:db8:0:0:0:0:0:2"].some(function (range) { return iprange.toString() === range; }))
+                .toBe(true);
+        };
+        try {
+            for (var ranges_1 = __values(ranges), ranges_1_1 = ranges_1.next(); !ranges_1_1.done; ranges_1_1 = ranges_1.next()) {
+                var iprange = ranges_1_1.value;
+                _loop_1(iprange);
+            }
+        }
+        catch (e_1_1) { e_1 = { error: e_1_1 }; }
+        finally {
+            try {
+                if (ranges_1_1 && !ranges_1_1.done && (_a = ranges_1.return)) _a.call(ranges_1);
+            }
+            finally { if (e_1) throw e_1.error; }
+        }
+        expect(length).toBe(3);
+    });
+    it('should return the correct list of IPv6 numbers when takeStream is called and assigned to variables', function () {
+        var ipv6CidrRange = new src_3.IPv6CidrRange(new src_1.IPv6("2001:db8::"), new src_2.IPv6Prefix(48));
+        var ranges = ipv6CidrRange.toRangeSet().take(3);
+        var _a = __read(ranges, 3), first = _a[0], second = _a[1], third = _a[2];
+        expect(first.toString()).toBe("2001:db8:0:0:0:0:0:0");
+        expect(second.toString()).toBe("2001:db8:0:0:0:0:0:1");
+        expect(third.toString()).toBe("2001:db8:0:0:0:0:0:2");
+    });
+    it('should return all list of IPv6 number when takeStream is called without passing in a count', function () {
+        var ipv6CidrRange = new src_3.IPv6CidrRange(new src_1.IPv6("2001:db8::"), new src_2.IPv6Prefix(126));
+        var ranges = ipv6CidrRange.toRangeSet().take();
+        var _a = __read(ranges, 5), first = _a[0], second = _a[1], third = _a[2], fourth = _a[3], fifth = _a[4];
+        expect(first.toString()).toBe("2001:db8:0:0:0:0:0:0");
+        expect(second.toString()).toBe("2001:db8:0:0:0:0:0:1");
+        expect(third.toString()).toBe("2001:db8:0:0:0:0:0:2");
+        expect(fourth.toString()).toBe("2001:db8:0:0:0:0:0:3");
+        expect(fifth).toBeUndefined();
     });
     it('should correctly tell if ranges are consecutive', function () {
         var firstRange = new src_3.IPv6CidrRange(new src_1.IPv6("2001:db8::"), new src_2.IPv6Prefix(48));
@@ -128,8 +171,30 @@ describe('IPv6CidrRange: ', function () {
         expect(containerRange.isOverlapping(firstRange)).toBe(false);
         expect(firstRange.isOverlapping(containerRange)).toBe(false);
     });
+    it('should correctly tell if ranges can be merged', function () {
+        var firstRange = src_3.IPv6CidrRange.fromCidr("2001:db8:0:0:0:0:0:0/48");
+        var secondRange = src_3.IPv6CidrRange.fromCidr("2001:db8:1:0:0:0:0:0/48");
+        expect(firstRange.isCidrMergeable(secondRange)).toBe(true);
+        expect(secondRange.isCidrMergeable(firstRange)).toBe(true);
+    });
+    it('should correctly tell if ranges cannot be merged', function () {
+        var firstRange = src_3.IPv6CidrRange.fromCidr("2001:db8:0:0:0:0:0:0/48");
+        var secondRange = src_3.IPv6CidrRange.fromCidr("2004:db8:1:0:0:0:0:0/48");
+        expect(firstRange.isCidrMergeable(secondRange)).toBe(false);
+        expect(secondRange.isCidrMergeable(firstRange)).toBe(false);
+    });
+    it('should correctly tell when ranges are equal', function () {
+        var firstRange = new src_3.IPv6CidrRange(new src_1.IPv6("2001:db8::"), new src_2.IPv6Prefix(48));
+        var secondRange = new src_3.IPv6CidrRange(new src_1.IPv6("2001:db8::"), new src_2.IPv6Prefix(48));
+        expect(firstRange.isEquals(secondRange)).toBe(true);
+    });
+    it('should correctly tell when ranges are not equal', function () {
+        var firstRange = new src_3.IPv6CidrRange(new src_1.IPv6("2001:db8::"), new src_2.IPv6Prefix(48));
+        var secondRange = new src_3.IPv6CidrRange(new src_1.IPv6("2001:db8:1::"), new src_2.IPv6Prefix(48));
+        expect(firstRange.isEquals(secondRange)).toBe(false);
+    });
     it('should be able to use for in construct on range', function () {
-        var e_1, _a;
+        var e_2, _a;
         var ipv6CidrRange = new src_3.IPv6CidrRange(new src_1.IPv6("2001:db8::"), new src_2.IPv6Prefix(127));
         var expectedValue = ipv6CidrRange.take(bigInt(2));
         var expectedIndex = 0;
@@ -140,12 +205,12 @@ describe('IPv6CidrRange: ', function () {
                 expectedIndex++;
             }
         }
-        catch (e_1_1) { e_1 = { error: e_1_1 }; }
+        catch (e_2_1) { e_2 = { error: e_2_1 }; }
         finally {
             try {
                 if (ipv6CidrRange_1_1 && !ipv6CidrRange_1_1.done && (_a = ipv6CidrRange_1.return)) _a.call(ipv6CidrRange_1);
             }
-            finally { if (e_1) throw e_1.error; }
+            finally { if (e_2) throw e_2.error; }
         }
     });
     it('should be able to use spread syntax on range', function () {

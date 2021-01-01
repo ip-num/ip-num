@@ -1,6 +1,6 @@
 'use strict';
 import {dottedDecimalNotationToBinaryString} from "./BinaryUtils";
-import {cidrPrefixToSubnetMaskBinaryString} from "./BinaryUtils";
+import {cidrPrefixToMaskBinaryString} from "./BinaryUtils";
 import * as bigInt from "big-integer";
 import {IPNumType} from "./IPNumType";
 import {expandIPv6Number} from "./IPv6Utils";
@@ -11,13 +11,15 @@ export class Validator {
     static IPV4_PATTERN: RegExp = new RegExp(/^(0?[0-9]?[0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.(0?[0-9]?[0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.(0?[0-9]?[0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.(0?[0-9]?[0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])$/);
     static IPV4_RANGE_PATTERN: RegExp = new RegExp(/^(0?[0-9]?[0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.(0?[0-9]?[0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.(0?[0-9]?[0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.(0?[0-9]?[0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(\/)([1-9]|[1-2][0-9]|3[0-2])$/);
     static IPV6_RANGE_PATTERN: RegExp = new RegExp(/^s*((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:)))(%.+)?s*(\/([0-9]|[1-9][0-9]|1[0-1][0-9]|12[0-8]))?$/);
-    static IPV4_SUBNET_MASK_BIT_PATTERN: RegExp = new RegExp(/^(1){0,32}(0){0,32}$/);
-    static IPV6_SUBNET_MASK_BIT_PATTERN: RegExp = new RegExp(/^(1){0,128}(0){0,128}$/);
+    static IPV4_CONTIGUOUS_MASK_BIT_PATTERN: RegExp = new RegExp(/^(1){0,32}(0){0,32}$/);
+    static IPV6_CONTIGUOUS_MASK_BIT_PATTERN: RegExp = new RegExp(/^(1){0,128}(0){0,128}$/);
 
     static EIGHT_BIT_SIZE: bigInt.BigInteger = bigInt("1".repeat(8), 2);
     static SIXTEEN_BIT_SIZE: bigInt.BigInteger = bigInt("1".repeat(16), 2);
     static THIRTY_TWO_BIT_SIZE: bigInt.BigInteger = bigInt("1".repeat(32), 2);
     static ONE_HUNDRED_AND_TWENTY_EIGHT_BIT_SIZE: bigInt.BigInteger = bigInt("1".repeat(128), 2);
+    static IPV4_SIZE = bigInt("4294967296");
+    static IPV6_SIZE = bigInt("340282366920938463463374607431768211456");
 
     static invalidAsnRangeMessage = "ASN number given less than zero or is greater than 32bit";
     static invalid16BitAsnRangeMessage = "ASN number given less than zero or is greater than 16bit";
@@ -27,7 +29,7 @@ export class Validator {
     static invalidHexadecatetMessage = "The value given is less than zero or is greater than 16bit";
     static invalidOctetCountMessage = "An IP4 number cannot have less or greater than 4 octets";
     static invalidHexadecatetCountMessage = "An IP6 number must have exactly 8 hexadecatet";
-    static invalidSubnetMaskMessage = "The Subnet Mask is invalid";
+    static invalidMaskMessage = "The Mask is invalid";
     static invalidPrefixValueMessage = "A Prefix value cannot be less than 0 or greater than 32";
     static invalidIPv4CidrNotationMessage = "Cidr notation should be in the form [ip number]/[range]";
     static InvalidIPCidrRangeMessage = "Given IP number portion must is not the start of the range";
@@ -38,6 +40,8 @@ export class Validator {
     static cannotSplitSingleRangeErrorMessage = "Cannot split an IP range with a single IP number";
     static invalidInetNumType = "Given ipNumType must be either InetNumType.IPv4 or InetNumType.IPv6";
     static invalidBinaryStringErrorMessage = "Binary string should contain only contiguous 1s and 0s";
+    static invalidIPRangeSizeMessage = "Given size is zero or greater than maximum size of $iptype";
+    static invalidIPRangeSizeForCidrMessage = "Given size can't be created via cidr prefix";
 
     /**
      * Checks if given ipNumber is in between the given lower and upper bound
@@ -188,29 +192,29 @@ export class Validator {
     }
 
     /**
-     * Checks if given string is a valid IPv4 subnet mask
+     * Checks if given string is a valid IPv4 mask
      *
-     * @param {string} ipv4SubnetMaskString the given IPv4 subnet mask string
-     * @returns {[boolean , string]} first value is true if valid IPv4 subnet mask string, false otherwise. Second value
+     * @param {string} ipv4MaskString the given IPv4 mask string
+     * @returns {[boolean , string]} first value is true if valid IPv4 mask string, false otherwise. Second value
      * contains "valid" or an error message when value is invalid
      */
-    static isValidIPv4SubnetMask(ipv4SubnetMaskString: string) : [boolean, string[]] {
-        let ipv4InBinary = dottedDecimalNotationToBinaryString(ipv4SubnetMaskString);
-        let isValid = Validator.IPV4_SUBNET_MASK_BIT_PATTERN.test(ipv4InBinary);
-        return isValid ? [isValid, []]: [isValid, [Validator.invalidSubnetMaskMessage]];
+    static isValidIPv4Mask(ipv4MaskString: string) : [boolean, string[]] {
+        let ipv4InBinary = dottedDecimalNotationToBinaryString(ipv4MaskString);
+        let isValid = Validator.IPV4_CONTIGUOUS_MASK_BIT_PATTERN.test(ipv4InBinary);
+        return isValid ? [isValid, []]: [isValid, [Validator.invalidMaskMessage]];
     }
 
     /**
-     * Checks if given string is a valid IPv6 subnet mask
+     * Checks if given string is a valid IPv6 mask
      *
-     * @param {string} ipv6SubnetMaskString the given IPv6 subnet mask string
-     * @returns {[boolean , string]} first value is true if valid IPv6 subnet mask string, false otherwise. Second value
+     * @param {string} ipv6MaskString the given IPv6 mask string
+     * @returns {[boolean , string]} first value is true if valid IPv6 mask string, false otherwise. Second value
      * contains "valid" or an error message when value is invalid
      */
-    static isValidIPv6SubnetMask(ipv6SubnetMaskString: string) : [boolean, string[]] {
-        let ipv6InBinary = hexadectetNotationToBinaryString(ipv6SubnetMaskString);
-        let isValid = Validator.IPV6_SUBNET_MASK_BIT_PATTERN.test(ipv6InBinary);
-        return isValid ? [isValid, []]: [isValid, [Validator.invalidSubnetMaskMessage]];
+    static isValidIPv6Mask(ipv6MaskString: string) : [boolean, string[]] {
+        let ipv6InBinary = hexadectetNotationToBinaryString(ipv6MaskString);
+        let isValid = Validator.IPV6_CONTIGUOUS_MASK_BIT_PATTERN.test(ipv6InBinary);
+        return isValid ? [isValid, []]: [isValid, [Validator.invalidMaskMessage]];
     }
 
     /**
@@ -253,7 +257,7 @@ export class Validator {
    * value contains [] or an array of error message when invalid
    */
   static isValidIPv4CidrRange(ipv4CidrNotation: string): [boolean, string[]] {
-      return Validator.isValidCidrRange(ipv4CidrNotation, Validator.isValidIPv4CidrNotation, dottedDecimalNotationToBinaryString, (value: number) => cidrPrefixToSubnetMaskBinaryString(value, IPNumType.IPv4));
+      return Validator.isValidCidrRange(ipv4CidrNotation, Validator.isValidIPv4CidrNotation, dottedDecimalNotationToBinaryString, (value: number) => cidrPrefixToMaskBinaryString(value, IPNumType.IPv4));
     }
 
   /**
@@ -266,7 +270,7 @@ export class Validator {
    * value contains [] or an array of error message when invalid
    */
     static isValidIPv6CidrRange(ipv6CidrNotation: string): [boolean, string[]] {
-      return Validator.isValidCidrRange(ipv6CidrNotation, Validator.isValidIPv6CidrNotation, colonHexadecimalNotationToBinaryString, (value: number) => cidrPrefixToSubnetMaskBinaryString(value, IPNumType.IPv6));
+      return Validator.isValidCidrRange(ipv6CidrNotation, Validator.isValidIPv6CidrNotation, colonHexadecimalNotationToBinaryString, (value: number) => cidrPrefixToMaskBinaryString(value, IPNumType.IPv6));
     }
 
 
@@ -284,8 +288,8 @@ export class Validator {
       let ip = cidrComponents[0];
       let range = cidrComponents[1];
       let ipNumber = bigInt(toBinaryStringConverter(ip), 2);
-      let subnetMask = bigInt(prefixFactory(parseInt(range)), 2);
-      let isValid = ipNumber.and(subnetMask).equals(ipNumber);
+      let mask = bigInt(prefixFactory(parseInt(range)), 2);
+      let isValid = ipNumber.and(mask).equals(ipNumber);
 
       return isValid ? [isValid, []]: [isValid, [Validator.InvalidIPCidrRangeMessage]];
     }
@@ -302,6 +306,20 @@ export class Validator {
             .greaterOrEquals(hexadectetNotationToBinaryString(lastIP));
         return this.isValidRange(ipv6RangeString, Validator.isValidIPv6String, firstLastValidator);
     }
+
+    // static isValidIPv4RangeSize(rangeSize: bigInt.BigInteger): boolean {
+    //     if (rangeSize.greater(Validator.IPV4_SIZE) || rangeSize.equals(bigInt(0))) {
+    //         [false, [Validator.invalidIPRangeSizeMessage]];
+    //     }
+    //     let size = rangeSize;
+    //     while (size.isEven()) {
+    //         if (size.isOdd() || size.equals(bigInt(2))) {
+    //             break;
+    //         }
+    //         size = size.shiftRight(bigInt(1));
+    //     }
+    //     return size.isEven();
+    // }
 
     private static isValidRange(rangeString: string,
                                 validator: (x:string) => [boolean, string[]],

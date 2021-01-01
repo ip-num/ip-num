@@ -48,9 +48,9 @@ How you get access to the above, depends on the module loading mechanism being u
 Import what you need from `ip-num` and use away
 
 ```
-import { Asn } from "ip-num/Asn";
-import { IPv4 } from "ip-num/IPv4";
-import { IPv6 } from "ip-num/IPv6";
+import { Asn } from "ip-num/IPNumber";
+import { IPv4 } from "ip-num/IPNumber";
+import { IPv6 } from "ip-num/IPNumber";
 ```
 
 You can then make use of the imported module in your TypeScript code
@@ -122,13 +122,36 @@ Find below, some example of the usage of `ip-num`. For a more comprehensive over
 values that needs to be worked with when dealing with IP numbers can exceed the numeric value that can be safely represented natively within JavaScript without loosing precisions ie numbers greater than 
 [Number.MAX_SAFE_INTEGER](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/MAX_SAFE_INTEGER)
  
+### Overview 
+An incomplete overview of the structure of `ip-num` is represented below:
+
+```
+IPNumber/ -- module that contains IP numbers implementations
+├── AbstractIPNum -- contains common implementation to ASN, IPv4 and IPv6 
+│   ├── Asn
+│   ├── IPv4
+|     ├── IPv4Mask
+│   ├── IPv6
+|     ├── IPv6Mask
+
+IPRange/ -- module that contains IP ranges implementations
+├── AbstractIPRange -- contains common implementation for IPv4 and IPv6 CIDR ranges 
+│   ├── IPv4CidrRange
+│   ├── IPv6CidrRange
+├── RangedSet -- Represents a continuous segment of either IPv4 or IPv6 numbers without adhering to classless inter-domain routing scheme
+
+IPPool/
+├── Pool
+``` 
+ 
+ 
 ### ASN
 ```
-import { Asn } from "ip-num/Asn";
+import { Asn } from "ip-num/IPNumber";
 ..........
 // creating
 let asA = Asn.fromNumber(1234) // using the fromNumber factory method to create an instance from number
-let asB Asn.fromString("AS1234") // using the fromString factory method to create an instance from string
+let asB = Asn.fromString("AS1234") // using the fromString factory method to create an instance from string
 let asC = Asn.fromString("1234") // string without the "AS" prefix is also supported
 let asD = Asn.fromString("1.10") // string in asdot+ format is also supported
 let asE = Asn.fromBinaryString('1111') // using the fromBinaryString to create an instance from binary string
@@ -146,11 +169,11 @@ Asn.fromNumber(2).hasPrevious() // true
 
 ```
 
-See the [ASN documentation](https://ip-num.github.io/ip-num/classes/_asn_.asn.html) for more information
+See the [ASN documentation](https://ip-num.github.io/ip-num/classes/_ipnumber_.asn.html) for more information
 
 ### IPv4
 ```
-import { IPv4 } from "ip-num/IPv4";
+import { IPv4 } from "ip-num/IPNumber";
 
 // creating
 let firstIPv4 = new IPv4("74.125.43.99") // Creating an instance using the constructor
@@ -167,16 +190,16 @@ firstIPv4.isLessThan(thirdIPv4) // true
 firstIPv4.isGreaterThan(thirdIPv4) // false
 ```
 
-See the [IPv4 documentation](https://ip-num.github.io/ip-num/classes/_ipv4_.ipv4.html) for more information
+See the [IPv4 documentation](https://ip-num.github.io/ip-num/classes/_ipnumber_.ipv4.html) for more information
 
 ### IPv6
 ```
-import { IPv6 } from "ip-num/IPv6";
+import { IPv6 } from "ip-num/IPNumber";
 
 // creating
 let firstIPv6 = new IPv6("ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff") // Creating an instance using the constructor
 let secondIPv6 = IPv6.fromBigInteger(bigInt("100")) // Using the fromBigInteger convenience method
-let thirdIPv6 = IPv6.fromHexadecimalString(""::") // Using the fromDecimalDottedString convenience method. Not abbreviated representation of IPv6 string is supported
+let thirdIPv6 = IPv6.fromHexadecimalString("::") // Using the fromDecimalDottedString convenience method. Not abbreviated representation of IPv6 string is supported
 let fourthIPv6 = IPv6.fromBinaryString("01001010011111010010101101100011") // using the fromBinaryString convenience method
    
 // converting an IPv6 instance to binary string representation
@@ -189,11 +212,11 @@ firstIPv6.isGreaterThan(thirdIPv6) // true
 
 ```
 
-See the [IPv6 documentation](https://ip-num.github.io/ip-num/classes/_ipv6_.ipv6.html) for more information
+See the [IPv6 documentation](https://ip-num.github.io/ip-num/classes/_ipnumber_.ipv6.html) for more information
 
 ### IPv4 Ranges
 ```
-import {IPv4CidrRange} from "ip-num/IPv4CidrRange";
+import {IPv4CidrRange} from "ip-num/IPRange";
 
 // creating an IPv4 range from CIDR notation
 let ipv4Range = IPv4CidrRange.fromCidr("192.198.0.0/24");
@@ -210,11 +233,29 @@ ipv4Range.split()[0].toCidrString() // returns 192.198.0.0/25
 ipv4Range.split()[1].toCidrString() // returns 192.198.0.128/25
 ```
 
-See the [IPv4CidrRange documentation](https://ip-num.github.io/ip-num/classes/_ipv4range_.ipv4range.html) for more information
+Performing set like operations with IP Ranges:
+
+```
+import {IPv4CidrRange} from "ip-num/IPRange";
+
+let containerRange = IPv4CidrRange.fromCidr("192.168.0.0/24");
+let firstRange = IPv4CidrRange.fromCidr("192.168.0.0/25");
+let secondRange = IPv4CidrRange.fromCidr("192.168.0.128/25");
+
+console.log(containerRange.inside(firstRange)) // false
+
+console.log(containerRange.inside(secondRange)) // false;
+
+console.log(firstRange.inside(containerRange)); // true;
+console.log(secondRange.inside(containerRange)); // true;
+```
+
+
+See the [IPv4CidrRange documentation](https://ip-num.github.io/ip-num/classes/_iprange_.ipv4cidrrange.html) for more information
 
 ### IPv6 Ranges
 ```
-import {IPv6CidrRange} from "ip-num/IPv6CidrRange";
+import {IPv6CidrRange} from "ip-num/IPRange";
 
 // creating an IPv6 range from CIDR notation
 let ipv6Range = IPv6CidrRange.fromCidr("2001:db8::/33");
@@ -231,73 +272,103 @@ ipv6Range.split()[0].toCidrString() // returns 2001:db8:0:0:0:0:0:0/34
 ipv6Range.split()[1].toCidrString() // returns 2001:db8:4000:0:0:0:0:0/34
 ```
 
-See the [IPv6CidrRange documentation](https://ip-num.github.io/ip-num/classes/_ipv6range_.ipv6range.html) for more information
-
-### IPNumber and IPRange interfaces
-When working in TypeScript, you have the ability to abstract ASN, IPv4 and IPv6 as an IPNumber, and IPv4CidrRange and 
-IPv6CidrRange as IPRange
+Performing set like operations with IP Ranges:
 
 ```
-// representing ASN, IPv4 and IPv6 with the IPNumber interface
-let ipNumbers: IPNumber[] = [];
+import {IPv6CidrRange} from "ip-num/IPRange";
+let containerRange = new IPv6CidrRange(new IPv6("2001:db8::"), new IPv6Prefix(47));
+let firstRange = new IPv6CidrRange(new IPv6("2001:db8::"), new IPv6Prefix(48));
+let secondRange = new IPv6CidrRange(new IPv6("2001:db8:1::"), new IPv6Prefix(48));
+
+console.log(containerRange.inside(firstRange)); // false
+console.log(containerRange.inside(secondRange)); // false;
+
+console.log(firstRange.inside(containerRange)) // true;
+console.log(secondRange.inside(containerRange)) // true;
+```
+
+
+See the [IPv6CidrRange documentation](https://ip-num.github.io/ip-num/classes/_iprange_.ipv6cidrrange.html) for more information
+
+### AbstractIPNum and AbstractIPRange
+
+When working in TypeScript, you have the ability to abstract ASN, IPv4 and IPv6 as an AbstractIPNum, and IPv4CidrRange and 
+IPv6CidrRange as AbstractIPRange
+
+```
+import {AbstractIPNum} from "ip-num/IPNumber";
+import {AbstractIPRange} from "ip-num/IPRange";
+import {Asn} from "ip-num/IPNumber";
+import {IPv4} from "ip-num/IPNumber";
+import {IPv6} from "ip-num/IPNumber";
+import {IPv4CidrRange} from "ip-num/IPRange";
+import {IPv6CidrRange} from "ip-num/IPRange";
+import {IPv4Prefix} from "ip-num/Prefix";
+import {IPv6Prefix} from "ip-num/Prefix";
+
+
+// representing ASN, IPv4 and IPv6 as a AbstractIPNum
+let ipNumbers: AbstractIPNum[] = [];
 ipNumbers.push(new Asn("200"));
 ipNumbers.push(new IPv4("133.245.233.255"));
 ipNumbers.push(new IPv6("2001:800:0:0:0:0:0:2002"))
 
 // console logs AS200
-                133.245.233.255
-                2001:800:0:0:0:0:0:2002
+//              133.245.233.255
+//              2001:800:0:0:0:0:0:2002
 ipNumbers.forEach(ip => {
    console.log(ip.toString());
 });
 
 
-// representing IPv4CidrRange and IPv6CidrRange with the IPRange interface
-let ipRanges: IPRange[] = [];
+// representing IPv4CidrRange and IPv6CidrRange as AbstractIPRange
+
+let ipRanges: AbstractIPRange<IPv4 | IPv6, IPv4Prefix | IPv6Prefix>[] = [];
 ipRanges.push(IPv4CidrRange.fromCidr("192.198.0.0/24"));
 ipRanges.push(IPv6CidrRange.fromCidr("2001:db8::/33"));
 
 // console logs 192.198.0.0/24
-                2001:db8:0:0:0:0:0:0/33
+//               2001:db8:0:0:0:0:0:0/33
 ipRanges.forEach(iprange => {
    console.log(iprange.toCidrString());
 });
 
 ```
 
-See the [IPNumber documentation](https://ip-num.github.io/ip-num/interfaces/_interface_ipnumber_.ipnumber.html) for more information
-See the [IPRange documentation](https://ip-num.github.io/ip-num/interfaces/_interface_iprange_.iprange.html) for more information
+See the [IPNumber documentation](https://ip-num.github.io/ip-num/modules/_ipnumber_.html) for more information
+See the [IPRange documentation](https://ip-num.github.io/ip-num/modules/_iprange_.html) for more information
 
-### IPv4SubnetMask and IPv6SubnetMask
+### IPv4Mask and IPv6Mask
 
-IPv4SubnetMask and IPv6SubnetMask are used to represents subnet masks in IPv4 and IPv6 
+IPv4Mask and IPv6Mask are used to represent subnet masks in IPv4 and IPv6 
 respectively. 
 
 Subnet masks are in all respects IP numbers with the only restriction that they must contain contiguous on bits (1's) 
-followed by contiguous off bits (0's). This means IPv4SubnetMask and IPv6SubnetMask can perform all the operations 
+followed by contiguous off bits (0's). This means IPv4Mask and IPv6Mask can perform all the operations 
 available on IPv4 and IPv6. The only difference is that the invariant required for a subnet is enforced in the 
-constructor of IPv4SubnetMask and IPv6SubnetMask. For example:
+constructor of IPv4Mask and IPv6Mask. For example:
 
 The following code will throw an exception:
 
 ```
-import {IPv4SubnetMask} from 'ip-num/IPv4SubnetMask'
-import {IPv4SubnetMask} from 'ip-num/IPv4SubnetMask'
+import {IPv4Mask} from 'ip-num/IPNumber'
+import {IPv6Mask} from 'ip-num/IPNumber'
 
-let ipv4SubnetMask = new IPv4SubnetMask("10.255.10.3");
-let ipv6SubnetMask = new IPv6SubnetMask("3ffe:1900:4545:0003:0200:f8ff:fe21:67cf");
+let ipv4Mask = new IPv4Mask("10.255.10.3");
+let ipv6Mask = new IPv6Mask("3ffe:1900:4545:0003:0200:f8ff:fe21:67cf");
 ```
 
 While the following code works fine:
 
 ```
-import {IPv4SubnetMask} from 'ip-num/SubnetMask'
-import {IPv6SubnetMask} from 'ip-num/SubnetMask'
+import {IPv4Mask} from 'ip-num/IPNumber'
+import {IPv6Mask} from 'ip-num/IPNumber'
 
-let iPv4SubnetMask = new IPv4SubnetMask("255.0.0.0");
-let iPv6SubnetMask = new IPv6SubnetMask("ffff:ffff:ffff:ffff:ffff:ffff:0:0");
+let iPv4Mask = new IPv4Mask("255.0.0.0");
+let iPv6Mask = new IPv6Mask("ffff:ffff:ffff:ffff:ffff:ffff:0:0");
 ``` 
-See the [SubnetMask documentation](https://ip-num.github.io/ip-num/modules/_subnetmask_.html) for more information
+See the [IPv4Mask documentation](https://ip-num.github.io/ip-num/_ipnumber_.ipv4mask.html) for more information
+See the [IPv6Mask documentation](https://ip-num.github.io/ip-num/_ipnumber_.ipv6mask.html) for more information
 
 ### IPv4-Mapped IPv6 Address Support
 IPv4-Mapped IPv6 Address IPv6 allows embedding an IPv4 address within an IPv6 address. See [IPv6 Addresses with Embedded IPv4 Addresses](https://tools.ietf.org/html/rfc4291#section-2.5.5)
@@ -307,7 +378,7 @@ IPv4-Mapped IPv6 Address IPv6 allows embedding an IPv4 address within an IPv6 ad
 ##### Converting from an existing IPv4
 
 ```
-import { IPv4 } from "ip-num/IPv4";
+import { IPv4 } from "ip-num/IPNumber";
 
 let ipv4 = new IPv4("74.125.43.99")
 ipv4.toIPv4MappedIPv6().toString() // produces ::ffff:4a7d:2b63
@@ -316,7 +387,8 @@ ipv4.toIPv4MappedIPv6().toString() // produces ::ffff:4a7d:2b63
 ##### From an existing IPv4 using convenience method on IPv6
 
 ```
-import { IPv6 } from "ip-num/IPv6";
+import { IPv6 } from "ip-num/IPNumber";
+import { IPv4 } from "ip-num/IPNumber";
 
 let ipv6 = IPv6.fromIPv4(new IPv4("74.125.43.99"))
 ipv6.toString() // produces ::ffff:4a7d:2b63
@@ -325,10 +397,54 @@ ipv6.toString() // produces ::ffff:4a7d:2b63
 ##### From dot-decimal notation using convenience method on IPv6
 
 ```
-import { IPv6 } from "ip-num/IPv6";
+import { IPv6 } from "ip-num/IPNumber";
 
 let ipv6 = IPv6.fromIPv4DotDecimalString("74.125.43.99")
 ipv6.toString() // produces ::ffff:4a7d:2b63
+```
+
+
+### IP Pool
+
+`Pool` allows for working with collections of IP numbers and ranges.
+
+#### Creating Pools from list of IP numbers and converting to IP ranges 
+
+```
+import {IPv4} from "ip-num/IPNumber";
+import {Pool} from "ip-num/IPPool";
+
+let pool = Pool.fromIPNumbers([
+IPv4.fromDecimalDottedString("10.0.0.1"), 
+IPv4.fromDecimalDottedString("10.0.0.2")
+]);
+
+let ranges = pool.getRanges();
+console.log(ranges[0].toCidrRange().toCidrString()); // prints "10.0.0.1/32"
+console.log(ranges[1].toCidrRange().toCidrString()); // prints "10.0.0.2/32"
+```
+
+#### Aggregating IP ranges
+
+```
+import {IPv4} from "ip-num/IPNumber";
+import {Pool} from "ip-num/IPPool";
+import {RangedSet} from "ip-num/IPRange";
+import {IPv4CidrRange} from "ip-num/IPRange";
+
+let arrays: RangedSet<IPv4>[] = new Array<RangedSet<IPv4>>();
+
+arrays.push(RangedSet.fromCidrRange(IPv4CidrRange.fromCidr("192.168.0.0/26")));
+arrays.push(RangedSet.fromCidrRange(IPv4CidrRange.fromCidr("192.168.0.64/26")));
+arrays.push(RangedSet.fromCidrRange(IPv4CidrRange.fromCidr("192.168.0.128/27")));
+arrays.push(RangedSet.fromCidrRange(IPv4CidrRange.fromCidr("192.168.0.160/27")));
+arrays.push(RangedSet.fromCidrRange(IPv4CidrRange.fromCidr("192.168.0.192/26")));
+
+let pool = Pool.fromRangeSet(arrays);
+let aggregatedPool = pool.aggregate();
+
+console.log(aggregatedPool.getRanges()[0].toRangeString()) // prints("192.168.0.0-192.168.0.255");
+console.log(aggregatedPool.getRanges().length) // prints 1;
 ```
 
 ### Validation and Utilities
@@ -339,7 +455,7 @@ utility operations can be found in `BinaryUtils`, `IPv6Utils`, and `HexadecimalU
 For example to expand and collapse IPv6 numbers:
 
 ```
-import {IPv6Utils} from 'ip-num/IPv6Utils'
+import * as IPv6Utils from 'ip-num/IPv6Utils'
 
 // expanding
 IPv6Utils.expandIPv6Number("::") // Expands to 0000:0000:0000:0000:0000:0000:0000:0000
@@ -359,7 +475,7 @@ let result = Validator.isValidIPv4CidrNotation("123.234.334.23")
 let result = Validator.isValidIPv4CidrNotation("10.0.0.0/8")
 // result => [true, []]
 ``` 
-See the [Validator documentation](https://ip-num.github.io/ip-num/classes/_validator_.validator.html) for more information
+See the [Validator documentation](https://ip-num.github.io/ip-num/classes/_validator_.html) for more information
 See the [BinaryUtils documentation](https://ip-num.github.io/ip-num/modules/_binaryutils_.html) for more information
 See the [IPv6Utils documentation](https://ip-num.github.io/ip-num/modules/_ipv6utils_.html) for more information
 See the [HexadecimalUtils documentation](https://ip-num.github.io/ip-num/modules/_hexadecimalutils_.html) for more information
@@ -377,6 +493,8 @@ Found a bug and you want to provide a fix for it? Then feel free to submit a pul
 
 Change log
 ------------------
+
+View latest releases [here](https://github.com/ip-num/ip-num/releases)
 
 ##### v1.2.1
 * Fixes a cyclic dependency bug. [Issue #24](https://github.com/ip-num/ip-num/issues/24) 

@@ -1,7 +1,7 @@
 
 import {Validator} from "../src/Validator";
 import * as bigInt from "big-integer";
-import {IPv6} from "../src/IPv6";
+import {IPv6} from "../src/IPNumber";
 import {IPv4} from "../src";
 
 describe('IPv6: ', () => {
@@ -42,6 +42,20 @@ describe('IPv6: ', () => {
 
     it('should instantiate by calling fromHexadecimal', () => {
         let iPv6 = IPv6.fromHexadecimalString("3ffe:1900:4545:0003:0200:f8ff:fe21:67cf");
+        expect(iPv6.toString()).toEqual("3ffe:1900:4545:3:200:f8ff:fe21:67cf");
+        let hexadecatets = iPv6.getHexadecatet();
+        expect(hexadecatets[0].toString()).toEqual("3ffe");
+        expect(hexadecatets[1].toString()).toEqual("1900");
+        expect(hexadecatets[2].toString()).toEqual("4545");
+        expect(hexadecatets[3].toString()).toEqual("3");
+        expect(hexadecatets[4].toString()).toEqual("200");
+        expect(hexadecatets[5].toString()).toEqual("f8ff");
+        expect(hexadecatets[6].toString()).toEqual("fe21");
+        expect(hexadecatets[7].toString()).toEqual("67cf");
+    });
+
+    it('should instantiate by calling fromString', () => {
+        let iPv6 = IPv6.fromString("3ffe:1900:4545:0003:0200:f8ff:fe21:67cf");
         expect(iPv6.toString()).toEqual("3ffe:1900:4545:3:200:f8ff:fe21:67cf");
         let hexadecatets = iPv6.getHexadecatet();
         expect(hexadecatets[0].toString()).toEqual("3ffe");

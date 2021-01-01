@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.cidrPrefixToSubnetMaskBinaryString = exports.leftPadWithZeroBit = exports.dottedDecimalNotationToBinaryString = exports.parseBinaryStringToBigInteger = exports.decimalNumberToOctetString = exports.bigIntegerNumberToBinaryString = exports.decimalNumberToBinaryString = void 0;
+exports.intLog2 = exports.cidrPrefixToMaskBinaryString = exports.leftPadWithZeroBit = exports.dottedDecimalNotationToBinaryString = exports.parseBinaryStringToBigInteger = exports.decimalNumberToOctetString = exports.bigIntegerNumberToBinaryString = exports.decimalNumberToBinaryString = void 0;
 var bigInt = require("big-integer/BigInteger");
 var IPNumType_1 = require("./IPNumType");
 /**
@@ -70,12 +70,12 @@ exports.leftPadWithZeroBit = function (binaryString, finalStringLength) {
     return "0".repeat(finalStringLength - binaryString.length).concat(binaryString);
 };
 /**
- * Given the prefix portion of a cidr notation and the type of IP number, returns the subnet mask in binary string
+ * Given the prefix portion of a cidr notation and the type of IP number, returns the mask in binary string
  *
  * @param {number} cidrPrefix the prefix part of a cidr notation
  * @param {IPNumType.IPv4 | IPNumType.IPv6} ipType the type of the ip number in the range the cidr represents
  */
-exports.cidrPrefixToSubnetMaskBinaryString = function (cidrPrefix, ipType) {
+exports.cidrPrefixToMaskBinaryString = function (cidrPrefix, ipType) {
     var cidrUpperValue;
     if (ipType == IPNumType_1.IPNumType.IPv4) {
         cidrUpperValue = 32;
@@ -88,5 +88,31 @@ exports.cidrPrefixToSubnetMaskBinaryString = function (cidrPrefix, ipType) {
     var onBits = '1'.repeat(cidrPrefix);
     var offBits = '0'.repeat(cidrUpperValue - cidrPrefix);
     return "" + onBits + offBits;
+};
+/**
+ * Calculates the log, to base 2 of given number.
+ *
+ * @throws Error if number cannot be converted to log base 2
+ * @param givenNumber the number to calculate log base 2
+ * @return the log base 2 of given number
+ */
+exports.intLog2 = function (givenNumber) {
+    var result = 0;
+    while (givenNumber.isEven()) {
+        if (givenNumber.equals(bigInt(2))) {
+            result++;
+            break;
+        }
+        givenNumber = givenNumber.shiftRight(bigInt(1));
+        if (givenNumber.isOdd()) {
+            result = 0;
+            break;
+        }
+        result++;
+    }
+    if (result == 0) {
+        throw new Error("The value of log2 for " + givenNumber.toString() + " is not an integer");
+    }
+    return result;
 };
 //# sourceMappingURL=BinaryUtils.js.map

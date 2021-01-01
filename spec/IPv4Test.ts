@@ -2,7 +2,7 @@
  * Created by daderemi on 07/11/16.
  */
 
-import {IPv4} from "../src/IPv4";
+import {IPv4} from "../src/IPNumber";
 import {Validator} from "../src/Validator";
 import * as bigInt from "big-integer";
 
@@ -15,8 +15,12 @@ describe('IPv4: ', () => {
         expect(IPv4.fromBigInteger(bigInt("1876843053")).toString()).toEqual("111.222.90.45");
     });
 
-    it('should instantiate by passing dot-decimal notation', () => {
+    it('should instantiate by passing dot-decimal notation to fromDecimalDottedString', () => {
         expect(IPv4.fromDecimalDottedString("111.222.90.45").toString()).toEqual("111.222.90.45");
+    });
+
+    it('should instantiate by passing dot-decimal notation to fromString', () => {
+        expect(IPv4.fromString("111.222.90.45").toString()).toEqual("111.222.90.45");
     });
 
     it('should instantiate IPv4 by passing binary string', () => {

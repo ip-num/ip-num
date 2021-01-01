@@ -1,26 +1,30 @@
 import {Validator} from "./Validator";
-import {IPv4SubnetMask} from "./SubnetMask";
-import {parseBinaryStringToBigInteger} from "./BinaryUtils";
+import {IPv4, IPv4Mask, IPv6, IPv6Mask} from "./IPNumber";
+import {intLog2, parseBinaryStringToBigInteger} from "./BinaryUtils";
 import {IPNumType} from "./IPNumType";
-import {IPv6SubnetMask} from "./SubnetMask";
 import {binaryStringToHexadecimalString} from "./HexadecimalUtils";
 import {Hexadecatet} from "./Hexadecatet";
+import * as bigInt from "big-integer";
 
 
 interface Prefix {
     value: number;
     getValue(): number;
+    merge(): Prefix;
+    split(): Prefix;
 }
 
 /**
  * Represents the prefix portion in the CIDR notation for representing IP ranges
  *
- * The IPv4 prefix portion represents the subnet mask. It is the number of continuous bits turned on (with value 1)
+ * The IPv4 prefix portion represents the mask. It is the number of continuous bits turned on (with value 1)
  * counting from the left side of an 8 bit value.
  *
  * {@see https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing} for more information on CIDR
  */
 class IPv4Prefix implements Prefix {
+    type: "IPv4" = "IPv4"
+    private readonly bitValue: bigInt.BigInteger = bigInt(32);
     /**
      * The decimal value of the 8bit number representing the prefix
      */
@@ -34,6 +38,11 @@ class IPv4Prefix implements Prefix {
      */
     static fromNumber(rawValue:number):IPv4Prefix {
         return new IPv4Prefix(rawValue);
+    };
+
+    static fromRangeSize(rangeSize: bigInt.BigInteger) {
+        let prefixNumber = rangeSize.equals(bigInt.one) ? 32 : 32 - rangeSizeToPrefix(rangeSize, Validator.IPV4_SIZE);
+        return IPv4Prefix.fromNumber(prefixNumber)
     };
 
     /**
@@ -63,23 +72,54 @@ class IPv4Prefix implements Prefix {
 
     /**
      * Gets the decimal value of the IPv4 prefix as string
-     * @returns {string} he decimal value of the IPv4 prefix as string
+     * @returns {string} The decimal value of the IPv4 prefix as string
      */
     public toString(): string {
         return this.value.toString();
     }
 
     /**
-     * Converts the IPv4 prefix to a {@link IPv4SubnetMask}
+     * Converts the IPv4 prefix to a {@link IPv4Mask}
      *
-     * The IPv4 Subnet mask is the representation of the prefix in the dot-decimal notation
+     * The IPv4 mask is the representation of the prefix in the dot-decimal notation
      *
-     * @returns {IPv4SubnetMask} the subnet mask representation of the prefix
+     * @returns {IPv4Mask} the mask representation of the prefix
      */
-    public toSubnetMask(): IPv4SubnetMask {
+    public toMask(): IPv4Mask {
         let onBits = '1'.repeat(this.value);
         let offBits = '0'.repeat(32 - this.value);
-        return IPv4SubnetMask.fromDecimalDottedString(this.toDecimalNotation(`${onBits}${offBits}`));
+        return IPv4Mask.fromDecimalDottedString(this.toDecimalNotation(`${onBits}${offBits}`));
+    }
+
+    /**
+     * Returns the size (number of IP numbers) of range of this prefix
+     *
+     * @return {BigInteger} the size (number of IP numbers) of range of this prefix
+     */
+    public toRangeSize(): bigInt.BigInteger {
+        /**
+         * Using bitwise shift operation this will be
+         * 1 << (this.bitValue - this.prefix.getValue())
+         * Since left shift a number by x is equivalent to multiplying the number by the power x raised to 2
+         * 2 << 4 = 2 * (2 raised to 4)
+         */
+        return bigInt(2).pow(this.bitValue.minus(bigInt(this.getValue())));
+    }
+
+    /**
+     * Returns a prefix for when this prefix is merged
+     * with another prefix of the same size
+     */
+    merge(): IPv4Prefix {
+        return new IPv4Prefix(this.value - 1);
+    }
+
+    /**
+     * Returns a prefix for when this prefix is split
+     * into two equal halves
+     */
+    split(): IPv4Prefix {
+        return new IPv4Prefix(this.value + 1);
     }
 
     private toDecimalNotation(bits:string): string {
@@ -90,12 +130,14 @@ class IPv4Prefix implements Prefix {
 /**
  * Represents the prefix portion in the CIDR notation for representing IP ranges
  *
- * The IPv6 prefix portion represents the subnet mask. It is the number of continuous bits turned on (with value 1)
+ * The IPv6 prefix portion represents the mask. It is the number of continuous bits turned on (with value 1)
  * counting from the left side of an 128 bit value.
  *
  * {@see https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing} for more information on CIDR
  */
 class IPv6Prefix implements Prefix {
+    type: "IPv6" = "IPv6"
+    private readonly bitValue: bigInt.BigInteger = bigInt(128);
     /**
      * The decimal value of the 16bit number representing the prefix
      */
@@ -110,6 +152,11 @@ class IPv6Prefix implements Prefix {
     static fromNumber(rawValue:number):IPv6Prefix {
         return new IPv6Prefix(rawValue);
     };
+
+    static fromRangeSize(rangeSize: bigInt.BigInteger): IPv6Prefix {
+        let prefixNumber = rangeSize.equals(bigInt.one) ? 128 : 128 - rangeSizeToPrefix(rangeSize, Validator.IPV6_SIZE);
+        return IPv6Prefix.fromNumber(prefixNumber)
+    }
 
     /**
      * Constructor for an instance of IPv6 prefix from a decimal number
@@ -145,16 +192,47 @@ class IPv6Prefix implements Prefix {
     }
 
     /**
-     * Converts the IPv6 prefix to a {@link IPv6SubnetMask}
+     * Converts the IPv6 prefix to a {@link IPv6Mask}
      *
-     * The IPv6 Subnet mask is the representation of the prefix in 8 groups of 16 bit values represented in hexadecimal
+     * The IPv6 mask is the representation of the prefix in 8 groups of 16 bit values represented in hexadecimal
      *
-     * @returns {IPv6SubnetMask} the subnet mask representation of the prefix
+     * @returns {IPv6Mask} the mask representation of the prefix
      */
-    public toSubnetMask(): IPv6SubnetMask {
+    public toMask(): IPv6Mask {
         let onBits = '1'.repeat(this.value);
         let offBits = '0'.repeat(128 - this.value);
-        return IPv6SubnetMask.fromHexadecimalString(this.toHexadecatetNotation(`${onBits}${offBits}`));
+        return IPv6Mask.fromHexadecimalString(this.toHexadecatetNotation(`${onBits}${offBits}`));
+    }
+
+    /**
+     * Returns the size (number of IP numbers) of range of this prefix
+     *
+     * @return {BigInteger} the size (number of IP numbers) of range of this prefix
+     */
+    public toRangeSize(): bigInt.BigInteger {
+        /**
+         * Using bitwise shift operation this will be
+         * 1 << (this.bitValue - this.prefix.getValue())
+         * Since left shift a number by x is equivalent to multiplying the number by the power x raised to 2
+         * 2 << 4 = 2 * (2 raised to 4)
+         */
+        return bigInt(2).pow(this.bitValue.minus(bigInt(this.getValue())));
+    }
+
+    /**
+     * Returns a prefix for when this prefix is merged
+     * with another prefix of the same size
+     */
+    merge(): IPv6Prefix {
+        return new IPv6Prefix(this.value - 1);
+    }
+
+    /**
+     * Returns a prefix for when this prefix is split
+     * into two equal halves
+     */
+    split(): IPv6Prefix {
+        return new IPv6Prefix(this.value + 1);
     }
 
     private toHexadecatetNotation(bits:string): string {
@@ -166,4 +244,27 @@ class IPv6Prefix implements Prefix {
     }
 }
 
-export {Prefix, IPv4Prefix, IPv6Prefix}
+function rangeSizeToPrefix(rangeSize: bigInt.BigInteger,
+                           rangeMaxSize:bigInt.BigInteger): number {
+    let ipType = rangeMaxSize.greater(Validator.IPV4_SIZE) ? "IPv6" : "IPv4";
+    if (rangeSize.greater(rangeMaxSize) || rangeSize.equals(bigInt(0))) {
+        throw new Error(Validator.invalidIPRangeSizeMessage.replace("$iptype", ipType));
+    }
+
+    try {
+        return intLog2(rangeSize);
+    } catch (e) {
+        throw new Error(Validator.invalidIPRangeSizeForCidrMessage);
+    }
+}
+
+
+/**
+ * Check is the given Prefix is an {@link IPv4Prefix} or not
+ * @param prefix the IP prefix to check if it is IPv4Prefix.
+ */
+function isIPv4Prefix(prefix: IPv4Prefix | IPv6Prefix): prefix is IPv4Prefix {
+    return prefix.type === "IPv4";
+}
+
+export {Prefix, IPv4Prefix, IPv6Prefix, isIPv4Prefix}

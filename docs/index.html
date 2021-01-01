@@ -66,279 +66,341 @@
 			<div class="tsd-panel tsd-typography">
 				<p><a href="https://travis-ci.org/ip-num/ip-num"><img src="https://travis-ci.org/ip-num/ip-num.svg?branch=master" alt="Build Status"></a>
 				<a href="https://coveralls.io/github/ip-num/ip-num?branch=master"><img src="https://coveralls.io/repos/github/ip-num/ip-num/badge.svg?branch=master" alt="Coverage Status"></a></p>
-				<h1 id="ip-num">ip-num</h1>
+				<a href="#ip-num" id="ip-num" style="color: inherit; text-decoration: none;">
+					<h1>ip-num</h1>
+				</a>
 				<p><code>ip-num</code> is a <a href="https://www.typescriptlang.org/">TypeScript</a> library for working with <code>IPv4</code>, <code>IPv6</code> and <code>ASN</code> numbers. It provides representations of these internet protocol numbers with the ability to perform various operations like parsing, validating etc. on them.</p>
 				<p><code>ip-num</code> can be used with both TypeScript and vanila JavaScript. It also support both usage within a browser environment as well as Node.Js environment.</p>
 				<p><code>ip-num</code> makes use of the <a href="https://github.com/peterolson/BigInteger.js/">BigInteger.js</a> library to represents numeric values. This is due to the fact that numeric values when dealing with IP numbers can exceed the value that can safely be represented natively within JavaScript without loosing precisions ie numbers greater than
 				<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/MAX_SAFE_INTEGER">Number.MAX_SAFE_INTEGER</a></p>
 				<p><code>ip-num</code>&#39;s source can be found on <a href="https://github.com/ip-num/ip-num">GitHub</a></p>
-				<p>You can have a play at <code>ip-num</code>&#39;s API via the JsBin at <a href="http://bit.ly/ipnum-playground">http://bit.ly/ipnum-playground</a></p>
-				<h2 id="installation">Installation</h2>
-				<h3 id="node-js">Node.js</h3>
+				<p>You can have a play at <code>ip-num</code>&#39;s API via the Runkit at <a href="http://bit.ly/ipnum-repl">http://bit.ly/ipnum-repl</a></p>
+				<a href="#installation" id="installation" style="color: inherit; text-decoration: none;">
+					<h2>Installation</h2>
+				</a>
+				<a href="#nodejs" id="nodejs" style="color: inherit; text-decoration: none;">
+					<h3>Node.js</h3>
+				</a>
 				<p>If you want to use <code>ip-num</code> from within a Node.js environment, you can install it via <a href="https://npmjs.org/">npm</a>.</p>
 				<p><code>npm install ip-num</code></p>
-				<p><code>ip-num</code> is tested against version 7 - and upwards - of NodeJs.</p>
-				<h3 id="browser">Browser</h3>
-				<p>If you are using a browser, you can include <code>ip-num</code> by linking to it or download it from GitHub</p>
-				<p><code>&lt;script src=&quot;https://ip-num.github.io/ip-num/ip-num.js&quot;&gt;&lt;/script&gt;</code></p>
-				<p>The source maps can be found at</p>
-				<pre><code class="lang-https://ip-num.github.io/ip-num/ip-num.js.map&quot;```">
-Previous releases can be seen at [https://github.com/ip-num/ip-num/releases](https://github.com/ip-num/ip-num/releases)
+				<p>check the <code>.travis.yml</code> file for the versions of Node.js <code>ip-num</code> is being built and tested with.</p>
+				<a href="#browser" id="browser" style="color: inherit; text-decoration: none;">
+					<h3>Browser</h3>
+				</a>
+				<p>If you are using a browser, you would have to use a module bundler like <a href="http://browserify.org/">browserify</a>,
+				<a href="https://parceljs.org/">parceljs</a>, <a href="https://webpack.js.org/">webpack</a> etc. to be able to use ip-num as a front-end module.</p>
+				<p>For quick prototyping, you can download the release from github at <a href="https://github.com/ip-num/ip-num/releases">https://github.com/ip-num/ip-num/releases</a></p>
+				<p>You can then extract the compressed file and include the <code>ip-num.js</code> file located in the <code>dist</code> folder.</p>
+				<a href="#usage" id="usage" style="color: inherit; text-decoration: none;">
+					<h2>Usage</h2>
+				</a>
+				<p>The functionality <code>ip-num</code> exposes can be grouped into 2 broad categories:</p>
+				<ul>
+					<li>Modules representing ASN, IPv4, and IPv6 internet protocol numbers</li>
+					<li>Utilities and Validator </li>
+				</ul>
+				<p>How you get access to the above, depends on the module loading mechanism being used. The examples below will show how
+					to access <code>ip-num</code> using ES module mechanism with TypeScript in Node.js, using CommonJs module mechanism with
+				JavaScript in Node.Js, and by including <code>ip-num</code> via a script tag with JavaScript in the browser.</p>
+				<a href="#es-module-with-typescript" id="es-module-with-typescript" style="color: inherit; text-decoration: none;">
+					<h3>ES module with TypeScript</h3>
+				</a>
+				<p>Import what you need from <code>ip-num</code> and use away</p>
+				<pre><code>import { Asn } <span class="hljs-keyword">from</span> <span class="hljs-string">"ip-num/Asn"</span>;
+import { IPv4 } <span class="hljs-keyword">from</span> <span class="hljs-string">"ip-num/IPv4"</span>;
+import {<span class="hljs-built_in"> IPv6 </span>} <span class="hljs-keyword">from</span> <span class="hljs-string">"ip-num/IPv6"</span>;</code></pre><p>You can then make use of the imported module in your TypeScript code</p>
+				<pre><code><span class="hljs-keyword">let</span> asn = <span class="hljs-keyword">new</span> <span class="hljs-constructor">Asn(65546)</span>;
+asn.<span class="hljs-keyword">to</span><span class="hljs-constructor">BinaryString()</span> <span class="hljs-comment">//10000000000001010</span>
 
-Usage
-------------------
+<span class="hljs-keyword">let</span> ipv4 = <span class="hljs-keyword">new</span> <span class="hljs-constructor">IPv4(<span class="hljs-string">"74.125.43.99"</span>)</span>;
+ipv4.<span class="hljs-keyword">to</span><span class="hljs-constructor">BinaryString()</span> <span class="hljs-comment">//01001010011111010010101101100011</span>
 
-The functionality `ip-num` exposes can be grouped into 2 broad categories:
-* Modules representing ASN, IPv4, and IPv6 internet protocol numbers
-* Utilities and Validator 
+<span class="hljs-keyword">let</span> ipv6 = <span class="hljs-keyword">new</span> <span class="hljs-constructor">IPv6(<span class="hljs-string">"ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff"</span>)</span>;
+ipv6.<span class="hljs-keyword">to</span><span class="hljs-constructor">BinaryString()</span> <span class="hljs-comment">//11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111</span></code></pre>
+				<a href="#commonjs-with-javascript" id="commonjs-with-javascript" style="color: inherit; text-decoration: none;">
+					<h3>CommonJs with JavaScript</h3>
+				</a>
+				<p>All external modules in <code>ip-num</code> are exported and made available via the global <em>ip-num</em> module. So you can <code>require
+(&#39;ip-num&#39;)</code> and then access the module you want to use in your application, or access the module in one go, while 
+				requiring; as shown below:</p>
+				<pre><code>const Asn = require(<span class="hljs-string">"ip-num"</span>).Asn;
+const IPv4 = require(<span class="hljs-string">"ip-num"</span>).IPv4;
+const<span class="hljs-built_in"> IPv6 </span>= require(<span class="hljs-string">"ip-num"</span>).IPv6;</code></pre><p>The imported module can then be used:</p>
+				<pre><code><span class="hljs-keyword">let</span> asn = <span class="hljs-keyword">new</span> <span class="hljs-constructor">Asn(65546)</span>;
+asn.<span class="hljs-keyword">to</span><span class="hljs-constructor">BinaryString()</span> <span class="hljs-comment">//10000000000001010</span>
 
-How you get access to the above, depends on the module loading mechanism being used. The examples below will show how
- to access `ip-num` using ES module mechanism with TypeScript in Node.js, using CommonJs module mechanism with 
- JavaScript in Node.Js, and by including `ip-num` via a script tag with JavaScript in the browser.
+<span class="hljs-keyword">let</span> ipv4 = <span class="hljs-keyword">new</span> <span class="hljs-constructor">IPv4(<span class="hljs-string">"74.125.43.99"</span>)</span>;
+ipv4.<span class="hljs-keyword">to</span><span class="hljs-constructor">BinaryString()</span> <span class="hljs-comment">//01001010011111010010101101100011</span>
 
-### ES module with TypeScript
+<span class="hljs-keyword">let</span> ipv6 = <span class="hljs-keyword">new</span> <span class="hljs-constructor">IPv6(<span class="hljs-string">"ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff"</span>)</span>;
+ipv6.<span class="hljs-keyword">to</span><span class="hljs-constructor">BinaryString()</span> <span class="hljs-comment">//11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111</span></code></pre>
+				<a href="#via-script-tag-with-javascript" id="via-script-tag-with-javascript" style="color: inherit; text-decoration: none;">
+					<h3>Via Script tag with JavaScript</h3>
+				</a>
+				<p>Including the <code>ip-num</code> library via the script tag in the browser exposes <code>ipnum</code> variable from which you can access
+				the modules exposes by the library.</p>
+				<pre><code>&lt;script src=<span class="hljs-string">"https://ip-num.github.io/ip-num/ip-num.js"</span>&gt;&lt;/script&gt;
+........
+<span class="hljs-keyword">let</span> asn = <span class="hljs-keyword">new</span> ipnum.<span class="hljs-constructor">Asn(65546)</span>;
+console.log(asn.<span class="hljs-keyword">to</span><span class="hljs-constructor">BinaryString()</span>); <span class="hljs-comment">//10000000000001010</span>
 
-Import what you need from `ip-num` and use away
+<span class="hljs-keyword">let</span> ipv4 = <span class="hljs-keyword">new</span> ipnum.<span class="hljs-constructor">IPv4(<span class="hljs-string">"74.125.43.99"</span>)</span>
+console.log(ipv4.<span class="hljs-keyword">to</span><span class="hljs-constructor">BinaryString()</span>); <span class="hljs-comment">//01001010011111010010101101100011</span>
+
+<span class="hljs-keyword">let</span> ipv6 = <span class="hljs-keyword">new</span> ipnum.<span class="hljs-constructor">IPv6(<span class="hljs-string">"ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff"</span>)</span>;
+console.log(ipv6.<span class="hljs-keyword">to</span><span class="hljs-constructor">BinaryString()</span>); <span class="hljs-comment">//11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111</span>
 </code></pre>
-				<p>import { Asn } from &quot;ip-num/Asn&quot;;
-					import { IPv4 } from &quot;ip-num/IPv4&quot;;
-				import { IPv6 } from &quot;ip-num/IPv6&quot;;</p>
-				<pre><code>
-You can <span class="hljs-keyword">then</span> make <span class="hljs-keyword">use</span> <span class="hljs-keyword">of</span> the imported <span class="hljs-keyword">module</span> <span class="hljs-keyword">in</span> your TypeScript code
-</code></pre><p>let asn = new Asn(65546);
-				asn.toBinaryString() //10000000000001010</p>
-				<p>let ipv4 = new IPv4(&quot;74.125.43.99&quot;);
-				ipv4.toBinaryString() //01001010011111010010101101100011</p>
-				<p>let ipv6 = new IPv6(&quot;ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff&quot;);
-				ipv6.toBinaryString() //11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111</p>
-				<pre><code>
-<span class="hljs-comment">### CommonJs with JavaScript</span>
+				<a href="#documentation" id="documentation" style="color: inherit; text-decoration: none;">
+					<h2>Documentation</h2>
+				</a>
+				<p>Documentation can be found at <a href="https://ip-num.github.io/ip-num/">https://ip-num.github.io/ip-num/</a></p>
+				<a href="#examples" id="examples" style="color: inherit; text-decoration: none;">
+					<h2>Examples</h2>
+				</a>
+				<p>Find below, some example of the usage of <code>ip-num</code>. For a more comprehensive overview of the API, please refer to the <a href="https://ip-num.github.io/ip-num/">documentation</a>.</p>
+				<p><code>ip-num</code> makes use of the <a href="https://github.com/peterolson/BigInteger.js/">BigInteger.js</a> library to represents numeric values. This is due to the fact that numeric
+					values that needs to be worked with when dealing with IP numbers can exceed the numeric value that can be safely represented natively within JavaScript without loosing precisions ie numbers greater than
+				<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/MAX_SAFE_INTEGER">Number.MAX_SAFE_INTEGER</a></p>
+				<a href="#asn" id="asn" style="color: inherit; text-decoration: none;">
+					<h3>ASN</h3>
+				</a>
+				<pre><code>import { Asn } from <span class="hljs-string">"ip-num/IPNumber"</span>;
+..........
+<span class="hljs-comment">// creating</span>
+<span class="hljs-keyword">let</span> asA = <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Asn</span>.</span></span>from<span class="hljs-constructor">Number(1234)</span> <span class="hljs-comment">// using the fromNumber factory method to create an instance from number</span>
+<span class="hljs-keyword">let</span> asB = <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Asn</span>.</span></span>from<span class="hljs-constructor">String(<span class="hljs-string">"AS1234"</span>)</span> <span class="hljs-comment">// using the fromString factory method to create an instance from string</span>
+<span class="hljs-keyword">let</span> asC = <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Asn</span>.</span></span>from<span class="hljs-constructor">String(<span class="hljs-string">"1234"</span>)</span> <span class="hljs-comment">// string without the "AS" prefix is also supported</span>
+<span class="hljs-keyword">let</span> asD = <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Asn</span>.</span></span>from<span class="hljs-constructor">String(<span class="hljs-string">"1.10"</span>)</span> <span class="hljs-comment">// string in asdot+ format is also supported</span>
+<span class="hljs-keyword">let</span> asE = <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Asn</span>.</span></span>from<span class="hljs-constructor">BinaryString('1111')</span> <span class="hljs-comment">// using the fromBinaryString to create an instance from binary string</span>
 
-All external modules <span class="hljs-keyword">in</span> `ip-<span class="hljs-built_in">num</span>` are exported <span class="hljs-keyword">and</span> made available via <span class="hljs-keyword">the</span> <span class="hljs-built_in">global</span> <span class="hljs-title">_ip-num</span>_ module. So you can `<span class="hljs-built_in">require</span>
-(<span class="hljs-string">'ip-num'</span>)` <span class="hljs-keyword">and</span> <span class="hljs-keyword">then</span> access <span class="hljs-keyword">the</span> module you want <span class="hljs-built_in">to</span> use <span class="hljs-keyword">in</span> your application, <span class="hljs-keyword">or</span> access <span class="hljs-keyword">the</span> module <span class="hljs-keyword">in</span> <span class="hljs-literal">one</span> go, <span class="hljs-keyword">while</span> 
-requiring; <span class="hljs-keyword">as</span> shown below:
-</code></pre><p>const Asn = require(&quot;ip-num&quot;).Asn;
-					const IPv4 = require(&quot;ip-num&quot;).IPv4;
-				const IPv6 = require(&quot;ip-num&quot;).IPv6;</p>
-				<pre><code>
-The imported <span class="hljs-keyword">module</span> can <span class="hljs-keyword">then</span> be used:
-</code></pre><p>let asn = new Asn(65546);
-				asn.toBinaryString() //10000000000001010</p>
-				<p>let ipv4 = new IPv4(&quot;74.125.43.99&quot;);
-				ipv4.toBinaryString() //01001010011111010010101101100011</p>
-				<p>let ipv6 = new IPv6(&quot;ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff&quot;);
-				ipv6.toBinaryString() //11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111</p>
-				<pre><code>
-<span class="hljs-comment">### Via Script tag with JavaScript</span>
+<span class="hljs-comment">// converting between different ASN string representations</span>
+<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Asn</span>.</span></span>from<span class="hljs-constructor">Number(65526)</span>.<span class="hljs-keyword">to</span><span class="hljs-constructor">ASDotPlus()</span> <span class="hljs-comment">// will give "0.65526"</span>
+<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Asn</span>.</span></span>from<span class="hljs-constructor">Number(65546)</span>.<span class="hljs-keyword">to</span><span class="hljs-constructor">ASDot()</span> <span class="hljs-comment">// will give "1.10"</span>
+<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Asn</span>.</span></span>from<span class="hljs-constructor">Number(2)</span>.<span class="hljs-keyword">to</span><span class="hljs-constructor">BinaryString()</span> <span class="hljs-comment">// will give 10</span>
 
-Including the `ip-num` library via the<span class="hljs-built_in"> script </span>tag <span class="hljs-keyword">in</span> the browser exposes `ipnum` variable <span class="hljs-keyword">from</span> which you can access 
-the modules exposes by the library.
-</code></pre><p><script src="https://ip-num.github.io/ip-num/ip-num.js"></script>
-					........
-					let asn = new ipnum.Asn(65546);
-				console.log(asn.toBinaryString()); //10000000000001010</p>
-				<p>let ipv4 = new ipnum.IPv4(&quot;74.125.43.99&quot;)
-				console.log(ipv4.toBinaryString()); //01001010011111010010101101100011</p>
-				<p>let ipv6 = new ipnum.IPv6(&quot;ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff&quot;);
-				console.log(ipv6.toBinaryString()); //11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111</p>
-				<pre><code>
-<span class="hljs-section">Documentation
-------------------</span>
-Documentation can be found at [<span class="hljs-string">https://ip-num.github.io/ip-num/</span>](<span class="hljs-link">https://ip-num.github.io/ip-num/</span>)
+<span class="hljs-comment">// check if previous and next values exist, getting previous and next values</span>
+<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Asn</span>.</span></span>from<span class="hljs-constructor">Number(Math.<span class="hljs-params">pow</span>(2, 32)</span> - <span class="hljs-number">1</span>).has<span class="hljs-constructor">Next()</span> <span class="hljs-comment">// false</span>
+<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Asn</span>.</span></span>from<span class="hljs-constructor">Number(2)</span>.has<span class="hljs-constructor">Next()</span> <span class="hljs-comment">// true</span>
+<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Asn</span>.</span></span>from<span class="hljs-constructor">Number(0)</span>.has<span class="hljs-constructor">Previous()</span> <span class="hljs-comment">// false</span>
+<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Asn</span>.</span></span>from<span class="hljs-constructor">Number(2)</span>.has<span class="hljs-constructor">Previous()</span> <span class="hljs-comment">// true</span>
+</code></pre><p>See the <a href="https://ip-num.github.io/ip-num/classes/_asn_.asn.html">ASN documentation</a> for more information</p>
+				<a href="#ipv4" id="ipv4" style="color: inherit; text-decoration: none;">
+					<h3>IPv4</h3>
+				</a>
+				<pre><code>import { IPv4 } from <span class="hljs-string">"ip-num/IPNumber"</span>;
 
-<span class="hljs-section">Examples
-------------------</span>
-Find below, some example of the usage of <span class="hljs-code">`ip-num`</span>. For a more comprehensive overview of the API, please refer to the [<span class="hljs-string">documentation</span>](<span class="hljs-link">https://ip-num.github.io/ip-num/</span>).
+<span class="hljs-comment">// creating</span>
+<span class="hljs-keyword">let</span> firstIPv4 = <span class="hljs-keyword">new</span> <span class="hljs-constructor">IPv4(<span class="hljs-string">"74.125.43.99"</span>)</span> <span class="hljs-comment">// Creating an instance using the constructor</span>
+<span class="hljs-keyword">let</span> secondIPv4 = <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">IPv4</span>.</span></span>from<span class="hljs-constructor">BigInteger(<span class="hljs-params">bigInt</span>(<span class="hljs-string">"1876843053"</span>)</span>) <span class="hljs-comment">// Using the fromBigInteger convenience method</span>
+<span class="hljs-keyword">let</span> thirdIPv4 = <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">IPv4</span>.</span></span>from<span class="hljs-constructor">DecimalDottedString(<span class="hljs-string">"111.222.90.45"</span>)</span> <span class="hljs-comment">// Using the fromDecimalDottedString convenience method</span>
+<span class="hljs-keyword">let</span> fourthIPv4 = <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">IPv4</span>.</span></span>from<span class="hljs-constructor">BinaryString(<span class="hljs-string">"01001010011111010010101101100011"</span>)</span> <span class="hljs-comment">// using the fromBinaryString convenience method</span>
 
-<span class="hljs-code">`ip-num`</span> makes use of the [<span class="hljs-string">BigInteger.js</span>](<span class="hljs-link">https://github.com/peterolson/BigInteger.js/</span>) library to represents numeric values. This is due to the fact that numeric 
-values that needs to be worked with when dealing with IP numbers can exceed the numeric value that can be safely represented natively within JavaScript without loosing precisions ie numbers greater than 
-[<span class="hljs-string">Number.MAX_SAFE_INTEGER</span>](<span class="hljs-link">https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/MAX_SAFE_INTEGER</span>)
+<span class="hljs-comment">// converting an IPv4 instance to binary string representation</span>
+firstIPv4.<span class="hljs-keyword">to</span><span class="hljs-constructor">BinaryString()</span> <span class="hljs-comment">// will be 01001010011111010010101101100011</span>
 
-<span class="hljs-section">### ASN</span>
-</code></pre><p>import { Asn } from &quot;ip-num/Asn&quot;;
-					..........
-					// creating
-					let asA = Asn.fromNumber(1234) // using the fromNumber factory method to create an instance from number
-					let asB Asn.fromString(&quot;AS1234&quot;) // using the fromString factory method to create an instance from string
-					let asC = Asn.fromString(&quot;1234&quot;) // string without the &quot;AS&quot; prefix is also supported
-					let asD = Asn.fromString(&quot;1.10&quot;) // string in asdot+ format is also supported
-				let asE = Asn.fromBinaryString(&#39;1111&#39;) // using the fromBinaryString to create an instance from binary string</p>
-				<p>// converting between different ASN string representations
-					Asn.fromNumber(65526).toASDotPlus() // will give &quot;0.65526&quot;
-					Asn.fromNumber(65546).toASDot() // will give &quot;1.10&quot;
-				Asn.fromNumber(2).toBinaryString() // will give 10</p>
-				<p>// check if previous and next values exist, getting previous and next values
-					Asn.fromNumber(Math.pow(2, 32) - 1).hasNext() // false
-					Asn.fromNumber(2).hasNext() // true
-					Asn.fromNumber(0).hasPrevious() // false
-				Asn.fromNumber(2).hasPrevious() // true</p>
-				<pre><code>
-See the [<span class="hljs-string">ASN documentation</span>](<span class="hljs-link">https://ip-num.github.io/ip-num/classes/_asn_.asn.html</span>) for more information
+<span class="hljs-comment">// comparing IPV4</span>
+firstIPv4.is<span class="hljs-constructor">Equals(<span class="hljs-params">thirdIPv4</span>)</span> <span class="hljs-comment">// false</span>
+firstIPv4.is<span class="hljs-constructor">LessThan(<span class="hljs-params">thirdIPv4</span>)</span> <span class="hljs-comment">// true</span>
+firstIPv4.is<span class="hljs-constructor">GreaterThan(<span class="hljs-params">thirdIPv4</span>)</span> <span class="hljs-comment">// false</span></code></pre><p>See the <a href="https://ip-num.github.io/ip-num/classes/_ipv4_.ipv4.html">IPv4 documentation</a> for more information</p>
+				<a href="#ipv6" id="ipv6" style="color: inherit; text-decoration: none;">
+					<h3>IPv6</h3>
+				</a>
+				<pre><code>import { IPv6 } from <span class="hljs-string">"ip-num/IPNumber"</span>;
 
-<span class="hljs-section">### IPv4</span>
-</code></pre><p>import { IPv4 } from &quot;ip-num/IPv4&quot;;</p>
-				<p>// creating
-					let firstIPv4 = new IPv4(&quot;74.125.43.99&quot;) // Creating an instance using the constructor
-					let secondIPv4 = IPv4.fromBigInteger(bigInt(&quot;1876843053&quot;)) // Using the fromBigInteger convenience method
-					let thirdIPv4 = IPv4.fromDecimalDottedString(&quot;111.222.90.45&quot;) // Using the fromDecimalDottedString convenience method
-				let fourthIPv4 = IPv4.fromBinaryString(&quot;01001010011111010010101101100011&quot;) // using the fromBinaryString convenience method</p>
-				<p>// converting an IPv4 instance to binary string representation
-				firstIPv4.toBinaryString() // will be 01001010011111010010101101100011</p>
-				<p>// comparing IPV4
-					firstIPv4.isEquals(thirdIPv4) // false
-					firstIPv4.isLessThan(thirdIPv4) // true
-				firstIPv4.isGreaterThan(thirdIPv4) // false</p>
-				<pre><code>
-See the [<span class="hljs-string">IPv4 documentation</span>](<span class="hljs-link">https://ip-num.github.io/ip-num/classes/_ipv4_.ipv4.html</span>) for more information
+<span class="hljs-comment">// creating</span>
+<span class="hljs-keyword">let</span> firstIPv6 = <span class="hljs-keyword">new</span> <span class="hljs-constructor">IPv6(<span class="hljs-string">"ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff"</span>)</span> <span class="hljs-comment">// Creating an instance using the constructor</span>
+<span class="hljs-keyword">let</span> secondIPv6 = <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">IPv6</span>.</span></span>from<span class="hljs-constructor">BigInteger(<span class="hljs-params">bigInt</span>(<span class="hljs-string">"100"</span>)</span>) <span class="hljs-comment">// Using the fromBigInteger convenience method</span>
+<span class="hljs-keyword">let</span> thirdIPv6 = <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">IPv6</span>.</span></span>from<span class="hljs-constructor">HexadecimalString(<span class="hljs-string">"::"</span>)</span> <span class="hljs-comment">// Using the fromDecimalDottedString convenience method. Not abbreviated representation of IPv6 string is supported</span>
+<span class="hljs-keyword">let</span> fourthIPv6 = <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">IPv6</span>.</span></span>from<span class="hljs-constructor">BinaryString(<span class="hljs-string">"01001010011111010010101101100011"</span>)</span> <span class="hljs-comment">// using the fromBinaryString convenience method</span>
 
-<span class="hljs-section">### IPv6</span>
-</code></pre><p>import { IPv6 } from &quot;ip-num/IPv6&quot;;</p>
-				<p>// creating
-					let firstIPv6 = new IPv6(&quot;ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff&quot;) // Creating an instance using the constructor
-					let secondIPv6 = IPv6.fromBigInteger(bigInt(&quot;100&quot;)) // Using the fromBigInteger convenience method
-					let thirdIPv6 = IPv6.fromHexadecimalString(&quot;&quot;::&quot;) // Using the fromDecimalDottedString convenience method. Not abbreviated representation of IPv6 string is supported
-				let fourthIPv6 = IPv6.fromBinaryString(&quot;01001010011111010010101101100011&quot;) // using the fromBinaryString convenience method</p>
-				<p>// converting an IPv6 instance to binary string representation
-				firstIPv6.toBinaryString() // will be 11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111</p>
-				<p>// comparing IPV6
-					firstIPv6.isEquals(thirdIPv6) // false
-					firstIPv6.isLessThan(thirdIPv6) // false
-				firstIPv6.isGreaterThan(thirdIPv6) // true</p>
-				<pre><code>
-See the [<span class="hljs-string">IPv6 documentation</span>](<span class="hljs-link">https://ip-num.github.io/ip-num/classes/_ipv6_.ipv6.html</span>) for more information
+<span class="hljs-comment">// converting an IPv6 instance to binary string representation</span>
+firstIPv6.<span class="hljs-keyword">to</span><span class="hljs-constructor">BinaryString()</span> <span class="hljs-comment">// will be 11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111</span>
 
-<span class="hljs-section">### IPv4 Ranges</span>
-</code></pre><p>import {IPv4CidrRange} from &quot;ip-num/IPv4CidrRange&quot;;</p>
-				<p>// creating an IPv4 range from CIDR notation
-				let ipv4Range = IPv4CidrRange.fromCidr(&quot;192.198.0.0/24&quot;);</p>
-				<p>// get first and last IPv4 number in the range
-					ipv4Range.getFirst().toString() // gives 192.198.0.0
-				ipv4Range.getLast().toString() // gives 192.198.0.255</p>
-				<p>// getting number of IPv4 numbers in the range
-				ipv4Range.getSize() // Returns 256</p>
-				<p>// splitting ranges
-					ipv4Range.split()[0].toCidrString() // returns 192.198.0.0/25
-				ipv4Range.split()[1].toCidrString() // returns 192.198.0.128/25</p>
-				<pre><code>
-See the [<span class="hljs-string">IPv4CidrRange documentation</span>](<span class="hljs-link">https://ip-num.github.io/ip-num/classes/_ipv4range_.ipv4range.html</span>) for more information
+<span class="hljs-comment">// comparing IPV6</span>
+firstIPv6.is<span class="hljs-constructor">Equals(<span class="hljs-params">thirdIPv6</span>)</span> <span class="hljs-comment">// false</span>
+firstIPv6.is<span class="hljs-constructor">LessThan(<span class="hljs-params">thirdIPv6</span>)</span> <span class="hljs-comment">// false</span>
+firstIPv6.is<span class="hljs-constructor">GreaterThan(<span class="hljs-params">thirdIPv6</span>)</span> <span class="hljs-comment">// true</span>
+</code></pre><p>See the <a href="https://ip-num.github.io/ip-num/classes/_ipv6_.ipv6.html">IPv6 documentation</a> for more information</p>
+				<a href="#ipv4-ranges" id="ipv4-ranges" style="color: inherit; text-decoration: none;">
+					<h3>IPv4 Ranges</h3>
+				</a>
+				<pre><code>import {IPv4CidrRange} from <span class="hljs-string">"ip-num/IPRange"</span>;
 
-<span class="hljs-section">### IPv6 Ranges</span>
-</code></pre><p>import {IPv6CidrRange} from &quot;ip-num/IPv6CidrRange&quot;;</p>
-				<p>// creating an IPv6 range from CIDR notation
-				let ipv6Range = IPv6CidrRange.fromCidr(&quot;2001:db8::/33&quot;);</p>
-				<p>// get first and last IPv6 number in the range
-					ipv6Range.getFirst().toString() // gives 2001:db8:0:0:0:0:0:0
-				ipv6Range.getLast().toString() // gives 2001:db8:7fff:ffff:ffff:ffff:ffff:ffff</p>
-				<p>// getting number of IPv6 numbers in the range
-				ipv6Range.getSize() // Returns 39614081257132168796771975168</p>
-				<p>// splitting ranges
-					ipv6Range.split()[0].toCidrString() // returns 2001:db8:0:0:0:0:0:0/34
-				ipv6Range.split()[1].toCidrString() // returns 2001:db8:4000:0:0:0:0:0/34</p>
-				<pre><code>
-See <span class="hljs-keyword">the</span> [IPv6CidrRange documentation](<span class="hljs-keyword">https</span>://ip-<span class="hljs-built_in">num</span>.github.io/ip-<span class="hljs-built_in">num</span>/classes/<span class="hljs-title">_ipv6range</span>_.ipv6range.html) <span class="hljs-keyword">for</span> more information
+<span class="hljs-comment">// creating an IPv4 range from CIDR notation</span>
+<span class="hljs-keyword">let</span> ipv4Range = <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">IPv4CidrRange</span>.</span></span>from<span class="hljs-constructor">Cidr(<span class="hljs-string">"192.198.0.0/24"</span>)</span>;
 
-<span class="hljs-comment">### IPNumber and IPRange interfaces</span>
-When working <span class="hljs-keyword">in</span> TypeScript, you have <span class="hljs-keyword">the</span> ability <span class="hljs-built_in">to</span> abstract ASN, IPv4 <span class="hljs-keyword">and</span> IPv6 <span class="hljs-keyword">as</span> <span class="hljs-keyword">an</span> IPNumber, <span class="hljs-keyword">and</span> IPv4CidrRange <span class="hljs-keyword">and</span>
-IPv6CidrRange <span class="hljs-keyword">as</span> IPRange
-</code></pre><p>// representing ASN, IPv4 and IPv6 with the IPNumber interface
-					let ipNumbers: IPNumber[] = [];
-					ipNumbers.push(new Asn(&quot;200&quot;));
-					ipNumbers.push(new IPv4(&quot;133.245.233.255&quot;));
-				ipNumbers.push(new IPv6(&quot;2001:800:0:0:0:0:0:2002&quot;))</p>
-				<p>// console logs AS200
-					133.245.233.255
-					2001:800:0:0:0:0:0:2002
-					ipNumbers.forEach(ip =&gt; {
-					console.log(ip.toString());
-				});</p>
-				<p>// representing IPv4CidrRange and IPv6CidrRange with the IPRange interface
-					let ipRanges: IPRange[] = [];
-					ipRanges.push(IPv4CidrRange.fromCidr(&quot;192.198.0.0/24&quot;));
-				ipRanges.push(IPv6CidrRange.fromCidr(&quot;2001:db8::/33&quot;));</p>
-				<p>// console logs 192.198.0.0/24
-					2001:db8:0:0:0:0:0:0/33
-					ipRanges.forEach(iprange =&gt; {
-					console.log(iprange.toCidrString());
-				});</p>
-				<pre><code>
-See the [IPNumber documentation](https://ip-num.github.io/ip-num/interfaces/_interface_ipnumber_.ipnumber.html) <span class="hljs-keyword">for</span> more information
-See the [IPRange documentation](https://ip-num.github.io/ip-num/interfaces/_interface_iprange_.iprange.html) <span class="hljs-keyword">for</span> more information
+<span class="hljs-comment">// get first and last IPv4 number in the range</span>
+ipv4Range.get<span class="hljs-constructor">First()</span>.<span class="hljs-keyword">to</span><span class="hljs-constructor">String()</span> <span class="hljs-comment">// gives 192.198.0.0</span>
+ipv4Range.get<span class="hljs-constructor">Last()</span>.<span class="hljs-keyword">to</span><span class="hljs-constructor">String()</span> <span class="hljs-comment">// gives 192.198.0.255</span>
 
-### IPv4Subnet <span class="hljs-keyword">and</span> IPv6Subnet
+<span class="hljs-comment">// getting number of IPv4 numbers in the range</span>
+ipv4Range.get<span class="hljs-constructor">Size()</span> <span class="hljs-comment">// Returns 256</span>
 
-IPv4Subnet <span class="hljs-keyword">and</span> IPv6Subnet are used <span class="hljs-keyword">to</span> represents subnets <span class="hljs-keyword">in</span> IPv4 <span class="hljs-keyword">and</span> IPv6 
-respectively. 
+<span class="hljs-comment">// splitting ranges</span>
+ipv4Range.split<span class="hljs-literal">()</span><span class="hljs-literal">[<span class="hljs-number">0</span>]</span>.<span class="hljs-keyword">to</span><span class="hljs-constructor">CidrString()</span> <span class="hljs-comment">// returns 192.198.0.0/25</span>
+ipv4Range.split<span class="hljs-literal">()</span><span class="hljs-literal">[<span class="hljs-number">1</span>]</span>.<span class="hljs-keyword">to</span><span class="hljs-constructor">CidrString()</span> <span class="hljs-comment">// returns 192.198.0.128/25</span></code></pre><p>See the <a href="https://ip-num.github.io/ip-num/classes/_ipv4range_.ipv4range.html">IPv4CidrRange documentation</a> for more information</p>
+				<a href="#ipv6-ranges" id="ipv6-ranges" style="color: inherit; text-decoration: none;">
+					<h3>IPv6 Ranges</h3>
+				</a>
+				<pre><code>import {IPv6CidrRange} from <span class="hljs-string">"ip-num/IPRange"</span>;
 
-Subnets are <span class="hljs-keyword">in</span> <span class="hljs-keyword">all</span> respects IP numbers <span class="hljs-keyword">with</span> the only restriction that they must contain contiguous <span class="hljs-keyword">on</span> bits (<span class="hljs-number">1</span><span class="hljs-symbol">'s</span>) 
-followed by contiguous off bits (<span class="hljs-number">0</span><span class="hljs-symbol">'s</span>). This means IPv4Subnet <span class="hljs-keyword">and</span> IPv6Subnet can perform <span class="hljs-keyword">all</span> the operations available 
-<span class="hljs-keyword">on</span> IPv4 <span class="hljs-keyword">and</span> IPv6. The only difference <span class="hljs-keyword">is</span> that the invariant required <span class="hljs-keyword">for</span> a subnet <span class="hljs-keyword">is</span> enforced <span class="hljs-keyword">in</span> the contructor <span class="hljs-keyword">of</span> 
-IPv4Subnet <span class="hljs-keyword">and</span> IPv6Subnet. <span class="hljs-keyword">For</span> example:
+<span class="hljs-comment">// creating an IPv6 range from CIDR notation</span>
+<span class="hljs-keyword">let</span> ipv6Range = <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">IPv6CidrRange</span>.</span></span>from<span class="hljs-constructor">Cidr(<span class="hljs-string">"2001:db8::/33"</span>)</span>;
 
-The following code will throw an exception:
-</code></pre><p>import {IPv4Subnet} from &#39;ip-num/IPv4Subnet&#39;
-				import {IPv4Subnet} from &#39;ip-num/IPv4Subnet&#39;</p>
-				<p>let ipv4Subnet = new IPv4Subnet(&quot;10.255.10.3&quot;);
-				let ipv6Subnet = new IPv6Subnet(&quot;3ffe:1900:4545:0003:0200:f8ff:fe21:67cf&quot;);</p>
-				<pre><code>
-<span class="hljs-keyword">While</span> the following <span class="hljs-built_in">code</span> works fine:
-</code></pre><p>import {IPv4Subnet} from &#39;ip-num/Subnet&#39;
-				import {IPv6Subnet} from &#39;ip-num/Subnet&#39;</p>
-				<p>let iPv4Subnet = new IPv4Subnet(&quot;255.0.0.0&quot;);
-				let iPv6Subnet = new IPv6Subnet(&quot;ffff:ffff:ffff:ffff:ffff:ffff:0:0&quot;);</p>
-				<pre><code>See the [<span class="hljs-string">Subnet documentation</span>](<span class="hljs-link">https://ip-num.github.io/ip-num/modules/_subnet_.html</span>) for more information
+<span class="hljs-comment">// get first and last IPv6 number in the range</span>
+ipv6Range.get<span class="hljs-constructor">First()</span>.<span class="hljs-keyword">to</span><span class="hljs-constructor">String()</span> <span class="hljs-comment">// gives 2001:db8:0:0:0:0:0:0</span>
+ipv6Range.get<span class="hljs-constructor">Last()</span>.<span class="hljs-keyword">to</span><span class="hljs-constructor">String()</span> <span class="hljs-comment">// gives 2001:db8:7fff:ffff:ffff:ffff:ffff:ffff</span>
 
-<span class="hljs-section">### IPv4-Mapped IPv6 Address Support</span>
-IPv4-Mapped IPv6 Address IPv6 allows embedding an IPv4 address within an IPv6 address. See [<span class="hljs-string">IPv6 Addresses with Embedded IPv4 Addresses</span>](<span class="hljs-link">https://tools.ietf.org/html/rfc4291#section-2.5.5</span>)
+<span class="hljs-comment">// getting number of IPv6 numbers in the range</span>
+ipv6Range.get<span class="hljs-constructor">Size()</span> <span class="hljs-comment">// Returns 39614081257132168796771975168</span>
 
-<span class="hljs-code">`ip-num`</span> offers various ways to create an IPv4-Mapped IPv6 Address:
+<span class="hljs-comment">// splitting ranges</span>
+ipv6Range.split<span class="hljs-literal">()</span><span class="hljs-literal">[<span class="hljs-number">0</span>]</span>.<span class="hljs-keyword">to</span><span class="hljs-constructor">CidrString()</span> <span class="hljs-comment">// returns 2001:db8:0:0:0:0:0:0/34</span>
+ipv6Range.split<span class="hljs-literal">()</span><span class="hljs-literal">[<span class="hljs-number">1</span>]</span>.<span class="hljs-keyword">to</span><span class="hljs-constructor">CidrString()</span> <span class="hljs-comment">// returns 2001:db8:4000:0:0:0:0:0/34</span></code></pre><p>See the <a href="https://ip-num.github.io/ip-num/classes/_ipv6range_.ipv6range.html">IPv6CidrRange documentation</a> for more information</p>
+				<a href="#abstractipnum-and-abstractiprange" id="abstractipnum-and-abstractiprange" style="color: inherit; text-decoration: none;">
+					<h3>AbstractIPNum and AbstractIPRange</h3>
+				</a>
+				<p>When working in TypeScript, you have the ability to abstract ASN, IPv4 and IPv6 as an AbstractIPNum, and IPv4CidrRange and
+				IPv6CidrRange as AbstractIPRange</p>
+				<pre><code><span class="hljs-keyword">import</span> {AbstractIPNum} <span class="hljs-keyword">from</span> <span class="hljs-string">"ip-num/IPNumber"</span>;
+<span class="hljs-keyword">import</span> {AbstractIPRange} <span class="hljs-keyword">from</span> <span class="hljs-string">"ip-num/IPRange"</span>;
+<span class="hljs-keyword">import</span> {Asn} <span class="hljs-keyword">from</span> <span class="hljs-string">"ip-num/IPNumber"</span>;
+<span class="hljs-keyword">import</span> {IPv4} <span class="hljs-keyword">from</span> <span class="hljs-string">"ip-num/IPNumber"</span>;
+<span class="hljs-keyword">import</span> {IPv6} <span class="hljs-keyword">from</span> <span class="hljs-string">"ip-num/IPNumber"</span>;
+<span class="hljs-keyword">import</span> {IPv4CidrRange} <span class="hljs-keyword">from</span> <span class="hljs-string">"ip-num/IPRange"</span>;
+<span class="hljs-keyword">import</span> {IPv6CidrRange} <span class="hljs-keyword">from</span> <span class="hljs-string">"ip-num/IPRange"</span>;
+<span class="hljs-keyword">import</span> {IPv4Prefix} <span class="hljs-keyword">from</span> <span class="hljs-string">"ip-num/Prefix"</span>;
+<span class="hljs-keyword">import</span> {IPv6Prefix} <span class="hljs-keyword">from</span> <span class="hljs-string">"ip-num/Prefix"</span>;
 
-<span class="hljs-section">##### Converting from an existing IPv4</span>
-</code></pre><p>import { IPv4 } from &quot;ip-num/IPv4&quot;;</p>
-				<p>let ipv4 = new IPv4(&quot;74.125.43.99&quot;)
-				ipv4.toIPv4MappedIPv6().toString() // produces ::ffff:4a7d:2b63</p>
-				<pre><code>
-##### <span class="hljs-keyword">From</span> an existing IPv4 <span class="hljs-keyword">using</span> convenience <span class="hljs-function"><span class="hljs-keyword">method</span> <span class="hljs-title">on</span> <span class="hljs-title">IPv6</span></span>
-</code></pre><p>import { IPv6 } from &quot;ip-num/IPv6&quot;;</p>
-				<p>let ipv6 = IPv6.fromIPv4(new IPv4(&quot;74.125.43.99&quot;))
-				ipv6.toString() // produces ::ffff:4a7d:2b63</p>
-				<pre><code>
-##### <span class="hljs-keyword">From</span> dot-decimal notation <span class="hljs-keyword">using</span> convenience <span class="hljs-function"><span class="hljs-keyword">method</span> <span class="hljs-title">on</span> <span class="hljs-title">IPv6</span></span>
-</code></pre><p>import { IPv6 } from &quot;ip-num/IPv6&quot;;</p>
-				<p>let ipv6 = IPv6.fromIPv4DotDecimalString(&quot;74.125.43.99&quot;)
-				ipv6.toString() // produces ::ffff:4a7d:2b63</p>
-				<pre><code>
-<span class="hljs-comment">### Validation and Utilities</span>
+<span class="hljs-comment">// representing ASN, IPv4 and IPv6 as a AbstractIPNum</span>
+<span class="hljs-keyword">let</span> ipNumbers: AbstractIPNum[] = [];
+ipNumbers.push(<span class="hljs-keyword">new</span> Asn(<span class="hljs-string">"200"</span>));
+ipNumbers.push(<span class="hljs-keyword">new</span> IPv4(<span class="hljs-string">"133.245.233.255"</span>));
+ipNumbers.push(<span class="hljs-keyword">new</span> IPv6(<span class="hljs-string">"2001:800:0:0:0:0:0:2002"</span>))
 
-Various validation are exposed via the `Validator` module.  `ip-num` also provide various utility operations. These 
-utility operations can be found <span class="hljs-keyword">in</span> `BinaryUtils`, `IPv6Utils`, <span class="hljs-keyword">and</span> `HexadecimalUtils`.
+<span class="hljs-comment">// console logs AS200</span>
+<span class="hljs-comment">//              133.245.233.255</span>
+<span class="hljs-comment">//              2001:800:0:0:0:0:0:2002</span>
+ipNumbers.forEach(<span class="hljs-function"><span class="hljs-params">ip</span> =&gt;</span> {
+   <span class="hljs-built_in">console</span>.log(ip.toString());
+});
 
-<span class="hljs-keyword">For</span> example <span class="hljs-keyword">to</span> expand <span class="hljs-keyword">and</span> collapse<span class="hljs-built_in"> IPv6 </span>numbers:
-</code></pre><p>import {IPv6Utils} from &#39;ip-num/IPv6Utils&#39;</p>
-				<p>// expanding
-					IPv6Utils.expandIPv6Number(&quot;::&quot;) // Expands to 0000:0000:0000:0000:0000:0000:0000:0000
-					IPv6Utils.expandIPv6Number(&quot;FF01::101&quot;)// Expands to FF01:0000:0000:0000:0000:0000:0000:0101
-					// collapsing
-					IPv6Utils.collapseIPv6Number(&quot;0000:0000:0000:0000:0000:0000:0000:0000&quot;) // Collapses to ::
-				IPv6Utils.collapseIPv6Number(&quot;FF01:0:0:0:0:0:0:101&quot;) // Collapses to FF01::101</p>
-				<pre><code>
-To<span class="hljs-built_in"> check </span>if a given string is valid cidr notation:
-</code></pre><p>import {Validator} from &#39;ip-num/Validator&#39;</p>
-				<p>let result = Validator.isValidIPv4CidrNotation(&quot;123.234.334.23&quot;)
-					// result =&gt; [false, [&quot;Cidr notation should be in the form [ip number]/[range]&quot;]]
-					let result = Validator.isValidIPv4CidrNotation(&quot;10.0.0.0/8&quot;)
-					// result =&gt; [true, []]
-					```
-					See the <a href="https://ip-num.github.io/ip-num/classes/_validator_.validator.html">Validator documentation</a> for more information
+
+<span class="hljs-comment">// representing IPv4CidrRange and IPv6CidrRange as AbstractIPRange</span>
+
+<span class="hljs-keyword">let</span> ipRanges: AbstractIPRange&lt;IPv4 | IPv6, IPv4Prefix | IPv6Prefix&gt;[] = [];
+ipRanges.push(IPv4CidrRange.fromCidr(<span class="hljs-string">"192.198.0.0/24"</span>));
+ipRanges.push(IPv6CidrRange.fromCidr(<span class="hljs-string">"2001:db8::/33"</span>));
+
+<span class="hljs-comment">// console logs 192.198.0.0/24</span>
+<span class="hljs-comment">//               2001:db8:0:0:0:0:0:0/33</span>
+ipRanges.forEach(<span class="hljs-function"><span class="hljs-params">iprange</span> =&gt;</span> {
+   <span class="hljs-built_in">console</span>.log(iprange.toCidrString());
+});
+</code></pre><p>See the <a href="https://ip-num.github.io/ip-num/interfaces/_interface_ipnumber_.ipnumber.html">IPNumber documentation</a> for more information
+				See the <a href="https://ip-num.github.io/ip-num/interfaces/_interface_iprange_.iprange.html">IPRange documentation</a> for more information</p>
+				<a href="#ipv4mask-and-ipv6mask" id="ipv4mask-and-ipv6mask" style="color: inherit; text-decoration: none;">
+					<h3>IPv4Mask and IPv6Mask</h3>
+				</a>
+				<p>IPv4Mask and IPv6Mask are used to represent subnet masks in IPv4 and IPv6
+				respectively. </p>
+				<p>Subnet masks are in all respects IP numbers with the only restriction that they must contain contiguous on bits (1&#39;s)
+					followed by contiguous off bits (0&#39;s). This means IPv4Mask and IPv6Mask can perform all the operations
+					available on IPv4 and IPv6. The only difference is that the invariant required for a subnet is enforced in the
+				constructor of IPv4Mask and IPv6Mask. For example:</p>
+				<p>The following code will throw an exception:</p>
+				<pre><code><span class="hljs-keyword">import</span> {IPv4Mask} <span class="hljs-keyword">from</span> <span class="hljs-string">'ip-num/IPNumber'</span>
+<span class="hljs-keyword">import</span> {IPv6Mask} <span class="hljs-keyword">from</span> <span class="hljs-string">'ip-num/IPNumber'</span>
+
+<span class="hljs-keyword">let</span> ipv4Mask = <span class="hljs-keyword">new</span> IPv4Mask(<span class="hljs-string">"10.255.10.3"</span>);
+<span class="hljs-keyword">let</span> ipv6Mask = <span class="hljs-keyword">new</span> IPv6Mask(<span class="hljs-string">"3ffe:1900:4545:0003:0200:f8ff:fe21:67cf"</span>);</code></pre><p>While the following code works fine:</p>
+				<pre><code><span class="hljs-keyword">import</span> {IPv4Mask} <span class="hljs-keyword">from</span> <span class="hljs-string">'ip-num/IPNumber'</span>
+<span class="hljs-keyword">import</span> {IPv6Mask} <span class="hljs-keyword">from</span> <span class="hljs-string">'ip-num/IPNumber'</span>
+
+<span class="hljs-keyword">let</span> iPv4Mask = <span class="hljs-keyword">new</span> IPv4Mask(<span class="hljs-string">"255.0.0.0"</span>);
+<span class="hljs-keyword">let</span> iPv6Mask = <span class="hljs-keyword">new</span> IPv6Mask(<span class="hljs-string">"ffff:ffff:ffff:ffff:ffff:ffff:0:0"</span>);</code></pre><p>See the <a href="https://ip-num.github.io/ip-num/modules/_subnetmask_.html">Mask documentation</a> for more information</p>
+				<a href="#ipv4-mapped-ipv6-address-support" id="ipv4-mapped-ipv6-address-support" style="color: inherit; text-decoration: none;">
+					<h3>IPv4-Mapped IPv6 Address Support</h3>
+				</a>
+				<p>IPv4-Mapped IPv6 Address IPv6 allows embedding an IPv4 address within an IPv6 address. See <a href="https://tools.ietf.org/html/rfc4291#section-2.5.5">IPv6 Addresses with Embedded IPv4 Addresses</a></p>
+				<p><code>ip-num</code> offers various ways to create an IPv4-Mapped IPv6 Address:</p>
+				<a href="#converting-from-an-existing-ipv4" id="converting-from-an-existing-ipv4" style="color: inherit; text-decoration: none;">
+					<h5>Converting from an existing IPv4</h5>
+				</a>
+				<pre><code>import { IPv4 } from <span class="hljs-string">"ip-num/IPNumber"</span>;
+
+<span class="hljs-built_in">let</span> ipv4 = <span class="hljs-built_in">new</span> IPv4(<span class="hljs-string">"74.125.43.99"</span>)
+ipv4.toIPv4MappedIPv6().toString() // produces ::ffff:4a7d:<span class="hljs-number">2b63</span></code></pre>
+				<a href="#from-an-existing-ipv4-using-convenience-method-on-ipv6" id="from-an-existing-ipv4-using-convenience-method-on-ipv6" style="color: inherit; text-decoration: none;">
+					<h5>From an existing IPv4 using convenience method on IPv6</h5>
+				</a>
+				<pre><code>import { IPv6 } from <span class="hljs-string">"ip-num/IPNumber"</span>;
+import { IPv4 } from <span class="hljs-string">"ip-num/IPNumber"</span>;
+
+<span class="hljs-built_in">let</span> ipv6 = IPv6.fromIPv4(<span class="hljs-built_in">new</span> IPv4(<span class="hljs-string">"74.125.43.99"</span>))
+ipv6.toString() // produces ::ffff:4a7d:<span class="hljs-number">2b63</span></code></pre>
+				<a href="#from-dot-decimal-notation-using-convenience-method-on-ipv6" id="from-dot-decimal-notation-using-convenience-method-on-ipv6" style="color: inherit; text-decoration: none;">
+					<h5>From dot-decimal notation using convenience method on IPv6</h5>
+				</a>
+				<pre><code>import { IPv6 } from <span class="hljs-string">"ip-num/IPNumber"</span>;
+
+<span class="hljs-built_in">let</span> ipv6 = IPv6.fromIPv4DotDecimalString(<span class="hljs-string">"74.125.43.99"</span>)
+ipv6.toString() // produces ::ffff:4a7d:<span class="hljs-number">2b63</span></code></pre>
+				<a href="#validation-and-utilities" id="validation-and-utilities" style="color: inherit; text-decoration: none;">
+					<h3>Validation and Utilities</h3>
+				</a>
+				<p>Various validation are exposed via the <code>Validator</code> module.  <code>ip-num</code> also provide various utility operations. These
+				utility operations can be found in <code>BinaryUtils</code>, <code>IPv6Utils</code>, and <code>HexadecimalUtils</code>.</p>
+				<p>For example to expand and collapse IPv6 numbers:</p>
+				<pre><code>import<span class="hljs-operator"> * </span><span class="hljs-keyword">as</span> IPv6Utils from 'ip-num/IPv6Utils'
+
+<span class="hljs-comment">// expanding</span>
+<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">IPv6Utils</span>.</span></span>expand<span class="hljs-constructor">IPv6Number(<span class="hljs-string">"::"</span>)</span> <span class="hljs-comment">// Expands to 0000:0000:0000:0000:0000:0000:0000:0000</span>
+<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">IPv6Utils</span>.</span></span>expand<span class="hljs-constructor">IPv6Number(<span class="hljs-string">"FF01::101"</span>)</span><span class="hljs-comment">// Expands to FF01:0000:0000:0000:0000:0000:0000:0101</span>
+<span class="hljs-comment">// collapsing</span>
+<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">IPv6Utils</span>.</span></span>collapse<span class="hljs-constructor">IPv6Number(<span class="hljs-string">"0000:0000:0000:0000:0000:0000:0000:0000"</span>)</span> <span class="hljs-comment">// Collapses to :: </span>
+<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">IPv6Utils</span>.</span></span>collapse<span class="hljs-constructor">IPv6Number(<span class="hljs-string">"FF01:0:0:0:0:0:0:101"</span>)</span> <span class="hljs-comment">// Collapses to FF01::101</span></code></pre><p>To check if a given string is valid cidr notation:</p>
+				<pre><code>import {Validator} from 'ip-num/Validator'
+
+<span class="hljs-keyword">let</span> result = <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Validator</span>.</span></span>is<span class="hljs-constructor">ValidIPv4CidrNotation(<span class="hljs-string">"123.234.334.23"</span>)</span>
+<span class="hljs-comment">// result =&gt; [false, ["Cidr notation should be in the form [ip number]/[range]"]]</span>
+<span class="hljs-keyword">let</span> result = <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Validator</span>.</span></span>is<span class="hljs-constructor">ValidIPv4CidrNotation(<span class="hljs-string">"10.0.0.0/8"</span>)</span>
+<span class="hljs-comment">// result =&gt; [true, []]</span></code></pre><p>See the <a href="https://ip-num.github.io/ip-num/classes/_validator_.validator.html">Validator documentation</a> for more information
 					See the <a href="https://ip-num.github.io/ip-num/modules/_binaryutils_.html">BinaryUtils documentation</a> for more information
 					See the <a href="https://ip-num.github.io/ip-num/modules/_ipv6utils_.html">IPv6Utils documentation</a> for more information
 				See the <a href="https://ip-num.github.io/ip-num/modules/_hexadecimalutils_.html">HexadecimalUtils documentation</a> for more information</p>
-				<h2 id="license">License</h2>
+				<a href="#license" id="license" style="color: inherit; text-decoration: none;">
+					<h2>License</h2>
+				</a>
 				<p>The <code>ip-num</code> library is released under the MIT license</p>
-				<h2 id="contributing">Contributing</h2>
+				<a href="#contributing" id="contributing" style="color: inherit; text-decoration: none;">
+					<h2>Contributing</h2>
+				</a>
 				<p>To discuss a new feature or ask a question, open an issue. Find the issue tracker <a href="https://github.com/ip-num/ip-num/issues">here</a></p>
 				<p>Found a bug and you want to provide a fix for it? Then feel free to submit a pull request. It will be appreciated if the changes made are backed with tests.</p>
-				<h2 id="change-log">Change log</h2>
-				<h5 id="v1-1-1">v1.1.1</h5>
+				<a href="#change-log" id="change-log" style="color: inherit; text-decoration: none;">
+					<h2>Change log</h2>
+				</a>
+				<p>View latest releases <a href="https://github.com/ip-num/ip-num/releases">here</a></p>
+				<a href="#v121" id="v121" style="color: inherit; text-decoration: none;">
+					<h5>v1.2.1</h5>
+				</a>
+				<ul>
+					<li>Fixes a cyclic dependency bug. <a href="https://github.com/ip-num/ip-num/issues/24">Issue #24</a> </li>
+				</ul>
+				<a href="#v120" id="v120" style="color: inherit; text-decoration: none;">
+					<h5>v1.2.0</h5>
+				</a>
+				<ul>
+					<li>Introduced AbstractIpRange to abstract over the IPRange (ie: IPv4Range and IPv6Range). <a href="https://github.com/ip-num/ip-num/issues/15">Issue #15</a> </li>
+					<li>Extend the IPRange interface. <a href="https://github.com/ip-num/ip-num/issues/20">Issue #20</a></li>
+					<li>Add method to IPRange to return the adjacent ranges. <a href="https://github.com/ip-num/ip-num/issues/19">Issue #19</a></li>
+					<li>Add ability to validate if a CIDR notation represents a valid range. <a href="https://github.com/ip-num/ip-num/issues/21">Issue #21</a></li>
+					<li>Changed target to es5 so as to support Internet Explorer 11. <a href="https://github.com/ip-num/ip-num/issues/22">Issue #22</a></li>
+				</ul>
+				<a href="#v111" id="v111" style="color: inherit; text-decoration: none;">
+					<h5>v1.1.1</h5>
+				</a>
 				<ul>
 					<li>Fixed isValidIPv4String() incorrectly returns true for some invalid addresses. <a href="https://github.com/ip-num/ip-num/issues/9">Issue #9</a></li>
 					<li>Improved Validator.isValidIPv6String and added test coverage. <a href="https://github.com/ip-num/ip-num/issues/10">Issue #10</a></li>
@@ -347,9 +409,13 @@ To<span class="hljs-built_in"> check </span>if a given string is valid cidr nota
 					<li>Prepend with &quot;::&quot; if toString value for IPv6 has leading zeros. <a href="https://github.com/ip-num/ip-num/issues/12">Issue #12</a></li>
 					<li>Implemented support for IPv4-Mapped IPv6 Address. <a href="https://github.com/ip-num/ip-num/issues/3">Issue #3</a></li>
 				</ul>
-				<h5 id="v1-1-0">v1.1.0</h5>
+				<a href="#v110" id="v110" style="color: inherit; text-decoration: none;">
+					<h5>v1.1.0</h5>
+				</a>
 				<p>Version 1.1.0 was Unpublished.</p>
-				<h5 id="v1-0-1">v1.0.1</h5>
+				<a href="#v101" id="v101" style="color: inherit; text-decoration: none;">
+					<h5>v1.0.1</h5>
+				</a>
 				<ul>
 					<li>Renamed Subnet to SubnetMask <a href="https://github.com/ip-num/ip-num/issues/1">Issue #1</a></li>
 					<li>Fixed the throwing of <em>invalid integer: NaN</em> when invalid IPv4 and IPv6 strings are passed to Validator
@@ -357,6 +423,12 @@ To<span class="hljs-built_in"> check </span>if a given string is valid cidr nota
 					<a href="https://github.com/ip-num/ip-num/issues/5">Issue #5</a></li>
 					<li>Fixed <code>Validator.isValidIPv4CidrNotation</code> improper validation of IPv4 CIDR <a href="https://github.com/ip-num/ip-num/issues/6">Issue #6</a></li>
 				</ul>
+				<a href="#acknowledgement" id="acknowledgement" style="color: inherit; text-decoration: none;">
+					<h2>Acknowledgement</h2>
+				</a>
+				<p>Special thanks to JetBrains for supporting the development of <code>ip-num</code> with a free IDE licence.  </p>
+				<img src="https://user-images.githubusercontent.com/272535/43159119-bb6a8946-8f81-11e8-8839-26b9f5a8815f.png" width="100">
+				<p>You can find more information about JetBrains support for open source projects <a href="https://www.jetbrains.com/buy/opensource/">here</a></p>
 			</div>
 		</div>
 		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
@@ -365,65 +437,41 @@ To<span class="hljs-built_in"> check </span>if a given string is valid cidr nota
 					<li class="globals  ">
 						<a href="globals.html"><em>Globals</em></a>
 					</li>
-					<li class="label tsd-is-external">
-						<span>Internals</span>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_binaryutils_.html">&quot;<wbr>Binary<wbr>Utils&quot;</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="modules/_abstractipnum_.html">"<wbr>AbstractIPNum"</a>
+						<a href="modules/_hexadecatet_.html">&quot;<wbr>Hexadecatet&quot;</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="modules/_asn_.html">"<wbr>Asn"</a>
+						<a href="modules/_hexadecimalutils_.html">&quot;<wbr>Hexadecimal<wbr>Utils&quot;</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="modules/_binaryutils_.html">"<wbr>Binary<wbr>Utils"</a>
+						<a href="modules/_ipnumtype_.html">&quot;IPNum<wbr>Type&quot;</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="modules/_hexadecatet_.html">"<wbr>Hexadecatet"</a>
+						<a href="modules/_ipnumber_.html">&quot;IPNumber&quot;</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="modules/_hexadecimalutils_.html">"<wbr>Hexadecimal<wbr>Utils"</a>
+						<a href="modules/_ippool_.html">&quot;IPPool&quot;</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="modules/_ipnumtype_.html">"IPNum<wbr>Type"</a>
+						<a href="modules/_iprange_.html">&quot;IPRange&quot;</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="modules/_ipv4_.html">"IPv4"</a>
+						<a href="modules/_ipv6utils_.html">&quot;IPv6<wbr>Utils&quot;</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="modules/_ipv4range_.html">"IPv4<wbr>Range"</a>
+						<a href="modules/_octet_.html">&quot;<wbr>Octet&quot;</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="modules/_ipv6_.html">"IPv6"</a>
+						<a href="modules/_prefix_.html">&quot;<wbr>Prefix&quot;</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="modules/_ipv6range_.html">"IPv6<wbr>Range"</a>
+						<a href="modules/_validator_.html">&quot;<wbr>Validator&quot;</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="modules/_ipv6utils_.html">"IPv6<wbr>Utils"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_octet_.html">"<wbr>Octet"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_prefix_.html">"<wbr>Prefix"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_subnetmask_.html">"<wbr>Subnet<wbr>Mask"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_validator_.html">"<wbr>Validator"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_index_.html">"index"</a>
-					</li>
-					<li class="label tsd-is-external">
-						<span>Externals</span>
-					</li>
-					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="modules/_interface_ipnumber_.html">"interface/IPNumber"</a>
-					</li>
-					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="modules/_interface_iprange_.html">"interface/IPRange"</a>
+						<a href="modules/_index_.html">&quot;index&quot;</a>
 					</li>
 				</ul>
 			</nav>
@@ -446,6 +494,7 @@ To<span class="hljs-built_in"> check </span>if a given string is valid cidr nota
 				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
 				<li class="tsd-kind-index-signature"><span class="tsd-kind-icon">Index signature</span></li>
 				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
+				<li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
@@ -494,7 +543,7 @@ To<span class="hljs-built_in"> check </span>if a given string is valid cidr nota
 	</div>
 </footer>
 <div class="container tsd-generator">
-	<p>Generated using <a href="http://typedoc.org/" target="_blank">TypeDoc</a></p>
+	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
 </div>
 <div class="overlay"></div>
 <script src="assets/js/main.js"></script>

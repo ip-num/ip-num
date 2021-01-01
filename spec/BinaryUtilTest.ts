@@ -1,6 +1,7 @@
 import * as BinaryUtils from "../src/BinaryUtils";
 import * as bigInt from "big-integer/BigInteger";
 import {IPNumType} from "../src";
+import {intLog2} from "../src/BinaryUtils";
 
 describe('Binary Utils', () => {
     it('Should correctly convert decimal to binary', () => {
@@ -49,28 +50,41 @@ describe('Binary Utils', () => {
     });
     describe('IPv4 cidr prefix to binary string', () => {
       it('should convert a 24 prefix', () => {
-        expect(BinaryUtils.cidrPrefixToSubnetMaskBinaryString(24, IPNumType.IPv4)).toBe(`${"1".repeat(24)}${"0".repeat(8)}`)
+        expect(BinaryUtils.cidrPrefixToMaskBinaryString(24, IPNumType.IPv4)).toBe(`${"1".repeat(24)}${"0".repeat(8)}`)
       });
       it('should convert a 32 prefix', () => {
-        expect(BinaryUtils.cidrPrefixToSubnetMaskBinaryString(32, IPNumType.IPv4)).toBe(`${"1".repeat(32)}`)
+        expect(BinaryUtils.cidrPrefixToMaskBinaryString(32, IPNumType.IPv4)).toBe(`${"1".repeat(32)}`)
       });
       it('should throw an exception when converting 33 prefix', () => {
         expect(() => {
-          BinaryUtils.cidrPrefixToSubnetMaskBinaryString(33, IPNumType.IPv4);
+          BinaryUtils.cidrPrefixToMaskBinaryString(33, IPNumType.IPv4);
         }).toThrowError(Error, 'Value is greater than 32');
       });
     });
     describe('IPv6 cidr prefix to binary string', () => {
       it('should convert a 64 prefix', () => {
-      expect(BinaryUtils.cidrPrefixToSubnetMaskBinaryString(64, IPNumType.IPv6)).toBe(`${"1".repeat(64)}${"0".repeat(64)}`)
+      expect(BinaryUtils.cidrPrefixToMaskBinaryString(64, IPNumType.IPv6)).toBe(`${"1".repeat(64)}${"0".repeat(64)}`)
       });
       it('should convert a 128 prefix', () => {
-        expect(BinaryUtils.cidrPrefixToSubnetMaskBinaryString(128, IPNumType.IPv6)).toBe(`${"1".repeat(128)}`)
+        expect(BinaryUtils.cidrPrefixToMaskBinaryString(128, IPNumType.IPv6)).toBe(`${"1".repeat(128)}`)
       });
       it('should throw an exception when converting 130 prefix', () => {
         expect(() => {
-        BinaryUtils.cidrPrefixToSubnetMaskBinaryString(130, IPNumType.IPv6);
+        BinaryUtils.cidrPrefixToMaskBinaryString(130, IPNumType.IPv6);
         }).toThrowError(Error, 'Value is greater than 128');
       });
     });
+
+    describe('log2', () => {
+        it('should calculate the log2 of a number', () => {
+            expect(intLog2(bigInt(8))).toBe(3);
+            expect(intLog2(bigInt(256))).toBe(8);
+        });
+
+        it('should throw an exception when no int log2', () => {
+            expect(() => {
+                intLog2(bigInt(12))
+            }).toThrowError(Error)
+        })
+    })
 });

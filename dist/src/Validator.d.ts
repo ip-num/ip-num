@@ -4,12 +4,14 @@ export declare class Validator {
     static IPV4_PATTERN: RegExp;
     static IPV4_RANGE_PATTERN: RegExp;
     static IPV6_RANGE_PATTERN: RegExp;
-    static IPV4_SUBNET_MASK_BIT_PATTERN: RegExp;
-    static IPV6_SUBNET_MASK_BIT_PATTERN: RegExp;
+    static IPV4_CONTIGUOUS_MASK_BIT_PATTERN: RegExp;
+    static IPV6_CONTIGUOUS_MASK_BIT_PATTERN: RegExp;
     static EIGHT_BIT_SIZE: bigInt.BigInteger;
     static SIXTEEN_BIT_SIZE: bigInt.BigInteger;
     static THIRTY_TWO_BIT_SIZE: bigInt.BigInteger;
     static ONE_HUNDRED_AND_TWENTY_EIGHT_BIT_SIZE: bigInt.BigInteger;
+    static IPV4_SIZE: bigInt.BigInteger;
+    static IPV6_SIZE: bigInt.BigInteger;
     static invalidAsnRangeMessage: string;
     static invalid16BitAsnRangeMessage: string;
     static invalidIPv4NumberMessage: string;
@@ -18,7 +20,7 @@ export declare class Validator {
     static invalidHexadecatetMessage: string;
     static invalidOctetCountMessage: string;
     static invalidHexadecatetCountMessage: string;
-    static invalidSubnetMaskMessage: string;
+    static invalidMaskMessage: string;
     static invalidPrefixValueMessage: string;
     static invalidIPv4CidrNotationMessage: string;
     static InvalidIPCidrRangeMessage: string;
@@ -29,6 +31,8 @@ export declare class Validator {
     static cannotSplitSingleRangeErrorMessage: string;
     static invalidInetNumType: string;
     static invalidBinaryStringErrorMessage: string;
+    static invalidIPRangeSizeMessage: string;
+    static invalidIPRangeSizeForCidrMessage: string;
     /**
      * Checks if given ipNumber is in between the given lower and upper bound
      *
@@ -110,21 +114,21 @@ export declare class Validator {
      */
     static isValidPrefixValue(prefixValue: number, ipNumType: IPNumType): [boolean, string[]];
     /**
-     * Checks if given string is a valid IPv4 subnet mask
+     * Checks if given string is a valid IPv4 mask
      *
-     * @param {string} ipv4SubnetMaskString the given IPv4 subnet mask string
-     * @returns {[boolean , string]} first value is true if valid IPv4 subnet mask string, false otherwise. Second value
+     * @param {string} ipv4MaskString the given IPv4 mask string
+     * @returns {[boolean , string]} first value is true if valid IPv4 mask string, false otherwise. Second value
      * contains "valid" or an error message when value is invalid
      */
-    static isValidIPv4SubnetMask(ipv4SubnetMaskString: string): [boolean, string[]];
+    static isValidIPv4Mask(ipv4MaskString: string): [boolean, string[]];
     /**
-     * Checks if given string is a valid IPv6 subnet mask
+     * Checks if given string is a valid IPv6 mask
      *
-     * @param {string} ipv6SubnetMaskString the given IPv6 subnet mask string
-     * @returns {[boolean , string]} first value is true if valid IPv6 subnet mask string, false otherwise. Second value
+     * @param {string} ipv6MaskString the given IPv6 mask string
+     * @returns {[boolean , string]} first value is true if valid IPv6 mask string, false otherwise. Second value
      * contains "valid" or an error message when value is invalid
      */
-    static isValidIPv6SubnetMask(ipv6SubnetMaskString: string): [boolean, string[]];
+    static isValidIPv6Mask(ipv6MaskString: string): [boolean, string[]];
     /**
      * Checks if the given string is a valid IPv4 range in Cidr notation
      *

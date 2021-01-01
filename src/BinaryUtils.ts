@@ -76,12 +76,12 @@ export let leftPadWithZeroBit = (binaryString: string, finalStringLength: number
 };
 
 /**
- * Given the prefix portion of a cidr notation and the type of IP number, returns the subnet mask in binary string
+ * Given the prefix portion of a cidr notation and the type of IP number, returns the mask in binary string
  *
  * @param {number} cidrPrefix the prefix part of a cidr notation
  * @param {IPNumType.IPv4 | IPNumType.IPv6} ipType the type of the ip number in the range the cidr represents
  */
-export let cidrPrefixToSubnetMaskBinaryString = (cidrPrefix: number, ipType: IPNumType.IPv4 | IPNumType.IPv6): string => {
+export let cidrPrefixToMaskBinaryString = (cidrPrefix: number, ipType: IPNumType.IPv4 | IPNumType.IPv6): string => {
   let cidrUpperValue;
   if (ipType == IPNumType.IPv4) {
     cidrUpperValue = 32;
@@ -93,4 +93,33 @@ export let cidrPrefixToSubnetMaskBinaryString = (cidrPrefix: number, ipType: IPN
   let onBits = '1'.repeat(cidrPrefix);
   let offBits = '0'.repeat(cidrUpperValue - cidrPrefix);
   return `${onBits}${offBits}`;
+};
+
+/**
+ * Calculates the log, to base 2 of given number.
+ *
+ * @throws Error if number cannot be converted to log base 2
+ * @param givenNumber the number to calculate log base 2
+ * @return the log base 2 of given number
+ */
+export let intLog2 = (givenNumber:bigInt.BigInteger): number => {
+    let result = 0;
+
+    while (givenNumber.isEven()) {
+        if (givenNumber.equals(bigInt(2))) {
+            result++;
+            break;
+        }
+        givenNumber = givenNumber.shiftRight(bigInt(1));
+        if (givenNumber.isOdd()) {
+            result = 0;
+            break;
+        }
+        result++;
+    }
+
+    if (result == 0) {
+        throw new Error(`The value of log2 for ${givenNumber.toString()} is not an integer`)
+    }
+    return result
 };
