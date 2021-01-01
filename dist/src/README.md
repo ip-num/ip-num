@@ -122,7 +122,7 @@ values that needs to be worked with when dealing with IP numbers can exceed the 
 [Number.MAX_SAFE_INTEGER](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/MAX_SAFE_INTEGER)
  
 ### Overview 
-An incomplete overview of the structure of `ip-num` is represented below:
+An overview covering some part of the module structure of `ip-num` is represented below:
 
 ```
 IPNumber/ -- module that contains IP numbers implementations
@@ -140,7 +140,7 @@ IPRange/ -- module that contains IP ranges implementations
 ├── RangedSet -- Represents a continuous segment of either IPv4 or IPv6 numbers without adhering to classless inter-domain routing scheme
 
 IPPool/
-├── Pool
+├── Pool -- Represents a collection of IP numbers as single or set
 ``` 
  
  
