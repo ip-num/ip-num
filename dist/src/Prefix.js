@@ -100,7 +100,7 @@ var IPv4Prefix = /** @class */ (function () {
      */
     IPv4Prefix.prototype.toRangeSize = function () {
         /**
-         * Using bitwise shit operation this will be
+         * Using bitwise shift operation this will be
          * 1 << (this.bitValue - this.prefix.getValue())
          * Since left shift a number by x is equivalent to multiplying the number by the power x raised to 2
          * 2 << 4 = 2 * (2 raised to 4)
@@ -202,7 +202,7 @@ var IPv6Prefix = /** @class */ (function () {
      */
     IPv6Prefix.prototype.toRangeSize = function () {
         /**
-         * Using bitwise shit operation this will be
+         * Using bitwise shift operation this will be
          * 1 << (this.bitValue - this.prefix.getValue())
          * Since left shift a number by x is equivalent to multiplying the number by the power x raised to 2
          * 2 << 4 = 2 * (2 raised to 4)

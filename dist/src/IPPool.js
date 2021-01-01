@@ -118,7 +118,7 @@ var Pool = /** @class */ (function () {
      * @param prefix prefix range to retrieve
      * TODO TSE
      */
-    Pool.prototype.getSingleCidrRange = function (prefix) {
+    Pool.prototype.getCidrRange = function (prefix) {
         var e_1, _a;
         if (prefix.toRangeSize().gt(this.getSize())) {
             throw new Error("Not enough IP number in the pool for requested prefix: " + prefix);
@@ -166,14 +166,14 @@ var Pool = /** @class */ (function () {
      *
      * @param reqprefix prefix range to retrieve
      */
-    Pool.prototype.getMultipleCidrRanges = function (reqprefix) {
+    Pool.prototype.getCidrRanges = function (reqprefix) {
         var _this = this;
         if (reqprefix.toRangeSize().greater(this.getSize())) {
             throw new Error("Prefix greater than pool");
         }
         var go = function (reqprefix, prefix, accummulated) {
             try {
-                var singleCidrRange = _this.getSingleCidrRange(prefix);
+                var singleCidrRange = _this.getCidrRange(prefix);
                 accummulated.push(singleCidrRange);
                 var currentSize = accummulated.reduce(function (previous, current) {
                     return previous.plus(current.getSize());
@@ -186,14 +186,9 @@ var Pool = /** @class */ (function () {
                 }
             }
             catch (e) {
-                if (prefix.getValue() !== 1) {
-                    var lowerPrefix = Prefix_1.isIPv4Prefix(prefix) ?
-                        Prefix_1.IPv4Prefix.fromNumber(prefix.getValue() + 1) : Prefix_1.IPv6Prefix.fromNumber(prefix.getValue() + 1);
-                    return go(reqprefix, lowerPrefix, accummulated);
-                }
-                else {
-                    throw Error();
-                }
+                var lowerPrefix = Prefix_1.isIPv4Prefix(prefix) ?
+                    Prefix_1.IPv4Prefix.fromNumber(prefix.getValue() + 1) : Prefix_1.IPv6Prefix.fromNumber(prefix.getValue() + 1);
+                return go(reqprefix, lowerPrefix, accummulated);
             }
         };
         return go(reqprefix, reqprefix, []);
@@ -220,21 +215,27 @@ var Pool = /** @class */ (function () {
     };
     /**
      * Removes the given range from the pool. It only removes if the exact range exist in the pool.
-     * It is a Noop, if the given range does not exist in the pool
+     * It is a Noop and returns false, if the given range does not exist in the pool. Returns true otherwise
      *
      * @param rangeToRemove range to remove from ppol
      */
     Pool.prototype.removeExact = function (rangeToRemove) {
-        this.backingSet = this.backingSet.removeExact(rangeToRemove);
+        var updatedSet = this.backingSet.removeExact(rangeToRemove);
+        var isUpdated = !this.backingSet.isEquals(updatedSet);
+        this.backingSet = updatedSet;
+        return isUpdated;
     };
     /**
      * Removes the given range from the pool. If the given range overlaps, then it removes the overlapping portion.
-     * It is a Noop, if the given range does not exist or overlap in the pool
+     * It is a Noop and returns false, if the given range does not exist in the pool. Returns true otherwise
      *
      * @param rangeToRemove range to remove from ppol
      */
     Pool.prototype.removeOverlapping = function (rangeToRemove) {
-        this.backingSet = this.backingSet.removeOverlapping(rangeToRemove);
+        var updatedSet = this.backingSet.removeOverlapping(rangeToRemove);
+        var isUpdated = !this.backingSet.isEquals(updatedSet);
+        this.backingSet = updatedSet;
+        return isUpdated;
     };
     /**
      * Adds the given range to the pool.
@@ -276,6 +277,14 @@ var SortedSet = /** @class */ (function () {
     };
     SortedSet.prototype.asArray = function () {
         return this.backingArray;
+    };
+    SortedSet.prototype.isEquals = function (other) {
+        if (this.backingArray.length !== other.asArray().length) {
+            return false;
+        }
+        return this.backingArray.every(function (value, index) {
+            return value.getSize().equals(other.asArray()[index].getSize());
+        });
     };
     SortedSet.prototype.add = function (item) {
         var array = this.backingArray;
@@ -319,7 +328,12 @@ var SortedSet = /** @class */ (function () {
                 });
             }
             else {
-                return backingItem.difference(items);
+                try {
+                    return backingItem.difference(items);
+                }
+                catch (e) {
+                    return backingItem;
+                }
             }
         });
         return new SortedSet(this.sortArray(filtered));

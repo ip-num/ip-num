@@ -52,7 +52,7 @@ export declare class Pool<T extends RangeType> {
      * @param prefix prefix range to retrieve
      * TODO TSE
      */
-    getSingleCidrRange<T extends IPv4Prefix | IPv6Prefix>(prefix: T): IPCidrRange<T>;
+    getCidrRange<T extends IPv4Prefix | IPv6Prefix>(prefix: T): IPCidrRange<T>;
     /**
      * Gets a single or multiple ranges that fulfils the given prefix from the pool.
      *
@@ -60,7 +60,7 @@ export declare class Pool<T extends RangeType> {
      *
      * @param reqprefix prefix range to retrieve
      */
-    getMultipleCidrRanges<T extends IPv4Prefix | IPv6Prefix>(reqprefix: T): IPCidrRangeArray<T>;
+    getCidrRanges<T extends IPv4Prefix | IPv6Prefix>(reqprefix: T): IPCidrRangeArray<T>;
     /**
      * Returns the size of IP numbers in the pool
      */
@@ -73,18 +73,18 @@ export declare class Pool<T extends RangeType> {
     resetWith(ipRanges: Array<RangedSet<IPv4 | IPv6>>): void;
     /**
      * Removes the given range from the pool. It only removes if the exact range exist in the pool.
-     * It is a Noop, if the given range does not exist in the pool
+     * It is a Noop and returns false, if the given range does not exist in the pool. Returns true otherwise
      *
      * @param rangeToRemove range to remove from ppol
      */
-    removeExact(rangeToRemove: RangedSet<AbstractIPNum>): void;
+    removeExact(rangeToRemove: RangedSet<AbstractIPNum>): boolean;
     /**
      * Removes the given range from the pool. If the given range overlaps, then it removes the overlapping portion.
-     * It is a Noop, if the given range does not exist or overlap in the pool
+     * It is a Noop and returns false, if the given range does not exist in the pool. Returns true otherwise
      *
      * @param rangeToRemove range to remove from ppol
      */
-    removeOverlapping(rangeToRemove: RangedSet<AbstractIPNum>): void;
+    removeOverlapping(rangeToRemove: RangedSet<AbstractIPNum>): boolean;
     /**
      * Adds the given range to the pool.
      *
