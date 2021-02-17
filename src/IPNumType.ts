@@ -1,5 +1,5 @@
-export enum IPNumType {
-    ASN,
-    IPv4,
-    IPv6
+export const enum IPNumType {
+    ASN = "ASN",
+    IPv4 = "IPv4",
+    IPv6 = "IPv6"
 }

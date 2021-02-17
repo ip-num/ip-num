@@ -7,7 +7,7 @@ import {
     IPv6Prefix,
     RangedSet
 } from "../src";
-import {Pool} from "../src/IPPool";
+import {Pool} from "../src";
 import bigInt = require("big-integer");
 
 describe('Pool', () => {
