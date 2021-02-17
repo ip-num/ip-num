@@ -1,7 +1,6 @@
 'use strict';
 Object.defineProperty(exports, "__esModule", { value: true });
 var src_1 = require("../src");
-var src_2 = require("../src");
 describe('Validator: ', function () {
     describe('isValidIPv4String ', function () {
         it('validate IPv4 strings', function () {
@@ -47,8 +46,8 @@ describe('Validator: ', function () {
     });
     describe('isValidPrefixValue', function () {
         it('validate invalid IPNumType', function () {
-            expect(src_1.Validator.isValidPrefixValue(3, src_2.IPNumType.ASN)[0]).toBe(false);
-            expect(src_1.Validator.isValidPrefixValue(3, src_2.IPNumType.ASN)[1].some(function (errorMessage) { return errorMessage === src_1.Validator.invalidInetNumType; })).toBe(true);
+            expect(src_1.Validator.isValidPrefixValue(3, "ASN" /* ASN */)[0]).toBe(false);
+            expect(src_1.Validator.isValidPrefixValue(3, "ASN" /* ASN */)[1].some(function (errorMessage) { return errorMessage === src_1.Validator.invalidInetNumType; })).toBe(true);
         });
     });
     describe('isValidIPv4RangeString', function () {

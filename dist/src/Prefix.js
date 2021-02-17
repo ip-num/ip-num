@@ -20,7 +20,6 @@ exports.isIPv4Prefix = exports.IPv6Prefix = exports.IPv4Prefix = void 0;
 var Validator_1 = require("./Validator");
 var IPNumber_1 = require("./IPNumber");
 var BinaryUtils_1 = require("./BinaryUtils");
-var IPNumType_1 = require("./IPNumType");
 var HexadecimalUtils_1 = require("./HexadecimalUtils");
 var Hexadecatet_1 = require("./Hexadecatet");
 var bigInt = require("big-integer");
@@ -45,7 +44,7 @@ var IPv4Prefix = /** @class */ (function () {
         this.bitValue = bigInt(32);
         var isValid;
         var message;
-        _a = __read(Validator_1.Validator.isValidPrefixValue(rawValue, IPNumType_1.IPNumType.IPv4), 2), isValid = _a[0], message = _a[1];
+        _a = __read(Validator_1.Validator.isValidPrefixValue(rawValue, "IPv4" /* IPv4 */), 2), isValid = _a[0], message = _a[1];
         if (!isValid) {
             throw new Error(message.filter(function (msg) { return msg !== ''; }).toString());
         }
@@ -148,7 +147,7 @@ var IPv6Prefix = /** @class */ (function () {
         this.bitValue = bigInt(128);
         var isValid;
         var message;
-        _a = __read(Validator_1.Validator.isValidPrefixValue(rawValue, IPNumType_1.IPNumType.IPv6), 2), isValid = _a[0], message = _a[1];
+        _a = __read(Validator_1.Validator.isValidPrefixValue(rawValue, "IPv6" /* IPv6 */), 2), isValid = _a[0], message = _a[1];
         if (!isValid) {
             throw new Error(message.filter(function (msg) { return msg !== ''; }).toString());
         }

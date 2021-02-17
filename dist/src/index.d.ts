@@ -7,12 +7,13 @@
  * ipNum.IPv4CidrRange // gets access to IPv4CidrRange
  * ipNum.Asn // gets access to Asn
  */
-export * from './IPRange';
-export * from './IPNumber';
 export * from './BinaryUtils';
 export * from './Hexadecatet';
 export * from './HexadecimalUtils';
+export * from './IPNumber';
 export * from './IPNumType';
+export * from './IPPool';
+export * from './IPRange';
 export * from './IPv6Utils';
 export * from './Octet';
 export * from './Prefix';

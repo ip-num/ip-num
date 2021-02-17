@@ -37,7 +37,6 @@ var BinaryUtils_1 = require("./BinaryUtils");
 var BinaryUtils_2 = require("./BinaryUtils");
 var BinaryUtils_3 = require("./BinaryUtils");
 var BinaryUtils_4 = require("./BinaryUtils");
-var IPNumType_1 = require("./IPNumType");
 var BinaryUtils_5 = require("./BinaryUtils");
 var Hexadecatet_1 = require("./Hexadecatet");
 var HexadecimalUtils_1 = require("./HexadecimalUtils");
@@ -158,7 +157,7 @@ var IPv4 = /** @class */ (function (_super) {
          * The type of IP number. Value is one of the values of the {@link IPNumType} enum
          * @type {IPNumType} the type of IP number
          */
-        _this.type = IPNumType_1.IPNumType.IPv4;
+        _this.type = "IPv4" /* IPv4 */;
         /**
          * An array of {@link Octet}'s
          *
@@ -332,7 +331,7 @@ var Asn = /** @class */ (function (_super) {
          * The maximum bit size (i.e. binary value) of the ASN number in BigInteger
          */
         _this.maximumBitSize = Validator_1.Validator.THIRTY_TWO_BIT_SIZE;
-        _this.type = IPNumType_1.IPNumType.ASN;
+        _this.type = "ASN" /* ASN */;
         if (typeof rawValue === 'string') {
             if (Asn.startWithASprefix(rawValue)) {
                 _this.value = bigInt(parseInt(rawValue.substring(2)));
@@ -520,7 +519,7 @@ var IPv6 = /** @class */ (function (_super) {
          * The type of IP number. Value is one of the values of the {@link IPNumType} enum
          * @type {IPNumType} the type of IP number
          */
-        _this.type = IPNumType_1.IPNumType.IPv6;
+        _this.type = "IPv6" /* IPv6 */;
         /**
          * An array of {@link Hexadecatet}'s
          *
