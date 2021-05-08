@@ -208,6 +208,9 @@ export class RangedSet<T extends AbstractIPNum> implements Iterable<AbstractIPNu
      * Check if this range can be converted to a CIDR range.
      */
     public isCidrAble(): boolean {
+        if (this.getSize().eq(bigInt.one)) {
+            return true;
+        }
         try {
             intLog2(this.getSize());
             return true;
