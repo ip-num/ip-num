@@ -1,11 +1,8 @@
 import * as bigInt from "big-integer";
-import {IPv6, isIPv4, AbstractIPNum} from "./IPNumber";
-import {IPv4} from "./IPNumber";
-import {IPv6Prefix} from "./Prefix";
-import {intLog2, leftPadWithZeroBit} from "./BinaryUtils";
-import {parseBinaryStringToBigInteger} from "./BinaryUtils";
+import {AbstractIPNum, IPv4, IPv6, isIPv4} from "./IPNumber";
+import {IPv4Prefix, IPv6Prefix} from "./Prefix";
+import {intLog2, leftPadWithZeroBit, parseBinaryStringToBigInteger} from "./BinaryUtils";
 import {Validator} from "./Validator";
-import {IPv4Prefix} from "./Prefix";
 
 
 export type IP<T> = T extends IPv4CidrRange ? IPv4 : IPv6;
@@ -477,6 +474,7 @@ export abstract class AbstractIPRange<T extends AbstractIPNum, P extends IPv4Pre
 
         return this.newInstance(this.getFirst(), this.getPrefix().merge());
     }
+
     /**
      * Returns a lazily evaluated representation of the IP range that produces IP numbers by either:
      *
@@ -686,6 +684,31 @@ export class IPv4CidrRange extends AbstractIPRange<IPv4, IPv4Prefix> {
         let firstIPOfSecondRange = firstRange.getLast().nextIPNumber();
         let secondRange = new IPv4CidrRange(firstIPOfSecondRange, splitCidr);
         return [firstRange, secondRange];
+    }
+
+    /**
+     * Method that split prefix into ranges of the given prefix,
+     * throws an exception if the size of the given prefix is larger than target prefix
+     *
+     * @param prefix the prefix to use to split
+     * @returns {Array<IPv4CidrRange>} An array of two {@link IPv4CidrRange}
+     */
+    public splitInto(prefix: IPv4Prefix): Array<IPv4CidrRange> {
+        let splitCount = prefix.getValue() - this.cidrPrefix.getValue()
+        if (splitCount < 0) {
+            throw new Error("Prefix to split into is larger than source prefix")
+        } else if (splitCount === 0) {
+            return [new IPv4CidrRange(this.getFirst(), prefix)]
+        } else if (splitCount === 1) {
+            return this.split();
+        } else {
+            let results = this.split();
+            while (splitCount > 1) {
+                results = results.flatMap(result => result.split());
+                splitCount = splitCount - 1;
+            }
+            return results
+        }
     }
 
     /**
@@ -916,6 +939,31 @@ export class IPv6CidrRange extends AbstractIPRange<IPv6, IPv6Prefix> {
         let firstIPOfSecondRange = firstRange.getLast().nextIPNumber();
         let secondRange = new IPv6CidrRange(firstIPOfSecondRange, splitCidr);
         return [firstRange, secondRange];
+    }
+
+    /**
+     * Method that split prefix into ranges of the given prefix,
+     * throws an exception if the size of the given prefix is larger than target prefix
+     *
+     * @param prefix the prefix to use to split
+     * @returns {Array<IPv6CidrRange>} An array of two {@link IPv6CidrRange}
+     */
+    public splitInto(prefix: IPv6Prefix): Array<IPv6CidrRange> {
+        let splitCount = prefix.getValue() - this.cidrPrefix.getValue()
+        if (splitCount < 0) {
+            throw new Error("Prefix to split into is larger than source prefix")
+        } else if (splitCount === 0) {
+            return [new IPv6CidrRange(this.getFirst(), prefix)]
+        } else if (splitCount === 1) {
+            return this.split();
+        } else {
+            let results = this.split();
+            while (splitCount > 1) {
+                results = results.flatMap(result => result.split());
+                splitCount = splitCount - 1;
+            }
+            return results
+        }
     }
 
     /**
