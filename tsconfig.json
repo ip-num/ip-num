@@ -15,7 +15,7 @@
       "pretty": true,
       "sourceMap": true,
       "typeRoots": [ "./node_modules/@types" ],
-      "lib": ["esnext"],
+      "lib": ["es2019","esnext"],
       "target": "es5",
       "downlevelIteration": true
     }
