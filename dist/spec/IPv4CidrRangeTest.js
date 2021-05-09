@@ -233,6 +233,38 @@ describe('IPv4CidrRange: ', function () {
         expect(firstRange.toCidrString()).toBe("192.168.208.0/25");
         expect(secondRange.toCidrString()).toBe("192.168.208.128/25");
     });
+    it('should throw on splitInto IP if split range is greater', function () {
+        var ipv4CidrRange = src_1.IPv4CidrRange.fromCidr("192.168.208.0/24");
+        expect(function () {
+            ipv4CidrRange.splitInto(src_3.IPv4Prefix.fromNumber(23));
+        }).toThrowError(Error);
+    });
+    it('should split IP range on level correctly using split Into, no ops', function () {
+        var ipv4CidrRange = src_1.IPv4CidrRange.fromCidr("192.168.208.0/24");
+        var splitRanges = ipv4CidrRange.splitInto(src_3.IPv4Prefix.fromNumber(24));
+        var firstRange = splitRanges[0];
+        expect(firstRange.toCidrString()).toBe("192.168.208.0/24");
+    });
+    it('should split IP range on level correctly using split Into', function () {
+        var ipv4CidrRange = src_1.IPv4CidrRange.fromCidr("192.168.208.0/24");
+        var splitRanges = ipv4CidrRange.splitInto(src_3.IPv4Prefix.fromNumber(25));
+        var firstRange = splitRanges[0];
+        var secondRange = splitRanges[1];
+        expect(firstRange.toCidrString()).toBe("192.168.208.0/25");
+        expect(secondRange.toCidrString()).toBe("192.168.208.128/25");
+    });
+    it('should split IP range multiple level correctly using split Into', function () {
+        var ipv4CidrRange = src_1.IPv4CidrRange.fromCidr("192.168.208.0/24");
+        var splitRanges = ipv4CidrRange.splitInto(src_3.IPv4Prefix.fromNumber(26));
+        var firstRange = splitRanges[0];
+        var secondRange = splitRanges[1];
+        var thirdRange = splitRanges[2];
+        var fourthRange = splitRanges[3];
+        expect(firstRange.toCidrString()).toBe("192.168.208.0/26");
+        expect(secondRange.toCidrString()).toBe("192.168.208.64/26");
+        expect(thirdRange.toCidrString()).toBe("192.168.208.128/26");
+        expect(fourthRange.toCidrString()).toBe("192.168.208.192/26");
+    });
     it('should tell if there is a next consecutive range', function () {
         var firstRange = new src_1.IPv4CidrRange(new src_2.IPv4("0.0.0.0"), new src_3.IPv4Prefix(1));
         var secondRange = new src_1.IPv4CidrRange(new src_2.IPv4("127.255.255.255"), new src_3.IPv4Prefix(1));

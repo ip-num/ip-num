@@ -1,8 +1,6 @@
 import * as bigInt from "big-integer";
-import { IPv6, AbstractIPNum } from "./IPNumber";
-import { IPv4 } from "./IPNumber";
-import { IPv6Prefix } from "./Prefix";
-import { IPv4Prefix } from "./Prefix";
+import { AbstractIPNum, IPv4, IPv6 } from "./IPNumber";
+import { IPv4Prefix, IPv6Prefix } from "./Prefix";
 export declare type IP<T> = T extends IPv4CidrRange ? IPv4 : IPv6;
 /**
  * Represents a continuous segment of either IPv4 or IPv6 numbers
@@ -309,6 +307,14 @@ export declare class IPv4CidrRange extends AbstractIPRange<IPv4, IPv4Prefix> {
      */
     split(): Array<IPv4CidrRange>;
     /**
+     * Method that split prefix into ranges of the given prefix,
+     * throws an exception if the size of the given prefix is larger than target prefix
+     *
+     * @param prefix the prefix to use to split
+     * @returns {Array<IPv4CidrRange>} An array of two {@link IPv4CidrRange}
+     */
+    splitInto(prefix: IPv4Prefix): Array<IPv4CidrRange>;
+    /**
      * Returns true if there is an adjacent IPv4 cidr range of exactly the same size next to this range
      */
     hasNextRange(): boolean;
@@ -437,6 +443,14 @@ export declare class IPv6CidrRange extends AbstractIPRange<IPv6, IPv6Prefix> {
      * @returns {Array<IPv6CidrRange>} An array of two {@link IPv6CidrRange}
      */
     split(): Array<IPv6CidrRange>;
+    /**
+     * Method that split prefix into ranges of the given prefix,
+     * throws an exception if the size of the given prefix is larger than target prefix
+     *
+     * @param prefix the prefix to use to split
+     * @returns {Array<IPv6CidrRange>} An array of two {@link IPv6CidrRange}
+     */
+    splitInto(prefix: IPv6Prefix): Array<IPv6CidrRange>;
     /**
      * Returns true if there is an adjacent IPv6 cidr range of exactly the same size next to this range
      */

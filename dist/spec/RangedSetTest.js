@@ -30,6 +30,14 @@ describe('RangedSet: ', function () {
         expect(rangedSet.getFirst().toString()).toEqual("127.0.0.0");
         expect(rangedSet.getLast().toString()).toEqual("127.0.0.255");
     });
+    it("returns if ipv4 ranged set sized 1 is cidr-able", function () {
+        var rangedSet = src_1.RangedSet.fromRangeString("1.2.3.4-1.2.3.4");
+        expect(rangedSet.isCidrAble()).toBeTrue();
+    });
+    it("returns if ipv6 ranged set sized 1 is cidr-able", function () {
+        var rangedSet = src_1.RangedSet.fromRangeString("2001:db8:0:0:0:0:0:0-2001:db8:0:0:0:0:0:1");
+        expect(rangedSet.isCidrAble()).toBeTrue();
+    });
     it("throw if create string is not well formed I", function () {
         expect(function () {
             var rangedSet = src_1.RangedSet.fromRangeString("127.0.0.0127.0.0.255");

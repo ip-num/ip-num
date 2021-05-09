@@ -228,6 +228,38 @@ describe('IPv6CidrRange: ', function () {
         expect(firstRange.toCidrString()).toBe("2001:db8:0:0:0:0:0:0/48");
         expect(secondRange.toCidrString()).toBe("2001:db8:1:0:0:0:0:0/48");
     });
+    it('should throw on splitInto IP if split range is greater', function () {
+        var ipv6CidrRange = src_3.IPv6CidrRange.fromCidr("2001:db8::/47");
+        expect(function () {
+            ipv6CidrRange.splitInto(src_2.IPv6Prefix.fromNumber(46));
+        }).toThrowError(Error);
+    });
+    it('should split IP range on level correctly using split Into, no ops', function () {
+        var ipv6CidrRange = src_3.IPv6CidrRange.fromCidr("2001:db8::/47");
+        var splitRanges = ipv6CidrRange.splitInto(src_2.IPv6Prefix.fromNumber(47));
+        var firstRange = splitRanges[0];
+        expect(firstRange.toCidrString()).toBe("2001:db8:0:0:0:0:0:0/47");
+    });
+    it('should split IP range on level correctly using split Into', function () {
+        var ipv6CidrRange = src_3.IPv6CidrRange.fromCidr("2001:db8::/47");
+        var splitRanges = ipv6CidrRange.splitInto(src_2.IPv6Prefix.fromNumber(48));
+        var firstRange = splitRanges[0];
+        var secondRange = splitRanges[1];
+        expect(firstRange.toCidrString()).toBe("2001:db8:0:0:0:0:0:0/48");
+        expect(secondRange.toCidrString()).toBe("2001:db8:1:0:0:0:0:0/48");
+    });
+    it('should split IP range multiple level correctly using split Into', function () {
+        var ipv6CidrRange = src_3.IPv6CidrRange.fromCidr("2001:db8::/47");
+        var splitRanges = ipv6CidrRange.splitInto(src_2.IPv6Prefix.fromNumber(49));
+        var firstRange = splitRanges[0];
+        var secondRange = splitRanges[1];
+        var thirdRange = splitRanges[2];
+        var fourthRange = splitRanges[3];
+        expect(firstRange.toCidrString()).toBe("2001:db8:0:0:0:0:0:0/49");
+        expect(secondRange.toCidrString()).toBe("2001:db8:0:8000:0:0:0:0/49");
+        expect(thirdRange.toCidrString()).toBe("2001:db8:1:0:0:0:0:0/49");
+        expect(fourthRange.toCidrString()).toBe("2001:db8:1:8000:0:0:0:0/49");
+    });
     it('should tell if there is a next adjacent range', function () {
         var firstRange = new src_3.IPv6CidrRange(new src_1.IPv6("0:0:0:0:0:0:0:0"), new src_2.IPv6Prefix(1));
         var secondRange = new src_3.IPv6CidrRange(new src_1.IPv6("2001:db8:0:0:0:0:0:0"), new src_2.IPv6Prefix(1));
