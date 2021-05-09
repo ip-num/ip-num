@@ -2,7 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.intLog2 = exports.cidrPrefixToMaskBinaryString = exports.leftPadWithZeroBit = exports.dottedDecimalNotationToBinaryString = exports.parseBinaryStringToBigInteger = exports.decimalNumberToOctetString = exports.bigIntegerNumberToBinaryString = exports.decimalNumberToBinaryString = void 0;
 var bigInt = require("big-integer/BigInteger");
-var IPNumType_1 = require("./IPNumType");
 /**
  * Converts a decimal number to binary string
  *
@@ -77,7 +76,7 @@ exports.leftPadWithZeroBit = function (binaryString, finalStringLength) {
  */
 exports.cidrPrefixToMaskBinaryString = function (cidrPrefix, ipType) {
     var cidrUpperValue;
-    if (ipType == IPNumType_1.IPNumType.IPv4) {
+    if (ipType == "IPv4" /* IPv4 */) {
         cidrUpperValue = 32;
     }
     else {

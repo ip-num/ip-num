@@ -2,7 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var BinaryUtils = require("../src/BinaryUtils");
 var bigInt = require("big-integer/BigInteger");
-var src_1 = require("../src");
 var BinaryUtils_1 = require("../src/BinaryUtils");
 describe('Binary Utils', function () {
     it('Should correctly convert decimal to binary', function () {
@@ -51,27 +50,27 @@ describe('Binary Utils', function () {
     });
     describe('IPv4 cidr prefix to binary string', function () {
         it('should convert a 24 prefix', function () {
-            expect(BinaryUtils.cidrPrefixToMaskBinaryString(24, src_1.IPNumType.IPv4)).toBe("" + "1".repeat(24) + "0".repeat(8));
+            expect(BinaryUtils.cidrPrefixToMaskBinaryString(24, "IPv4" /* IPv4 */)).toBe("" + "1".repeat(24) + "0".repeat(8));
         });
         it('should convert a 32 prefix', function () {
-            expect(BinaryUtils.cidrPrefixToMaskBinaryString(32, src_1.IPNumType.IPv4)).toBe("" + "1".repeat(32));
+            expect(BinaryUtils.cidrPrefixToMaskBinaryString(32, "IPv4" /* IPv4 */)).toBe("" + "1".repeat(32));
         });
         it('should throw an exception when converting 33 prefix', function () {
             expect(function () {
-                BinaryUtils.cidrPrefixToMaskBinaryString(33, src_1.IPNumType.IPv4);
+                BinaryUtils.cidrPrefixToMaskBinaryString(33, "IPv4" /* IPv4 */);
             }).toThrowError(Error, 'Value is greater than 32');
         });
     });
     describe('IPv6 cidr prefix to binary string', function () {
         it('should convert a 64 prefix', function () {
-            expect(BinaryUtils.cidrPrefixToMaskBinaryString(64, src_1.IPNumType.IPv6)).toBe("" + "1".repeat(64) + "0".repeat(64));
+            expect(BinaryUtils.cidrPrefixToMaskBinaryString(64, "IPv6" /* IPv6 */)).toBe("" + "1".repeat(64) + "0".repeat(64));
         });
         it('should convert a 128 prefix', function () {
-            expect(BinaryUtils.cidrPrefixToMaskBinaryString(128, src_1.IPNumType.IPv6)).toBe("" + "1".repeat(128));
+            expect(BinaryUtils.cidrPrefixToMaskBinaryString(128, "IPv6" /* IPv6 */)).toBe("" + "1".repeat(128));
         });
         it('should throw an exception when converting 130 prefix', function () {
             expect(function () {
-                BinaryUtils.cidrPrefixToMaskBinaryString(130, src_1.IPNumType.IPv6);
+                BinaryUtils.cidrPrefixToMaskBinaryString(130, "IPv6" /* IPv6 */);
             }).toThrowError(Error, 'Value is greater than 128');
         });
     });

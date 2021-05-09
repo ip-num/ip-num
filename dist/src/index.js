@@ -19,12 +19,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * ipNum.IPv4CidrRange // gets access to IPv4CidrRange
  * ipNum.Asn // gets access to Asn
  */
-__exportStar(require("./IPRange"), exports);
-__exportStar(require("./IPNumber"), exports);
 __exportStar(require("./BinaryUtils"), exports);
 __exportStar(require("./Hexadecatet"), exports);
 __exportStar(require("./HexadecimalUtils"), exports);
+__exportStar(require("./IPNumber"), exports);
 __exportStar(require("./IPNumType"), exports);
+__exportStar(require("./IPPool"), exports);
+__exportStar(require("./IPRange"), exports);
 __exportStar(require("./IPv6Utils"), exports);
 __exportStar(require("./Octet"), exports);
 __exportStar(require("./Prefix"), exports);
