@@ -1,5 +1,10 @@
 import {leftPadWithZeroBit} from "./BinaryUtils";
 
+
+let extractPrefix = (ipv6String: string): string => {
+    return ipv6String.includes("/") ? `/${ipv6String.split("/")[1]}` : ""
+}
+
 /**
  * Expands an IPv6 number in abbreviated format into its full form
  *
@@ -27,6 +32,12 @@ export let expandIPv6Number = (ipv6String:string):string => {
 
     if (/(:){3,}/.test(ipv6String)) throw "given IPv6 contains consecutive : more than two";
 
+    const prefix = extractPrefix(ipv6String);
+
+    if (ipv6String.includes("/")) {
+        ipv6String = ipv6String.split("/")[0]
+    }
+
     if (ipv6String.includes("::")) {
         let split = ipv6String.split("::");
         let leftPortion = split[0];
@@ -48,10 +59,10 @@ export let expandIPv6Number = (ipv6String:string):string => {
             rightString = ":"+rightString;
         }
 
-        return `${leftString}${doublePortion}${rightString}`;
+        return `${leftString}${doublePortion}${rightString}${prefix}`;
 
     } else {
-        return expandWithZero(ipv6String.split(":"));
+        return `${expandWithZero(ipv6String.split(":"))}${prefix}`;
     }
 };
 
@@ -65,6 +76,11 @@ export let expandIPv6Number = (ipv6String:string):string => {
  * @returns {string} the collapsed IPv6 number
  */
 export let collapseIPv6Number = (ipv6String:string):string => {
+    const prefix = extractPrefix(ipv6String);
+    if (ipv6String.includes("/")) {
+        ipv6String = ipv6String.split("/")[0]
+    }
+
     let hexadecimals: string[] = ipv6String.split(":");
     let hexadecimalsWithoutLeadingZeros = hexadecimals.map((hexidecimal) => {
        let withoutLeadingZero = hexidecimal.replace(/^0+/, '');
@@ -77,7 +93,7 @@ export let collapseIPv6Number = (ipv6String:string):string => {
     });
     let contracted = hexadecimalsWithoutLeadingZeros.join(":").replace(/(^0)?(:0){2,}/, ':');
     if (contracted.slice(-1) === ":") {
-        return `${contracted}:`;
+        return `${contracted}:${prefix}`;
     }
-    return contracted;
+    return `${contracted}${prefix}`;
 };

@@ -15,9 +15,13 @@ describe('IPv6 Utils', () => {
 
         expect(IPv6Utils.expandIPv6Number("2001:db8:85a3:0:0:8a2e:370:7334")).toBe("2001:0db8:85a3:0000:0000:8a2e:0370:7334");
         expect(IPv6Utils.expandIPv6Number("2001:db8::2:1")).toBe("2001:0db8:0000:0000:0000:0000:0002:0001");
+
+        expect(IPv6Utils.expandIPv6Number("2001:0555:0001:0800::/128")).toBe("2001:0555:0001:0800:0000:0000:0000:0000/128");
+        expect(IPv6Utils.expandIPv6Number("2001:0470:0001:0800:0:0:0:0/128")).toBe("2001:0470:0001:0800:0000:0000:0000:0000/128");
+        expect(IPv6Utils.expandIPv6Number("2001:0555:0001:0800:0:0:0:0/50")).toBe("2001:0555:0001:0800:0000:0000:0000:0000/50");
     });
 
-    it('Should correctly abbreviate long ipv6 number', () => {
+    it('Should correctly collapse long ipv6 number', () => {
         expect(IPv6Utils.collapseIPv6Number("0000:0000:0000:0000:0000:0000:0000:0000")).toBe("::");
         expect(IPv6Utils.collapseIPv6Number("0000:0000:0000:0000:0000:0000:0000:0001")).toBe("::1");
 
@@ -27,5 +31,8 @@ describe('IPv6 Utils', () => {
         expect(IPv6Utils.collapseIPv6Number("2001:0DB8:0000:CD30:0000:0000:0000:0000")).toBe("2001:DB8:0:CD30::");
         expect(IPv6Utils.collapseIPv6Number("2001:0db8:85a3:0000:0000:8a2e:0370:7334")).toBe("2001:db8:85a3::8a2e:370:7334");
         expect(IPv6Utils.collapseIPv6Number("2001:0db8:0000:0000:0000:0000:0002:0001")).toBe("2001:db8::2:1");
+
+        expect(IPv6Utils.collapseIPv6Number("2001:0555:0001:0800::/128")).toBe("2001:555:1:800::/128");
+        expect(IPv6Utils.collapseIPv6Number("2001:0555:0001:0800::/50")).toBe("2001:555:1:800::/50");
     });
 });
