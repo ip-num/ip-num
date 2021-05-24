@@ -1,8 +1,9 @@
 import * as bigInt from "big-integer";
 import {AbstractIPNum, IPv4, IPv6, isIPv4} from "./IPNumber";
 import {IPv4Prefix, IPv6Prefix} from "./Prefix";
-import {intLog2, leftPadWithZeroBit, parseBinaryStringToBigInteger} from "./BinaryUtils";
+import {cidrPrefixToMaskBinaryString, intLog2, leftPadWithZeroBit, parseBinaryStringToBigInteger} from "./BinaryUtils";
 import {Validator} from "./Validator";
+import {IPNumType} from "./IPNumType";
 
 
 export type IP<T> = T extends IPv4CidrRange ? IPv4 : IPv6;
@@ -212,8 +213,11 @@ export class RangedSet<T extends AbstractIPNum> implements Iterable<AbstractIPNu
             return true;
         }
         try {
-            intLog2(this.getSize());
-            return true;
+            let prefix = intLog2(this.getSize());
+            let netmask = parseBinaryStringToBigInteger(
+                cidrPrefixToMaskBinaryString(prefix, isIPv4(this.currentValue) ? IPNumType.IPv4: IPNumType.IPv6)
+            );
+            return this.first.getValue().eq(netmask.and(this.first.getValue()));
         } catch (e) {
             return false;
         }
