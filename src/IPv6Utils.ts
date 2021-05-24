@@ -1,4 +1,5 @@
 import {leftPadWithZeroBit} from "./BinaryUtils";
+import {Validator} from "./Validator";
 
 
 let extractPrefix = (ipv6String: string): string => {
@@ -36,6 +37,11 @@ export let expandIPv6Number = (ipv6String:string):string => {
 
     if (ipv6String.includes("/")) {
         ipv6String = ipv6String.split("/")[0]
+    }
+
+    let isValid = Validator.IPV6_PATTERN.test(ipv6String);
+    if (!isValid) {
+        throw Error(Validator.invalidIPv6PatternMessage)
     }
 
     if (ipv6String.includes("::")) {
@@ -81,6 +87,13 @@ export let collapseIPv6Number = (ipv6String:string):string => {
         ipv6String = ipv6String.split("/")[0]
     }
 
+    let isValid = Validator.IPV6_PATTERN.test(ipv6String);
+
+    if (!isValid) {
+        throw Error(Validator.invalidIPv6PatternMessage)
+    }
+
+
     let hexadecimals: string[] = ipv6String.split(":");
     let hexadecimalsWithoutLeadingZeros = hexadecimals.map((hexidecimal) => {
        let withoutLeadingZero = hexidecimal.replace(/^0+/, '');
@@ -91,9 +104,10 @@ export let collapseIPv6Number = (ipv6String:string):string => {
        }
 
     });
-    let contracted = hexadecimalsWithoutLeadingZeros.join(":").replace(/(^0)?(:0){2,}/, ':');
+    let contracted = hexadecimalsWithoutLeadingZeros.join(":").replace(/((^0)?(:0){2,}|(^0)(:0){1,})/, ':');
     if (contracted.slice(-1) === ":") {
         return `${contracted}:${prefix}`;
     }
+    contracted = contracted.replace(":0:", "::");
     return `${contracted}${prefix}`;
 };
