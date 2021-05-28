@@ -591,10 +591,7 @@ export class IPv4CidrRange extends AbstractIPRange<IPv4, IPv4Prefix> {
      * @returns {IPv4} the last IPv4 number in the IPv4 range
      */
     public getLast(): IPv4 {
-        let onMask = bigInt("1".repeat(32), 2);
-        let subnetAsBigInteger = this.cidrPrefix.toMask().getValue();
-        let invertedMask = leftPadWithZeroBit(subnetAsBigInteger.xor(onMask).toString(2), 32);
-        return IPv4.fromBigInteger(this.ipv4.getValue().or(parseBinaryStringToBigInteger(invertedMask)));
+        return last(this, this.ipv4) as IPv4
     }
 
     protected newInstance(num: IPv4, prefix: IPv4Prefix): IPv4CidrRange {
@@ -849,10 +846,7 @@ export class IPv6CidrRange extends AbstractIPRange<IPv6, IPv6Prefix> {
      * @returns {IPv6} the last IPv6 number in the IPv6 range
      */
     public getLast(): IPv6 {
-        let onMask = bigInt("1".repeat(128), 2);
-        let maskAsBigInteger = this.cidrPrefix.toMask().getValue();
-        let invertedMask = leftPadWithZeroBit(maskAsBigInteger.xor(onMask).toString(2), 128);
-        return IPv6.fromBigInteger(this.ipv6.getValue().or(parseBinaryStringToBigInteger(invertedMask)));
+        return last(this, this.ipv6) as IPv6
     }
 
     protected newInstance(num: IPv6, prefix: IPv6Prefix): IPv6CidrRange {
@@ -1010,4 +1004,22 @@ export class IPv6CidrRange extends AbstractIPRange<IPv6, IPv6Prefix> {
         }
         return;
     }
+}
+
+
+// utility functions shared by both IPv6CidrRange and IPv4CidrRange
+let last = (range: IPv6CidrRange | IPv4CidrRange, ip: IPv6 | IPv4): IPv6 | IPv4 => {
+    let bitValue = range.bitValue.valueOf();
+    let maskSize = bigInt("1".repeat(bitValue), 2);
+    let maskAsBigInteger = range.cidrPrefix.toMask().getValue();
+    let invertedMask = leftPadWithZeroBit(maskAsBigInteger.xor(maskSize).toString(2), bitValue);
+    if (isIPv4CidrRange(range)) {
+        return IPv4.fromBigInteger(ip.getValue().or(parseBinaryStringToBigInteger(invertedMask)))
+    } else {
+        return IPv6.fromBigInteger(ip.getValue().or(parseBinaryStringToBigInteger(invertedMask)));
+    }
+}
+
+export function isIPv4CidrRange<T>(ip: IPv6CidrRange | IPv4CidrRange): ip is IPv4CidrRange {
+    return ip.bitValue.valueOf() === 32;
 }
