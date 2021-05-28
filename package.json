@@ -24,7 +24,8 @@
     "ipnum-release-major": "npm version major && npm run ipnum-release",
     "ipnum-release-minor": "npm version minor && npm run ipnum-release",
     "ipnum-release-patch": "npm version patch && npm run ipnum-release",
-    "ipnum-release-prepatch": "npm version prepatch && npm run ipnum-release"
+    "ipnum-release-prepatch": "npm version prepatch && npm run ipnum-release",
+    "ipnum-release-prerelease": "npm version prerelease && npm run ipnum-release"
   },
   "nyc": {
     "exclude": [
