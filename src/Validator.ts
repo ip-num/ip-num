@@ -44,6 +44,7 @@ export class Validator {
     static invalidBinaryStringErrorMessage = "Binary string should contain only contiguous 1s and 0s";
     static invalidIPRangeSizeMessage = "Given size is zero or greater than maximum size of $iptype";
     static invalidIPRangeSizeForCidrMessage = "Given size can't be created via cidr prefix";
+    static invalidIPv4PatternMessage = "Given IPv4 is not confirm to a valid IPv6 address";
     static invalidIPv6PatternMessage = "Given IPv6 is not confirm to a valid IPv6 address";
 
     /**
@@ -146,8 +147,12 @@ export class Validator {
         let isValid = rawOctets.every(octet => {
             return Validator.isNumeric(octet) ? Validator.isValidIPv4Octet(bigInt(octet))[0] : false;
         });
+        if (!isValid) {
+            return [false, [Validator.invalidOctetRangeMessage]]
+        }
 
-        return [isValid, isValid ? []: [Validator.invalidOctetRangeMessage]];
+        isValid = Validator.IPV4_PATTERN.test(ipv4String);
+        return [isValid, isValid? []: [Validator.invalidIPv4PatternMessage]];
     }
 
     /**
