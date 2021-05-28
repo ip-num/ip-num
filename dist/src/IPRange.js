@@ -254,8 +254,9 @@ var RangedSet = /** @class */ (function () {
             return true;
         }
         try {
-            BinaryUtils_1.intLog2(this.getSize());
-            return true;
+            var prefix = BinaryUtils_1.intLog2(this.getSize());
+            var netmask = BinaryUtils_1.parseBinaryStringToBigInteger(BinaryUtils_1.cidrPrefixToMaskBinaryString(prefix, IPNumber_1.isIPv4(this.currentValue) ? "IPv4" /* IPv4 */ : "IPv6" /* IPv6 */));
+            return this.first.getValue().eq(netmask.and(this.first.getValue()));
         }
         catch (e) {
             return false;
