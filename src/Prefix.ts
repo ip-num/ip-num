@@ -12,6 +12,8 @@ interface Prefix {
     getValue(): number;
     merge(): Prefix;
     split(): Prefix;
+    toString(): string;
+    toRangeSize(): bigInt.BigInteger
 }
 
 /**
@@ -265,6 +267,14 @@ function rangeSizeToPrefix(rangeSize: bigInt.BigInteger,
  */
 function isIPv4Prefix(prefix: IPv4Prefix | IPv6Prefix): prefix is IPv4Prefix {
     return prefix.type === "IPv4";
+}
+
+/**
+ * Check is the given Prefix is an {@link IPv4Prefix} or not
+ * @param prefix the IP prefix to check if it is IPv4Prefix.
+ */
+function isIPv6Prefix(prefix: IPv4Prefix | IPv6Prefix): prefix is IPv6Prefix {
+    return prefix.type === "IPv6";
 }
 
 export {Prefix, IPv4Prefix, IPv6Prefix, isIPv4Prefix}
