@@ -2,6 +2,7 @@ import * as bigInt from "big-integer";
 import { IPNumType } from "./IPNumType";
 export declare class Validator {
     static IPV4_PATTERN: RegExp;
+    static IPV6_PATTERN: RegExp;
     static IPV4_RANGE_PATTERN: RegExp;
     static IPV6_RANGE_PATTERN: RegExp;
     static IPV4_CONTIGUOUS_MASK_BIT_PATTERN: RegExp;
@@ -33,6 +34,8 @@ export declare class Validator {
     static invalidBinaryStringErrorMessage: string;
     static invalidIPRangeSizeMessage: string;
     static invalidIPRangeSizeForCidrMessage: string;
+    static invalidIPv4PatternMessage: string;
+    static invalidIPv6PatternMessage: string;
     /**
      * Checks if given ipNumber is in between the given lower and upper bound
      *

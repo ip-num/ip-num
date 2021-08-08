@@ -23,13 +23,23 @@ describe('RangedSet: ', () => {
         expect(rangedSet.getLast().toString()).toEqual("127.0.0.255");
     });
 
-    it("returns if ipv4 ranged set sized 1 is cidr-able", () => {
+    it("returns ipv4 ranged set sized 1 as cidr-able", () => {
         let rangedSet= RangedSet.fromRangeString("1.2.3.4-1.2.3.4");
         expect(rangedSet.isCidrAble()).toBeTrue();
     });
 
+    it("returns true if ipv4 ranged is cidr-able", () => {
+        let rangedSet= RangedSet.fromRangeString("31.151.0.0-31.151.255.255");
+        expect(rangedSet.isCidrAble()).toBeTrue();
+    });
+
+    it("returns false if ipv4 ranged cidr size but is not cidr-able", () => {
+        let rangedSet= RangedSet.fromRangeString("8.17.205.0-8.17.206.255");
+        expect(rangedSet.isCidrAble()).toBeFalse();
+    });
+
     it("returns if ipv6 ranged set sized 1 is cidr-able", () => {
-        let rangedSet= RangedSet.fromRangeString("2001:db8:0:0:0:0:0:0-2001:db8:0:0:0:0:0:1");
+        let rangedSet= RangedSet.fromRangeString("2001:db8:0:0:0:0:0:0-2001:db8:0:0:0:0:0:0");
         expect(rangedSet.isCidrAble()).toBeTrue();
     });
 

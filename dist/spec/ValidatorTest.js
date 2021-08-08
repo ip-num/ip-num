@@ -25,6 +25,8 @@ describe('Validator: ', function () {
             expect(src_1.Validator.isValidIPv6String('ffff:ffff:ffff:ffff:ffff:ffff:ffff :ffff')[0]).toBe(false);
             expect(src_1.Validator.isValidIPv6String('ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff')[0]).toBe(false);
             expect(src_1.Validator.isValidIPv6String('123.234.10.10')[0]).toBe(false);
+            expect(src_1.Validator.isValidIPv6String('::123::')[0]).toBe(false);
+            expect(src_1.Validator.isValidIPv6String('12::123::')[0]).toBe(false);
         });
     });
     describe('isValidIPv4CidrNotation ', function () {

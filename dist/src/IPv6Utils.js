@@ -2,6 +2,10 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.collapseIPv6Number = exports.expandIPv6Number = void 0;
 var BinaryUtils_1 = require("./BinaryUtils");
+var Validator_1 = require("./Validator");
+var extractPrefix = function (ipv6String) {
+    return ipv6String.includes("/") ? "/" + ipv6String.split("/")[1] : "";
+};
 /**
  * Expands an IPv6 number in abbreviated format into its full form
  *
@@ -26,6 +30,14 @@ exports.expandIPv6Number = function (ipv6String) {
     };
     if (/(:){3,}/.test(ipv6String))
         throw "given IPv6 contains consecutive : more than two";
+    var prefix = extractPrefix(ipv6String);
+    if (ipv6String.includes("/")) {
+        ipv6String = ipv6String.split("/")[0];
+    }
+    var isValid = Validator_1.Validator.IPV6_PATTERN.test(ipv6String);
+    if (!isValid) {
+        throw Error(Validator_1.Validator.invalidIPv6PatternMessage);
+    }
     if (ipv6String.includes("::")) {
         var split = ipv6String.split("::");
         var leftPortion = split[0];
@@ -41,10 +53,10 @@ exports.expandIPv6Number = function (ipv6String) {
         if (rightString !== "") {
             rightString = ":" + rightString;
         }
-        return "" + leftString + doublePortion + rightString;
+        return "" + leftString + doublePortion + rightString + prefix;
     }
     else {
-        return expandWithZero(ipv6String.split(":"));
+        return "" + expandWithZero(ipv6String.split(":")) + prefix;
     }
 };
 /**
@@ -56,6 +68,14 @@ exports.expandIPv6Number = function (ipv6String) {
  * @returns {string} the collapsed IPv6 number
  */
 exports.collapseIPv6Number = function (ipv6String) {
+    var prefix = extractPrefix(ipv6String);
+    if (ipv6String.includes("/")) {
+        ipv6String = ipv6String.split("/")[0];
+    }
+    var isValid = Validator_1.Validator.IPV6_PATTERN.test(ipv6String);
+    if (!isValid) {
+        throw Error(Validator_1.Validator.invalidIPv6PatternMessage);
+    }
     var hexadecimals = ipv6String.split(":");
     var hexadecimalsWithoutLeadingZeros = hexadecimals.map(function (hexidecimal) {
         var withoutLeadingZero = hexidecimal.replace(/^0+/, '');
@@ -66,10 +86,11 @@ exports.collapseIPv6Number = function (ipv6String) {
             return "0";
         }
     });
-    var contracted = hexadecimalsWithoutLeadingZeros.join(":").replace(/(^0)?(:0){2,}/, ':');
+    var contracted = hexadecimalsWithoutLeadingZeros.join(":").replace(/((^0)?(:0){2,}|(^0)(:0){1,})/, ':');
     if (contracted.slice(-1) === ":") {
-        return contracted + ":";
+        return contracted + ":" + prefix;
     }
-    return contracted;
+    contracted = contracted.replace(":0:", "::");
+    return "" + contracted + prefix;
 };
 //# sourceMappingURL=IPv6Utils.js.map
