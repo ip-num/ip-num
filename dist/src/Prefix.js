@@ -252,4 +252,11 @@ function isIPv4Prefix(prefix) {
     return prefix.type === "IPv4";
 }
 exports.isIPv4Prefix = isIPv4Prefix;
+/**
+ * Check is the given Prefix is an {@link IPv4Prefix} or not
+ * @param prefix the IP prefix to check if it is IPv4Prefix.
+ */
+function isIPv6Prefix(prefix) {
+    return prefix.type === "IPv6";
+}
 //# sourceMappingURL=Prefix.js.map

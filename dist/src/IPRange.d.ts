@@ -468,3 +468,4 @@ export declare class IPv6CidrRange extends AbstractIPRange<IPv6, IPv6Prefix> {
      */
     previousRange(): IPv6CidrRange | undefined;
 }
+export declare function isIPv4CidrRange<T>(ip: IPv6CidrRange | IPv4CidrRange): ip is IPv4CidrRange;

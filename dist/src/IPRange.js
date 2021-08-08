@@ -67,7 +67,7 @@ var __values = (this && this.__values) || function(o) {
     throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.IPv6CidrRange = exports.IPv4CidrRange = exports.AbstractIPRange = exports.RangedSet = void 0;
+exports.isIPv4CidrRange = exports.IPv6CidrRange = exports.IPv4CidrRange = exports.AbstractIPRange = exports.RangedSet = void 0;
 var bigInt = require("big-integer");
 var IPNumber_1 = require("./IPNumber");
 var Prefix_1 = require("./Prefix");
@@ -614,10 +614,7 @@ var IPv4CidrRange = /** @class */ (function (_super) {
      * @returns {IPv4} the last IPv4 number in the IPv4 range
      */
     IPv4CidrRange.prototype.getLast = function () {
-        var onMask = bigInt("1".repeat(32), 2);
-        var subnetAsBigInteger = this.cidrPrefix.toMask().getValue();
-        var invertedMask = BinaryUtils_1.leftPadWithZeroBit(subnetAsBigInteger.xor(onMask).toString(2), 32);
-        return IPNumber_1.IPv4.fromBigInteger(this.ipv4.getValue().or(BinaryUtils_1.parseBinaryStringToBigInteger(invertedMask)));
+        return last(this, this.ipv4);
     };
     IPv4CidrRange.prototype.newInstance = function (num, prefix) {
         return new IPv4CidrRange(num, prefix);
@@ -855,10 +852,7 @@ var IPv6CidrRange = /** @class */ (function (_super) {
      * @returns {IPv6} the last IPv6 number in the IPv6 range
      */
     IPv6CidrRange.prototype.getLast = function () {
-        var onMask = bigInt("1".repeat(128), 2);
-        var maskAsBigInteger = this.cidrPrefix.toMask().getValue();
-        var invertedMask = BinaryUtils_1.leftPadWithZeroBit(maskAsBigInteger.xor(onMask).toString(2), 128);
-        return IPNumber_1.IPv6.fromBigInteger(this.ipv6.getValue().or(BinaryUtils_1.parseBinaryStringToBigInteger(invertedMask)));
+        return last(this, this.ipv6);
     };
     IPv6CidrRange.prototype.newInstance = function (num, prefix) {
         return new IPv6CidrRange(num, prefix);
@@ -1007,4 +1001,21 @@ var IPv6CidrRange = /** @class */ (function (_super) {
     return IPv6CidrRange;
 }(AbstractIPRange));
 exports.IPv6CidrRange = IPv6CidrRange;
+// utility functions shared by both IPv6CidrRange and IPv4CidrRange
+var last = function (range, ip) {
+    var bitValue = range.bitValue.valueOf();
+    var maskSize = bigInt("1".repeat(bitValue), 2);
+    var maskAsBigInteger = range.cidrPrefix.toMask().getValue();
+    var invertedMask = BinaryUtils_1.leftPadWithZeroBit(maskAsBigInteger.xor(maskSize).toString(2), bitValue);
+    if (isIPv4CidrRange(range)) {
+        return IPNumber_1.IPv4.fromBigInteger(ip.getValue().or(BinaryUtils_1.parseBinaryStringToBigInteger(invertedMask)));
+    }
+    else {
+        return IPNumber_1.IPv6.fromBigInteger(ip.getValue().or(BinaryUtils_1.parseBinaryStringToBigInteger(invertedMask)));
+    }
+};
+function isIPv4CidrRange(ip) {
+    return ip.bitValue.valueOf() === 32;
+}
+exports.isIPv4CidrRange = isIPv4CidrRange;
 //# sourceMappingURL=IPRange.js.map

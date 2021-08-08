@@ -5,6 +5,8 @@ interface Prefix {
     getValue(): number;
     merge(): Prefix;
     split(): Prefix;
+    toString(): string;
+    toRangeSize(): bigInt.BigInteger;
 }
 /**
  * Represents the prefix portion in the CIDR notation for representing IP ranges
