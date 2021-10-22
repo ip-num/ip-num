@@ -3,6 +3,7 @@ import {IPv4} from "../src";
 import {IPv4Prefix} from "../src";
 import {Validator} from "../src";
 import * as bigInt from "big-integer";
+import {performance} from "perf_hooks";
 
 describe('IPv4CidrRange: ', () => {
     it('should instantiate by calling constructor with IPv4 and prefix', () => {
@@ -285,4 +286,15 @@ describe('IPv4CidrRange: ', () => {
     it('should return the previous adjacent range', () => {
       expect(IPv4CidrRange.fromCidr("255.255.255.0/24").previousRange()).toEqual(IPv4CidrRange.fromCidr("255.255.254.0/24"))
     })
+
+    fit(`Timing IPv4CidrRange comparison`, () => {
+        for (let i = 32; i >= 16; i--) {
+            let actual = IPv4CidrRange.fromCidr(`10.0.0.0/${i}`)
+            let expected = IPv4CidrRange.fromCidr(`10.0.0.0/${i}`)
+            let startTime = performance.now()
+            expect(actual).toEqual(expected)
+            let endTime = performance.now()
+            console.log(`Comparing same /${i} took ${endTime - startTime} milliseconds`)
+        }
+    });
 });
