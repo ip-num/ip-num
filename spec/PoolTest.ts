@@ -659,6 +659,33 @@ describe('Pool', () => {
             expect(pool.getRanges()[1].toCidrRange().toCidrString()).toEqual("2002:db8:1:0:0:0:0:0/49")
         });
 
+        it("fix", () => {
+            const pool = Pool.fromRangeSet([
+                IPv6CidrRange.fromCidr('2aaa:2aaa:1::/48').toRangeSet(),
+                IPv6CidrRange.fromCidr('2aaa:2aaa:2::/48').toRangeSet(),
+            ]);
+
+            const to48 = pool
+                .aggregate()
+                .getRanges()
+                .flatMap(entry => {
+                    return (entry.toCidrRange() as IPv6CidrRange).splitInto(new IPv6Prefix(48)).map(entry => {
+                        return entry.toCidrString();
+                    });
+                });
+
+            const direct = pool
+                .aggregate()
+                .getRanges()
+                .map(entry => {
+                    return entry.toCidrRange().toCidrString();
+                });
+
+            console.dir('to48 = ');
+            console.dir(to48);
+            console.dir('direct = ');
+            console.dir(direct);
+        })
 
     });
 });

@@ -461,7 +461,16 @@ export abstract class AbstractIPRange<T extends AbstractIPNum, P extends IPv4Pre
     }
 
     public isCidrMergeable(otherRange: IPv6CidrRange | IPv4CidrRange): boolean {
-        return this.isConsecutive(otherRange) && this.getSize().equals(otherRange.getSize());
+        let matchingBitCount = this.getFirst().matchingBitCount(otherRange.getFirst());
+
+        if (this.getPrefix().value - matchingBitCount !== 1) {
+            return false;
+        }
+
+        return this.isConsecutive(otherRange)
+            && this.getSize().equals(otherRange.getSize())
+            && this.getFirst().getValue().and(matchingBitCount).eq(otherRange.getFirst().getValue().and(matchingBitCount));
+
     }
 
     public isMergeable(otherRange: IPv6CidrRange | IPv4CidrRange): boolean {

@@ -118,6 +118,19 @@ export abstract class AbstractIPNum {
     public isGreaterThanOrEquals(anotherIPNum: AbstractIPNum): boolean {
         return this.value.greaterOrEquals(anotherIPNum.value);
     }
+
+    public matchingBitCount(other: AbstractIPNum): number {
+        let thisBit = this.toBinaryString();
+        let otherBit = other.toBinaryString();
+        let count = 0;
+        for (;count < thisBit.length; count++) {
+            if (thisBit.charAt(count) === otherBit.charAt(count)) {
+                continue;
+            }
+            break;
+        }
+        return count;
+    }
 }
 
 /**
