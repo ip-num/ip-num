@@ -1,7 +1,13 @@
 import * as bigInt from "big-integer";
 import {AbstractIPNum, IPv4, IPv6, isIPv4} from "./IPNumber";
 import {IPv4Prefix, IPv6Prefix} from "./Prefix";
-import {cidrPrefixToMaskBinaryString, intLog2, leftPadWithZeroBit, parseBinaryStringToBigInteger} from "./BinaryUtils";
+import {
+    cidrPrefixToMaskBinaryString,
+    intLog2,
+    leftPadWithZeroBit,
+    matchingBitCount,
+    parseBinaryStringToBigInteger
+} from "./BinaryUtils";
 import {Validator} from "./Validator";
 import {IPNumType} from "./IPNumType";
 
@@ -461,15 +467,15 @@ export abstract class AbstractIPRange<T extends AbstractIPNum, P extends IPv4Pre
     }
 
     public isCidrMergeable(otherRange: IPv6CidrRange | IPv4CidrRange): boolean {
-        let matchingBitCount = this.getFirst().matchingBitCount(otherRange.getFirst());
+        let count = matchingBitCount(this.getFirst().toBinaryString(), otherRange.getFirst().toBinaryString());
 
-        if (this.getPrefix().value - matchingBitCount !== 1) {
+        if (this.getPrefix().value - count !== 1) {
             return false;
         }
 
         return this.isConsecutive(otherRange)
             && this.getSize().equals(otherRange.getSize())
-            && this.getFirst().getValue().and(matchingBitCount).eq(otherRange.getFirst().getValue().and(matchingBitCount));
+            && this.getFirst().getValue().and(count).eq(otherRange.getFirst().getValue().and(count));
 
     }
 
