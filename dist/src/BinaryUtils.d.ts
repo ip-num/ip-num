@@ -58,3 +58,9 @@ export declare let cidrPrefixToMaskBinaryString: (cidrPrefix: number, ipType: IP
  * @return the log base 2 of given number
  */
 export declare let intLog2: (givenNumber: bigInt.BigInteger) => number;
+/**
+ * Starting from the most significant bit (from left) returns the number of first bits from both string that are equal
+ * @param firstBinaryString first binary string
+ * @param secondBinaryString second binary string
+ */
+export declare let matchingBitCount: (firstBinaryString: string, secondBinaryString: string) => number;

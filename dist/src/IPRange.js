@@ -484,7 +484,13 @@ var AbstractIPRange = /** @class */ (function () {
         return this.toRangeSet().isConsecutive(otherRange.toRangeSet());
     };
     AbstractIPRange.prototype.isCidrMergeable = function (otherRange) {
-        return this.isConsecutive(otherRange) && this.getSize().equals(otherRange.getSize());
+        var count = BinaryUtils_1.matchingBitCount(this.getFirst().toBinaryString(), otherRange.getFirst().toBinaryString());
+        if (this.getPrefix().value - count !== 1) {
+            return false;
+        }
+        return this.isConsecutive(otherRange)
+            && this.getSize().equals(otherRange.getSize())
+            && this.getFirst().getValue().and(count).eq(otherRange.getFirst().getValue().and(count));
     };
     AbstractIPRange.prototype.isMergeable = function (otherRange) {
         return this.isCidrMergeable(otherRange)
