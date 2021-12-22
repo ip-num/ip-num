@@ -263,19 +263,6 @@ var Validator = /** @class */ (function () {
             .greaterOrEquals(HexadecimalUtils_2.hexadectetNotationToBinaryString(lastIP)); };
         return this.isValidRange(ipv6RangeString, Validator.isValidIPv6String, firstLastValidator);
     };
-    // static isValidIPv4RangeSize(rangeSize: bigInt.BigInteger): boolean {
-    //     if (rangeSize.greater(Validator.IPV4_SIZE) || rangeSize.equals(bigInt(0))) {
-    //         [false, [Validator.invalidIPRangeSizeMessage]];
-    //     }
-    //     let size = rangeSize;
-    //     while (size.isEven()) {
-    //         if (size.isOdd() || size.equals(bigInt(2))) {
-    //             break;
-    //         }
-    //         size = size.shiftRight(bigInt(1));
-    //     }
-    //     return size.isEven();
-    // }
     Validator.isValidRange = function (rangeString, validator, firstLastValidator) {
         var rangeComponents = rangeString.split("-").map(function (component) { return component.trim(); });
         if (rangeComponents.length !== 2 || (rangeComponents[0].length === 0 || rangeComponents[1].length === 0)) {
