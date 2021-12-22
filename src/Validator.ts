@@ -319,20 +319,6 @@ export class Validator {
         return this.isValidRange(ipv6RangeString, Validator.isValidIPv6String, firstLastValidator);
     }
 
-    // static isValidIPv4RangeSize(rangeSize: bigInt.BigInteger): boolean {
-    //     if (rangeSize.greater(Validator.IPV4_SIZE) || rangeSize.equals(bigInt(0))) {
-    //         [false, [Validator.invalidIPRangeSizeMessage]];
-    //     }
-    //     let size = rangeSize;
-    //     while (size.isEven()) {
-    //         if (size.isOdd() || size.equals(bigInt(2))) {
-    //             break;
-    //         }
-    //         size = size.shiftRight(bigInt(1));
-    //     }
-    //     return size.isEven();
-    // }
-
     private static isValidRange(rangeString: string,
                                 validator: (x:string) => [boolean, string[]],
                                 firstLastValidator: (first:string, last:string) => boolean):[boolean, string[]] {
