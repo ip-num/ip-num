@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.intLog2 = exports.cidrPrefixToMaskBinaryString = exports.leftPadWithZeroBit = exports.dottedDecimalNotationToBinaryString = exports.parseBinaryStringToBigInteger = exports.decimalNumberToOctetString = exports.bigIntegerNumberToBinaryString = exports.decimalNumberToBinaryString = void 0;
+exports.matchingBitCount = exports.intLog2 = exports.cidrPrefixToMaskBinaryString = exports.leftPadWithZeroBit = exports.dottedDecimalNotationToBinaryString = exports.parseBinaryStringToBigInteger = exports.decimalNumberToOctetString = exports.bigIntegerNumberToBinaryString = exports.decimalNumberToBinaryString = void 0;
 var bigInt = require("big-integer/BigInteger");
 /**
  * Converts a decimal number to binary string
@@ -113,5 +113,30 @@ exports.intLog2 = function (givenNumber) {
         throw new Error("The value of log2 for " + givenNumber.toString() + " is not an integer");
     }
     return result;
+};
+/**
+ * Starting from the most significant bit (from left) returns the number of first bits from both string that are equal
+ * @param firstBinaryString first binary string
+ * @param secondBinaryString second binary string
+ */
+exports.matchingBitCount = function (firstBinaryString, secondBinaryString) {
+    var longerString;
+    var otherString;
+    if (firstBinaryString.length >= secondBinaryString.length) {
+        longerString = firstBinaryString;
+        otherString = secondBinaryString;
+    }
+    else {
+        longerString = secondBinaryString;
+        otherString = firstBinaryString;
+    }
+    var count = 0;
+    for (; count < longerString.length; count++) {
+        if (longerString.charAt(count) === otherString.charAt(count)) {
+            continue;
+        }
+        break;
+    }
+    return count;
 };
 //# sourceMappingURL=BinaryUtils.js.map

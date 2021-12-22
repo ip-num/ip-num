@@ -1,7 +1,7 @@
 import * as BinaryUtils from "../src/BinaryUtils";
 import * as bigInt from "big-integer/BigInteger";
 import {IPNumType} from "../src";
-import {intLog2} from "../src/BinaryUtils";
+import {intLog2, matchingBitCount} from "../src/BinaryUtils";
 
 describe('Binary Utils', () => {
     it('Should correctly convert decimal to binary', () => {
@@ -87,4 +87,19 @@ describe('Binary Utils', () => {
             }).toThrowError(Error)
         })
     })
+
+    describe('matchingBitCount', () => {
+        it('should return matching bit count same string', () => {
+            expect(matchingBitCount("1010111", "1010111")).toEqual(7)
+        });
+        it('should return matching bit count different string same length', () => {
+            expect(matchingBitCount("10101110100111010", "10101111101101110")).toEqual(7)
+        });
+        it('should return matching bit count different string, first string longer', () => {
+            expect(matchingBitCount("10101110100111010001111", "10101111101101110")).toEqual(7)
+        });
+        it('should return matching bit count different string, second string longer', () => {
+            expect(matchingBitCount("10101110100111010", "101011111011011100001111")).toEqual(7)
+        });
+    });
 });

@@ -123,3 +123,30 @@ export let intLog2 = (givenNumber:bigInt.BigInteger): number => {
     }
     return result
 };
+
+/**
+ * Starting from the most significant bit (from left) returns the number of first bits from both string that are equal
+ * @param firstBinaryString first binary string
+ * @param secondBinaryString second binary string
+ */
+export let matchingBitCount = (firstBinaryString: string, secondBinaryString: string) : number => {
+    let longerString;
+    let otherString;
+
+    if (firstBinaryString.length >= secondBinaryString.length) {
+        longerString = firstBinaryString;
+        otherString = secondBinaryString;
+    } else {
+        longerString = secondBinaryString;
+        otherString = firstBinaryString;
+    }
+
+    let count = 0;
+    for (;count < longerString.length; count++) {
+        if (longerString.charAt(count) === otherString.charAt(count)) {
+            continue;
+        }
+        break;
+    }
+    return count;
+};

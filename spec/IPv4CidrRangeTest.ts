@@ -285,4 +285,10 @@ describe('IPv4CidrRange: ', () => {
     it('should return the previous adjacent range', () => {
       expect(IPv4CidrRange.fromCidr("255.255.255.0/24").previousRange()).toEqual(IPv4CidrRange.fromCidr("255.255.254.0/24"))
     })
+    it('should return false for two adjacent ranges that cannot form a single range', () => {
+        let firstRange = IPv4CidrRange.fromCidr("10.0.1.0/24");
+        let secondRange = IPv4CidrRange.fromCidr("10.0.2.0/24");
+        expect(firstRange.isCidrMergeable(secondRange)).toBe(false);
+        expect(secondRange.isCidrMergeable(firstRange)).toBe(false);
+    })
 });

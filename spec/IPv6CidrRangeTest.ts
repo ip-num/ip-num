@@ -155,7 +155,12 @@ describe('IPv6CidrRange: ', () => {
         expect(firstRange.isCidrMergeable(secondRange)).toBe(false);
         expect(secondRange.isCidrMergeable(firstRange)).toBe(false);
     });
-
+    it('should return false for two adjacent ranges that cannot form a single range', () => {
+        let firstRange = IPv6CidrRange.fromCidr("2aaa:2aaa:1::/48");
+        let secondRange = IPv6CidrRange.fromCidr("2aaa:2aaa:2::/48");
+        expect(firstRange.isCidrMergeable(secondRange)).toBe(false);
+        expect(secondRange.isCidrMergeable(firstRange)).toBe(false);
+    });
     it('should correctly tell when ranges are equal', () => {
         let firstRange = new IPv6CidrRange(new IPv6("2001:db8::"), new IPv6Prefix(48));
         let secondRange = new IPv6CidrRange(new IPv6("2001:db8::"), new IPv6Prefix(48));
