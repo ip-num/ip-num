@@ -1,5 +1,8 @@
 {
-  "include": ["src/*","spec/*"],
+  "include": [
+    "packages/ip-num/src/*",
+    "packages/ip-num/spec/*"
+  ],
   "compileOnSave": true,
     "compilerOptions": {
       "skipLibCheck": true,

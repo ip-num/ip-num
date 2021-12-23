@@ -1,10 +1,9 @@
 .idea
-/packages/*/.nyc_output
-/packages/*/coverage/*
+.nyc_output
+coverage
 /packages/*/node_modules
 *.iml
 node_modules
 .DS_Store
-
 
 /packages/ip-num/spec/support/jasmine.json
