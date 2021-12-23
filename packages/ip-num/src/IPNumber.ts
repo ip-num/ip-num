@@ -329,7 +329,7 @@ export class Asn extends AbstractIPNum {
      */
     readonly value:bigInt.BigInteger;
     /**
-     * The number of bits needed to represents the value of the ASN number
+     * The number of bits needed to represent the value of the ASN number
      */
     bitSize: number = 32;
     /**
@@ -448,8 +448,8 @@ export class Asn extends AbstractIPNum {
      *
      */
     toASDotPlus():string {
-        let high = Math.floor(this.value.valueOf() / 65535);
-        let low = (this.value.valueOf() % 65535) - high;
+        let high = Math.floor(this.value.valueOf() / 65536);
+        let low = (this.value.valueOf() % 65536);
         return `${high}.${low}`;
     }
 
