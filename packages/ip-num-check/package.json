@@ -1,0 +1,27 @@
+{
+  "name": "ip-num-check",
+  "version": "0.0.1",
+  "description": "Generate ip-num fast-check arbitraries",
+  "main": "./index.js",
+  "types": "./index.d.ts",
+  "scripts": {
+    "compile": "tsc -p tsconfig.json",
+    "test": "nyc -e .ts jasmine-ts spec/**/*.ts --config=jasmine.json"
+  },
+  "keywords": [
+    "property based testing",
+    "testing",
+    "fast check",
+    "ip-num"
+  ],
+  "devDependencies": {
+    "@types/jasmine": "^3.10.2",
+    "coveralls": "^3.1.1",
+    "jasmine": "^3.10.0",
+    "jasmine-ts": "^0.4.0",
+    "nyc": "^15.1.0",
+    "ts-node": "^10.4.0",
+    "typescript": "^4.5.4",
+    "ip-num-check-shared": "0.0.1",
+  }
+}
