@@ -17,7 +17,8 @@ export const asnPlainValuesBinary = fc.oneof(asn16BitValues, asn32BitValues).map
 export const asnDotPlusValues = asnPlainValues.map(asnPlain => {
     return {
         intValue: asnPlain,
-        asnDotPlusValue: `${Math.floor(asnPlain/65536)}.${asnPlain % 65536}`
+        asnDotPlusValue: `${Math.floor(asnPlain/65536)}.${asnPlain % 65536}`,
+        binaryValue: asnPlain.toString(2)
     }
 })
 export const asnASStringValues = asnPlainValues.map(integer => { return {
