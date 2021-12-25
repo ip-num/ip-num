@@ -25,5 +25,3 @@ export const asnASStringValues = asnPlainValues.map(integer => { return {
     intValue: integer,
     stringVal: `AS${integer.toString()}`
 }})
-
-export const asnASDotPlusValues = 0

@@ -1,34 +1,53 @@
 import * as BinaryUtils from "../src/BinaryUtils";
 import * as bigInt from "big-integer/BigInteger";
-import {IPNumType} from "../src";
-import {intLog2, matchingBitCount} from "../src/BinaryUtils";
+import {Asn, IPNumType} from "../src";
+import {intLog2, leftPadWithZeroBit, matchingBitCount} from "../src/BinaryUtils";
+import fc from "fast-check"
+import {decimalAndBinary} from "./arbitraties/BinaryArbitraties";
 
 describe('Binary Utils', () => {
-    it('Should correctly convert decimal to binary', () => {
-        expect(BinaryUtils.decimalNumberToBinaryString(1234) === '10011010010').toEqual(true);
+    fit('Should correctly convert decimal to binary', () => {
+        fc.assert(fc.property(decimalAndBinary, (value) => {
+            expect(BinaryUtils.decimalNumberToBinaryString(value.value)).toEqual(value.binary);
+        }));
     });
-    it('Should correctly parse binary string to a number in BigInteger', () => {
-        expect(BinaryUtils.parseBinaryStringToBigInteger('10011010010')).toEqual(bigInt(1234));
+    fit('Should correctly parse binary string to a number in BigInteger', () => {
+        fc.assert(fc.property(decimalAndBinary, (value) => {
+            expect(BinaryUtils.parseBinaryStringToBigInteger(value.binary)).toEqual(bigInt(value.value));
+        }));
     });
-    it('Should correctly convert binary to decimal', () => {
-        expect(BinaryUtils.parseBinaryStringToBigInteger('10011010010').valueOf() === 1234).toEqual(true);
+    fit('Should correctly convert binary to decimal', () => {
+        fc.assert(fc.property(decimalAndBinary, (value) => {
+            expect(BinaryUtils.parseBinaryStringToBigInteger(value.binary).valueOf()).toEqual(value.value);
+        }));
     });
-    it('Should correctly convert a big integer number to binary string', () => {
-        expect(BinaryUtils.bigIntegerNumberToBinaryString(bigInt(1234))).toBe('10011010010');
-        expect(BinaryUtils.bigIntegerNumberToBinaryString(bigInt(4294967295))).toBe('11111111111111111111111111111111')
+    fit('Should correctly convert a big integer number to binary string', () => {
+        fc.assert(fc.property(decimalAndBinary, (value) => {
+            expect(BinaryUtils.bigIntegerNumberToBinaryString(bigInt(value.value))).toEqual(value.binary);
+        }));
     });
-    it('Should correctly convert binary to decimal and back to binary', () => {
-        let originalBinary = '10011010010';
-        let decimal = BinaryUtils.parseBinaryStringToBigInteger(originalBinary).valueOf();
-        let finalBinary = BinaryUtils.decimalNumberToBinaryString(decimal);
-        expect(originalBinary.toString() === finalBinary).toEqual(true);
+    fit('Should correctly convert binary to decimal and back to binary', () => {
+        fc.assert(fc.property(decimalAndBinary, (value) => {
+            expect(
+                BinaryUtils.decimalNumberToBinaryString(
+                    BinaryUtils.parseBinaryStringToBigInteger(value.binary).valueOf()
+                )
+            ).toEqual(value.binary);
+        }));
     });
-    it('Should correctly convert decimal number to octets', () => {
-        let decimalValue = 10;
-        let octet = BinaryUtils.decimalNumberToOctetString(decimalValue);
-        expect(octet).toEqual('00001010')
+    fit('Should correctly convert decimal number to octets', () => {
+        fc.assert(fc.property(decimalAndBinary.filter(value => {
+            return value.binary.length <= 8;
+        }).map(value => {
+            return {
+                binary: leftPadWithZeroBit(value.binary, 8),
+                value: value.value
+            }
+        }), (value) => {
+            expect(BinaryUtils.decimalNumberToOctetString(value.value)).toEqual(value.binary);
+        }));
     });
-    it('Should throw an exception when converting to octet and value is larger than an octet', () => {
+    fit('Should throw an exception when converting to octet and value is larger than an octet', () => {
         expect(() => {
             BinaryUtils.decimalNumberToOctetString(122222222222);
         }).toThrowError(Error, 'Given decimal in binary contains digits greater than an octet');

@@ -13,7 +13,7 @@ import {
     asnDotPlusValues,
     asnPlainValues,
     asnPlainValuesBinary
-} from "./Arbitraties";
+} from "./arbitraties/AsnArbitraties";
 
 describe('ASN', () => {
     it('should instantiate by passing number to static method', () => {
