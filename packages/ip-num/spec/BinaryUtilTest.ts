@@ -3,7 +3,8 @@ import * as bigInt from "big-integer/BigInteger";
 import {Asn, IPNumType} from "../src";
 import {intLog2, leftPadWithZeroBit, matchingBitCount} from "../src/BinaryUtils";
 import fc from "fast-check"
-import {decimalAndBinary} from "./arbitraties/BinaryArbitraties";
+import {decimalAndBinary, ipv4DecimalNotation} from "./arbitraties/BinaryArbitraties";
+import {min} from "big-integer";
 
 describe('Binary Utils', () => {
     fit('Should correctly convert decimal to binary', () => {
@@ -52,13 +53,23 @@ describe('Binary Utils', () => {
             BinaryUtils.decimalNumberToOctetString(122222222222);
         }).toThrowError(Error, 'Given decimal in binary contains digits greater than an octet');
     });
-    it('Should correctly convert IP number in dotted decimal notation to binary string', () => {
-        expect(BinaryUtils.dottedDecimalNotationToBinaryString('2.16.217.69')).toEqual('00000010000100001101100101000101');
-        expect(BinaryUtils.dottedDecimalNotationToBinaryString('0.0.0.0')).toEqual('00000000000000000000000000000000');
-        expect(BinaryUtils.dottedDecimalNotationToBinaryString('255.255.255.255')).toEqual('11111111111111111111111111111111');
-        expect(BinaryUtils.dottedDecimalNotationToBinaryString('254.198.20.255')).toEqual('11111110110001100001010011111111');
+    fit('Should correctly convert IP number in dotted decimal notation to binary string', () => {
+
+        fc.assert(fc.property(ipv4DecimalNotation, (value) => {
+            expect(BinaryUtils.dottedDecimalNotationToBinaryString(value.decimalNotation)).toEqual(value.binary);
+        }));
+
     });
-    it('Should pad given string with zeros to become given length', () => {
+    fit('Should pad given string with zeros to become given length', () => {
+
+        fc.assert(fc.property(fc.tuple(fc.integer({min:0}).map((value: number) => {
+            return value.toString(2)
+        }), fc.integer({min:0, max:20})).filter(values => {
+            return values[1] > values[0].length
+        }), (value) => {
+            expect(BinaryUtils.leftPadWithZeroBit(value[0], value[1]).length).toEqual(value[1]);
+            expect(BinaryUtils.leftPadWithZeroBit(value[0], value[1]).endsWith(value[0])).toEqual(true);
+        }));
         expect(BinaryUtils.leftPadWithZeroBit('10', 5)).toEqual('00010');
         expect(BinaryUtils.leftPadWithZeroBit('00010', 5)).toEqual('00010');
     });
