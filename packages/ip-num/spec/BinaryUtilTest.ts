@@ -54,14 +54,11 @@ describe('Binary Utils', () => {
         }).toThrowError(Error, 'Given decimal in binary contains digits greater than an octet');
     });
     fit('Should correctly convert IP number in dotted decimal notation to binary string', () => {
-
         fc.assert(fc.property(ipv4DecimalNotation, (value) => {
             expect(BinaryUtils.dottedDecimalNotationToBinaryString(value.decimalNotation)).toEqual(value.binary);
         }));
-
     });
     fit('Should pad given string with zeros to become given length', () => {
-
         fc.assert(fc.property(fc.tuple(fc.integer({min:0}).map((value: number) => {
             return value.toString(2)
         }), fc.integer({min:0, max:20})).filter(values => {
