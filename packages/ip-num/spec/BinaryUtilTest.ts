@@ -75,12 +75,12 @@ describe('Binary Utils', () => {
             BinaryUtils.leftPadWithZeroBit('111111110', 5)
         }).toThrowError(Error, 'Given string is already longer than given final length after padding: 5');
     });
-    describe('IPv4 cidr prefix to binary string', () => {
-      it('should convert a 24 prefix', () => {
-        expect(BinaryUtils.cidrPrefixToMaskBinaryString(24, IPNumType.IPv4)).toBe(`${"1".repeat(24)}${"0".repeat(8)}`)
-      });
-      it('should convert a 32 prefix', () => {
-        expect(BinaryUtils.cidrPrefixToMaskBinaryString(32, IPNumType.IPv4)).toBe(`${"1".repeat(32)}`)
+    fdescribe('IPv4 cidr prefix to binary string', () => {
+      it('should convert prefix to mask binary string', () => {
+          fc.assert(fc.property(fc.integer(1,32), (value) => {
+              let maskString = BinaryUtils.cidrPrefixToMaskBinaryString(value, IPNumType.IPv4)
+              expect(new RegExp(`^1{${value}}0{${32-value}}$`).test(maskString)).toBeTrue()
+          }))
       });
       it('should throw an exception when converting 33 prefix', () => {
         expect(() => {
