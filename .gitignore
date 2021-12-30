@@ -8,3 +8,4 @@ node_modules
 
 
 /packages/ip-num/spec/support/jasmine.json
+/packages/ip-num-check/node_modules/
