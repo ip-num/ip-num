@@ -1,5 +1,5 @@
 {
-  "name": "ip-num-check",
+  "name": "@ip-num/ip-check",
   "version": "0.0.1",
   "description": "Generate ip-num fast-check arbitraries",
   "main": "./index.js",
@@ -21,7 +21,10 @@
     "jasmine-ts": "^0.4.0",
     "nyc": "^15.1.0",
     "ts-node": "^10.4.0",
-    "typescript": "^4.5.4",
-    "ip-num-check-shared": "0.0.1",
+    "typescript": "^4.5.4"
+  },
+  "dependencies": {
+    "fast-check": "^2.20.0",
+    "ip-num": "^1.3.4"
   }
 }
