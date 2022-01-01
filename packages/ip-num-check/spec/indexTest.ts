@@ -13,6 +13,11 @@ describe('ASNs', () => {
             return value.value.valueOf() >= 2 || value.value.valueOf() <= 3
         }))
     });
+    it('Throws an error when given maximum is too large', () => {
+        expect(() => {
+            ipcheck.asn(0, 75535)
+        }).toThrowError(Error);
+    })
 })
 
 describe('IPv4', () => {
@@ -26,6 +31,11 @@ describe('IPv4', () => {
             return value.value.valueOf() >= 2 || value.value.valueOf() <= 5
         }))
     })
+    it('Throws an error when given maximum is too large', () => {
+        expect(() => {
+            ipcheck.ipv4(0, (Math.pow(2, 32) + 10))
+        }).toThrowError(Error);
+    })
 })
 
 describe('IPv6', () => {
@@ -38,6 +48,11 @@ describe('IPv6', () => {
         fc.assert(fc.property(ipcheck.ipv6(BigInt(2), BigInt(5)), (value: IPv6) => {
             return value.value.geq(2) || value.value.leq(5)
         }))
+    })
+    it('Throws an error when given maximum is too large', () => {
+        expect(() => {
+            ipcheck.ipv6(BigInt(0), BigInt("440282366920938463463374607431768211456"))
+        }).toThrowError(Error);
     })
 })
 
