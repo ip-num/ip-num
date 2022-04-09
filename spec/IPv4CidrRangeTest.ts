@@ -2,11 +2,10 @@ import {IPv4CidrRange} from "../src";
 import {IPv4} from "../src";
 import {IPv4Prefix} from "../src";
 import {Validator} from "../src";
-import * as bigInt from "big-integer";
 
 describe('IPv4CidrRange: ', () => {
     it('should instantiate by calling constructor with IPv4 and prefix', () => {
-        let ipv4CidrRange = new IPv4CidrRange(new IPv4("192.198.0.0"), new IPv4Prefix(24));
+        let ipv4CidrRange = new IPv4CidrRange(new IPv4("192.198.0.0"), new IPv4Prefix(24n));
         expect(ipv4CidrRange.toCidrString()).toEqual("192.198.0.0/24");
     });
     it('should instantiate from string in cidr notation', () => {
@@ -25,26 +24,26 @@ describe('IPv4CidrRange: ', () => {
 
 
     it('should return the first IPv4 number in range', () => {
-        let ipv4CidrRange = new IPv4CidrRange(new IPv4("192.198.0.0"), new IPv4Prefix(24));
+        let ipv4CidrRange = new IPv4CidrRange(new IPv4("192.198.0.0"), new IPv4Prefix(24n));
         expect(ipv4CidrRange.getFirst().toString()).toEqual("192.198.0.0");
     });
     it('should return the last IPv4 number in range', () => {
-        let ipv4CidrRange = new IPv4CidrRange(new IPv4("192.198.0.0"), new IPv4Prefix(24));
+        let ipv4CidrRange = new IPv4CidrRange(new IPv4("192.198.0.0"), new IPv4Prefix(24n));
         expect(ipv4CidrRange.getLast().toString()).toEqual("192.198.0.255");
     });
     it('should convert to string with range dash format', () => {
-        let ipv4CidrRange = new IPv4CidrRange(new IPv4("192.198.0.0"), new IPv4Prefix(24));
+        let ipv4CidrRange = new IPv4CidrRange(new IPv4("192.198.0.0"), new IPv4Prefix(24n));
         expect(ipv4CidrRange.toRangeString()).toEqual("192.198.0.0-192.198.0.255");
     });
     it('should return the correct list of IPv4 number when take is called', () => {
-        let ipv4CidrRange = new IPv4CidrRange(new IPv4("192.198.0.0"), new IPv4Prefix(24));
-        let take = ipv4CidrRange.take(bigInt(3));
+        let ipv4CidrRange = new IPv4CidrRange(new IPv4("192.198.0.0"), new IPv4Prefix(24n));
+        let take = ipv4CidrRange.take(3n);
         expect(take[0].toString()).toBe("192.198.0.0");
         expect(take[1].toString()).toBe("192.198.0.1");
         expect(take[2].toString()).toBe("192.198.0.2");
     });
     it('should return the correct list of IPv4 numbers when takeStream is called and looped over using for of', () => {
-      let ipv4CidrRange = new IPv4CidrRange(new IPv4("0.0.0.0"), new IPv4Prefix(0));
+      let ipv4CidrRange = new IPv4CidrRange(new IPv4("0.0.0.0"), new IPv4Prefix(0n));
       let ranges = ipv4CidrRange.toRangeSet().take(3);
       let length = 0;
       for (let iprange of ranges) {
@@ -55,7 +54,7 @@ describe('IPv4CidrRange: ', () => {
     });
 
     it('should return the correct list of IPv4 numbers when takeStream is called and assigned to variables', () => {
-      let ipv4CidrRange = new IPv4CidrRange(new IPv4("0.0.0.0"), new IPv4Prefix(0));
+      let ipv4CidrRange = new IPv4CidrRange(new IPv4("0.0.0.0"), new IPv4Prefix(0n));
       let ranges = ipv4CidrRange.toRangeSet().take(3);
       let [first, second, third] = ranges;
 
@@ -65,7 +64,7 @@ describe('IPv4CidrRange: ', () => {
     });
 
     it('should return all list of IPv4 numbers when takeStream is called without passing in a count', () => {
-        let ipv4CidrRange = new IPv4CidrRange(new IPv4("0.0.0.0"), new IPv4Prefix(30));
+        let ipv4CidrRange = new IPv4CidrRange(new IPv4("0.0.0.0"), new IPv4Prefix(30n));
         let ranges = ipv4CidrRange.toRangeSet().take();
         let [first, second, third, fourth, fifth] = ranges;
 
@@ -77,16 +76,16 @@ describe('IPv4CidrRange: ', () => {
     });
 
     it('should throw an exception when asked to take a value bigger than the size of range', function() {
-        let ipv4CidrRange = new IPv4CidrRange(new IPv4("192.198.0.0"), new IPv4Prefix(24));
+        let ipv4CidrRange = new IPv4CidrRange(new IPv4("192.198.0.0"), new IPv4Prefix(24n));
         let errMessage = Validator.takeOutOfRangeSizeMessage
             .replace("$size", ipv4CidrRange.getSize().toString())
-            .replace("$count", (ipv4CidrRange.getSize().plus(1)).toString());
+            .replace("$count", (ipv4CidrRange.getSize() + 1n).toString());
         expect(() => {
-            ipv4CidrRange.take(ipv4CidrRange.getSize().plus(1));
+            ipv4CidrRange.take(ipv4CidrRange.getSize() + 1n);
         }).toThrowError(Error, errMessage);
     });
     it('should throw an exception when trying to split a range with on IP number', function(){
-        let ipv4CidrRange = new IPv4CidrRange(new IPv4("192.198.0.0"), new IPv4Prefix(32));
+        let ipv4CidrRange = new IPv4CidrRange(new IPv4("192.198.0.0"), new IPv4Prefix(32n));
         expect(() => {
             ipv4CidrRange.split();
         }).toThrowError(Error, Validator.cannotSplitSingleRangeErrorMessage);
@@ -173,8 +172,8 @@ describe('IPv4CidrRange: ', () => {
         expect(firstRange.isEquals(secondRange)).toBe(false);
     });
     it('should be able to use for in construct on range', () => {
-        let ipv4CidrRange = new IPv4CidrRange(new IPv4("192.198.0.0"), new IPv4Prefix(30));
-        let expectedValue = ipv4CidrRange.take(bigInt(4));
+        let ipv4CidrRange = new IPv4CidrRange(new IPv4("192.198.0.0"), new IPv4Prefix(30n));
+        let expectedValue = ipv4CidrRange.take(4n);
         let expectedIndex = 0;
         for (let value of ipv4CidrRange) {
             expect(value.isEquals(expectedValue[expectedIndex])).toBe(true);
@@ -182,8 +181,8 @@ describe('IPv4CidrRange: ', () => {
         }
     });
     it('should be able to use spread syntax on range', () => {
-        let ipv4CidrRange = new IPv4CidrRange(new IPv4("192.198.0.0"), new IPv4Prefix(30));
-        let expectedValue = ipv4CidrRange.take(bigInt(4));
+        let ipv4CidrRange = new IPv4CidrRange(new IPv4("192.198.0.0"), new IPv4Prefix(30n));
+        let expectedValue = ipv4CidrRange.take(4n);
 
         let iPv4CidrRanges = [... ipv4CidrRange];
 
@@ -203,18 +202,18 @@ describe('IPv4CidrRange: ', () => {
     it('should throw on splitInto IP if split range is greater', () => {
         let ipv4CidrRange = IPv4CidrRange.fromCidr("192.168.208.0/24");
         expect(() => {
-            ipv4CidrRange.splitInto(IPv4Prefix.fromNumber(23));
+            ipv4CidrRange.splitInto(IPv4Prefix.fromNumber(23n));
         }).toThrowError(Error);
     });
     it('should split IP range on level correctly using split Into, no ops', () => {
         let ipv4CidrRange = IPv4CidrRange.fromCidr("192.168.208.0/24");
-        let splitRanges: Array<IPv4CidrRange> = ipv4CidrRange.splitInto(IPv4Prefix.fromNumber(24));
+        let splitRanges: Array<IPv4CidrRange> = ipv4CidrRange.splitInto(IPv4Prefix.fromNumber(24n));
         let firstRange = splitRanges[0];
         expect(firstRange.toCidrString()).toBe("192.168.208.0/24");
     });
     it('should split IP range on level correctly using split Into', () => {
         let ipv4CidrRange = IPv4CidrRange.fromCidr("192.168.208.0/24");
-        let splitRanges: Array<IPv4CidrRange> = ipv4CidrRange.splitInto(IPv4Prefix.fromNumber(25));
+        let splitRanges: Array<IPv4CidrRange> = ipv4CidrRange.splitInto(IPv4Prefix.fromNumber(25n));
         let firstRange = splitRanges[0];
         let secondRange = splitRanges[1];
         expect(firstRange.toCidrString()).toBe("192.168.208.0/25");
@@ -222,7 +221,7 @@ describe('IPv4CidrRange: ', () => {
     });
     it('should split IP range multiple level correctly using split Into', () => {
         let ipv4CidrRange = IPv4CidrRange.fromCidr("192.168.208.0/24");
-        let splitRanges: Array<IPv4CidrRange> = ipv4CidrRange.splitInto(IPv4Prefix.fromNumber(26));
+        let splitRanges: Array<IPv4CidrRange> = ipv4CidrRange.splitInto(IPv4Prefix.fromNumber(26n));
         let firstRange = splitRanges[0];
         let secondRange = splitRanges[1];
         let thirdRange = splitRanges[2];
@@ -233,10 +232,10 @@ describe('IPv4CidrRange: ', () => {
         expect(fourthRange.toCidrString()).toBe("192.168.208.192/26");
     });
     it('should tell if there is a next consecutive range', () => {
-        let firstRange = new IPv4CidrRange(new IPv4("0.0.0.0"), new IPv4Prefix(1));
-        let secondRange = new IPv4CidrRange(new IPv4("127.255.255.255"), new IPv4Prefix(1));
-        let thirdRange = new IPv4CidrRange(new IPv4("128.0.0.0"), new IPv4Prefix(1));
-        let fourthRange = new IPv4CidrRange(new IPv4("255.255.255.255"), new IPv4Prefix(1));
+        let firstRange = new IPv4CidrRange(new IPv4("0.0.0.0"), new IPv4Prefix(1n));
+        let secondRange = new IPv4CidrRange(new IPv4("127.255.255.255"), new IPv4Prefix(1n));
+        let thirdRange = new IPv4CidrRange(new IPv4("128.0.0.0"), new IPv4Prefix(1n));
+        let fourthRange = new IPv4CidrRange(new IPv4("255.255.255.255"), new IPv4Prefix(1n));
 
         expect(firstRange.hasNextRange()).toBe(true);
         expect(secondRange.hasNextRange()).toBe(true);
@@ -248,10 +247,10 @@ describe('IPv4CidrRange: ', () => {
         expect(IPv4CidrRange.fromCidr("255.255.255.0/24").hasNextRange()).toBe(false);
     });
     it('should tell if there is a next adjacent range', () => {
-        let firstRange = new IPv4CidrRange(new IPv4("0.0.0.0"), new IPv4Prefix(1));
-        let secondRange = new IPv4CidrRange(new IPv4("127.255.255.255"), new IPv4Prefix(1));
-        let thirdRange = new IPv4CidrRange(new IPv4("128.0.0.0"), new IPv4Prefix(1));
-        let fourthRange = new IPv4CidrRange(new IPv4("255.255.255.255"), new IPv4Prefix(1));
+        let firstRange = new IPv4CidrRange(new IPv4("0.0.0.0"), new IPv4Prefix(1n));
+        let secondRange = new IPv4CidrRange(new IPv4("127.255.255.255"), new IPv4Prefix(1n));
+        let thirdRange = new IPv4CidrRange(new IPv4("128.0.0.0"), new IPv4Prefix(1n));
+        let fourthRange = new IPv4CidrRange(new IPv4("255.255.255.255"), new IPv4Prefix(1n));
 
         expect(firstRange.hasNextRange()).toBe(true);
         expect(secondRange.hasNextRange()).toBe(true);
@@ -263,10 +262,10 @@ describe('IPv4CidrRange: ', () => {
         expect(IPv4CidrRange.fromCidr("255.255.255.0/24").hasNextRange()).toBe(false);
     });
     it('should tell if there is a previous adjacent range', () => {
-        let firstRange = new IPv4CidrRange(new IPv4("0.0.0.0"), new IPv4Prefix(1));
-        let secondRange = new IPv4CidrRange(new IPv4("127.255.255.255"), new IPv4Prefix(1));
-        let thirdRange = new IPv4CidrRange(new IPv4("128.0.0.0"), new IPv4Prefix(1));
-        let fourthRange = new IPv4CidrRange(new IPv4("255.255.255.255"), new IPv4Prefix(1));
+        let firstRange = new IPv4CidrRange(new IPv4("0.0.0.0"), new IPv4Prefix(1n));
+        let secondRange = new IPv4CidrRange(new IPv4("127.255.255.255"), new IPv4Prefix(1n));
+        let thirdRange = new IPv4CidrRange(new IPv4("128.0.0.0"), new IPv4Prefix(1n));
+        let fourthRange = new IPv4CidrRange(new IPv4("255.255.255.255"), new IPv4Prefix(1n));
 
         expect(firstRange.hasPreviousRange()).toBe(false);
         expect(secondRange.hasPreviousRange()).toBe(false);

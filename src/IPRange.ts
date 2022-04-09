@@ -1,4 +1,3 @@
-import * as bigInt from "big-integer";
 import {AbstractIPNum, IPv4, IPv6, isIPv4} from "./IPNumber";
 import {IPv4Prefix, IPv6Prefix} from "./Prefix";
 import {
@@ -6,7 +5,7 @@ import {
     intLog2,
     leftPadWithZeroBit,
     matchingBitCount,
-    parseBinaryStringToBigInteger
+    parseBinaryStringToBigInt
 } from "./BinaryUtils";
 import {Validator} from "./Validator";
 import {IPNumType} from "./IPNumType";
@@ -19,7 +18,7 @@ export type IP<T> = T extends IPv4CidrRange ? IPv4 : IPv6;
  * for allocating IP addresses.
  */
 export class RangedSet<T extends AbstractIPNum> implements Iterable<AbstractIPNum> {
-    readonly bitValue: bigInt.BigInteger;
+    readonly bitValue: bigint;
     private readonly currentValue: T;
     private readonly first: T;
     private readonly last: T;
@@ -92,7 +91,7 @@ export class RangedSet<T extends AbstractIPNum> implements Iterable<AbstractIPNu
              throw new Error(`${first.toString()} should be lower than ${last.toString()}`)
         }
         this.currentValue = first;
-        this.bitValue = bigInt(first.bitSize);
+        this.bitValue = BigInt(first.bitSize);
     }
 
     /**
@@ -112,8 +111,8 @@ export class RangedSet<T extends AbstractIPNum> implements Iterable<AbstractIPNu
     /**
      * Returns the size, which is the number of IP numbers in the range.
      */
-    getSize(): bigInt.BigInteger {
-        return this.last.getValue().minus(this.first.getValue()).plus(bigInt.one);
+    getSize(): bigint {
+        return this.last.getValue() - (this.first.getValue()) + (1n);
     }
 
     /**
@@ -167,7 +166,7 @@ export class RangedSet<T extends AbstractIPNum> implements Iterable<AbstractIPNu
             return false;
         } else {
             if (this.getFirst().isEquals(otherRange.getFirst())) {
-                return this.getSize().lesser(otherRange.getSize())
+                return this.getSize() < (otherRange.getSize())
             }
             return this.getFirst().isLessThan(otherRange.getFirst());
         }
@@ -183,7 +182,7 @@ export class RangedSet<T extends AbstractIPNum> implements Iterable<AbstractIPNu
             return false;
         } else {
             if (this.getFirst().isEquals(otherRange.getFirst())) {
-                return this.getSize().greater(otherRange.getSize());
+                return this.getSize() > (otherRange.getSize());
             }
             return this.getFirst().isGreaterThan(otherRange.getFirst());
         }
@@ -215,15 +214,15 @@ export class RangedSet<T extends AbstractIPNum> implements Iterable<AbstractIPNu
      * Check if this range can be converted to a CIDR range.
      */
     public isCidrAble(): boolean {
-        if (this.getSize().eq(bigInt.one)) {
+        if (this.getSize() === (1n)) {
             return true;
         }
         try {
             let prefix = intLog2(this.getSize());
-            let netmask = parseBinaryStringToBigInteger(
+            let netmask = parseBinaryStringToBigInt(
                 cidrPrefixToMaskBinaryString(prefix, isIPv4(this.currentValue) ? IPNumType.IPv4: IPNumType.IPv6)
             );
-            return this.first.getValue().eq(netmask.and(this.first.getValue()));
+            return (this.first.getValue()) === (netmask & (this.first.getValue()));
         } catch (e) {
             return false;
         }
@@ -332,21 +331,21 @@ export class RangedSet<T extends AbstractIPNum> implements Iterable<AbstractIPNu
      * @param offset offset from this range where the subrange should begin
      * @param size the size of the range
      */
-    public takeSubRange(offset: bigInt.BigInteger, size: bigInt.BigInteger): RangedSet<AbstractIPNum> {
-        if (offset.plus(size).gt(this.getSize())) {
+    public takeSubRange(offset: bigint, size: bigint): RangedSet<AbstractIPNum> {
+        if (offset + (size) > (this.getSize())) {
             throw new RangeError("Requested range is greater than what can be taken");
         }
 
-        if (size.eq(bigInt(0))) {
+        if (size === (0n)) {
             throw new Error("Sub range cannot be zero");
         }
 
-        let valueOfFirstIp = this.getFirst().value.plus(offset);
+        let valueOfFirstIp = this.getFirst().value + (offset);
         let firstIp: AbstractIPNum = isIPv4(this.getFirst()) ?
-            IPv4.fromBigInteger(valueOfFirstIp) : IPv6.fromBigInteger(valueOfFirstIp);
+            IPv4.fromBigInt(valueOfFirstIp) : IPv6.fromBigInteger(valueOfFirstIp);
 
-        let valueOfLastIp = firstIp.value.plus(size.minus(bigInt.one));
-        let lastIp = isIPv4(firstIp)? IPv4.fromBigInteger(valueOfLastIp) : IPv6.fromBigInteger(valueOfLastIp);
+        let valueOfLastIp = firstIp.value + (size - 1n);
+        let lastIp = isIPv4(firstIp)? IPv4.fromBigInt(valueOfLastIp) : IPv6.fromBigInteger(valueOfLastIp);
 
         return new RangedSet(firstIp, lastIp);
     }
@@ -359,7 +358,7 @@ export class RangedSet<T extends AbstractIPNum> implements Iterable<AbstractIPNu
      * @param range
      */
     public difference(range: RangedSet<T>): Array<RangedSet<AbstractIPNum>> {
-        if (range.getSize().gt(this.getSize())) {
+        if (range.getSize() > (this.getSize())) {
             throw new Error("Range is greater than range to be subtracted from");
         }
 
@@ -395,7 +394,7 @@ export class RangedSet<T extends AbstractIPNum> implements Iterable<AbstractIPNu
 
     private toIPv4CidrRange(): IPv4CidrRange {
 
-        let candidateRange = new IPv4CidrRange(IPv4.fromBigInteger(this.getFirst().getValue()),
+        let candidateRange = new IPv4CidrRange(IPv4.fromBigInt(this.getFirst().getValue()),
             IPv4Prefix.fromRangeSize(this.getSize()));
         if (candidateRange.getFirst().isEquals(this.getFirst())) {
             return candidateRange;
@@ -421,24 +420,21 @@ export class RangedSet<T extends AbstractIPNum> implements Iterable<AbstractIPNu
  */
 export abstract class AbstractIPRange<T extends AbstractIPNum, P extends IPv4Prefix | IPv6Prefix>  implements Iterable<AbstractIPNum> {
 
-    abstract readonly bitValue: bigInt.BigInteger;
+    abstract readonly bitValue: bigint;
     protected abstract newInstance(num:T, prefix: IPv4Prefix | IPv6Prefix) : IPv4CidrRange | IPv6CidrRange;
     abstract getFirst(): T
     abstract getLast(): T
     abstract getPrefix():P;
-    abstract getSize(): bigInt.BigInteger;
+    abstract getSize(): bigint;
     abstract toCidrString(): string | never
 
     public hasNextRange(): boolean {
         let sizeOfCurrentRange = this.getSize();
-        return bigInt(2).pow(this.bitValue)
-            .minus(sizeOfCurrentRange)
-            .greaterOrEquals(this.getFirst().getValue().plus(sizeOfCurrentRange));
+        return (BigInt(Math.pow(2, Number(this.bitValue))) - sizeOfCurrentRange) >= (this.getFirst().getValue() + (sizeOfCurrentRange))
     }
 
     public hasPreviousRange(): boolean {
-        return this.getSize()
-            .lesserOrEquals(this.getFirst().getValue())
+        return this.getSize() <= (this.getFirst().getValue())
     }
 
 
@@ -469,13 +465,13 @@ export abstract class AbstractIPRange<T extends AbstractIPNum, P extends IPv4Pre
     public isCidrMergeable(otherRange: IPv6CidrRange | IPv4CidrRange): boolean {
         let count = matchingBitCount(this.getFirst().toBinaryString(), otherRange.getFirst().toBinaryString());
 
-        if (this.getPrefix().value - count !== 1) {
+        if (this.getPrefix().value - BigInt(count) !== 1n) {
             return false;
         }
 
         return this.isConsecutive(otherRange)
-            && this.getSize().equals(otherRange.getSize())
-            && this.getFirst().getValue().and(count).eq(otherRange.getFirst().getValue().and(count));
+            && this.getSize() === (otherRange.getSize())
+            && (this.getFirst().getValue() & (BigInt(count))) === ((otherRange.getFirst().getValue()) & (BigInt(count)));
 
     }
 
@@ -523,7 +519,7 @@ export abstract class AbstractIPRange<T extends AbstractIPNum, P extends IPv4Pre
  * @see https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing
  */
 export class IPv4CidrRange extends AbstractIPRange<IPv4, IPv4Prefix> {
-    readonly bitValue: bigInt.BigInteger = bigInt(32);
+    readonly bitValue: bigint = 32n;
 
     /**
      * Convenience method for constructing an instance of an IPv4CidrRange from an IP range represented in CIDR notation
@@ -539,7 +535,7 @@ export class IPv4CidrRange extends AbstractIPRange<IPv4, IPv4Prefix> {
         }
         let cidrComponents: Array<string> = rangeIncidrNotation.split("/");
         let ipString = cidrComponents[0];
-        let prefix = parseInt(cidrComponents[1]);
+        let prefix = BigInt(parseInt(cidrComponents[1]));
         return new IPv4CidrRange(IPv4.fromDecimalDottedString(ipString), IPv4Prefix.fromNumber(prefix));
     }
 
@@ -563,7 +559,7 @@ export class IPv4CidrRange extends AbstractIPRange<IPv4, IPv4Prefix> {
      *
      * @returns {bigInt.BigInteger} the amount of IPv4 numbers in the range
      */
-    public getSize(): bigInt.BigInteger {
+    public getSize(): bigint {
         return this.cidrPrefix.toRangeSize();
     }
 
@@ -597,7 +593,7 @@ export class IPv4CidrRange extends AbstractIPRange<IPv4, IPv4Prefix> {
      * @returns {IPv4} the first IPv4 number in the IPv4 range
      */
     public getFirst(): IPv4 {
-        return IPv4.fromBigInteger(this.ipv4.getValue().and(this.cidrPrefix.toMask().getValue()));
+        return IPv4.fromBigInt(this.ipv4.getValue() & (this.cidrPrefix.toMask().getValue()));
     }
 
     /**
@@ -669,18 +665,18 @@ export class IPv4CidrRange extends AbstractIPRange<IPv4, IPv4Prefix> {
      * @param {number} count the amount of IPv4 number to take from the IPv4 range
      * @returns {Array<IPv4>} an array of IPv4 number, taken from the IPv4 range
      */
-    public take(count: bigInt.BigInteger): Array<IPv4> {
+    public take(count: bigint): Array<IPv4> {
         let ipv4s: Array<IPv4>  = [this.getFirst()];
         let iteratingIPv4 = this.getFirst();
 
-        if (bigInt(count).greater(this.getSize())) {
+        if (count > (this.getSize())) {
             let errMessage = Validator.takeOutOfRangeSizeMessage
                 .replace("$count", count.toString())
                 .replace("$size", this.getSize().toString());
             throw new Error(errMessage);
         }
 
-        for (var counter = 0; counter < count.minus(1).valueOf(); counter++) {
+        for (var counter = 0; counter < count - 1n; counter++) {
             ipv4s.push(iteratingIPv4.nextIPNumber());
             iteratingIPv4 = iteratingIPv4.nextIPNumber();
         }
@@ -694,10 +690,10 @@ export class IPv4CidrRange extends AbstractIPRange<IPv4, IPv4Prefix> {
      */
     public split() : Array<IPv4CidrRange> {
         let prefixToSplit = this.cidrPrefix.getValue();
-        if (prefixToSplit === 32) {
+        if (prefixToSplit === 32n) {
             throw new Error("Cannot split an IP range with a single IP number");
         }
-        let splitCidr = IPv4Prefix.fromNumber(prefixToSplit + 1);
+        let splitCidr = IPv4Prefix.fromNumber(prefixToSplit + 1n);
         let firstIPOfFirstRange = this.getFirst();
         let firstRange = new IPv4CidrRange(firstIPOfFirstRange, splitCidr);
         let firstIPOfSecondRange = firstRange.getLast().nextIPNumber();
@@ -716,15 +712,15 @@ export class IPv4CidrRange extends AbstractIPRange<IPv4, IPv4Prefix> {
         let splitCount = prefix.getValue() - this.cidrPrefix.getValue()
         if (splitCount < 0) {
             throw new Error("Prefix to split into is larger than source prefix")
-        } else if (splitCount === 0) {
+        } else if (splitCount === 0n) {
             return [new IPv4CidrRange(this.getFirst(), prefix)]
-        } else if (splitCount === 1) {
+        } else if (splitCount === 1n) {
             return this.split();
         } else {
             let results = this.split();
             while (splitCount > 1) {
                 results = results.flatMap(result => result.split());
-                splitCount = splitCount - 1;
+                splitCount = splitCount - 1n;
             }
             return results
         }
@@ -750,7 +746,7 @@ export class IPv4CidrRange extends AbstractIPRange<IPv4, IPv4Prefix> {
     public nextRange(): IPv4CidrRange | undefined {
         if (this.hasNextRange()) {
             let sizeOfCurrentRange = this.getSize();
-            let startOfNextRange = this.getFirst().getValue().plus(sizeOfCurrentRange);
+            let startOfNextRange = this.getFirst().getValue() + (sizeOfCurrentRange);
             return new IPv4CidrRange(new IPv4(startOfNextRange), this.cidrPrefix)
         }
 
@@ -763,7 +759,7 @@ export class IPv4CidrRange extends AbstractIPRange<IPv4, IPv4Prefix> {
     public previousRange(): IPv4CidrRange | undefined {
         if (this.hasPreviousRange()) {
             let sizeOfCurrentRange = this.getSize();
-            let startOfPreviousRange = this.getFirst().getValue().minus(sizeOfCurrentRange);
+            let startOfPreviousRange = this.getFirst().getValue() - (sizeOfCurrentRange);
             return new IPv4CidrRange(new IPv4(startOfPreviousRange), this.cidrPrefix)
         }
 
@@ -779,7 +775,7 @@ export class IPv4CidrRange extends AbstractIPRange<IPv4, IPv4Prefix> {
  * @see https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing
  */
 export class IPv6CidrRange extends AbstractIPRange<IPv6, IPv6Prefix> {
-    readonly bitValue: bigInt.BigInteger = bigInt(128);
+    readonly bitValue: bigint = 128n;
 
     /**
      * Convenience method for constructing an instance of an IPV6Range from an IP range represented in CIDR notation
@@ -794,8 +790,7 @@ export class IPv6CidrRange extends AbstractIPRange<IPv6, IPv6Prefix> {
         }
         let cidrComponents: Array<string> = rangeInCidrNotation.split("/");
         let ipString = cidrComponents[0];
-        let prefix = parseInt(cidrComponents[1]);
-
+        let prefix = BigInt(parseInt(cidrComponents[1]));
         return new IPv6CidrRange(IPv6.fromHexadecimalString(ipString), IPv6Prefix.fromNumber(prefix));
     };
 
@@ -819,7 +814,7 @@ export class IPv6CidrRange extends AbstractIPRange<IPv6, IPv6Prefix> {
      *
      * @returns {bigInt.BigInteger} the amount of IPv6 numbers in the range
      */
-    public getSize(): bigInt.BigInteger {
+    public getSize(): bigint {
         return this.cidrPrefix.toRangeSize();
     }
 
@@ -852,7 +847,7 @@ export class IPv6CidrRange extends AbstractIPRange<IPv6, IPv6Prefix> {
      * @returns {IPv6} the first IPv6 number in the IPv6 range
      */
     public getFirst(): IPv6 {
-        return IPv6.fromBigInteger(this.ipv6.getValue().and(this.cidrPrefix.toMask().getValue()));
+        return IPv6.fromBigInteger(this.ipv6.getValue() & (this.cidrPrefix.toMask().getValue()));
     }
 
     /**
@@ -924,15 +919,15 @@ export class IPv6CidrRange extends AbstractIPRange<IPv6, IPv6Prefix> {
      * @param {number} count the amount of IPv6 number to take from the IPv6 range
      * @returns {Array<IPv6>} an array of IPv6 number, taken from the IPv6 range
      */
-    public take(count: bigInt.BigInteger): Array<IPv6> {
+    public take(count: bigint): Array<IPv6> {
         let iPv6s: Array<IPv6>  = [this.getFirst()];
         let iteratingIPv6 = this.getFirst();
 
-        if (count.greater(this.getSize())) {
+        if (count > (this.getSize())) {
             throw new Error(`${count.toString()} is greater than ${this.getSize().toString()}, the size of the range`);
         }
 
-        for (var counter = 0; counter < count.minus(1).valueOf(); counter++) {
+        for (var counter = 0; counter < count - 1n; counter++) {
             iPv6s.push(iteratingIPv6.nextIPNumber());
             iteratingIPv6 = iteratingIPv6.nextIPNumber();
         }
@@ -946,10 +941,10 @@ export class IPv6CidrRange extends AbstractIPRange<IPv6, IPv6Prefix> {
      */
     public split() : Array<IPv6CidrRange> {
         let prefixToSplit = this.cidrPrefix.getValue();
-        if (prefixToSplit === 128) {
+        if (prefixToSplit === 128n) {
             throw new Error("Cannot split an IP range with a single IP number");
         }
-        let splitCidr = IPv6Prefix.fromNumber(prefixToSplit + 1);
+        let splitCidr = IPv6Prefix.fromNumber(prefixToSplit + 1n);
         let firstIPOfFirstRange = this.getFirst();
         let firstRange = new IPv6CidrRange(firstIPOfFirstRange, splitCidr);
         let firstIPOfSecondRange = firstRange.getLast().nextIPNumber();
@@ -968,15 +963,15 @@ export class IPv6CidrRange extends AbstractIPRange<IPv6, IPv6Prefix> {
         let splitCount = prefix.getValue() - this.cidrPrefix.getValue()
         if (splitCount < 0) {
             throw new Error("Prefix to split into is larger than source prefix")
-        } else if (splitCount === 0) {
+        } else if (splitCount === 0n) {
             return [new IPv6CidrRange(this.getFirst(), prefix)]
-        } else if (splitCount === 1) {
+        } else if (splitCount === 1n) {
             return this.split();
         } else {
             let results = this.split();
             while (splitCount > 1) {
                 results = results.flatMap(result => result.split());
-                splitCount = splitCount - 1;
+                splitCount = splitCount - 1n;
             }
             return results
         }
@@ -1002,7 +997,7 @@ export class IPv6CidrRange extends AbstractIPRange<IPv6, IPv6Prefix> {
     public nextRange(): IPv6CidrRange | undefined {
         if (this.hasNextRange()) {
             let sizeOfCurrentRange = this.getSize();
-            let startOfNextRange = this.getFirst().getValue().plus(sizeOfCurrentRange);
+            let startOfNextRange = this.getFirst().getValue() + (sizeOfCurrentRange);
             return new IPv6CidrRange(new IPv6(startOfNextRange), this.cidrPrefix)
         }
         return;
@@ -1014,7 +1009,7 @@ export class IPv6CidrRange extends AbstractIPRange<IPv6, IPv6Prefix> {
     public previousRange(): IPv6CidrRange | undefined {
         if (this.hasPreviousRange()) {
             let sizeOfCurrentRange = this.getSize();
-            let startOfPreviousRange = this.getFirst().getValue().minus(sizeOfCurrentRange);
+            let startOfPreviousRange = this.getFirst().getValue() - sizeOfCurrentRange;
             return new IPv6CidrRange(new IPv6(startOfPreviousRange), this.cidrPrefix)
         }
         return;
@@ -1024,17 +1019,17 @@ export class IPv6CidrRange extends AbstractIPRange<IPv6, IPv6Prefix> {
 
 // utility functions shared by both IPv6CidrRange and IPv4CidrRange
 let last = (range: IPv6CidrRange | IPv4CidrRange, ip: IPv6 | IPv4): IPv6 | IPv4 => {
-    let bitValue = range.bitValue.valueOf();
-    let maskSize = bigInt("1".repeat(bitValue), 2);
+    let bitValue = Number(range.bitValue.valueOf());
+    let maskSize = BigInt(`0b${"1".repeat(bitValue)}`);
     let maskAsBigInteger = range.cidrPrefix.toMask().getValue();
-    let invertedMask = leftPadWithZeroBit(maskAsBigInteger.xor(maskSize).toString(2), bitValue);
+    let invertedMask = leftPadWithZeroBit((maskAsBigInteger ^ (maskSize)).toString(2), bitValue);
     if (isIPv4CidrRange(range)) {
-        return IPv4.fromBigInteger(ip.getValue().or(parseBinaryStringToBigInteger(invertedMask)))
+        return IPv4.fromBigInt((ip.getValue()) | (parseBinaryStringToBigInt(invertedMask)))
     } else {
-        return IPv6.fromBigInteger(ip.getValue().or(parseBinaryStringToBigInteger(invertedMask)));
+        return IPv6.fromBigInteger((ip.getValue()) | (parseBinaryStringToBigInt(invertedMask)));
     }
 }
 
 export function isIPv4CidrRange<T>(ip: IPv6CidrRange | IPv4CidrRange): ip is IPv4CidrRange {
-    return ip.bitValue.valueOf() === 32;
+    return ip.bitValue.valueOf() === 32n;
 }

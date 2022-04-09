@@ -1,4 +1,3 @@
-import * as bigInt from "big-integer/BigInteger";
 import {IPNumType} from "./IPNumType";
 
 /**
@@ -17,7 +16,7 @@ export let decimalNumberToBinaryString = (num:number):string => {
  * @param num the BigInteger number
  * @returns {string} the binary string
  */
-export let bigIntegerNumberToBinaryString = (num: bigInt.BigInteger): string => {
+export let bigIntToBinaryString = (num: bigint): string => {
     return num.toString(2);
 };
 
@@ -44,8 +43,8 @@ export let decimalNumberToOctetString = (num:number): string => {
  * @param num binary number in string to parse
  * @returns {number} binary number in BigInteger
  */
-export let parseBinaryStringToBigInteger = (num:string): bigInt.BigInteger => {
-    return bigInt(num, 2);
+export let parseBinaryStringToBigInt = (num:string): bigint => {
+    return BigInt(`0b${num}`);
 };
 
 /**
@@ -102,16 +101,16 @@ export let cidrPrefixToMaskBinaryString = (cidrPrefix: number, ipType: IPNumType
  * @param givenNumber the number to calculate log base 2
  * @return the log base 2 of given number
  */
-export let intLog2 = (givenNumber:bigInt.BigInteger): number => {
+export let intLog2 = (givenNumber: bigint): number => {
     let result = 0;
 
-    while (givenNumber.isEven()) {
-        if (givenNumber.equals(bigInt(2))) {
+    while (Number(givenNumber) % 2 === 0) {
+        if (givenNumber === 2n) {
             result++;
             break;
         }
-        givenNumber = givenNumber.shiftRight(bigInt(1));
-        if (givenNumber.isOdd()) {
+        givenNumber = givenNumber >> 1n;
+        if (Number(givenNumber) % 2 !== 0) {
             result = 0;
             break;
         }

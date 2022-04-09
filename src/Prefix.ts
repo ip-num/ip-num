@@ -1,19 +1,18 @@
 import {Validator} from "./Validator";
 import {IPv4, IPv4Mask, IPv6, IPv6Mask} from "./IPNumber";
-import {intLog2, parseBinaryStringToBigInteger} from "./BinaryUtils";
+import {intLog2, parseBinaryStringToBigInt} from "./BinaryUtils";
 import {IPNumType} from "./IPNumType";
 import {binaryStringToHexadecimalString} from "./HexadecimalUtils";
 import {Hexadecatet} from "./Hexadecatet";
-import * as bigInt from "big-integer";
 
 
 interface Prefix {
-    value: number;
-    getValue(): number;
+    value: bigint;
+    getValue(): bigint;
     merge(): Prefix;
     split(): Prefix;
     toString(): string;
-    toRangeSize(): bigInt.BigInteger
+    toRangeSize(): bigint
 }
 
 /**
@@ -26,11 +25,11 @@ interface Prefix {
  */
 class IPv4Prefix implements Prefix {
     type: "IPv4" = "IPv4"
-    private readonly bitValue: bigInt.BigInteger = bigInt(32);
+    private readonly bitValue: bigint = 32n;
     /**
      * The decimal value of the 8bit number representing the prefix
      */
-    value: number;
+    value: bigint;
 
     /**
      * Convenience method for constructing an instance of IPv4 prefix from a decimal number
@@ -38,13 +37,13 @@ class IPv4Prefix implements Prefix {
      * @param {number} rawValue the decimal value to construct the IPv4 prefix from.
      * @returns {IPv4Prefix} the instance of an IPv4 prefix
      */
-    static fromNumber(rawValue:number):IPv4Prefix {
+    static fromNumber(rawValue: bigint):IPv4Prefix {
         return new IPv4Prefix(rawValue);
     };
 
-    static fromRangeSize(rangeSize: bigInt.BigInteger) {
-        let prefixNumber = rangeSize.equals(bigInt.one) ? 32 : 32 - rangeSizeToPrefix(rangeSize, Validator.IPV4_SIZE);
-        return IPv4Prefix.fromNumber(prefixNumber)
+    static fromRangeSize(rangeSize: bigint) {
+        let prefixNumber = rangeSize === (1n) ? 32 : 32 - rangeSizeToPrefix(rangeSize, Validator.IPV4_SIZE);
+        return IPv4Prefix.fromNumber(BigInt(prefixNumber))
     };
 
     /**
@@ -53,7 +52,7 @@ class IPv4Prefix implements Prefix {
      * @param {number} rawValue the decimal value to construct the IPv4 prefix from.
      * @returns {IPv4Prefix} the instance of an IPv4 prefix
      */
-    constructor(rawValue: number) {
+    constructor(rawValue: bigint) {
         let isValid: boolean;
         let message: string[];
         [isValid, message] = Validator.isValidPrefixValue(rawValue, IPNumType.IPv4);
@@ -68,7 +67,7 @@ class IPv4Prefix implements Prefix {
      *
      * @returns {number} the decimal value of the IPv4 prefix
      */
-    public getValue(): number {
+    public getValue(): bigint {
         return this.value;
     }
 
@@ -88,8 +87,8 @@ class IPv4Prefix implements Prefix {
      * @returns {IPv4Mask} the mask representation of the prefix
      */
     public toMask(): IPv4Mask {
-        let onBits = '1'.repeat(this.value);
-        let offBits = '0'.repeat(32 - this.value);
+        let onBits = '1'.repeat(Number(this.value));
+        let offBits = '0'.repeat(Number(32n - this.value));
         return IPv4Mask.fromDecimalDottedString(this.toDecimalNotation(`${onBits}${offBits}`));
     }
 
@@ -98,14 +97,15 @@ class IPv4Prefix implements Prefix {
      *
      * @return {BigInteger} the size (number of IP numbers) of range of this prefix
      */
-    public toRangeSize(): bigInt.BigInteger {
+    public toRangeSize(): bigint {
         /**
          * Using bitwise shift operation this will be
          * 1 << (this.bitValue - this.prefix.getValue())
          * Since left shift a number by x is equivalent to multiplying the number by the power x raised to 2
          * 2 << 4 = 2 * (2 raised to 4)
          */
-        return bigInt(2).pow(this.bitValue.minus(bigInt(this.getValue())));
+        return BigInt(Math.pow(2, Number(this.bitValue - (this.getValue()))));
+        //return bigInt(2).pow(this.bitValue.minus(bigInt(this.getValue())));
     }
 
     /**
@@ -113,7 +113,7 @@ class IPv4Prefix implements Prefix {
      * with another prefix of the same size
      */
     merge(): IPv4Prefix {
-        return new IPv4Prefix(this.value - 1);
+        return new IPv4Prefix(this.value - 1n);
     }
 
     /**
@@ -121,11 +121,11 @@ class IPv4Prefix implements Prefix {
      * into two equal halves
      */
     split(): IPv4Prefix {
-        return new IPv4Prefix(this.value + 1);
+        return new IPv4Prefix(this.value + 1n);
     }
 
     private toDecimalNotation(bits:string): string {
-        return `${parseBinaryStringToBigInteger(bits.substr(0,8))}.${parseBinaryStringToBigInteger(bits.substr(8,8))}.${parseBinaryStringToBigInteger(bits.substr(16,8))}.${parseBinaryStringToBigInteger(bits.substr(24,8))}`
+        return `${parseBinaryStringToBigInt(bits.substr(0,8))}.${parseBinaryStringToBigInt(bits.substr(8,8))}.${parseBinaryStringToBigInt(bits.substr(16,8))}.${parseBinaryStringToBigInt(bits.substr(24,8))}`
     }
 }
 
@@ -139,11 +139,11 @@ class IPv4Prefix implements Prefix {
  */
 class IPv6Prefix implements Prefix {
     type: "IPv6" = "IPv6"
-    private readonly bitValue: bigInt.BigInteger = bigInt(128);
+    private readonly bitValue: bigint = 128n;
     /**
      * The decimal value of the 16bit number representing the prefix
      */
-    value: number;
+    value: bigint;
 
     /**
      * Convenience method for constructing an instance of IPv46 prefix from a decimal number
@@ -151,13 +151,13 @@ class IPv6Prefix implements Prefix {
      * @param {number} rawValue the decimal value to construct the IPv6 prefix from.
      * @returns {IPv4Prefix} the instance of an IPv6 prefix
      */
-    static fromNumber(rawValue:number):IPv6Prefix {
+    static fromNumber(rawValue: bigint):IPv6Prefix {
         return new IPv6Prefix(rawValue);
     };
 
-    static fromRangeSize(rangeSize: bigInt.BigInteger): IPv6Prefix {
-        let prefixNumber = rangeSize.equals(bigInt.one) ? 128 : 128 - rangeSizeToPrefix(rangeSize, Validator.IPV6_SIZE);
-        return IPv6Prefix.fromNumber(prefixNumber)
+    static fromRangeSize(rangeSize: bigint): IPv6Prefix {
+        let prefixNumber = rangeSize === (1n) ? 128 : 128 - rangeSizeToPrefix(rangeSize, Validator.IPV6_SIZE);
+        return IPv6Prefix.fromNumber(BigInt(prefixNumber))
     }
 
     /**
@@ -166,7 +166,7 @@ class IPv6Prefix implements Prefix {
      * @param {number} rawValue the decimal value to construct the IPv6 prefix from.
      * @returns {IPv4Prefix} the instance of an IPv6 prefix
      */
-    constructor(rawValue: number) {
+    constructor(rawValue: bigint) {
         let isValid: boolean;
         let message: string[];
         [isValid, message] = Validator.isValidPrefixValue(rawValue, IPNumType.IPv6);
@@ -181,7 +181,7 @@ class IPv6Prefix implements Prefix {
      *
      * @returns {number} the decimal value of the IPv6 prefix
      */
-    public getValue(): number {
+    public getValue(): bigint {
         return this.value;
     }
 
@@ -201,8 +201,8 @@ class IPv6Prefix implements Prefix {
      * @returns {IPv6Mask} the mask representation of the prefix
      */
     public toMask(): IPv6Mask {
-        let onBits = '1'.repeat(this.value);
-        let offBits = '0'.repeat(128 - this.value);
+        let onBits = '1'.repeat(Number(this.value));
+        let offBits = '0'.repeat(128 - Number(this.value));
         return IPv6Mask.fromHexadecimalString(this.toHexadecatetNotation(`${onBits}${offBits}`));
     }
 
@@ -211,14 +211,15 @@ class IPv6Prefix implements Prefix {
      *
      * @return {BigInteger} the size (number of IP numbers) of range of this prefix
      */
-    public toRangeSize(): bigInt.BigInteger {
+    public toRangeSize(): bigint {
         /**
          * Using bitwise shift operation this will be
          * 1 << (this.bitValue - this.prefix.getValue())
          * Since left shift a number by x is equivalent to multiplying the number by the power x raised to 2
          * 2 << 4 = 2 * (2 raised to 4)
          */
-        return bigInt(2).pow(this.bitValue.minus(bigInt(this.getValue())));
+        return BigInt(Math.pow(2, Number(this.bitValue - (this.getValue()))));
+        //return bigInt(2).pow(this.bitValue - (this.getValue()));
     }
 
     /**
@@ -226,7 +227,7 @@ class IPv6Prefix implements Prefix {
      * with another prefix of the same size
      */
     merge(): IPv6Prefix {
-        return new IPv6Prefix(this.value - 1);
+        return new IPv6Prefix(this.value - 1n);
     }
 
     /**
@@ -234,7 +235,7 @@ class IPv6Prefix implements Prefix {
      * into two equal halves
      */
     split(): IPv6Prefix {
-        return new IPv6Prefix(this.value + 1);
+        return new IPv6Prefix(this.value + 1n);
     }
 
     private toHexadecatetNotation(bits:string): string {
@@ -246,10 +247,10 @@ class IPv6Prefix implements Prefix {
     }
 }
 
-function rangeSizeToPrefix(rangeSize: bigInt.BigInteger,
-                           rangeMaxSize:bigInt.BigInteger): number {
-    let ipType = rangeMaxSize.greater(Validator.IPV4_SIZE) ? "IPv6" : "IPv4";
-    if (rangeSize.greater(rangeMaxSize) || rangeSize.equals(bigInt(0))) {
+function rangeSizeToPrefix(rangeSize: bigint,
+                           rangeMaxSize: bigint): number {
+    let ipType = rangeMaxSize > (Validator.IPV4_SIZE) ? "IPv6" : "IPv4";
+    if (rangeSize > (rangeMaxSize) || rangeSize === (0n)) {
         throw new Error(Validator.invalidIPRangeSizeMessage.replace("$iptype", ipType));
     }
 

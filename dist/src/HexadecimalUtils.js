@@ -1,15 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.hexadectetNotationToBinaryString = exports.binaryStringToHexadecimalString = exports.colonHexadecimalNotationToBinaryString = exports.hexadecimalStringToHexadecatetString = exports.hexadecimalStringToBinaryString = exports.bigIntegerNumberToHexadecimalString = void 0;
-var bigInt = require("big-integer/BigInteger");
-var IPv6Utils_1 = require("./IPv6Utils");
-var BinaryUtils_1 = require("./BinaryUtils");
+const bigInt = require("big-integer/BigInteger");
+const IPv6Utils_1 = require("./IPv6Utils");
+const BinaryUtils_1 = require("./BinaryUtils");
 /**
  * Converts a given BigInteger number to a hexadecimal string
  * @param num the BigInteger number
  * @returns {string} the hexadeciaml string
  */
-exports.bigIntegerNumberToHexadecimalString = function (num) {
+exports.bigIntegerNumberToHexadecimalString = (num) => {
     return num.toString(16);
 };
 /**
@@ -17,8 +17,8 @@ exports.bigIntegerNumberToHexadecimalString = function (num) {
  * @param {string} hexadecimalString the number in base 16
  * @returns {string} the number converted to base 2
  */
-exports.hexadecimalStringToBinaryString = function (hexadecimalString) {
-    var inDecimal = bigInt(hexadecimalString, 16);
+exports.hexadecimalStringToBinaryString = (hexadecimalString) => {
+    let inDecimal = bigInt(hexadecimalString, 16);
     return inDecimal.toString(2);
 };
 /**
@@ -27,9 +27,9 @@ exports.hexadecimalStringToBinaryString = function (hexadecimalString) {
  *
  * @param hexadecimalString {string} the number converted to binary hexadecatet string
  */
-exports.hexadecimalStringToHexadecatetString = function (hexadecimalString) {
-    var binaryString = exports.hexadecimalStringToBinaryString(hexadecimalString);
-    var length = binaryString.length;
+exports.hexadecimalStringToHexadecatetString = (hexadecimalString) => {
+    let binaryString = exports.hexadecimalStringToBinaryString(hexadecimalString);
+    let length = binaryString.length;
     if (length > 16) {
         throw new Error("Given decimal in binary contains digits greater than an Hexadecatet");
     }
@@ -42,10 +42,10 @@ exports.hexadecimalStringToHexadecatetString = function (hexadecimalString) {
  * @param hexadecimalString IPv6 string
  * @returns {string} the binary value of the given ipv6 number in string
  */
-exports.colonHexadecimalNotationToBinaryString = function (hexadecimalString) {
-    var expandedIPv6 = IPv6Utils_1.expandIPv6Number(hexadecimalString);
-    var stringHexadecimal = expandedIPv6.split(":");
-    return stringHexadecimal.reduce(function (binaryAsString, hexidecimal) {
+exports.colonHexadecimalNotationToBinaryString = (hexadecimalString) => {
+    let expandedIPv6 = IPv6Utils_1.expandIPv6Number(hexadecimalString);
+    let stringHexadecimal = expandedIPv6.split(":");
+    return stringHexadecimal.reduce((binaryAsString, hexidecimal) => {
         return binaryAsString.concat(exports.hexadecimalStringToHexadecatetString(hexidecimal));
     }, '');
 };
@@ -54,9 +54,9 @@ exports.colonHexadecimalNotationToBinaryString = function (hexadecimalString) {
  * @param {string} num in binary string
  * @returns {string} num in hexadecimal string
  */
-exports.binaryStringToHexadecimalString = function (num) {
+exports.binaryStringToHexadecimalString = (num) => {
     // first convert to binary string to decimal (big Integer)
-    var inDecimal = bigInt(num, 2);
+    let inDecimal = bigInt(num, 2);
     return inDecimal.toString(16);
 };
 /**
@@ -64,10 +64,10 @@ exports.binaryStringToHexadecimalString = function (num) {
  * @param {string} hexadectetString the IPv6 number
  * @returns {string} the IPv6 number converted to binary string
  */
-exports.hexadectetNotationToBinaryString = function (hexadectetString) {
-    var expand = IPv6Utils_1.expandIPv6Number(hexadectetString);
-    var hexadecimals = expand.split(":");
-    return hexadecimals.reduce(function (hexadecimalAsString, hexavalue) {
+exports.hexadectetNotationToBinaryString = (hexadectetString) => {
+    let expand = IPv6Utils_1.expandIPv6Number(hexadectetString);
+    let hexadecimals = expand.split(":");
+    return hexadecimals.reduce((hexadecimalAsString, hexavalue) => {
         return hexadecimalAsString.concat(BinaryUtils_1.leftPadWithZeroBit(exports.hexadecimalStringToBinaryString(hexavalue), 16));
     }, '');
 };

@@ -1,12 +1,11 @@
 import {IPv4, IPv4CidrRange, IPv4Prefix, IPv6, IPv6CidrRange, IPv6Prefix, RangedSet} from "../src";
-import bigInt = require("big-integer");
 
 
 describe('RangedSet: ', () => {
 
     it("create from single IPv4", () => {
         let singleton = RangedSet.fromSingleIP(new IPv4("0.0.0.254"));
-        expect(singleton.getSize().valueOf()).toBe(1);
+        expect(singleton.getSize().valueOf()).toBe(1n);
         expect(singleton.getFirst().toString()).toBe("0.0.0.254");
         expect(singleton.getLast().toString()).toBe("0.0.0.254");
     });
@@ -69,7 +68,7 @@ describe('RangedSet: ', () => {
 
     it("create from single IPv6", () => {
         let singleton = RangedSet.fromSingleIP(new IPv6("2001:db8:0:ffff:ffff:ffff:ffff:ffff"));
-        expect(singleton.getSize().valueOf()).toBe(1);
+        expect(singleton.getSize().valueOf()).toBe(1n);
         expect(singleton.getFirst().toString()).toBe("2001:db8:0:ffff:ffff:ffff:ffff:ffff");
         expect(singleton.getLast().toString()).toBe("2001:db8:0:ffff:ffff:ffff:ffff:ffff");
     });
@@ -107,14 +106,14 @@ describe('RangedSet: ', () => {
     it("fromCidr static constructor for IPv4", () => {
         let range = RangedSet
             .fromCidrRange(
-                new IPv4CidrRange(IPv4.fromDecimalDottedString("127.0.0.0"), IPv4Prefix.fromNumber(24))
+                new IPv4CidrRange(IPv4.fromDecimalDottedString("127.0.0.0"), IPv4Prefix.fromNumber(24n))
             );
         expect(range.getFirst().toString()).toBe("127.0.0.0");
         expect(range.getLast().toString()).toBe("127.0.0.255");
     });
 
     it("fromCidr static constructor for IPv6", () => {
-        let ipv6CidrRange = new IPv6CidrRange(new IPv6("2001:db8::"), new IPv6Prefix(48));
+        let ipv6CidrRange = new IPv6CidrRange(new IPv6("2001:db8::"), new IPv6Prefix(48n));
         let range = RangedSet
             .fromCidrRange(ipv6CidrRange);
 
@@ -321,7 +320,7 @@ describe('RangedSet: ', () => {
                 );
 
                 expect(()=>{
-                    let subRange = originalRange.takeSubRange(bigInt.zero, bigInt(0));
+                    let subRange = originalRange.takeSubRange(0n, BigInt(0));
                 }).toThrowError(Error, "Sub range cannot be zero");
             });
 
@@ -331,7 +330,7 @@ describe('RangedSet: ', () => {
                     IPv4.fromDecimalDottedString("127.0.0.255")
                 );
 
-                let subRange = originalRange.takeSubRange(bigInt.zero, bigInt(256));
+                let subRange = originalRange.takeSubRange(0n, BigInt(256));
                 expect(subRange.toRangeString()).toEqual("127.0.0.0-127.0.0.255");
             });
             it("should pick whole range with offset 1", () => {
@@ -340,7 +339,7 @@ describe('RangedSet: ', () => {
                     IPv4.fromDecimalDottedString("127.0.0.255")
                 );
 
-                let subRange = originalRange.takeSubRange(bigInt.one, bigInt(255));
+                let subRange = originalRange.takeSubRange(1n, BigInt(255));
                 expect(subRange.toRangeString()).toEqual("127.0.0.1-127.0.0.255");
             });
             it("should throw an exception if size is larger than range", () => {
@@ -350,7 +349,7 @@ describe('RangedSet: ', () => {
                 );
 
                 expect(()=>{
-                    let subRange = originalRange.takeSubRange(bigInt.zero, bigInt(257));
+                    let subRange = originalRange.takeSubRange(0n, BigInt(257));
                 }).toThrowError(Error, "Requested range is greater than what can be taken");
             });
 
@@ -361,7 +360,7 @@ describe('RangedSet: ', () => {
                 );
 
                 expect(()=>{
-                    let subRange = originalRange.takeSubRange(bigInt(4), bigInt(256));
+                    let subRange = originalRange.takeSubRange(BigInt(4), BigInt(256));
                 }).toThrowError(Error, "Requested range is greater than what can be taken");
             });
 
@@ -376,7 +375,7 @@ describe('RangedSet: ', () => {
                 );
 
                 expect(()=>{
-                    let subRange = originalRange.takeSubRange(bigInt.zero, bigInt(0));
+                    let subRange = originalRange.takeSubRange(0n, BigInt(0));
                 }).toThrowError(Error, "Sub range cannot be zero");
             });
 
@@ -386,7 +385,7 @@ describe('RangedSet: ', () => {
                     IPv6.fromHexadecimalString("2001:dff:ffff:ffff:ffff:ffff:ffff:ffff")
                 );
 
-                let subRange = originalRange.takeSubRange(bigInt.zero, bigInt("20282409603651670423947251286016"));
+                let subRange = originalRange.takeSubRange(0n, BigInt("20282409603651670423947251286016"));
                 expect(subRange.toRangeString()).toEqual("2001:d00:0:0:0:0:0:0-2001:dff:ffff:ffff:ffff:ffff:ffff:ffff");
             });
             it("should pick whole range with offset 1", () => {
@@ -395,7 +394,7 @@ describe('RangedSet: ', () => {
                     IPv6.fromHexadecimalString("2001:dff:ffff:ffff:ffff:ffff:ffff:ffff")
                 );
 
-                let subRange = originalRange.takeSubRange(bigInt.one, bigInt("20282409603651670423947251286015"));
+                let subRange = originalRange.takeSubRange(1n, BigInt("20282409603651670423947251286015"));
                 expect(subRange.toRangeString()).toEqual("2001:d00:0:0:0:0:0:1-2001:dff:ffff:ffff:ffff:ffff:ffff:ffff");
             });
             it("should throw an exception if size is larger than range", () => {
@@ -405,7 +404,7 @@ describe('RangedSet: ', () => {
                 );
 
                 expect(()=>{
-                    let subRange = originalRange.takeSubRange(bigInt.zero, bigInt("20282409603651670423947251286018"));
+                    let subRange = originalRange.takeSubRange(0n, BigInt("20282409603651670423947251286018"));
                 }).toThrowError(Error, "Requested range is greater than what can be taken");
             });
 
@@ -416,7 +415,7 @@ describe('RangedSet: ', () => {
                 );
 
                 expect(()=>{
-                    let subRange = originalRange.takeSubRange(bigInt("20282409603651670423947251286018"), bigInt("20282409603651670423947251286018"));
+                    let subRange = originalRange.takeSubRange(BigInt("20282409603651670423947251286018"), BigInt("20282409603651670423947251286018"));
                 }).toThrowError(Error, "Requested range is greater than what can be taken");
             });
         });

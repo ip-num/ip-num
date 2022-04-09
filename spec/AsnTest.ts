@@ -2,24 +2,23 @@
  * Created by daderemi on 31/07/16.
  */
 
-import {Asn} from "../src/IPNumber";
-import {Validator} from "../src/Validator";
+import {Asn} from "../src";
+import {Validator} from "../src";
 
-import * as bigInt from "big-integer"
 
 describe('ASN', () => {
     it('should instantiate by passing number to static method', () => {
-        expect(Asn.fromNumber(1234).getValue()).toEqual(bigInt(1234));
+        expect(Asn.fromNumber(1234).getValue()).toEqual(1234n);
     });
     it('should instantiate by passing well string prefixed with AS to static', () => {
-        expect(Asn.fromString("AS1234").getValue()).toEqual(bigInt(1234));
+        expect(Asn.fromString("AS1234").getValue()).toEqual(1234n);
     });
     it('should instantiate by passing AS in asdot+ format', () => {
-        expect(Asn.fromString("1.10").getValue()).toEqual(bigInt(65546));
-        expect(Asn.fromString("0.65526").getValue()).toEqual(bigInt(65526));
+        expect(Asn.fromString("1.10").getValue()).toEqual(65546n);
+        expect(Asn.fromString("0.65526").getValue()).toEqual(65526n);
     });
     it('should instantiate by passing a number in string to fromString', () => {
-        expect(Asn.fromString("1234").getValue()).toEqual(bigInt(1234));
+        expect(Asn.fromString("1234").getValue()).toEqual(1234n);
     });
     it('should instantiate by passing valid binary string to fromBinaryString', () => {
         let maxValue = (Math.pow(2, 32) - 1);

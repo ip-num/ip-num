@@ -1,9 +1,8 @@
 import {Octet} from "./Octet";
 import {Validator} from "./Validator";
-import * as bigInt from "big-integer"
 import {dottedDecimalNotationToBinaryString} from "./BinaryUtils";
-import {bigIntegerNumberToBinaryString} from "./BinaryUtils";
-import {parseBinaryStringToBigInteger} from "./BinaryUtils";
+import {bigIntToBinaryString} from "./BinaryUtils";
+import {parseBinaryStringToBigInt} from "./BinaryUtils";
 import {leftPadWithZeroBit} from "./BinaryUtils";
 import {IPNumType} from "./IPNumType";
 import {decimalNumberToBinaryString} from "./BinaryUtils";
@@ -21,7 +20,7 @@ export abstract class AbstractIPNum {
     /**
      * The decimal value represented by the IP number in BigInteger
      */
-    abstract readonly value: bigInt.BigInteger;
+    abstract readonly value: bigint;
     /**
      * The number of bits needed to represents the value of the IP number
      */
@@ -29,7 +28,7 @@ export abstract class AbstractIPNum {
     /**
      * The maximum bit size (i.e. binary value) of the IP number in BigInteger
      */
-    abstract readonly maximumBitSize: bigInt.BigInteger;
+    abstract readonly maximumBitSize: bigint;
 
     abstract nextIPNumber(): AbstractIPNum;
     abstract previousIPNumber(): AbstractIPNum;
@@ -39,7 +38,7 @@ export abstract class AbstractIPNum {
      *
      * @returns {bigInt.BigInteger} the numeric value of an IP number.
      */
-    public getValue():bigInt.BigInteger {
+    public getValue(): bigint {
         return this.value;
     }
 
@@ -56,8 +55,8 @@ export abstract class AbstractIPNum {
      * Checks if an IP number has a value greater than the present value
      * @returns {boolean} true, if there is a value greater than the present value. Returns false otherwise.
      */
-    hasNext():boolean {
-        return this.value.lesser(this.maximumBitSize);
+    hasNext(): boolean {
+        return this.value < this.maximumBitSize;
     }
 
     /**
@@ -65,7 +64,7 @@ export abstract class AbstractIPNum {
      * @returns {boolean} true, if there is a value lesser than the present value. Returns false otherwise.
      */
     hasPrevious():boolean {
-        return this.value.greater(bigInt.zero);
+        return this.value > 0n;
     }
 
     /**
@@ -75,7 +74,7 @@ export abstract class AbstractIPNum {
      * @returns {boolean} true if the given IP number is equals
      */
     public isEquals(anotherIPNum: AbstractIPNum): boolean {
-        return this.value.equals(anotherIPNum.value);
+        return this.value === anotherIPNum.value;
     }
 
     /**
@@ -85,7 +84,7 @@ export abstract class AbstractIPNum {
      * @returns {boolean} true if the given IP number is less than this current one. False otherwise.
      */
     public isLessThan(anotherIPNum: AbstractIPNum): boolean {
-        return this.value.lt(anotherIPNum.value);
+        return this.value < anotherIPNum.value;
     }
 
     /**
@@ -95,7 +94,7 @@ export abstract class AbstractIPNum {
      * @returns {boolean} true if the given IP number is greater than this current one. False otherwise.
      */
     public isGreaterThan(anotherIPNum: AbstractIPNum): boolean {
-        return this.value.gt(anotherIPNum.value);
+        return this.value > anotherIPNum.value;
     }
 
     /**
@@ -105,7 +104,7 @@ export abstract class AbstractIPNum {
      * @returns {boolean} true if the given IP number is less than or equals to this current one. False otherwise.
      */
     public isLessThanOrEquals(anotherIPNum: AbstractIPNum): boolean {
-        return this.value.lesserOrEquals(anotherIPNum.value);
+        return this.value <= anotherIPNum.value;
     }
 
     /**
@@ -116,7 +115,7 @@ export abstract class AbstractIPNum {
      * otherwise.
      */
     public isGreaterThanOrEquals(anotherIPNum: AbstractIPNum): boolean {
-        return this.value.greaterOrEquals(anotherIPNum.value);
+        return this.value >= anotherIPNum.value;
     }
 }
 
@@ -131,7 +130,7 @@ export class IPv4 extends AbstractIPNum {
     /**
      * The decimal value represented by the IPv4 number in BigInteger
      */
-    readonly value: bigInt.BigInteger;
+    readonly value: bigint;
     /**
      * The number of bits needed to represents the value of the IPv4 number
      */
@@ -140,7 +139,7 @@ export class IPv4 extends AbstractIPNum {
     /**
      * The maximum bit size (i.e. binary value) of the IPv4 number in BigInteger
      */
-    readonly maximumBitSize: bigInt.BigInteger = Validator.THIRTY_TWO_BIT_SIZE;
+    readonly maximumBitSize: bigint = Validator.THIRTY_TWO_BIT_SIZE;
     /**
      * The type of IP number. Value is one of the values of the {@link IPNumType} enum
      * @type {IPNumType} the type of IP number
@@ -166,7 +165,7 @@ export class IPv4 extends AbstractIPNum {
      * @param {bigInt.BigInteger} bigIntValue the decimal value of the IP number in BigInteger
      * @returns {IPv4} the IPv4 instance
      */
-    static fromBigInteger(bigIntValue: bigInt.BigInteger): IPv4 {
+    static fromBigInt(bigIntValue: bigint): IPv4 {
         return new IPv4(bigIntValue);
     }
 
@@ -202,7 +201,7 @@ export class IPv4 extends AbstractIPNum {
     static fromBinaryString(ipBinaryString: string) : IPv4 {
         let validationResult = Validator.isValidBinaryString(ipBinaryString);
         if (validationResult[0]) {
-            return new IPv4(parseBinaryStringToBigInteger(ipBinaryString));
+            return new IPv4(parseBinaryStringToBigInt(ipBinaryString));
         } else {
             throw Error(validationResult[1].join(','))
         }
@@ -214,14 +213,14 @@ export class IPv4 extends AbstractIPNum {
      * @param {string | bigInt.BigInteger} ipValue value to construct an IPv4 from. The given value can either be
      * numeric or string. If a string is given then it needs to be in dot-decimal notation
      */
-    constructor(ipValue: string | bigInt.BigInteger) {
+    constructor(ipValue: string | bigint) {
         super();
         if (typeof ipValue === "string" ) {
             let [value, octets] = this.constructFromDecimalDottedString(ipValue);
             this.value = value;
             this.octets = octets
         } else {
-            let [value, octets] = this.constructFromBigIntegerValue(ipValue);
+            let [value, octets] = this.constructFromBigIntValue(ipValue);
             this.value = value;
             this.octets = octets;
         }
@@ -251,7 +250,7 @@ export class IPv4 extends AbstractIPNum {
      * @returns {IPv4} the next IPv4 number
      */
     public nextIPNumber(): IPv4 {
-        return IPv4.fromBigInteger(this.getValue().add(1))
+        return IPv4.fromBigInt(this.getValue() + 1n)
     }
 
     /**
@@ -260,7 +259,7 @@ export class IPv4 extends AbstractIPNum {
      * @returns {IPv4} the previous IPv4 number
      */
     public previousIPNumber(): IPv4 {
-        return IPv4.fromBigInteger(this.getValue().minus(1))
+        return IPv4.fromBigInt(this.getValue() - 1n)
     }
 
     /**
@@ -278,7 +277,7 @@ export class IPv4 extends AbstractIPNum {
     }
 
 
-    private constructFromDecimalDottedString(ipString: string): [bigInt.BigInteger, Array<Octet>] {
+    private constructFromDecimalDottedString(ipString: string): [bigint, Array<Octet>] {
         let octets;
         let value;
         let [isValid, message] = Validator.isValidIPv4String(ipString);
@@ -289,16 +288,16 @@ export class IPv4 extends AbstractIPNum {
         octets = stringOctets.map((rawOctet) => {
             return Octet.fromString(rawOctet)
         });
-        value = bigInt(dottedDecimalNotationToBinaryString(ipString), 2);
+        value = BigInt(`0b${dottedDecimalNotationToBinaryString(ipString)}`);
         return [value, octets]
     }
 
-    private constructFromBigIntegerValue(ipv4Number: bigInt.BigInteger): [bigInt.BigInteger, Array<Octet>]  {
+    private constructFromBigIntValue(ipv4Number: bigint): [bigint, Array<Octet>]  {
         let [isValid, message] = Validator.isValidIPv4Number(ipv4Number);
         if (!isValid) {
             throw new Error(message.filter(msg => {return msg !== '';}).toString());
         }
-        let binaryString = bigIntegerNumberToBinaryString(ipv4Number);
+        let binaryString = bigIntToBinaryString(ipv4Number);
         return [ipv4Number, this.binaryStringToDecimalOctets(binaryString)]
     }
 
@@ -308,7 +307,7 @@ export class IPv4 extends AbstractIPNum {
         }
         let octets: string[] = ipv4BinaryString.match(/.{1,8}/g)!;
         return octets.map((octet) => {
-            return Octet.fromString(parseBinaryStringToBigInteger(octet).toString())
+            return Octet.fromString(parseBinaryStringToBigInt(octet).toString())
         });
     }
 }
@@ -327,7 +326,7 @@ export class Asn extends AbstractIPNum {
     /**
      * The decimal value represented by the ASN number in BigInteger
      */
-    readonly value:bigInt.BigInteger;
+    readonly value: bigint;
     /**
      * The number of bits needed to represents the value of the ASN number
      */
@@ -335,7 +334,7 @@ export class Asn extends AbstractIPNum {
     /**
      * The maximum bit size (i.e. binary value) of the ASN number in BigInteger
      */
-    maximumBitSize: bigInt.BigInteger = Validator.THIRTY_TWO_BIT_SIZE;
+    maximumBitSize: bigint = Validator.THIRTY_TWO_BIT_SIZE;
 
     type: IPNumType = IPNumType.ASN;
     private static AS_PREFIX = "AS";
@@ -360,7 +359,7 @@ export class Asn extends AbstractIPNum {
      * @param {number} rawValue the asn numeric value
      * @returns {Asn} the constructed ASN instance
      */
-    static fromNumber(rawValue:number):Asn {
+    static fromNumber(rawValue:number): Asn {
         return new Asn(rawValue);
     };
 
@@ -385,18 +384,18 @@ export class Asn extends AbstractIPNum {
      * @param {string | number} rawValue value to construct an ASN from. The given value can either be numeric or
      * string. If in string then it can be in asplain, asdot or asdot+ string representation format
      */
-    constructor(rawValue:string | number) {
+    constructor(rawValue:string | number | bigint) {
         super();
         if (typeof rawValue === 'string') {
             if (Asn.startWithASprefix(rawValue)) {
-                this.value = bigInt(parseInt(rawValue.substring(2)));
+                this.value = BigInt(parseInt(rawValue.substring(2)));
             } else if(rawValue.indexOf(".") != -1) {
-                this.value = bigInt(this.parseFromDotNotation(rawValue));
+                this.value = BigInt(this.parseFromDotNotation(rawValue));
             } else {
-                this.value = bigInt(parseInt(rawValue));
+                this.value = BigInt(parseInt(rawValue));
             }
         } else {
-            let valueAsBigInt = bigInt(rawValue);
+            let valueAsBigInt = BigInt(rawValue);
             let [isValid, message] = Validator.isValidAsnNumber(valueAsBigInt);
             if (!isValid) {
                 throw Error(message.filter(msg => {return msg !== '';}).toString());
@@ -448,8 +447,8 @@ export class Asn extends AbstractIPNum {
      *
      */
     toASDotPlus():string {
-        let high = Math.floor(this.value.valueOf() / 65535);
-        let low = (this.value.valueOf() % 65535) - high;
+        let high = this.value.valueOf() / 65535n;
+        let low = (this.value.valueOf() % 65535n) - high;
         return `${high}.${low}`;
     }
 
@@ -459,7 +458,7 @@ export class Asn extends AbstractIPNum {
      * @returns {string} a binary string representation of the value of the ASN number
      */
     toBinaryString():string {
-        return decimalNumberToBinaryString(this.value.valueOf());
+        return decimalNumberToBinaryString(Number(this.value));
     }
 
     /**
@@ -487,7 +486,7 @@ export class Asn extends AbstractIPNum {
      * @returns {AbstractIPNum} the next ASN number
      */
     nextIPNumber(): AbstractIPNum {
-        return new Asn(this.value.valueOf() + 1);
+        return new Asn(this.value.valueOf() + 1n);
     }
 
     /**
@@ -496,7 +495,7 @@ export class Asn extends AbstractIPNum {
      * @returns {AbstractIPNum} the previous ASN number
      */
     previousIPNumber(): Asn {
-        return new Asn(this.value.valueOf() - 1)
+        return new Asn(this.value.valueOf() - 1n)
     }
 
     private static startWithASprefix(word:string):boolean {
@@ -523,7 +522,7 @@ export class IPv6 extends AbstractIPNum {
     /**
      * The decimal value represented by the IPv6 number in BigInteger
      */
-    readonly value: bigInt.BigInteger;
+    readonly value: bigint;
     /**
      * The number of bits needed to represents the value of the IPv6 number
      */
@@ -531,7 +530,7 @@ export class IPv6 extends AbstractIPNum {
     /**
      * The maximum bit size (i.e. binary value) of the IPv6 number in BigInteger
      */
-    readonly maximumBitSize: bigInt.BigInteger = Validator.ONE_HUNDRED_AND_TWENTY_EIGHT_BIT_SIZE;
+    readonly maximumBitSize: bigint = Validator.ONE_HUNDRED_AND_TWENTY_EIGHT_BIT_SIZE;
     /**
      * The type of IP number. Value is one of the values of the {@link IPNumType} enum
      * @type {IPNumType} the type of IP number
@@ -557,7 +556,7 @@ export class IPv6 extends AbstractIPNum {
      * @param {bigInt.BigInteger} bigIntValue the decimal value of the IP number in BigInteger
      * @returns {IPv6} the IPv6 instance
      */
-    static fromBigInteger(bigIntValue: bigInt.BigInteger): IPv6 {
+    static fromBigInteger(bigIntValue: bigint): IPv6 {
         return new IPv6(bigIntValue);
     }
 
@@ -594,7 +593,7 @@ export class IPv6 extends AbstractIPNum {
         let validationResult = Validator.isValidBinaryString(ipBinaryString);
         if (validationResult[0]) {
             let paddedBinaryString = leftPadWithZeroBit(ipBinaryString, 128);
-            return new IPv6(parseBinaryStringToBigInteger(paddedBinaryString));
+            return new IPv6(parseBinaryStringToBigInt(paddedBinaryString));
         } else {
             throw Error(validationResult[1].join(','))
         }
@@ -627,7 +626,7 @@ export class IPv6 extends AbstractIPNum {
      * @param {string | bigInt.BigInteger} ipValue value to construct an IPv6 from. The given value can either be
      * numeric or string. If a string is given then it needs to be in hexadecatet string notation
      */
-    constructor(ipValue: string | bigInt.BigInteger) {
+    constructor(ipValue: string | bigint) {
         super();
         if (typeof ipValue === "string" ) {
             let expandedIPv6 = expandIPv6Number(ipValue);
@@ -636,7 +635,7 @@ export class IPv6 extends AbstractIPNum {
             this.hexadecatet = hexadecatet;
 
         } else {
-            let [value, hexadecatet] = this.constructFromBigIntegerValue(ipValue);
+            let [value, hexadecatet] = this.constructFromBigIntValue(ipValue);
             this.value = value;
             this.hexadecatet = hexadecatet;
         }
@@ -672,7 +671,7 @@ export class IPv6 extends AbstractIPNum {
      * @returns {IPv6} the next IPv6 number
      */
     public nextIPNumber(): IPv6 {
-        return IPv6.fromBigInteger(this.getValue().add(1))
+        return IPv6.fromBigInteger(this.getValue() + 1n)
     }
 
     /**
@@ -681,20 +680,20 @@ export class IPv6 extends AbstractIPNum {
      * @returns {IPv6} the previous IPv6 number
      */
     public previousIPNumber(): IPv6 {
-        return IPv6.fromBigInteger(this.getValue().minus(1))
+        return IPv6.fromBigInteger(this.getValue() - 1n)
     }
 
-    private constructFromBigIntegerValue(ipv6Number: bigInt.BigInteger): [bigInt.BigInteger, Array<Hexadecatet>]  {
+    private constructFromBigIntValue(ipv6Number: bigint): [bigint, Array<Hexadecatet>]  {
         let [isValid, message] = Validator.isValidIPv6Number(ipv6Number);
         if (!isValid) {
             throw new Error(message.filter(msg => {return msg !== '';}).toString());
         }
 
-        let binaryString = bigIntegerNumberToBinaryString(ipv6Number);
+        let binaryString = bigIntToBinaryString(ipv6Number);
         return [ipv6Number, this.binaryStringToHexadecatets(binaryString)]
     }
 
-    private constructFromHexadecimalDottedString(expandedIPv6: string): [bigInt.BigInteger, Array<Hexadecatet>] {
+    private constructFromHexadecimalDottedString(expandedIPv6: string): [bigint, Array<Hexadecatet>] {
         let [isValid, message] = Validator.isValidIPv6String(expandedIPv6);
         if (!isValid) {
             throw new Error(message.filter(msg => {return msg !== '';}).toString());
@@ -704,7 +703,7 @@ export class IPv6 extends AbstractIPNum {
         let hexadecatet: Hexadecatet[]  = stringHexadecimals.map((stringHexadecatet) => {
             return Hexadecatet.fromString(stringHexadecatet);
         });
-        let value = bigInt(hexadectetNotationToBinaryString(expandedIPv6), 2);
+        let value = BigInt(`0b${hexadectetNotationToBinaryString(expandedIPv6)}`);
         return [value, hexadecatet];
     }
 
@@ -736,7 +735,7 @@ export class IPv4Mask extends IPv4 {
     /**
      * The decimal value represented by the IPv4 mask in BigInteger
      */
-    readonly value: bigInt.BigInteger;
+    readonly value: bigint;
 
     /**
      * The cidr prefix represented by this mask
@@ -777,7 +776,7 @@ export class IPv4Mask extends IPv4 {
 
         let binaryString = dottedDecimalNotationToBinaryString(ipString);
         this.prefix  = (binaryString.match(/1/g) || []).length;
-        this.value = bigInt(binaryString, 2);
+        this.value = BigInt(`0b${binaryString}`);
     }
 }
 
@@ -798,7 +797,7 @@ export class IPv6Mask extends IPv6 {
     /**
      * The decimal value represented by the IPv6 number in BigInteger
      */
-    readonly value: bigInt.BigInteger;
+    readonly value: bigint;
 
 
     /**
@@ -840,9 +839,9 @@ export class IPv6Mask extends IPv6 {
 
         let binaryString = hexadectetNotationToBinaryString(ipString);
         this.prefix  = (binaryString.match(/1/g) || []).length;
-        this.value = bigInt(binaryString, 2);
+        this.value = BigInt(`0b${binaryString}`);
 
-        this.value = bigInt(hexadectetNotationToBinaryString(ipString), 2);
+        this.value = BigInt(`0b${hexadectetNotationToBinaryString(ipString)}`);
     }
 }
 

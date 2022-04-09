@@ -1,8 +1,8 @@
-import {IPv4Mask} from "../src/IPNumber";
-import {Validator} from "../src/Validator";
-import {IPv4} from "../src/IPNumber";
-import {IPv6Mask} from "../src/IPNumber";
-import {IPv6} from "../src/IPNumber";
+import {IPv4Mask} from "../src";
+import {Validator} from "../src";
+import {IPv4} from "../src";
+import {IPv6Mask} from "../src";
+import {IPv6} from "../src";
 
 describe('mask test', function() {
     it('should create an instance of IPv4 mask using fromDecimalDottedString', () => {

@@ -1,10 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.collapseIPv6Number = exports.expandIPv6Number = void 0;
-var BinaryUtils_1 = require("./BinaryUtils");
-var Validator_1 = require("./Validator");
-var extractPrefix = function (ipv6String) {
-    return ipv6String.includes("/") ? "/" + ipv6String.split("/")[1] : "";
+const BinaryUtils_1 = require("./BinaryUtils");
+const Validator_1 = require("./Validator");
+let extractPrefix = (ipv6String) => {
+    return ipv6String.includes("/") ? `/${ipv6String.split("/")[1]}` : "";
 };
 /**
  * Expands an IPv6 number in abbreviated format into its full form
@@ -14,49 +14,49 @@ var extractPrefix = function (ipv6String) {
  * @param {string} ipv6String the abbreviated IPv6 address to expand
  * @returns {string} the expanded IPv6 address
  */
-exports.expandIPv6Number = function (ipv6String) {
-    var expandWithZero = function (hexadecimalArray) {
-        var paddedArray = hexadecimalArray.map(function (hexadecimal) {
+exports.expandIPv6Number = (ipv6String) => {
+    let expandWithZero = (hexadecimalArray) => {
+        let paddedArray = hexadecimalArray.map((hexadecimal) => {
             return BinaryUtils_1.leftPadWithZeroBit(hexadecimal, 4);
         });
         return paddedArray.join(":");
     };
-    var expandDoubleColon = function (gapCount) {
-        var pads = [];
-        for (var count = 0; count < gapCount; count++) {
+    let expandDoubleColon = (gapCount) => {
+        let pads = [];
+        for (let count = 0; count < gapCount; count++) {
             pads.push("0000");
         }
         return pads.join(":");
     };
     if (/(:){3,}/.test(ipv6String))
         throw "given IPv6 contains consecutive : more than two";
-    var prefix = extractPrefix(ipv6String);
+    const prefix = extractPrefix(ipv6String);
     if (ipv6String.includes("/")) {
         ipv6String = ipv6String.split("/")[0];
     }
-    var isValid = Validator_1.Validator.IPV6_PATTERN.test(ipv6String);
+    let isValid = Validator_1.Validator.IPV6_PATTERN.test(ipv6String);
     if (!isValid) {
         throw Error(Validator_1.Validator.invalidIPv6PatternMessage);
     }
     if (ipv6String.includes("::")) {
-        var split = ipv6String.split("::");
-        var leftPortion = split[0];
-        var rightPortion = split[1];
-        var leftPortionSplit = leftPortion.split(":").filter(function (hexadecimal) { return hexadecimal !== ""; });
-        var rightPortionSplit = rightPortion.split(":").filter(function (hexadecimal) { return hexadecimal !== ""; });
-        var doublePortion = expandDoubleColon(8 - (leftPortionSplit.length + rightPortionSplit.length));
-        var leftString = expandWithZero(leftPortionSplit);
+        let split = ipv6String.split("::");
+        let leftPortion = split[0];
+        let rightPortion = split[1];
+        let leftPortionSplit = leftPortion.split(":").filter(hexadecimal => { return hexadecimal !== ""; });
+        let rightPortionSplit = rightPortion.split(":").filter(hexadecimal => { return hexadecimal !== ""; });
+        let doublePortion = expandDoubleColon(8 - (leftPortionSplit.length + rightPortionSplit.length));
+        let leftString = expandWithZero(leftPortionSplit);
         if (leftString !== "") {
             leftString += ":";
         }
-        var rightString = expandWithZero(rightPortionSplit);
+        let rightString = expandWithZero(rightPortionSplit);
         if (rightString !== "") {
             rightString = ":" + rightString;
         }
-        return "" + leftString + doublePortion + rightString + prefix;
+        return `${leftString}${doublePortion}${rightString}${prefix}`;
     }
     else {
-        return "" + expandWithZero(ipv6String.split(":")) + prefix;
+        return `${expandWithZero(ipv6String.split(":"))}${prefix}`;
     }
 };
 /**
@@ -67,18 +67,18 @@ exports.expandIPv6Number = function (ipv6String) {
  * @param {string} ipv6String the full form IPv6 number to collapse
  * @returns {string} the collapsed IPv6 number
  */
-exports.collapseIPv6Number = function (ipv6String) {
-    var prefix = extractPrefix(ipv6String);
+exports.collapseIPv6Number = (ipv6String) => {
+    const prefix = extractPrefix(ipv6String);
     if (ipv6String.includes("/")) {
         ipv6String = ipv6String.split("/")[0];
     }
-    var isValid = Validator_1.Validator.IPV6_PATTERN.test(ipv6String);
+    let isValid = Validator_1.Validator.IPV6_PATTERN.test(ipv6String);
     if (!isValid) {
         throw Error(Validator_1.Validator.invalidIPv6PatternMessage);
     }
-    var hexadecimals = ipv6String.split(":");
-    var hexadecimalsWithoutLeadingZeros = hexadecimals.map(function (hexidecimal) {
-        var withoutLeadingZero = hexidecimal.replace(/^0+/, '');
+    let hexadecimals = ipv6String.split(":");
+    let hexadecimalsWithoutLeadingZeros = hexadecimals.map((hexidecimal) => {
+        let withoutLeadingZero = hexidecimal.replace(/^0+/, '');
         if (withoutLeadingZero !== '') {
             return withoutLeadingZero;
         }
@@ -86,11 +86,11 @@ exports.collapseIPv6Number = function (ipv6String) {
             return "0";
         }
     });
-    var contracted = hexadecimalsWithoutLeadingZeros.join(":").replace(/((^0)?(:0){2,}|(^0)(:0){1,})/, ':');
+    let contracted = hexadecimalsWithoutLeadingZeros.join(":").replace(/((^0)?(:0){2,}|(^0)(:0){1,})/, ':');
     if (contracted.slice(-1) === ":") {
-        return contracted + ":" + prefix;
+        return `${contracted}:${prefix}`;
     }
     contracted = contracted.replace(":0:", "::");
-    return "" + contracted + prefix;
+    return `${contracted}${prefix}`;
 };
 //# sourceMappingURL=IPv6Utils.js.map

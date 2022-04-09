@@ -1,6 +1,6 @@
 
-import {Validator} from "../src/Validator";
-import {Hexadecatet} from "../src/Hexadecatet";
+import {Validator} from "../src";
+import {Hexadecatet} from "../src";
 
 describe('Hexadecatet: ', () => {
     it('should instantiate by calling constructor', () => {

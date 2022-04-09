@@ -16,7 +16,7 @@
       "sourceMap": true,
       "typeRoots": [ "./node_modules/@types" ],
       "lib": ["es2019","esnext"],
-      "target": "es5",
+      "target": "ES2020",
       "downlevelIteration": true
     }
 }

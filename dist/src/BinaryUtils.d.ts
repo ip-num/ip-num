@@ -12,7 +12,7 @@ export declare let decimalNumberToBinaryString: (num: number) => string;
  * @param num the BigInteger number
  * @returns {string} the binary string
  */
-export declare let bigIntegerNumberToBinaryString: (num: bigInt.BigInteger) => string;
+export declare let bigIntToBinaryString: (num: bigint) => string;
 /**
  * Converts a decimal number to binary octet (8 bit) string. If needed the octet will be padded with zeros
  * to make it up to 8 bits
@@ -27,7 +27,7 @@ export declare let decimalNumberToOctetString: (num: number) => string;
  * @param num binary number in string to parse
  * @returns {number} binary number in BigInteger
  */
-export declare let parseBinaryStringToBigInteger: (num: string) => bigInt.BigInteger;
+export declare let parseBinaryStringToBigInt: (num: string) => bigint;
 /**
  * Given an IPv4 number in dot-decimal notated string, e.g 192.168.0.1 converts it to
  * binary string, e.g. '11000000101010000000000000000001'

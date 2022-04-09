@@ -1,4 +1,3 @@
-import * as bigInt from "big-integer/BigInteger";
 import {expandIPv6Number} from "./IPv6Utils";
 import {leftPadWithZeroBit} from "./BinaryUtils";
 
@@ -7,7 +6,7 @@ import {leftPadWithZeroBit} from "./BinaryUtils";
  * @param num the BigInteger number
  * @returns {string} the hexadeciaml string
  */
-export let bigIntegerNumberToHexadecimalString = (num: bigInt.BigInteger): string => {
+export let bigIntegerNumberToHexadecimalString = (num: bigint): string => {
     return num.toString(16);
 };
 
@@ -17,7 +16,7 @@ export let bigIntegerNumberToHexadecimalString = (num: bigInt.BigInteger): strin
  * @returns {string} the number converted to base 2
  */
 export let hexadecimalStringToBinaryString = (hexadecimalString: string) : string => {
-    let inDecimal = bigInt(hexadecimalString, 16);
+    let inDecimal = BigInt(`0x${hexadecimalString}`);
     return inDecimal.toString(2);
 };
 
@@ -61,7 +60,7 @@ export let colonHexadecimalNotationToBinaryString = (hexadecimalString: string):
  */
 export let binaryStringToHexadecimalString = (num: string): string => {
     // first convert to binary string to decimal (big Integer)
-    let inDecimal = bigInt(num, 2);
+    let inDecimal = BigInt(`0b${num}`);
     return inDecimal.toString(16);
 };
 
