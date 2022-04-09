@@ -2,12 +2,9 @@
 
 ip-num
 ================
-`ip-num` is a [TypeScript](https://www.typescriptlang.org/) library for working with `IPv4`, `IPv6` and `ASN` numbers. It provides representations of these internet protocol numbers with the ability to perform various operations like parsing, validating etc. on them.
+`ip-num` is a zero dependency, [TypeScript](https://www.typescriptlang.org/) library for working with `IPv4`, `IPv6` and `ASN` numbers. It provides representations of these internet protocol numbers with the ability to perform various operations like parsing, validating etc. on them.
 
 `ip-num` can be used with both TypeScript and vanila JavaScript. It also support both usage within a browser environment as well as Node.Js environment.
-
-`ip-num` makes use of the [BigInteger.js](https://github.com/peterolson/BigInteger.js/) library to represents numeric values. This is due to the fact that numeric values when dealing with IP numbers can exceed the value that can safely be represented natively within JavaScript without loosing precisions ie numbers greater than 
-[Number.MAX_SAFE_INTEGER](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/MAX_SAFE_INTEGER)
 
 `ip-num`'s source can be found on [GitHub](https://github.com/ip-num/ip-num)
 
