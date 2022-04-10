@@ -90,7 +90,8 @@ export class Validator {
      * @returns {[boolean , string]} first value is true if valid IPv4 number, false otherwise. Second value contains
      * "valid" or an error message when value is invalid
      */
-    static isValidIPv4Number(ipv4Number: bigint): [boolean, string[]]  {
+    static isValidIPv4Number(ipv4Number: bigint | number): [boolean, string[]]  {
+        ipv4Number = typeof ipv4Number === "bigint" ? ipv4Number : BigInt(ipv4Number);
         let isValid = this.isWithinRange(ipv4Number, 0n, this.THIRTY_TWO_BIT_SIZE);
         return isValid ? [isValid, []]: [isValid, [Validator.invalidIPv4NumberMessage]];
     }

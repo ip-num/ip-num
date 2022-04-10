@@ -2,9 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Hexadecatet = void 0;
 const Validator_1 = require("./Validator");
-const bigInt = require("big-integer");
 /**
- * A base 16 (hexadecimal) representation of a 16 bit value.
+ * A representation of a 4-digit hexadecimal number.
  *
  * It consists of four (base 16) number. ie FFFF
  *
@@ -26,7 +25,7 @@ class Hexadecatet {
         else {
             hexadecatetValue = parseInt(String(givenValue), 16);
         }
-        let [isValid, message] = Validator_1.Validator.isValidIPv6Hexadecatet(bigInt(hexadecatetValue));
+        let [isValid, message] = Validator_1.Validator.isValidIPv6Hexadecatet(BigInt(hexadecatetValue));
         if (!isValid) {
             throw Error(message.filter(msg => { return msg !== ''; }).toString());
         }

@@ -342,10 +342,10 @@ export class RangedSet<T extends AbstractIPNum> implements Iterable<AbstractIPNu
 
         let valueOfFirstIp = this.getFirst().value + (offset);
         let firstIp: AbstractIPNum = isIPv4(this.getFirst()) ?
-            IPv4.fromBigInt(valueOfFirstIp) : IPv6.fromBigInteger(valueOfFirstIp);
+            IPv4.fromNumber(valueOfFirstIp) : IPv6.fromBigInt(valueOfFirstIp);
 
         let valueOfLastIp = firstIp.value + (size - 1n);
-        let lastIp = isIPv4(firstIp)? IPv4.fromBigInt(valueOfLastIp) : IPv6.fromBigInteger(valueOfLastIp);
+        let lastIp = isIPv4(firstIp)? IPv4.fromNumber(valueOfLastIp) : IPv6.fromBigInt(valueOfLastIp);
 
         return new RangedSet(firstIp, lastIp);
     }
@@ -394,7 +394,7 @@ export class RangedSet<T extends AbstractIPNum> implements Iterable<AbstractIPNu
 
     private toIPv4CidrRange(): IPv4CidrRange {
 
-        let candidateRange = new IPv4CidrRange(IPv4.fromBigInt(this.getFirst().getValue()),
+        let candidateRange = new IPv4CidrRange(IPv4.fromNumber(this.getFirst().getValue()),
             IPv4Prefix.fromRangeSize(this.getSize()));
         if (candidateRange.getFirst().isEquals(this.getFirst())) {
             return candidateRange;
@@ -405,7 +405,7 @@ export class RangedSet<T extends AbstractIPNum> implements Iterable<AbstractIPNu
     }
 
     private toIPv6CidrRange(): IPv6CidrRange {
-        let candidateRange = new IPv6CidrRange(IPv6.fromBigInteger(this.getFirst().getValue()),
+        let candidateRange = new IPv6CidrRange(IPv6.fromBigInt(this.getFirst().getValue()),
             IPv6Prefix.fromRangeSize(this.getSize()));
         if (candidateRange.getFirst().isEquals(this.getFirst())) {
             return candidateRange;
@@ -593,7 +593,7 @@ export class IPv4CidrRange extends AbstractIPRange<IPv4, IPv4Prefix> {
      * @returns {IPv4} the first IPv4 number in the IPv4 range
      */
     public getFirst(): IPv4 {
-        return IPv4.fromBigInt(this.ipv4.getValue() & (this.cidrPrefix.toMask().getValue()));
+        return IPv4.fromNumber(this.ipv4.getValue() & (this.cidrPrefix.toMask().getValue()));
     }
 
     /**
@@ -847,7 +847,7 @@ export class IPv6CidrRange extends AbstractIPRange<IPv6, IPv6Prefix> {
      * @returns {IPv6} the first IPv6 number in the IPv6 range
      */
     public getFirst(): IPv6 {
-        return IPv6.fromBigInteger(this.ipv6.getValue() & (this.cidrPrefix.toMask().getValue()));
+        return IPv6.fromBigInt(this.ipv6.getValue() & (this.cidrPrefix.toMask().getValue()));
     }
 
     /**
@@ -1024,9 +1024,9 @@ let last = (range: IPv6CidrRange | IPv4CidrRange, ip: IPv6 | IPv4): IPv6 | IPv4 
     let maskAsBigInteger = range.cidrPrefix.toMask().getValue();
     let invertedMask = leftPadWithZeroBit((maskAsBigInteger ^ (maskSize)).toString(2), bitValue);
     if (isIPv4CidrRange(range)) {
-        return IPv4.fromBigInt((ip.getValue()) | (parseBinaryStringToBigInt(invertedMask)))
+        return IPv4.fromNumber((ip.getValue()) | (parseBinaryStringToBigInt(invertedMask)))
     } else {
-        return IPv6.fromBigInteger((ip.getValue()) | (parseBinaryStringToBigInt(invertedMask)));
+        return IPv6.fromBigInt((ip.getValue()) | (parseBinaryStringToBigInt(invertedMask)));
     }
 }
 

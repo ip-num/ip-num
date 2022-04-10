@@ -7,19 +7,9 @@ import {IPNumType} from "./IPNumType";
  * @returns {string} the binary string representation of number
  */
 
-export let decimalNumberToBinaryString = (num:number):string => {
-    return Number(num).toString(2);
-};
-
-/**
- * Converts a given BigInteger number to a binary string
- * @param num the BigInteger number
- * @returns {string} the binary string
- */
-export let bigIntToBinaryString = (num: bigint): string => {
+export let numberToBinaryString = (num: number | bigint): string => {
     return num.toString(2);
 };
-
 
 /**
  * Converts a decimal number to binary octet (8 bit) string. If needed the octet will be padded with zeros
@@ -28,8 +18,8 @@ export let bigIntToBinaryString = (num: bigint): string => {
  * @param {number} num to convert to octet string
  * @returns {string} the octet string representation of given number
  */
-export let decimalNumberToOctetString = (num:number): string => {
-    let binaryString = decimalNumberToBinaryString(num);
+export let decimalNumberToOctetString = (num: number | bigint): string => {
+    let binaryString = numberToBinaryString(num);
     let length = binaryString.length;
     if (length > 8) {
         throw new Error("Given decimal in binary contains digits greater than an octet")
@@ -38,12 +28,12 @@ export let decimalNumberToOctetString = (num:number): string => {
 };
 
 /**
- * Parses number in binary to number in BigInteger
+ * Parses number in binary to number in BigInt
  *
  * @param num binary number in string to parse
- * @returns {number} binary number in BigInteger
+ * @returns {number} binary number in BigInt
  */
-export let parseBinaryStringToBigInt = (num:string): bigint => {
+export let parseBinaryStringToBigInt = (num: string): bigint => {
     return BigInt(`0b${num}`);
 };
 
@@ -104,13 +94,13 @@ export let cidrPrefixToMaskBinaryString = (cidrPrefix: number, ipType: IPNumType
 export let intLog2 = (givenNumber: bigint): number => {
     let result = 0;
 
-    while (Number(givenNumber) % 2 === 0) {
+    while (givenNumber % 2n === 0n) {
         if (givenNumber === 2n) {
             result++;
             break;
         }
         givenNumber = givenNumber >> 1n;
-        if (Number(givenNumber) % 2 !== 0) {
+        if (givenNumber % 2n !== 0n) {
             result = 0;
             break;
         }

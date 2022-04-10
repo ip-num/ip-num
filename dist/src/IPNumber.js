@@ -7,7 +7,6 @@ const BinaryUtils_1 = require("./BinaryUtils");
 const BinaryUtils_2 = require("./BinaryUtils");
 const BinaryUtils_3 = require("./BinaryUtils");
 const BinaryUtils_4 = require("./BinaryUtils");
-const BinaryUtils_5 = require("./BinaryUtils");
 const Hexadecatet_1 = require("./Hexadecatet");
 const HexadecimalUtils_1 = require("./HexadecimalUtils");
 const IPv6Utils_1 = require("./IPv6Utils");
@@ -31,7 +30,7 @@ class AbstractIPNum {
      * @returns {string} the string binary representation.
      */
     toBinaryString() {
-        return BinaryUtils_4.leftPadWithZeroBit(this.value.toString(2), this.bitSize);
+        return BinaryUtils_3.leftPadWithZeroBit(this.value.toString(2), this.bitSize);
     }
     /**
      * Checks if an IP number has a value greater than the present value
@@ -186,7 +185,7 @@ class IPv4 extends AbstractIPNum {
     static fromBinaryString(ipBinaryString) {
         let validationResult = Validator_1.Validator.isValidBinaryString(ipBinaryString);
         if (validationResult[0]) {
-            return new IPv4(BinaryUtils_3.parseBinaryStringToBigInt(ipBinaryString));
+            return new IPv4(BinaryUtils_2.parseBinaryStringToBigInt(ipBinaryString));
         }
         else {
             throw Error(validationResult[1].join(','));
@@ -256,16 +255,16 @@ class IPv4 extends AbstractIPNum {
         if (!isValid) {
             throw new Error(message.filter(msg => { return msg !== ''; }).toString());
         }
-        let binaryString = BinaryUtils_2.bigIntToBinaryString(ipv4Number);
+        let binaryString = BinaryUtils_4.numberToBinaryString(ipv4Number);
         return [ipv4Number, this.binaryStringToDecimalOctets(binaryString)];
     }
     binaryStringToDecimalOctets(ipv4BinaryString) {
         if (ipv4BinaryString.length < 32) {
-            ipv4BinaryString = BinaryUtils_4.leftPadWithZeroBit(ipv4BinaryString, 32);
+            ipv4BinaryString = BinaryUtils_3.leftPadWithZeroBit(ipv4BinaryString, 32);
         }
         let octets = ipv4BinaryString.match(/.{1,8}/g);
         return octets.map((octet) => {
-            return Octet_1.Octet.fromString(BinaryUtils_3.parseBinaryStringToBigInt(octet).toString());
+            return Octet_1.Octet.fromString(BinaryUtils_2.parseBinaryStringToBigInt(octet).toString());
         });
     }
 }
@@ -404,7 +403,7 @@ class Asn extends AbstractIPNum {
      * @returns {string} a binary string representation of the value of the ASN number
      */
     toBinaryString() {
-        return BinaryUtils_5.decimalNumberToBinaryString(Number(this.value));
+        return BinaryUtils_4.numberToBinaryString(Number(this.value));
     }
     /**
      * Checks if the ASN value is 16bit
@@ -543,8 +542,8 @@ class IPv6 extends AbstractIPNum {
     static fromBinaryString(ipBinaryString) {
         let validationResult = Validator_1.Validator.isValidBinaryString(ipBinaryString);
         if (validationResult[0]) {
-            let paddedBinaryString = BinaryUtils_4.leftPadWithZeroBit(ipBinaryString, 128);
-            return new IPv6(BinaryUtils_3.parseBinaryStringToBigInt(paddedBinaryString));
+            let paddedBinaryString = BinaryUtils_3.leftPadWithZeroBit(ipBinaryString, 128);
+            return new IPv6(BinaryUtils_2.parseBinaryStringToBigInt(paddedBinaryString));
         }
         else {
             throw Error(validationResult[1].join(','));
@@ -613,7 +612,7 @@ class IPv6 extends AbstractIPNum {
         if (!isValid) {
             throw new Error(message.filter(msg => { return msg !== ''; }).toString());
         }
-        let binaryString = BinaryUtils_2.bigIntToBinaryString(ipv6Number);
+        let binaryString = BinaryUtils_4.numberToBinaryString(ipv6Number);
         return [ipv6Number, this.binaryStringToHexadecatets(binaryString)];
     }
     constructFromHexadecimalDottedString(expandedIPv6) {
@@ -625,7 +624,7 @@ class IPv6 extends AbstractIPNum {
         let hexadecatet = stringHexadecimals.map((stringHexadecatet) => {
             return Hexadecatet_1.Hexadecatet.fromString(stringHexadecatet);
         });
-        let value = BigInt(`0x${HexadecimalUtils_2.hexadectetNotationToBinaryString(expandedIPv6)}`);
+        let value = BigInt(`0b${HexadecimalUtils_2.hexadectetNotationToBinaryString(expandedIPv6)}`);
         return [value, hexadecatet];
     }
     binaryStringToHexadecatets(binaryString) {

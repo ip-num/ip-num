@@ -3,10 +3,10 @@ import * as HexadecimalUtils from "../src/HexadecimalUtils";
 
 describe('Hexadecimal Utils: ', () => {
     it('Should convert bigIntegerNumber to Hexadecimal String', () => {
-        expect(HexadecimalUtils.bigIntegerNumberToHexadecimalString(BigInt('2323'))).toEqual('913');
-        expect(HexadecimalUtils.bigIntegerNumberToHexadecimalString(BigInt('151515'))).toEqual('24fdb');
-        expect(HexadecimalUtils.bigIntegerNumberToHexadecimalString(BigInt('9223372036854776'))).toEqual('20c49ba5e353f8');
-        expect(HexadecimalUtils.bigIntegerNumberToHexadecimalString(BigInt('92233720368547760000'))).toEqual('50000000000000780');
+        expect(HexadecimalUtils.bigIntToHexadecimalString(BigInt('2323'))).toEqual('913');
+        expect(HexadecimalUtils.bigIntToHexadecimalString(BigInt('151515'))).toEqual('24fdb');
+        expect(HexadecimalUtils.bigIntToHexadecimalString(BigInt('9223372036854776'))).toEqual('20c49ba5e353f8');
+        expect(HexadecimalUtils.bigIntToHexadecimalString(BigInt('92233720368547760000'))).toEqual('50000000000000780');
     });
 
     it('Should convert hexadecimal string to binary string', () => {

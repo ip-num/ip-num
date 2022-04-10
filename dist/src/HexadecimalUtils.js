@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.hexadectetNotationToBinaryString = exports.binaryStringToHexadecimalString = exports.colonHexadecimalNotationToBinaryString = exports.hexadecimalStringToHexadecatetString = exports.hexadecimalStringToBinaryString = exports.bigIntegerNumberToHexadecimalString = void 0;
-const bigInt = require("big-integer/BigInteger");
 const IPv6Utils_1 = require("./IPv6Utils");
 const BinaryUtils_1 = require("./BinaryUtils");
 /**
@@ -18,7 +17,7 @@ exports.bigIntegerNumberToHexadecimalString = (num) => {
  * @returns {string} the number converted to base 2
  */
 exports.hexadecimalStringToBinaryString = (hexadecimalString) => {
-    let inDecimal = bigInt(hexadecimalString, 16);
+    let inDecimal = BigInt(`0x${hexadecimalString}`);
     return inDecimal.toString(2);
 };
 /**
@@ -56,7 +55,7 @@ exports.colonHexadecimalNotationToBinaryString = (hexadecimalString) => {
  */
 exports.binaryStringToHexadecimalString = (num) => {
     // first convert to binary string to decimal (big Integer)
-    let inDecimal = bigInt(num, 2);
+    let inDecimal = BigInt(`0b${num}`);
     return inDecimal.toString(16);
 };
 /**

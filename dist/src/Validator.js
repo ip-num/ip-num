@@ -193,7 +193,7 @@ class Validator {
             return [false, [Validator.invalidIPv4CidrNotationMessage]];
         }
         let [validIpv4, invalidIpv4Message] = Validator.isValidIPv4String(ip);
-        let [validPrefix, invalidPrefixMessage] = Validator.isValidPrefixValue(Number(range), "IPv4" /* IPv4 */);
+        let [validPrefix, invalidPrefixMessage] = Validator.isValidPrefixValue(BigInt(range), "IPv4" /* IPv4 */);
         let isValid = validIpv4 && validPrefix;
         let invalidMessage = invalidIpv4Message.concat(invalidPrefixMessage);
         return isValid ? [isValid, []] : [isValid, invalidMessage];
@@ -304,10 +304,10 @@ Validator.IPV4_RANGE_PATTERN = new RegExp(/^(0?[0-9]?[0-9]|1[0-9][0-9]|2[0-4][0-
 Validator.IPV6_RANGE_PATTERN = new RegExp(/^s*((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:)))(%.+)?s*(\/([0-9]|[1-9][0-9]|1[0-1][0-9]|12[0-8]))?$/);
 Validator.IPV4_CONTIGUOUS_MASK_BIT_PATTERN = new RegExp(/^(1){0,32}(0){0,32}$/);
 Validator.IPV6_CONTIGUOUS_MASK_BIT_PATTERN = new RegExp(/^(1){0,128}(0){0,128}$/);
-Validator.EIGHT_BIT_SIZE = BigInt("1".repeat(8));
-Validator.SIXTEEN_BIT_SIZE = BigInt("1".repeat(16));
-Validator.THIRTY_TWO_BIT_SIZE = BigInt("1".repeat(32));
-Validator.ONE_HUNDRED_AND_TWENTY_EIGHT_BIT_SIZE = BigInt("1".repeat(128));
+Validator.EIGHT_BIT_SIZE = BigInt(`0b${"1".repeat(8)}`);
+Validator.SIXTEEN_BIT_SIZE = BigInt(`0b${"1".repeat(16)}`);
+Validator.THIRTY_TWO_BIT_SIZE = BigInt(`0b${"1".repeat(32)}`);
+Validator.ONE_HUNDRED_AND_TWENTY_EIGHT_BIT_SIZE = BigInt(`0b${"1".repeat(128)}`);
 Validator.IPV4_SIZE = BigInt("4294967296");
 Validator.IPV6_SIZE = BigInt("340282366920938463463374607431768211456");
 Validator.invalidAsnRangeMessage = "ASN number given less than zero or is greater than 32bit";

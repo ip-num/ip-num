@@ -1,5 +1,5 @@
 /**
- * A base 16 (hexadecimal) representation of a 16 bit value.
+ * A representation of a 4-digit hexadecimal number.
  *
  * It consists of four (base 16) number. ie FFFF
  *

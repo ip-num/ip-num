@@ -6,7 +6,6 @@ const IPNumber_1 = require("./IPNumber");
 const BinaryUtils_1 = require("./BinaryUtils");
 const HexadecimalUtils_1 = require("./HexadecimalUtils");
 const Hexadecatet_1 = require("./Hexadecatet");
-const bigInt = require("big-integer");
 /**
  * Represents the prefix portion in the CIDR notation for representing IP ranges
  *
@@ -24,7 +23,7 @@ class IPv4Prefix {
      */
     constructor(rawValue) {
         this.type = "IPv4";
-        this.bitValue = bigInt(32);
+        this.bitValue = 32n;
         let isValid;
         let message;
         [isValid, message] = Validator_1.Validator.isValidPrefixValue(rawValue, "IPv4" /* IPv4 */);
@@ -44,8 +43,8 @@ class IPv4Prefix {
     }
     ;
     static fromRangeSize(rangeSize) {
-        let prefixNumber = rangeSize.equals(bigInt.one) ? 32 : 32 - rangeSizeToPrefix(rangeSize, Validator_1.Validator.IPV4_SIZE);
-        return IPv4Prefix.fromNumber(prefixNumber);
+        let prefixNumber = rangeSize === (1n) ? 32 : 32 - rangeSizeToPrefix(rangeSize, Validator_1.Validator.IPV4_SIZE);
+        return IPv4Prefix.fromNumber(BigInt(prefixNumber));
     }
     ;
     /**
@@ -71,8 +70,8 @@ class IPv4Prefix {
      * @returns {IPv4Mask} the mask representation of the prefix
      */
     toMask() {
-        let onBits = '1'.repeat(this.value);
-        let offBits = '0'.repeat(32 - this.value);
+        let onBits = '1'.repeat(Number(this.value));
+        let offBits = '0'.repeat(Number(32n - this.value));
         return IPNumber_1.IPv4Mask.fromDecimalDottedString(this.toDecimalNotation(`${onBits}${offBits}`));
     }
     /**
@@ -87,21 +86,22 @@ class IPv4Prefix {
          * Since left shift a number by x is equivalent to multiplying the number by the power x raised to 2
          * 2 << 4 = 2 * (2 raised to 4)
          */
-        return bigInt(2).pow(this.bitValue.minus(bigInt(this.getValue())));
+        return BigInt(Math.pow(2, Number(this.bitValue - (this.getValue()))));
+        //return bigInt(2).pow(this.bitValue.minus(bigInt(this.getValue())));
     }
     /**
      * Returns a prefix for when this prefix is merged
      * with another prefix of the same size
      */
     merge() {
-        return new IPv4Prefix(this.value - 1);
+        return new IPv4Prefix(this.value - 1n);
     }
     /**
      * Returns a prefix for when this prefix is split
      * into two equal halves
      */
     split() {
-        return new IPv4Prefix(this.value + 1);
+        return new IPv4Prefix(this.value + 1n);
     }
     toDecimalNotation(bits) {
         return `${BinaryUtils_1.parseBinaryStringToBigInt(bits.substr(0, 8))}.${BinaryUtils_1.parseBinaryStringToBigInt(bits.substr(8, 8))}.${BinaryUtils_1.parseBinaryStringToBigInt(bits.substr(16, 8))}.${BinaryUtils_1.parseBinaryStringToBigInt(bits.substr(24, 8))}`;
@@ -125,7 +125,7 @@ class IPv6Prefix {
      */
     constructor(rawValue) {
         this.type = "IPv6";
-        this.bitValue = bigInt(128);
+        this.bitValue = 128n;
         let isValid;
         let message;
         [isValid, message] = Validator_1.Validator.isValidPrefixValue(rawValue, "IPv6" /* IPv6 */);
@@ -145,8 +145,8 @@ class IPv6Prefix {
     }
     ;
     static fromRangeSize(rangeSize) {
-        let prefixNumber = rangeSize.equals(bigInt.one) ? 128 : 128 - rangeSizeToPrefix(rangeSize, Validator_1.Validator.IPV6_SIZE);
-        return IPv6Prefix.fromNumber(prefixNumber);
+        let prefixNumber = rangeSize === (1n) ? 128 : 128 - rangeSizeToPrefix(rangeSize, Validator_1.Validator.IPV6_SIZE);
+        return IPv6Prefix.fromNumber(BigInt(prefixNumber));
     }
     /**
      * Gets the decimal value of the IPv6 prefix
@@ -171,8 +171,8 @@ class IPv6Prefix {
      * @returns {IPv6Mask} the mask representation of the prefix
      */
     toMask() {
-        let onBits = '1'.repeat(this.value);
-        let offBits = '0'.repeat(128 - this.value);
+        let onBits = '1'.repeat(Number(this.value));
+        let offBits = '0'.repeat(128 - Number(this.value));
         return IPNumber_1.IPv6Mask.fromHexadecimalString(this.toHexadecatetNotation(`${onBits}${offBits}`));
     }
     /**
@@ -187,21 +187,22 @@ class IPv6Prefix {
          * Since left shift a number by x is equivalent to multiplying the number by the power x raised to 2
          * 2 << 4 = 2 * (2 raised to 4)
          */
-        return bigInt(2).pow(this.bitValue.minus(bigInt(this.getValue())));
+        return BigInt(Math.pow(2, Number(this.bitValue - (this.getValue()))));
+        //return bigInt(2).pow(this.bitValue - (this.getValue()));
     }
     /**
      * Returns a prefix for when this prefix is merged
      * with another prefix of the same size
      */
     merge() {
-        return new IPv6Prefix(this.value - 1);
+        return new IPv6Prefix(this.value - 1n);
     }
     /**
      * Returns a prefix for when this prefix is split
      * into two equal halves
      */
     split() {
-        return new IPv6Prefix(this.value + 1);
+        return new IPv6Prefix(this.value + 1n);
     }
     toHexadecatetNotation(bits) {
         let binaryStrings = bits.match(/.{1,16}/g);
@@ -213,8 +214,8 @@ class IPv6Prefix {
 }
 exports.IPv6Prefix = IPv6Prefix;
 function rangeSizeToPrefix(rangeSize, rangeMaxSize) {
-    let ipType = rangeMaxSize.greater(Validator_1.Validator.IPV4_SIZE) ? "IPv6" : "IPv4";
-    if (rangeSize.greater(rangeMaxSize) || rangeSize.equals(bigInt(0))) {
+    let ipType = rangeMaxSize > (Validator_1.Validator.IPV4_SIZE) ? "IPv6" : "IPv4";
+    if (rangeSize > (rangeMaxSize) || rangeSize === (0n)) {
         throw new Error(Validator_1.Validator.invalidIPRangeSizeMessage.replace("$iptype", ipType));
     }
     try {

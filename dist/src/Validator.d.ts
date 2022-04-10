@@ -114,7 +114,7 @@ export declare class Validator {
      * @param ipNumType The type of IP number
      * @returns {(boolean|string)[]} a tuple representing if valid or not and corresponding message
      */
-    static isValidPrefixValue(prefixValue: number, ipNumType: IPNumType): [boolean, string[]];
+    static isValidPrefixValue(prefixValue: bigint, ipNumType: IPNumType): [boolean, string[]];
     /**
      * Checks if given string is a valid IPv4 mask
      *

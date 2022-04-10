@@ -1,12 +1,11 @@
 import { IPv4Mask, IPv6Mask } from "./IPNumber";
-import * as bigInt from "big-integer";
 interface Prefix {
-    value: number;
-    getValue(): number;
+    value: bigint;
+    getValue(): bigint;
     merge(): Prefix;
     split(): Prefix;
     toString(): string;
-    toRangeSize(): bigInt.BigInteger;
+    toRangeSize(): bigint;
 }
 /**
  * Represents the prefix portion in the CIDR notation for representing IP ranges
@@ -22,28 +21,28 @@ declare class IPv4Prefix implements Prefix {
     /**
      * The decimal value of the 8bit number representing the prefix
      */
-    value: number;
+    value: bigint;
     /**
      * Convenience method for constructing an instance of IPv4 prefix from a decimal number
      *
      * @param {number} rawValue the decimal value to construct the IPv4 prefix from.
      * @returns {IPv4Prefix} the instance of an IPv4 prefix
      */
-    static fromNumber(rawValue: number): IPv4Prefix;
-    static fromRangeSize(rangeSize: bigInt.BigInteger): IPv4Prefix;
+    static fromNumber(rawValue: bigint): IPv4Prefix;
+    static fromRangeSize(rangeSize: bigint): IPv4Prefix;
     /**
      * Constructor for an instance of IPv4 prefix from a decimal number
      *
      * @param {number} rawValue the decimal value to construct the IPv4 prefix from.
      * @returns {IPv4Prefix} the instance of an IPv4 prefix
      */
-    constructor(rawValue: number);
+    constructor(rawValue: bigint);
     /**
      * Gets the decimal value of the IPv4 prefix
      *
      * @returns {number} the decimal value of the IPv4 prefix
      */
-    getValue(): number;
+    getValue(): bigint;
     /**
      * Gets the decimal value of the IPv4 prefix as string
      * @returns {string} The decimal value of the IPv4 prefix as string
@@ -62,7 +61,7 @@ declare class IPv4Prefix implements Prefix {
      *
      * @return {BigInteger} the size (number of IP numbers) of range of this prefix
      */
-    toRangeSize(): bigInt.BigInteger;
+    toRangeSize(): bigint;
     /**
      * Returns a prefix for when this prefix is merged
      * with another prefix of the same size
@@ -89,28 +88,28 @@ declare class IPv6Prefix implements Prefix {
     /**
      * The decimal value of the 16bit number representing the prefix
      */
-    value: number;
+    value: bigint;
     /**
      * Convenience method for constructing an instance of IPv46 prefix from a decimal number
      *
      * @param {number} rawValue the decimal value to construct the IPv6 prefix from.
      * @returns {IPv4Prefix} the instance of an IPv6 prefix
      */
-    static fromNumber(rawValue: number): IPv6Prefix;
-    static fromRangeSize(rangeSize: bigInt.BigInteger): IPv6Prefix;
+    static fromNumber(rawValue: bigint): IPv6Prefix;
+    static fromRangeSize(rangeSize: bigint): IPv6Prefix;
     /**
      * Constructor for an instance of IPv6 prefix from a decimal number
      *
      * @param {number} rawValue the decimal value to construct the IPv6 prefix from.
      * @returns {IPv4Prefix} the instance of an IPv6 prefix
      */
-    constructor(rawValue: number);
+    constructor(rawValue: bigint);
     /**
      * Gets the decimal value of the IPv6 prefix
      *
      * @returns {number} the decimal value of the IPv6 prefix
      */
-    getValue(): number;
+    getValue(): bigint;
     /**
      * Gets the decimal value of the IPv4 prefix as string
      * @returns {string} he decimal value of the IPv4 prefix as string
@@ -129,7 +128,7 @@ declare class IPv6Prefix implements Prefix {
      *
      * @return {BigInteger} the size (number of IP numbers) of range of this prefix
      */
-    toRangeSize(): bigInt.BigInteger;
+    toRangeSize(): bigint;
     /**
      * Returns a prefix for when this prefix is merged
      * with another prefix of the same size

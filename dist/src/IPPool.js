@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Pool = void 0;
 const IPRange_1 = require("./IPRange");
 const Prefix_1 = require("./Prefix");
-const bigInt = require("big-integer");
 /**
  * Represents a collection of IP {@link RangedSet}'s
  */
@@ -107,13 +106,13 @@ class Pool {
      * TODO TSE
      */
     getCidrRange(prefix) {
-        if (prefix.toRangeSize().gt(this.getSize())) {
+        if (prefix.toRangeSize() > (this.getSize())) {
             throw new Error(`Not enough IP number in the pool for requested prefix: ${prefix}`);
         }
         let selectedCidrRange;
         let error;
         loop: for (let range of this.getRanges()) {
-            for (var offset = bigInt.zero; offset.plus(prefix.toRangeSize()).lesserOrEquals(range.getSize()); offset = offset.plus(bigInt.one))
+            for (var offset = 0n; offset + (prefix.toRangeSize()) <= (range.getSize()); offset = offset + (1n))
                 try {
                     let selectedRange = range.takeSubRange(offset, prefix.toRangeSize());
                     selectedCidrRange = selectedRange.toCidrRange();
@@ -144,7 +143,7 @@ class Pool {
      * @param reqprefix prefix range to retrieve
      */
     getCidrRanges(reqprefix) {
-        if (reqprefix.toRangeSize().greater(this.getSize())) {
+        if (reqprefix.toRangeSize() > (this.getSize())) {
             throw new Error("Prefix greater than pool");
         }
         let go = (reqprefix, prefix, accummulated) => {
@@ -152,9 +151,9 @@ class Pool {
                 let singleCidrRange = this.getCidrRange(prefix);
                 accummulated.push(singleCidrRange);
                 let currentSize = accummulated.reduce((previous, current) => {
-                    return previous.plus(current.getSize());
-                }, bigInt.zero);
-                if (reqprefix.toRangeSize().equals(currentSize)) {
+                    return previous + (current.getSize());
+                }, 0n);
+                if (reqprefix.toRangeSize() === (currentSize)) {
                     return accummulated;
                 }
                 else {
@@ -163,7 +162,7 @@ class Pool {
             }
             catch (e) {
                 let lowerPrefix = Prefix_1.isIPv4Prefix(prefix) ?
-                    Prefix_1.IPv4Prefix.fromNumber(prefix.getValue() + 1) : Prefix_1.IPv6Prefix.fromNumber(prefix.getValue() + 1);
+                    Prefix_1.IPv4Prefix.fromNumber(prefix.getValue() + 1n) : Prefix_1.IPv6Prefix.fromNumber(prefix.getValue() + 1n);
                 return go(reqprefix, lowerPrefix, accummulated);
             }
         };
@@ -177,8 +176,8 @@ class Pool {
             .aggregate()
             .getRanges()
             .reduce((previous, current) => {
-            return previous.plus(current.getSize());
-        }, bigInt.zero);
+            return previous + (current.getSize());
+        }, 0n);
     }
     /**
      * Empties the pool and fill it with given ranges
@@ -258,7 +257,7 @@ class SortedSet {
             return false;
         }
         return this.backingArray.every((value, index) => {
-            return value.getSize().equals(other.asArray()[index].getSize());
+            return value.getSize() === (other.asArray()[index].getSize());
         });
     }
     add(item) {

@@ -1,22 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.matchingBitCount = exports.intLog2 = exports.cidrPrefixToMaskBinaryString = exports.leftPadWithZeroBit = exports.dottedDecimalNotationToBinaryString = exports.parseBinaryStringToBigInt = exports.decimalNumberToOctetString = exports.bigIntToBinaryString = exports.decimalNumberToBinaryString = void 0;
-const bigInt = require("big-integer/BigInteger");
+exports.matchingBitCount = exports.intLog2 = exports.cidrPrefixToMaskBinaryString = exports.leftPadWithZeroBit = exports.dottedDecimalNotationToBinaryString = exports.parseBinaryStringToBigInt = exports.decimalNumberToOctetString = exports.numberToBinaryString = void 0;
 /**
  * Converts a decimal number to binary string
  *
  * @param num number to parse
  * @returns {string} the binary string representation of number
  */
-exports.decimalNumberToBinaryString = (num) => {
-    return Number(num).toString(2);
-};
-/**
- * Converts a given BigInteger number to a binary string
- * @param num the BigInteger number
- * @returns {string} the binary string
- */
-exports.bigIntToBinaryString = (num) => {
+exports.numberToBinaryString = (num) => {
     return num.toString(2);
 };
 /**
@@ -27,7 +18,7 @@ exports.bigIntToBinaryString = (num) => {
  * @returns {string} the octet string representation of given number
  */
 exports.decimalNumberToOctetString = (num) => {
-    let binaryString = exports.decimalNumberToBinaryString(num);
+    let binaryString = exports.numberToBinaryString(num);
     let length = binaryString.length;
     if (length > 8) {
         throw new Error("Given decimal in binary contains digits greater than an octet");
@@ -97,13 +88,13 @@ exports.cidrPrefixToMaskBinaryString = (cidrPrefix, ipType) => {
  */
 exports.intLog2 = (givenNumber) => {
     let result = 0;
-    while (givenNumber.isEven()) {
-        if (givenNumber.equals(bigInt(2))) {
+    while (Number(givenNumber) % 2 === 0) {
+        if (givenNumber === 2n) {
             result++;
             break;
         }
-        givenNumber = givenNumber.shiftRight(bigInt(1));
-        if (givenNumber.isOdd()) {
+        givenNumber = givenNumber >> 1n;
+        if (Number(givenNumber) % 2 !== 0) {
             result = 0;
             break;
         }

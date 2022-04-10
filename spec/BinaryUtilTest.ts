@@ -4,7 +4,7 @@ import {intLog2, matchingBitCount} from "../src";
 
 describe('Binary Utils', () => {
     it('Should correctly convert decimal to binary', () => {
-        expect(BinaryUtils.decimalNumberToBinaryString(1234) === '10011010010').toEqual(true);
+        expect(BinaryUtils.numberToBinaryString(1234) === '10011010010').toEqual(true);
     });
     it('Should correctly parse binary string to a number in BigInteger', () => {
         expect(BinaryUtils.parseBinaryStringToBigInt('10011010010')).toEqual(1234n);
@@ -13,13 +13,13 @@ describe('Binary Utils', () => {
         expect(BinaryUtils.parseBinaryStringToBigInt('10011010010').valueOf() === 1234n).toEqual(true);
     });
     it('Should correctly convert a big integer number to binary string', () => {
-        expect(BinaryUtils.bigIntToBinaryString(1234n)).toBe('10011010010');
-        expect(BinaryUtils.bigIntToBinaryString(4294967295n)).toBe('11111111111111111111111111111111')
+        expect(BinaryUtils.numberToBinaryString(1234n)).toBe('10011010010');
+        expect(BinaryUtils.numberToBinaryString(4294967295n)).toBe('11111111111111111111111111111111')
     });
     it('Should correctly convert binary to decimal and back to binary', () => {
         let originalBinary = '10011010010';
         let decimal = BinaryUtils.parseBinaryStringToBigInt(originalBinary).valueOf();
-        let finalBinary = BinaryUtils.decimalNumberToBinaryString(Number(decimal));
+        let finalBinary = BinaryUtils.numberToBinaryString(Number(decimal));
         expect(originalBinary.toString() === finalBinary).toEqual(true);
     });
     it('Should correctly convert decimal number to octets', () => {

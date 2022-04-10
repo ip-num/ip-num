@@ -6,7 +6,7 @@ import {leftPadWithZeroBit} from "./BinaryUtils";
  * @param num the BigInteger number
  * @returns {string} the hexadeciaml string
  */
-export let bigIntegerNumberToHexadecimalString = (num: bigint): string => {
+export let bigIntToHexadecimalString = (num: bigint): string => {
     return num.toString(16);
 };
 

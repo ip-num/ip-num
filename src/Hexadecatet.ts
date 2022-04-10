@@ -17,7 +17,7 @@ export class Hexadecatet {
      * @param {string} rawValue the four (base 16) number
      * @returns {Hexadecatet} an instance of {@link Hexadecatet}
      */
-    static fromString(rawValue:string):Hexadecatet {
+    static fromString(rawValue: string):Hexadecatet {
         return new Hexadecatet(rawValue);
     };
 
@@ -28,7 +28,7 @@ export class Hexadecatet {
      * @param {number} rawValue decimal number representation of a 16 bit value
      * @returns {Hexadecatet} an instance of {@link Hexadecatet}
      */
-    static fromNumber(rawValue:number):Hexadecatet {
+    static fromNumber(rawValue: number):Hexadecatet {
         return new Hexadecatet(rawValue);
     };
 
@@ -60,7 +60,7 @@ export class Hexadecatet {
      *
      * @returns {number} the numeric value in base 10 (ie decimal)
      */
-    public getValue():number {
+    public getValue(): number {
         return this.value;
     }
 

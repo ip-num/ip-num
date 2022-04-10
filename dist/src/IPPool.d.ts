@@ -1,7 +1,6 @@
 import { IPv4CidrRange, IPv6CidrRange, RangedSet } from "./IPRange";
 import { AbstractIPNum, IPv4, IPv6 } from "./IPNumber";
 import { IPv4Prefix, IPv6Prefix } from "./Prefix";
-import * as bigInt from "big-integer";
 declare type RangeType = RangedSet<IPv4> | RangedSet<IPv6>;
 export declare type IPCidrRange<T> = T extends IPv4Prefix ? IPv4CidrRange : IPv6CidrRange;
 export declare type IPCidrRangeArray<T> = T extends IPv4Prefix ? Array<IPv4CidrRange> : Array<IPv6CidrRange>;
@@ -64,7 +63,7 @@ export declare class Pool<T extends RangeType> {
     /**
      * Returns the size of IP numbers in the pool
      */
-    getSize(): bigInt.BigInteger;
+    getSize(): bigint;
     /**
      * Empties the pool and fill it with given ranges
      *
