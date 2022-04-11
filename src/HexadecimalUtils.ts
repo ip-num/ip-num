@@ -2,8 +2,8 @@ import {expandIPv6Number} from "./IPv6Utils";
 import {leftPadWithZeroBit} from "./BinaryUtils";
 
 /**
- * Converts a given BigInteger number to a hexadecimal string
- * @param num the BigInteger number
+ * Converts a given bigint number to a hexadecimal string
+ * @param num the bigint number
  * @returns {string} the hexadeciaml string
  */
 export let bigIntToHexadecimalString = (num: bigint): string => {

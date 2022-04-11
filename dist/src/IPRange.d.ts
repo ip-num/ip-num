@@ -225,7 +225,7 @@ export declare class IPv4CidrRange extends AbstractIPRange<IPv4, IPv4Prefix> {
     /**
      * Gets the size of IPv4 numbers contained within the IPv4 range
      *
-     * @returns {bigInt.BigInteger} the amount of IPv4 numbers in the range
+     * @returns {bigint} the amount of IPv4 numbers in the range
      */
     getSize(): bigint;
     /**
@@ -362,7 +362,7 @@ export declare class IPv6CidrRange extends AbstractIPRange<IPv6, IPv6Prefix> {
     /**
      * Gets the size of IPv6 numbers contained within the IPv6 range
      *
-     * @returns {bigInt.BigInteger} the amount of IPv6 numbers in the range
+     * @returns {bigint} the amount of IPv6 numbers in the range
      */
     getSize(): bigint;
     /**

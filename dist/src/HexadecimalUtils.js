@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.hexadectetNotationToBinaryString = exports.binaryStringToHexadecimalString = exports.colonHexadecimalNotationToBinaryString = exports.hexadecimalStringToHexadecatetString = exports.hexadecimalStringToBinaryString = exports.bigIntegerNumberToHexadecimalString = void 0;
+exports.hexadectetNotationToBinaryString = exports.binaryStringToHexadecimalString = exports.colonHexadecimalNotationToBinaryString = exports.hexadecimalStringToHexadecatetString = exports.hexadecimalStringToBinaryString = exports.bigIntToHexadecimalString = void 0;
 const IPv6Utils_1 = require("./IPv6Utils");
 const BinaryUtils_1 = require("./BinaryUtils");
 /**
@@ -8,7 +8,7 @@ const BinaryUtils_1 = require("./BinaryUtils");
  * @param num the BigInteger number
  * @returns {string} the hexadeciaml string
  */
-exports.bigIntegerNumberToHexadecimalString = (num) => {
+exports.bigIntToHexadecimalString = (num) => {
     return num.toString(16);
 };
 /**

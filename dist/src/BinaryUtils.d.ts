@@ -15,10 +15,10 @@ export declare let numberToBinaryString: (num: number | bigint) => string;
  */
 export declare let decimalNumberToOctetString: (num: number | bigint) => string;
 /**
- * Parses number in binary to number in BigInteger
+ * Parses number in binary to number in BigInt
  *
  * @param num binary number in string to parse
- * @returns {number} binary number in BigInteger
+ * @returns {number} binary number in BigInt
  */
 export declare let parseBinaryStringToBigInt: (num: string) => bigint;
 /**

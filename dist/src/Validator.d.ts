@@ -67,7 +67,7 @@ export declare class Validator {
      * @returns {[boolean , string]} first value is true if valid IPv4 number, false otherwise. Second value contains
      * "valid" or an error message when value is invalid
      */
-    static isValidIPv4Number(ipv4Number: bigint): [boolean, string[]];
+    static isValidIPv4Number(ipv4Number: bigint | number): [boolean, string[]];
     /**
      * Checks if the number given is within the value considered valid for an IPv6 number
      *

@@ -13,7 +13,7 @@ describe('Pool', () => {
     describe('IPV4', () => {
         it('Should create from IP Numbers', () => {
             let pool = Pool
-                .fromIPNumbers([IPv4.fromDecimalDottedString("10.0.0.1"), IPv4.fromDecimalDottedString("10.0.0.2")]);
+                .fromIP([IPv4.fromDecimalDottedString("10.0.0.1"), IPv4.fromDecimalDottedString("10.0.0.2")]);
             let ranges = pool.getRanges();
             expect(ranges[0].toCidrRange().toCidrString()).toEqual("10.0.0.1/32")
             expect(ranges[1].toCidrRange().toCidrString()).toEqual("10.0.0.2/32")
@@ -346,7 +346,7 @@ describe('Pool', () => {
 
         it('Should create from IP Numbers', () => {
             let pool = Pool
-                .fromIPNumbers([IPv6.fromHexadecimalString("2620:0:0:0:0:0:0:0"),
+                .fromIP([IPv6.fromHexadecimalString("2620:0:0:0:0:0:0:0"),
                     IPv6.fromHexadecimalString("2620:0:ffff:ffff:ffff:ffff:ffff:ffff")]);
             let ranges = pool.getRanges();
 

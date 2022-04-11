@@ -387,7 +387,7 @@ export class Asn extends AbstractIPNum {
     constructor(rawValue:string | number | bigint) {
         super();
         if (typeof rawValue === 'string') {
-            if (Asn.startWithASprefix(rawValue)) {
+            if (Asn.startWithASPrefix(rawValue)) {
                 this.value = BigInt(parseInt(rawValue.substring(2)));
             } else if(rawValue.indexOf(".") != -1) {
                 this.value = BigInt(this.parseFromDotNotation(rawValue));
@@ -498,7 +498,7 @@ export class Asn extends AbstractIPNum {
         return new Asn(this.value.valueOf() - 1n)
     }
 
-    private static startWithASprefix(word:string):boolean {
+    private static startWithASPrefix(word:string):boolean {
         return word.indexOf(Asn.AS_PREFIX) === 0;
     }
 

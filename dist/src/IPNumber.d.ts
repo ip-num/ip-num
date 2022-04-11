@@ -7,23 +7,23 @@ import { Hexadecatet } from "./Hexadecatet";
  */
 export declare abstract class AbstractIPNum {
     /**
-     * The decimal value represented by the IP number in BigInteger
+     * The decimal value represented by the IP number in BigInt
      */
     abstract readonly value: bigint;
     /**
-     * The number of bits needed to represents the value of the IP number
+     * The number of bits needed to represent the value of the IP number
      */
     abstract readonly bitSize: number;
     /**
-     * The maximum bit size (i.e. binary value) of the IP number in BigInteger
+     * The maximum bit size (i.e. binary value) of the IP number in BigInt
      */
     abstract readonly maximumBitSize: bigint;
     abstract nextIPNumber(): AbstractIPNum;
     abstract previousIPNumber(): AbstractIPNum;
     /**
-     * Gets the numeric value of an IP number as {@link BigInteger}
+     * Gets the numeric value of an IP number as {@link BigInt}
      *
-     * @returns {bigInt.BigInteger} the numeric value of an IP number.
+     * @returns bigInt the numeric value of an IP number.
      */
     getValue(): bigint;
     /**
@@ -88,7 +88,7 @@ export declare abstract class AbstractIPNum {
  */
 export declare class IPv4 extends AbstractIPNum {
     /**
-     * The decimal value represented by the IPv4 number in BigInteger
+     * The decimal value represented by the IPv4 number in BigInt
      */
     readonly value: bigint;
     /**
@@ -96,7 +96,7 @@ export declare class IPv4 extends AbstractIPNum {
      */
     readonly bitSize: number;
     /**
-     * The maximum bit size (i.e. binary value) of the IPv4 number in BigInteger
+     * The maximum bit size (i.e. binary value) of the IPv4 number in BigInt
      */
     readonly maximumBitSize: bigint;
     /**
@@ -117,12 +117,12 @@ export declare class IPv4 extends AbstractIPNum {
      */
     readonly separator: string;
     /**
-     * A convenience method for creating an {@link IPv4} by providing the decimal value of the IP number in BigInteger
+     * A convenience method for creating an {@link IPv4} by providing the decimal value of the IP number in BigInt
      *
-     * @param {bigInt.BigInteger} bigIntValue the decimal value of the IP number in BigInteger
+     * @param {bigint} bigIntValue the decimal value of the IP number in BigInt
      * @returns {IPv4} the IPv4 instance
      */
-    static fromBigInt(bigIntValue: bigint): IPv4;
+    static fromNumber(bigIntValue: bigint | number): IPv4;
     /**
      * A convenience method for creating an {@link IPv4} by providing the IP number in dot-decimal notation. E.g
      * "10.1.1.10"
@@ -150,10 +150,10 @@ export declare class IPv4 extends AbstractIPNum {
     /**
      * Constructor for an IPv4 number.
      *
-     * @param {string | bigInt.BigInteger} ipValue value to construct an IPv4 from. The given value can either be
+     * @param {string | bigint} ipValue value to construct an IPv4 from. The given value can either be
      * numeric or string. If a string is given then it needs to be in dot-decimal notation
      */
-    constructor(ipValue: string | bigint);
+    constructor(ipValue: string | bigint | number);
     /**
      * A string representation of the IPv4 number. The string representation is in dot-decimal notation
      *
@@ -201,7 +201,7 @@ export declare class IPv4 extends AbstractIPNum {
  */
 export declare class Asn extends AbstractIPNum {
     /**
-     * The decimal value represented by the ASN number in BigInteger
+     * The decimal value represented by the ASN number in BigInt
      */
     readonly value: bigint;
     /**
@@ -209,7 +209,7 @@ export declare class Asn extends AbstractIPNum {
      */
     bitSize: number;
     /**
-     * The maximum bit size (i.e. binary value) of the ASN number in BigInteger
+     * The maximum bit size (i.e. binary value) of the ASN number in BigInt
      */
     maximumBitSize: bigint;
     type: IPNumType;
@@ -306,7 +306,7 @@ export declare class Asn extends AbstractIPNum {
      * @returns {AbstractIPNum} the previous ASN number
      */
     previousIPNumber(): Asn;
-    private static startWithASprefix;
+    private static startWithASPrefix;
     private parseFromDotNotation;
 }
 /**
@@ -318,7 +318,7 @@ export declare class Asn extends AbstractIPNum {
  */
 export declare class IPv6 extends AbstractIPNum {
     /**
-     * The decimal value represented by the IPv6 number in BigInteger
+     * The decimal value represented by the IPv6 number in BigInt
      */
     readonly value: bigint;
     /**
@@ -326,7 +326,7 @@ export declare class IPv6 extends AbstractIPNum {
      */
     readonly bitSize: number;
     /**
-     * The maximum bit size (i.e. binary value) of the IPv6 number in BigInteger
+     * The maximum bit size (i.e. binary value) of the IPv6 number in BigInt
      */
     readonly maximumBitSize: bigint;
     /**
@@ -347,12 +347,12 @@ export declare class IPv6 extends AbstractIPNum {
      */
     readonly separator: string;
     /**
-     * A convenience method for creating an {@link IPv6} by providing the decimal value of the IP number in BigInteger
+     * A convenience method for creating an {@link IPv6} by providing the decimal value of the IP number in BigInt
      *
-     * @param {bigInt.BigInteger} bigIntValue the decimal value of the IP number in BigInteger
+     * @param {bigint} bigIntValue the decimal value of the IP number in BigInt
      * @returns {IPv6} the IPv6 instance
      */
-    static fromBigInteger(bigIntValue: bigint): IPv6;
+    static fromBigInt(bigIntValue: bigint): IPv6;
     /**
      * A convenience method for creating an {@link IPv6} by providing the IP number in hexadecatet notation. E.g
      * "2001:800:0:0:0:0:0:2002"
@@ -395,7 +395,7 @@ export declare class IPv6 extends AbstractIPNum {
     /**
      * Constructor for an IPv6 number.
      *
-     * @param {string | bigInt.BigInteger} ipValue value to construct an IPv6 from. The given value can either be
+     * @param {string | bigint} ipValue value to construct an IPv6 from. The given value can either be
      * numeric or string. If a string is given then it needs to be in hexadecatet string notation
      */
     constructor(ipValue: string | bigint);
@@ -440,7 +440,7 @@ export declare class IPv4Mask extends IPv4 {
      */
     readonly octets: Array<Octet>;
     /**
-     * The decimal value represented by the IPv4 mask in BigInteger
+     * The decimal value represented by the IPv4 mask in BigInt
      */
     readonly value: bigint;
     /**
@@ -477,7 +477,7 @@ export declare class IPv6Mask extends IPv6 {
      */
     readonly hexadecatet: Array<Hexadecatet>;
     /**
-     * The decimal value represented by the IPv6 number in BigInteger
+     * The decimal value represented by the IPv6 number in BigInt
      */
     readonly value: bigint;
     /**

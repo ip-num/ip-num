@@ -95,17 +95,16 @@ class IPv4Prefix implements Prefix {
     /**
      * Returns the size (number of IP numbers) of range of this prefix
      *
-     * @return {BigInteger} the size (number of IP numbers) of range of this prefix
+     * @return {bigint} the size (number of IP numbers) of range of this prefix
      */
     public toRangeSize(): bigint {
         /**
          * Using bitwise shift operation this will be
-         * 1 << (this.bitValue - this.prefix.getValue())
+         * 1 << (this.bitValue - this.getValue())
          * Since left shift a number by x is equivalent to multiplying the number by the power x raised to 2
          * 2 << 4 = 2 * (2 raised to 4)
          */
-        return BigInt(Math.pow(2, Number(this.bitValue - (this.getValue()))));
-        //return bigInt(2).pow(this.bitValue.minus(bigInt(this.getValue())));
+        return 1n << (this.bitValue - this.getValue())
     }
 
     /**
@@ -209,17 +208,16 @@ class IPv6Prefix implements Prefix {
     /**
      * Returns the size (number of IP numbers) of range of this prefix
      *
-     * @return {BigInteger} the size (number of IP numbers) of range of this prefix
+     * @return {bigint} the size (number of IP numbers) of range of this prefix
      */
     public toRangeSize(): bigint {
         /**
          * Using bitwise shift operation this will be
-         * 1 << (this.bitValue - this.prefix.getValue())
+         * 1 << (this.bitValue - this.getValue())
          * Since left shift a number by x is equivalent to multiplying the number by the power x raised to 2
          * 2 << 4 = 2 * (2 raised to 4)
          */
-        return BigInt(Math.pow(2, Number(this.bitValue - (this.getValue()))));
-        //return bigInt(2).pow(this.bitValue - (this.getValue()));
+        return 1n << (this.bitValue - this.getValue())
     }
 
     /**

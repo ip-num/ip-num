@@ -26,10 +26,10 @@ exports.decimalNumberToOctetString = (num) => {
     return exports.leftPadWithZeroBit(binaryString, 8);
 };
 /**
- * Parses number in binary to number in BigInteger
+ * Parses number in binary to number in BigInt
  *
  * @param num binary number in string to parse
- * @returns {number} binary number in BigInteger
+ * @returns {number} binary number in BigInt
  */
 exports.parseBinaryStringToBigInt = (num) => {
     return BigInt(`0b${num}`);
@@ -88,13 +88,13 @@ exports.cidrPrefixToMaskBinaryString = (cidrPrefix, ipType) => {
  */
 exports.intLog2 = (givenNumber) => {
     let result = 0;
-    while (Number(givenNumber) % 2 === 0) {
+    while (givenNumber % 2n === 0n) {
         if (givenNumber === 2n) {
             result++;
             break;
         }
         givenNumber = givenNumber >> 1n;
-        if (Number(givenNumber) % 2 !== 0) {
+        if (givenNumber % 2n !== 0n) {
             result = 0;
             break;
         }

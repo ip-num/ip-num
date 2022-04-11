@@ -15,7 +15,7 @@ export class Pool<T extends RangeType> {
      * Convenient method for creating an instance from arrays of {@link IPv4} or {@link IPv6}
      * @param ipNumbers the arrays of {@link IPv4} or {@link IPv6} that will make up the pool.
      */
-    public static fromIPNumbers(ipNumbers: Array<IPv4> | Array<IPv6>): Pool<RangeType> {
+    public static fromIP(ipNumbers: Array<IPv4> | Array<IPv6>): Pool<RangeType> {
         let ranges: Array<RangedSet<AbstractIPNum>> = (ipNumbers as Array<AbstractIPNum>).map((ip:(AbstractIPNum)) => {
             return RangedSet.fromSingleIP(ip);
         });
@@ -124,7 +124,7 @@ export class Pool<T extends RangeType> {
 
         loop:
         for (let range of this.getRanges()) {
-            for (var offset = 0n; offset + (prefix.toRangeSize()) <= (range.getSize()); offset = offset + (1n)) try {
+            for (let offset = 0n; offset + (prefix.toRangeSize()) <= (range.getSize()); offset = offset + 1n) try {
                 let selectedRange = range.takeSubRange(offset, prefix.toRangeSize());
                 selectedCidrRange = selectedRange.toCidrRange();
                 let remaining = range.difference(selectedRange);
@@ -188,7 +188,7 @@ export class Pool<T extends RangeType> {
             .aggregate()
             .getRanges()
             .reduce((previous, current) => {
-            return previous + (current.getSize());
+            return previous + current.getSize();
         }, 0n);
     }
 

@@ -49,6 +49,7 @@ class Validator {
      * "valid" or an error message when value is invalid
      */
     static isValidIPv4Number(ipv4Number) {
+        ipv4Number = typeof ipv4Number === "bigint" ? ipv4Number : BigInt(ipv4Number);
         let isValid = this.isWithinRange(ipv4Number, 0n, this.THIRTY_TWO_BIT_SIZE);
         return isValid ? [isValid, []] : [isValid, [Validator.invalidIPv4NumberMessage]];
     }

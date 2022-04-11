@@ -17,9 +17,9 @@ const HexadecimalUtils_2 = require("./HexadecimalUtils");
  */
 class AbstractIPNum {
     /**
-     * Gets the numeric value of an IP number as {@link BigInteger}
+     * Gets the numeric value of an IP number as {@link BigInt}
      *
-     * @returns {bigInt.BigInteger} the numeric value of an IP number.
+     * @returns bigInt the numeric value of an IP number.
      */
     getValue() {
         return this.value;
@@ -105,7 +105,7 @@ class IPv4 extends AbstractIPNum {
     /**
      * Constructor for an IPv4 number.
      *
-     * @param {string | bigInt.BigInteger} ipValue value to construct an IPv4 from. The given value can either be
+     * @param {string | bigint} ipValue value to construct an IPv4 from. The given value can either be
      * numeric or string. If a string is given then it needs to be in dot-decimal notation
      */
     constructor(ipValue) {
@@ -115,7 +115,7 @@ class IPv4 extends AbstractIPNum {
          */
         this.bitSize = 32;
         /**
-         * The maximum bit size (i.e. binary value) of the IPv4 number in BigInteger
+         * The maximum bit size (i.e. binary value) of the IPv4 number in BigInt
          */
         this.maximumBitSize = Validator_1.Validator.THIRTY_TWO_BIT_SIZE;
         /**
@@ -147,12 +147,12 @@ class IPv4 extends AbstractIPNum {
         }
     }
     /**
-     * A convenience method for creating an {@link IPv4} by providing the decimal value of the IP number in BigInteger
+     * A convenience method for creating an {@link IPv4} by providing the decimal value of the IP number in BigInt
      *
-     * @param {bigInt.BigInteger} bigIntValue the decimal value of the IP number in BigInteger
+     * @param {bigint} bigIntValue the decimal value of the IP number in BigInt
      * @returns {IPv4} the IPv4 instance
      */
-    static fromBigInt(bigIntValue) {
+    static fromNumber(bigIntValue) {
         return new IPv4(bigIntValue);
     }
     /**
@@ -213,7 +213,7 @@ class IPv4 extends AbstractIPNum {
      * @returns {IPv4} the next IPv4 number
      */
     nextIPNumber() {
-        return IPv4.fromBigInt(this.getValue() + 1n);
+        return IPv4.fromNumber(this.getValue() + 1n);
     }
     /**
      * Returns the previous IPv4 number
@@ -221,7 +221,7 @@ class IPv4 extends AbstractIPNum {
      * @returns {IPv4} the previous IPv4 number
      */
     previousIPNumber() {
-        return IPv4.fromBigInt(this.getValue() - 1n);
+        return IPv4.fromNumber(this.getValue() - 1n);
     }
     /**
      * Returns this IPv4 number as a IPv4-Mapped IPv6 Address
@@ -256,6 +256,7 @@ class IPv4 extends AbstractIPNum {
             throw new Error(message.filter(msg => { return msg !== ''; }).toString());
         }
         let binaryString = BinaryUtils_4.numberToBinaryString(ipv4Number);
+        ipv4Number = typeof ipv4Number === "bigint" ? ipv4Number : BigInt(ipv4Number);
         return [ipv4Number, this.binaryStringToDecimalOctets(binaryString)];
     }
     binaryStringToDecimalOctets(ipv4BinaryString) {
@@ -290,12 +291,12 @@ class Asn extends AbstractIPNum {
          */
         this.bitSize = 32;
         /**
-         * The maximum bit size (i.e. binary value) of the ASN number in BigInteger
+         * The maximum bit size (i.e. binary value) of the ASN number in BigInt
          */
         this.maximumBitSize = Validator_1.Validator.THIRTY_TWO_BIT_SIZE;
         this.type = "ASN" /* ASN */;
         if (typeof rawValue === 'string') {
-            if (Asn.startWithASprefix(rawValue)) {
+            if (Asn.startWithASPrefix(rawValue)) {
                 this.value = BigInt(parseInt(rawValue.substring(2)));
             }
             else if (rawValue.indexOf(".") != -1) {
@@ -381,7 +382,7 @@ class Asn extends AbstractIPNum {
      * whether the numeric value of the ASN number is greater than 65526 or not.
      */
     toASDot() {
-        if (this.value.valueOf() >= 65536) {
+        if (this.value.valueOf() >= 65536n) {
             return this.toASDotPlus();
         }
         return this.toASPlain();
@@ -403,7 +404,7 @@ class Asn extends AbstractIPNum {
      * @returns {string} a binary string representation of the value of the ASN number
      */
     toBinaryString() {
-        return BinaryUtils_4.numberToBinaryString(Number(this.value));
+        return BinaryUtils_4.numberToBinaryString(this.value);
     }
     /**
      * Checks if the ASN value is 16bit
@@ -438,7 +439,7 @@ class Asn extends AbstractIPNum {
     previousIPNumber() {
         return new Asn(this.value.valueOf() - 1n);
     }
-    static startWithASprefix(word) {
+    static startWithASPrefix(word) {
         return word.indexOf(Asn.AS_PREFIX) === 0;
     }
     parseFromDotNotation(rawValue) {
@@ -461,7 +462,7 @@ class IPv6 extends AbstractIPNum {
     /**
      * Constructor for an IPv6 number.
      *
-     * @param {string | bigInt.BigInteger} ipValue value to construct an IPv6 from. The given value can either be
+     * @param {string | bigint} ipValue value to construct an IPv6 from. The given value can either be
      * numeric or string. If a string is given then it needs to be in hexadecatet string notation
      */
     constructor(ipValue) {
@@ -471,7 +472,7 @@ class IPv6 extends AbstractIPNum {
          */
         this.bitSize = 128;
         /**
-         * The maximum bit size (i.e. binary value) of the IPv6 number in BigInteger
+         * The maximum bit size (i.e. binary value) of the IPv6 number in BigInt
          */
         this.maximumBitSize = Validator_1.Validator.ONE_HUNDRED_AND_TWENTY_EIGHT_BIT_SIZE;
         /**
@@ -504,12 +505,12 @@ class IPv6 extends AbstractIPNum {
         }
     }
     /**
-     * A convenience method for creating an {@link IPv6} by providing the decimal value of the IP number in BigInteger
+     * A convenience method for creating an {@link IPv6} by providing the decimal value of the IP number in BigInt
      *
-     * @param {bigInt.BigInteger} bigIntValue the decimal value of the IP number in BigInteger
+     * @param {bigint} bigIntValue the decimal value of the IP number in BigInt
      * @returns {IPv6} the IPv6 instance
      */
-    static fromBigInteger(bigIntValue) {
+    static fromBigInt(bigIntValue) {
         return new IPv6(bigIntValue);
     }
     /**
@@ -597,7 +598,7 @@ class IPv6 extends AbstractIPNum {
      * @returns {IPv6} the next IPv6 number
      */
     nextIPNumber() {
-        return IPv6.fromBigInteger(this.getValue() + 1n);
+        return IPv6.fromBigInt(this.getValue() + 1n);
     }
     /**
      * Returns the previous IPv6 number
@@ -605,7 +606,7 @@ class IPv6 extends AbstractIPNum {
      * @returns {IPv6} the previous IPv6 number
      */
     previousIPNumber() {
-        return IPv6.fromBigInteger(this.getValue() - 1n);
+        return IPv6.fromBigInt(this.getValue() - 1n);
     }
     constructFromBigIntValue(ipv6Number) {
         let [isValid, message] = Validator_1.Validator.isValidIPv6Number(ipv6Number);

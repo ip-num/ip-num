@@ -13,7 +13,7 @@ export declare class Pool<T extends RangeType> {
      * Convenient method for creating an instance from arrays of {@link IPv4} or {@link IPv6}
      * @param ipNumbers the arrays of {@link IPv4} or {@link IPv6} that will make up the pool.
      */
-    static fromIPNumbers(ipNumbers: Array<IPv4> | Array<IPv6>): Pool<RangeType>;
+    static fromIP(ipNumbers: Array<IPv4> | Array<IPv6>): Pool<RangeType>;
     /**
      * Convenient method for creating an instance from arrays of {@link RangedSet}.
      *

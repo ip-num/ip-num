@@ -24,7 +24,7 @@ class Pool {
      * Convenient method for creating an instance from arrays of {@link IPv4} or {@link IPv6}
      * @param ipNumbers the arrays of {@link IPv4} or {@link IPv6} that will make up the pool.
      */
-    static fromIPNumbers(ipNumbers) {
+    static fromIP(ipNumbers) {
         let ranges = ipNumbers.map((ip) => {
             return IPRange_1.RangedSet.fromSingleIP(ip);
         });
@@ -112,7 +112,7 @@ class Pool {
         let selectedCidrRange;
         let error;
         loop: for (let range of this.getRanges()) {
-            for (var offset = 0n; offset + (prefix.toRangeSize()) <= (range.getSize()); offset = offset + (1n))
+            for (let offset = 0n; offset + (prefix.toRangeSize()) <= (range.getSize()); offset = offset + 1n)
                 try {
                     let selectedRange = range.takeSubRange(offset, prefix.toRangeSize());
                     selectedCidrRange = selectedRange.toCidrRange();
@@ -176,7 +176,7 @@ class Pool {
             .aggregate()
             .getRanges()
             .reduce((previous, current) => {
-            return previous + (current.getSize());
+            return previous + current.getSize();
         }, 0n);
     }
     /**

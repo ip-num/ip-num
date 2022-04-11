@@ -59,7 +59,7 @@ declare class IPv4Prefix implements Prefix {
     /**
      * Returns the size (number of IP numbers) of range of this prefix
      *
-     * @return {BigInteger} the size (number of IP numbers) of range of this prefix
+     * @return {bigint} the size (number of IP numbers) of range of this prefix
      */
     toRangeSize(): bigint;
     /**
@@ -126,7 +126,7 @@ declare class IPv6Prefix implements Prefix {
     /**
      * Returns the size (number of IP numbers) of range of this prefix
      *
-     * @return {BigInteger} the size (number of IP numbers) of range of this prefix
+     * @return {bigint} the size (number of IP numbers) of range of this prefix
      */
     toRangeSize(): bigint;
     /**
