@@ -33,7 +33,7 @@ class Validator {
     /**
      * Checks if the given ASN number is a 16bit ASN number
      *
-     * @param {bigInt.BigInteger} asnNumber to check if 16bit or not
+     * @param {bigint} asnNumber to check if 16bit or not
      * @returns {[boolean , string]} first value is true if valid 16bit ASN, false otherwise. Second value contains
      * "valid" or an error message when value is invalid
      */
@@ -77,7 +77,7 @@ class Validator {
     /**
      * Checks if the number given is valid for an IPv6 hexadecatet
      *
-     * @param {bigInt.BigInteger} hexadecatetNum the hexadecatet value
+     * @param {bigint} hexadecatetNum the hexadecatet value
      * @returns {[boolean , string]} first value is true if valid hexadecatet, false otherwise. Second value contains
      * "valid" or an error message when value is invalid
      */

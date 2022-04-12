@@ -40,7 +40,7 @@ describe('mask test', function() {
 
 // IPv6
     it('should create an instance of iPv6Mask using fromDecimalDottedString', () => {
-        let iPv6Mask = IPv6Mask.fromHexadecimalString("ffff:ffff:ffff:ffff:ffff:ffff:0:0");
+        let iPv6Mask = IPv6Mask.fromHexadecatet("ffff:ffff:ffff:ffff:ffff:ffff:0:0");
         expect(iPv6Mask.toString()).toEqual("ffff:ffff:ffff:ffff:ffff:ffff:0:0");
     });
 

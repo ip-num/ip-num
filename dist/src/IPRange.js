@@ -67,7 +67,7 @@ class RangedSet {
             return new RangedSet(IPNumber_1.IPv4.fromDecimalDottedString(firstIPString), IPNumber_1.IPv4.fromDecimalDottedString(lastIPString));
         }
         else if (isValidFirstIPv6 && isValidLastIPv6) {
-            return new RangedSet(IPNumber_1.IPv6.fromHexadecimalString(firstIPString), IPNumber_1.IPv6.fromHexadecimalString(lastIPString));
+            return new RangedSet(IPNumber_1.IPv6.fromHexadecatet(firstIPString), IPNumber_1.IPv6.fromHexadecatet(lastIPString));
         }
         else {
             throw new Error("First IP and Last IP should be valid and same type");
@@ -569,7 +569,7 @@ class IPv4CidrRange extends AbstractIPRange {
     /**
      * Method that takes IPv4 number from within an IPv4 range, starting from the first IPv4 number
      *
-     * @param {number} count the amount of IPv4 number to take from the IPv4 range
+     * @param {bigint} count the amount of IPv4 number to take from the IPv4 range
      * @returns {Array<IPv4>} an array of IPv4 number, taken from the IPv4 range
      */
     take(count) {
@@ -705,7 +705,7 @@ class IPv6CidrRange extends AbstractIPRange {
         let cidrComponents = rangeInCidrNotation.split("/");
         let ipString = cidrComponents[0];
         let prefix = BigInt(parseInt(cidrComponents[1]));
-        return new IPv6CidrRange(IPNumber_1.IPv6.fromHexadecimalString(ipString), Prefix_1.IPv6Prefix.fromNumber(prefix));
+        return new IPv6CidrRange(IPNumber_1.IPv6.fromHexadecatet(ipString), Prefix_1.IPv6Prefix.fromNumber(prefix));
     }
     ;
     /**
@@ -804,7 +804,7 @@ class IPv6CidrRange extends AbstractIPRange {
     /**
      * Method that takes IPv6 number from within an IPv6 range, starting from the first IPv6 number
      *
-     * @param {number} count the amount of IPv6 number to take from the IPv6 range
+     * @param {bigint} count the amount of IPv6 number to take from the IPv6 range
      * @returns {Array<IPv6>} an array of IPv6 number, taken from the IPv6 range
      */
     take(count) {

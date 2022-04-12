@@ -202,7 +202,7 @@ class IPv6Prefix implements Prefix {
     public toMask(): IPv6Mask {
         let onBits = '1'.repeat(Number(this.value));
         let offBits = '0'.repeat(128 - Number(this.value));
-        return IPv6Mask.fromHexadecimalString(this.toHexadecatetNotation(`${onBits}${offBits}`));
+        return IPv6Mask.fromHexadecatet(this.toHexadecatetNotation(`${onBits}${offBits}`));
     }
 
     /**

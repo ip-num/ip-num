@@ -362,7 +362,7 @@ export declare class IPv6 extends AbstractIPNum {
      * @param {string} ipString the IP number in hexadecatet
      * @returns {IPv6} the IPv6 instance
      */
-    static fromHexadecimalString(ipString: string): IPv6;
+    static fromHexadecatet(ipString: string): IPv6;
     /**
      * Alias for IPv6.fromHexadecimalString
      *
@@ -491,7 +491,7 @@ export declare class IPv6Mask extends IPv6 {
      * @param {string} rawValue The passed string in textual notation
      * @returns {IPv6Mask} the instance of IPv6Mask
      */
-    static fromHexadecimalString(rawValue: string): IPv6Mask;
+    static fromHexadecatet(rawValue: string): IPv6Mask;
     /**
      * Constructor for creating an instance of IPv6Mask.
      * The passed strings need to be a valid IPv6 mask number in dot-decimal notation

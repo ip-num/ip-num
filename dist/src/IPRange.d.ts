@@ -295,7 +295,7 @@ export declare class IPv4CidrRange extends AbstractIPRange<IPv4, IPv4Prefix> {
     /**
      * Method that takes IPv4 number from within an IPv4 range, starting from the first IPv4 number
      *
-     * @param {number} count the amount of IPv4 number to take from the IPv4 range
+     * @param {bigint} count the amount of IPv4 number to take from the IPv4 range
      * @returns {Array<IPv4>} an array of IPv4 number, taken from the IPv4 range
      */
     take(count: bigint): Array<IPv4>;
@@ -432,7 +432,7 @@ export declare class IPv6CidrRange extends AbstractIPRange<IPv6, IPv6Prefix> {
     /**
      * Method that takes IPv6 number from within an IPv6 range, starting from the first IPv6 number
      *
-     * @param {number} count the amount of IPv6 number to take from the IPv6 range
+     * @param {bigint} count the amount of IPv6 number to take from the IPv6 range
      * @returns {Array<IPv6>} an array of IPv6 number, taken from the IPv6 range
      */
     take(count: bigint): Array<IPv6>;

@@ -172,7 +172,7 @@ class IPv6Prefix {
     toMask() {
         let onBits = '1'.repeat(Number(this.value));
         let offBits = '0'.repeat(128 - Number(this.value));
-        return IPNumber_1.IPv6Mask.fromHexadecimalString(this.toHexadecatetNotation(`${onBits}${offBits}`));
+        return IPNumber_1.IPv6Mask.fromHexadecatet(this.toHexadecatetNotation(`${onBits}${offBits}`));
     }
     /**
      * Returns the size (number of IP numbers) of range of this prefix

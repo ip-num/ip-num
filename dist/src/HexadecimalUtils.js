@@ -4,8 +4,8 @@ exports.hexadectetNotationToBinaryString = exports.binaryStringToHexadecimalStri
 const IPv6Utils_1 = require("./IPv6Utils");
 const BinaryUtils_1 = require("./BinaryUtils");
 /**
- * Converts a given BigInteger number to a hexadecimal string
- * @param num the BigInteger number
+ * Converts a given bigint number to a hexadecimal string
+ * @param num the bigint number
  * @returns {string} the hexadeciaml string
  */
 exports.bigIntToHexadecimalString = (num) => {

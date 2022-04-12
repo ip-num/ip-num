@@ -69,7 +69,7 @@ export class RangedSet<T extends AbstractIPNum> implements Iterable<AbstractIPNu
         if (isValidFirstIPv4 && isValidSecondIPv4) {
             return new RangedSet(IPv4.fromDecimalDottedString(firstIPString), IPv4.fromDecimalDottedString(lastIPString))
         } else if (isValidFirstIPv6 && isValidLastIPv6) {
-            return new RangedSet(IPv6.fromHexadecimalString(firstIPString), IPv6.fromHexadecimalString(lastIPString))
+            return new RangedSet(IPv6.fromHexadecatet(firstIPString), IPv6.fromHexadecatet(lastIPString))
         } else {
             throw new Error("First IP and Last IP should be valid and same type");
         }
@@ -791,7 +791,7 @@ export class IPv6CidrRange extends AbstractIPRange<IPv6, IPv6Prefix> {
         let cidrComponents: Array<string> = rangeInCidrNotation.split("/");
         let ipString = cidrComponents[0];
         let prefix = BigInt(parseInt(cidrComponents[1]));
-        return new IPv6CidrRange(IPv6.fromHexadecimalString(ipString), IPv6Prefix.fromNumber(prefix));
+        return new IPv6CidrRange(IPv6.fromHexadecatet(ipString), IPv6Prefix.fromNumber(prefix));
     };
 
     /**

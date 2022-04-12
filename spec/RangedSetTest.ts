@@ -258,8 +258,8 @@ describe('RangedSet: ', () => {
 
     it('should convert range to Cidr range IPv6', () => {
         let convertedRange = new RangedSet(
-            IPv6.fromHexadecimalString("2620:0:0:0:0:0:0:0"),
-            IPv6.fromHexadecimalString("2620:0:ffff:ffff:ffff:ffff:ffff:ffff")
+            IPv6.fromHexadecatet("2620:0:0:0:0:0:0:0"),
+            IPv6.fromHexadecatet("2620:0:ffff:ffff:ffff:ffff:ffff:ffff")
         ).toCidrRange();
 
         expect(convertedRange.toCidrString()).toEqual("2620:0:0:0:0:0:0:0/32")
@@ -277,8 +277,8 @@ describe('RangedSet: ', () => {
     it('should not convert range to IPv6 Cidr range', () => {
         expect(() => {
             new RangedSet(
-                IPv6.fromHexadecimalString("2620:0:0:0:0:0:0:1"),
-                IPv6.fromHexadecimalString("2620:0:0:0:0:0:1:0"),
+                IPv6.fromHexadecatet("2620:0:0:0:0:0:0:1"),
+                IPv6.fromHexadecatet("2620:0:0:0:0:0:1:0"),
             ).toCidrRange();
         }).toThrowError(Error, "Range cannot be converted to CIDR");
     });
@@ -295,8 +295,8 @@ describe('RangedSet: ', () => {
     it('should not convert range to IPv6 Cidr range', () => {
         expect(() => {
             new RangedSet(
-                IPv6.fromHexadecimalString("2620:0:0:0:0:0:0:1"),
-                IPv6.fromHexadecimalString("2620:0:ffff:ffff:ffff:ffff:ffff:eeee")
+                IPv6.fromHexadecatet("2620:0:0:0:0:0:0:1"),
+                IPv6.fromHexadecatet("2620:0:ffff:ffff:ffff:ffff:ffff:eeee")
             ).toCidrRange();
         }).toThrowError(Error, "Given size can't be created via cidr prefix");
     });
@@ -304,8 +304,8 @@ describe('RangedSet: ', () => {
     it("should throw error when constructing with first grater than last", () => {
         expect(() => {
             new RangedSet(
-                IPv6.fromHexadecimalString("2620:0:ffff:ffff:ffff:ffff:ffff:eeee"),
-                IPv6.fromHexadecimalString("2620:0:0:0:0:0:0:1")
+                IPv6.fromHexadecatet("2620:0:ffff:ffff:ffff:ffff:ffff:eeee"),
+                IPv6.fromHexadecatet("2620:0:0:0:0:0:0:1")
             )
         }).toThrowError(Error);
     });
@@ -370,8 +370,8 @@ describe('RangedSet: ', () => {
 
             it("should pick whole range as sub range", () => {
                 let originalRange = new RangedSet(
-                    IPv6.fromHexadecimalString("2001:d00:0:0:0:0:0:0"),
-                    IPv6.fromHexadecimalString("2001:dff:ffff:ffff:ffff:ffff:ffff:ffff")
+                    IPv6.fromHexadecatet("2001:d00:0:0:0:0:0:0"),
+                    IPv6.fromHexadecatet("2001:dff:ffff:ffff:ffff:ffff:ffff:ffff")
                 );
 
                 expect(()=>{
@@ -381,8 +381,8 @@ describe('RangedSet: ', () => {
 
             it("should pick whole range as sub range", () => {
                 let originalRange = new RangedSet(
-                    IPv6.fromHexadecimalString("2001:d00:0:0:0:0:0:0"),
-                    IPv6.fromHexadecimalString("2001:dff:ffff:ffff:ffff:ffff:ffff:ffff")
+                    IPv6.fromHexadecatet("2001:d00:0:0:0:0:0:0"),
+                    IPv6.fromHexadecatet("2001:dff:ffff:ffff:ffff:ffff:ffff:ffff")
                 );
 
                 let subRange = originalRange.takeSubRange(0n, BigInt("20282409603651670423947251286016"));
@@ -390,8 +390,8 @@ describe('RangedSet: ', () => {
             });
             it("should pick whole range with offset 1", () => {
                 let originalRange = new RangedSet(
-                    IPv6.fromHexadecimalString("2001:d00:0:0:0:0:0:0"),
-                    IPv6.fromHexadecimalString("2001:dff:ffff:ffff:ffff:ffff:ffff:ffff")
+                    IPv6.fromHexadecatet("2001:d00:0:0:0:0:0:0"),
+                    IPv6.fromHexadecatet("2001:dff:ffff:ffff:ffff:ffff:ffff:ffff")
                 );
 
                 let subRange = originalRange.takeSubRange(1n, BigInt("20282409603651670423947251286015"));
@@ -399,8 +399,8 @@ describe('RangedSet: ', () => {
             });
             it("should throw an exception if size is larger than range", () => {
                 let originalRange = new RangedSet(
-                    IPv6.fromHexadecimalString("2001:d00:0:0:0:0:0:0"),
-                    IPv6.fromHexadecimalString("2001:dff:ffff:ffff:ffff:ffff:ffff:ffff")
+                    IPv6.fromHexadecatet("2001:d00:0:0:0:0:0:0"),
+                    IPv6.fromHexadecatet("2001:dff:ffff:ffff:ffff:ffff:ffff:ffff")
                 );
 
                 expect(()=>{
@@ -410,8 +410,8 @@ describe('RangedSet: ', () => {
 
             it("should throw an exception if size is larger than range due to offset", () => {
                 let originalRange = new RangedSet(
-                    IPv6.fromHexadecimalString("2001:d00:0:0:0:0:0:0"),
-                    IPv6.fromHexadecimalString("2001:dff:ffff:ffff:ffff:ffff:ffff:ffff")
+                    IPv6.fromHexadecatet("2001:d00:0:0:0:0:0:0"),
+                    IPv6.fromHexadecatet("2001:dff:ffff:ffff:ffff:ffff:ffff:ffff")
                 );
 
                 expect(()=>{
@@ -612,13 +612,13 @@ describe('RangedSet: ', () => {
 
             it("it should subtract all", () => {
                 let original = new RangedSet(
-                    IPv6.fromHexadecimalString("2620:0:0:0:0:0:0:0"),
-                    IPv6.fromHexadecimalString("2620:0:ffff:ffff:ffff:ffff:ffff:ffff")
+                    IPv6.fromHexadecatet("2620:0:0:0:0:0:0:0"),
+                    IPv6.fromHexadecatet("2620:0:ffff:ffff:ffff:ffff:ffff:ffff")
                 );
 
                 let toSubtract = new RangedSet(
-                    IPv6.fromHexadecimalString("2620:0:0:0:0:0:0:0"),
-                    IPv6.fromHexadecimalString("2620:0:ffff:ffff:ffff:ffff:ffff:ffff")
+                    IPv6.fromHexadecatet("2620:0:0:0:0:0:0:0"),
+                    IPv6.fromHexadecatet("2620:0:ffff:ffff:ffff:ffff:ffff:ffff")
                 );
 
                 let result = original.difference(toSubtract);
@@ -627,13 +627,13 @@ describe('RangedSet: ', () => {
 
             it("it should subtract from beginning", () => {
                 let original = new RangedSet(
-                    IPv6.fromHexadecimalString("2620:0:0:0:0:0:0:0"),
-                    IPv6.fromHexadecimalString("2620:0:ffff:ffff:ffff:ffff:ffff:ffff")
+                    IPv6.fromHexadecatet("2620:0:0:0:0:0:0:0"),
+                    IPv6.fromHexadecatet("2620:0:ffff:ffff:ffff:ffff:ffff:ffff")
                 );
 
                 let toSubtract = new RangedSet(
-                    IPv6.fromHexadecimalString("2620:0:0:0:0:0:0:3"),
-                    IPv6.fromHexadecimalString("2620:0:ffff:ffff:ffff:ffff:ffff:ffff")
+                    IPv6.fromHexadecatet("2620:0:0:0:0:0:0:3"),
+                    IPv6.fromHexadecatet("2620:0:ffff:ffff:ffff:ffff:ffff:ffff")
                 );
 
                 let result = original.difference(toSubtract);
@@ -643,13 +643,13 @@ describe('RangedSet: ', () => {
 
             it("it should subtract up to end", () => {
                 let original = new RangedSet(
-                    IPv6.fromHexadecimalString("2620:0:0:0:0:0:0:0"),
-                    IPv6.fromHexadecimalString("2620:0:ffff:ffff:ffff:ffff:ffff:ffff")
+                    IPv6.fromHexadecatet("2620:0:0:0:0:0:0:0"),
+                    IPv6.fromHexadecatet("2620:0:ffff:ffff:ffff:ffff:ffff:ffff")
                 );
 
                 let toSubtract = new RangedSet(
-                    IPv6.fromHexadecimalString("2620:0:0:0:0:0:0:bbbb"),
-                    IPv6.fromHexadecimalString("2620:0:ffff:ffff:ffff:ffff:ffff:ffff")
+                    IPv6.fromHexadecatet("2620:0:0:0:0:0:0:bbbb"),
+                    IPv6.fromHexadecatet("2620:0:ffff:ffff:ffff:ffff:ffff:ffff")
                 );
 
                 let result = original.difference(toSubtract);
@@ -659,13 +659,13 @@ describe('RangedSet: ', () => {
 
             it("it should subtract from middle", () => {
                 let original = new RangedSet(
-                    IPv6.fromHexadecimalString("2620:0:0:0:0:0:0:0"),
-                    IPv6.fromHexadecimalString("2620:0:ffff:ffff:ffff:ffff:ffff:ffff")
+                    IPv6.fromHexadecatet("2620:0:0:0:0:0:0:0"),
+                    IPv6.fromHexadecatet("2620:0:ffff:ffff:ffff:ffff:ffff:ffff")
                 );
 
                 let toSubtract = new RangedSet(
-                    IPv6.fromHexadecimalString("2620:0:0:0:0:0:0:200"),
-                    IPv6.fromHexadecimalString("2620:0:0:0:0:0:0:400")
+                    IPv6.fromHexadecatet("2620:0:0:0:0:0:0:200"),
+                    IPv6.fromHexadecatet("2620:0:0:0:0:0:0:400")
                 );
 
                 let result = original.difference(toSubtract);
@@ -677,13 +677,13 @@ describe('RangedSet: ', () => {
             describe("Less than test", () => {
                 it('should tell if less than if first ip is less', () => {
                     let first = new RangedSet(
-                        IPv6.fromHexadecimalString("3620:0:0:0:0:0:0:0"),
-                        IPv6.fromHexadecimalString("3620:0:ffff:ffff:ffff:ffff:ffff:ffff")
+                        IPv6.fromHexadecatet("3620:0:0:0:0:0:0:0"),
+                        IPv6.fromHexadecatet("3620:0:ffff:ffff:ffff:ffff:ffff:ffff")
                     );
 
                     let second = new RangedSet(
-                        IPv6.fromHexadecimalString("2620:0:0:0:0:0:0:0"),
-                        IPv6.fromHexadecimalString("2620:0:ffff:ffff:ffff:ffff:ffff:ffff")
+                        IPv6.fromHexadecatet("2620:0:0:0:0:0:0:0"),
+                        IPv6.fromHexadecatet("2620:0:ffff:ffff:ffff:ffff:ffff:ffff")
                     );
 
                     expect(first.isLessThan(second)).toBe(false);
@@ -691,13 +691,13 @@ describe('RangedSet: ', () => {
                 });
                 it('should tell if less than based on size if first ip is same', () => {
                     let first = new RangedSet(
-                        IPv6.fromHexadecimalString("3620:0:0:0:0:0:0:0"),
-                        IPv6.fromHexadecimalString("3620:0:0:0:0:0:0:ffff")
+                        IPv6.fromHexadecatet("3620:0:0:0:0:0:0:0"),
+                        IPv6.fromHexadecatet("3620:0:0:0:0:0:0:ffff")
                     );
 
                     let second = new RangedSet(
-                        IPv6.fromHexadecimalString("3620:0:0:0:0:0:0:0"),
-                        IPv6.fromHexadecimalString("3620:0:ffff:ffff:ffff:ffff:ffff:ffff")
+                        IPv6.fromHexadecatet("3620:0:0:0:0:0:0:0"),
+                        IPv6.fromHexadecatet("3620:0:ffff:ffff:ffff:ffff:ffff:ffff")
                     );
 
                     expect(first.isLessThan(second)).toBe(true);
@@ -705,13 +705,13 @@ describe('RangedSet: ', () => {
                 });
                 it('should tell if less than when equals', () => {
                     let first = new RangedSet(
-                        IPv6.fromHexadecimalString("3620:0:0:0:0:0:0:0"),
-                        IPv6.fromHexadecimalString("3620:0:ffff:ffff:ffff:ffff:ffff:ffff")
+                        IPv6.fromHexadecatet("3620:0:0:0:0:0:0:0"),
+                        IPv6.fromHexadecatet("3620:0:ffff:ffff:ffff:ffff:ffff:ffff")
                     );
 
                     let second = new RangedSet(
-                        IPv6.fromHexadecimalString("3620:0:0:0:0:0:0:0"),
-                        IPv6.fromHexadecimalString("3620:0:ffff:ffff:ffff:ffff:ffff:ffff")
+                        IPv6.fromHexadecatet("3620:0:0:0:0:0:0:0"),
+                        IPv6.fromHexadecatet("3620:0:ffff:ffff:ffff:ffff:ffff:ffff")
                     );
 
                     expect(first.isLessThan(second)).toBe(false);
@@ -721,13 +721,13 @@ describe('RangedSet: ', () => {
             describe("Greater than test", () => {
                 it('should tell if less than if first ip is less', () => {
                     let first = new RangedSet(
-                        IPv6.fromHexadecimalString("3620:0:0:0:0:0:0:0"),
-                        IPv6.fromHexadecimalString("3620:0:ffff:ffff:ffff:ffff:ffff:ffff")
+                        IPv6.fromHexadecatet("3620:0:0:0:0:0:0:0"),
+                        IPv6.fromHexadecatet("3620:0:ffff:ffff:ffff:ffff:ffff:ffff")
                     );
 
                     let second = new RangedSet(
-                        IPv6.fromHexadecimalString("2620:0:0:0:0:0:0:0"),
-                        IPv6.fromHexadecimalString("2620:0:ffff:ffff:ffff:ffff:ffff:ffff")
+                        IPv6.fromHexadecatet("2620:0:0:0:0:0:0:0"),
+                        IPv6.fromHexadecatet("2620:0:ffff:ffff:ffff:ffff:ffff:ffff")
                     );
 
                     expect(first.isGreaterThan(second)).toBe(true);
@@ -735,13 +735,13 @@ describe('RangedSet: ', () => {
                 });
                 it('should tell if less than based on size if first ip is same', () => {
                     let first = new RangedSet(
-                        IPv6.fromHexadecimalString("3620:0:0:0:0:0:0:0"),
-                        IPv6.fromHexadecimalString("3620:0:0:0:0:0:0:ffff")
+                        IPv6.fromHexadecatet("3620:0:0:0:0:0:0:0"),
+                        IPv6.fromHexadecatet("3620:0:0:0:0:0:0:ffff")
                     );
 
                     let second = new RangedSet(
-                        IPv6.fromHexadecimalString("3620:0:0:0:0:0:0:0"),
-                        IPv6.fromHexadecimalString("3620:0:ffff:ffff:ffff:ffff:ffff:ffff")
+                        IPv6.fromHexadecatet("3620:0:0:0:0:0:0:0"),
+                        IPv6.fromHexadecatet("3620:0:ffff:ffff:ffff:ffff:ffff:ffff")
                     );
 
                     expect(first.isGreaterThan(second)).toBe(false);
@@ -749,13 +749,13 @@ describe('RangedSet: ', () => {
                 });
                 it('should tell if less than when equals', () => {
                     let first = new RangedSet(
-                        IPv6.fromHexadecimalString("3620:0:0:0:0:0:0:0"),
-                        IPv6.fromHexadecimalString("3620:0:ffff:ffff:ffff:ffff:ffff:ffff")
+                        IPv6.fromHexadecatet("3620:0:0:0:0:0:0:0"),
+                        IPv6.fromHexadecatet("3620:0:ffff:ffff:ffff:ffff:ffff:ffff")
                     );
 
                     let second = new RangedSet(
-                        IPv6.fromHexadecimalString("3620:0:0:0:0:0:0:0"),
-                        IPv6.fromHexadecimalString("3620:0:ffff:ffff:ffff:ffff:ffff:ffff")
+                        IPv6.fromHexadecatet("3620:0:0:0:0:0:0:0"),
+                        IPv6.fromHexadecatet("3620:0:ffff:ffff:ffff:ffff:ffff:ffff")
                     );
 
                     expect(first.isGreaterThan(second)).toBe(false);

@@ -40,7 +40,7 @@ describe('IPv6: ', () => {
     });
 
     it('should instantiate by calling fromHexadecimal', () => {
-        let iPv6 = IPv6.fromHexadecimalString("3ffe:1900:4545:0003:0200:f8ff:fe21:67cf");
+        let iPv6 = IPv6.fromHexadecatet("3ffe:1900:4545:0003:0200:f8ff:fe21:67cf");
         expect(iPv6.toString()).toEqual("3ffe:1900:4545:3:200:f8ff:fe21:67cf");
         let hexadecatets = iPv6.getHexadecatet();
         expect(hexadecatets[0].toString()).toEqual("3ffe");
@@ -87,7 +87,7 @@ describe('IPv6: ', () => {
         let IPv6String = "3ffe:1900:4545:0003:0200:f8ff:fe21:67cf";
 
         let binaryString = IPv6
-            .fromHexadecimalString(IPv6String)
+            .fromHexadecatet(IPv6String)
             .toBinaryString();
 
         let iPv6 = IPv6.fromBinaryString(binaryString);
@@ -112,7 +112,7 @@ describe('IPv6: ', () => {
 
     it('should throw an exception when invalid IPv6 string is used to construct an IPv6 instance', function() {
         expect(() => {
-            IPv6.fromHexadecimalString("3ffe:1900:4545:0003:0200");
+            IPv6.fromHexadecatet("3ffe:1900:4545:0003:0200");
         }).toThrowError(Error);
     });
 
@@ -127,37 +127,37 @@ describe('IPv6: ', () => {
     });
 
     it('should correctly return the next value when nextIPNumber is called', () => {
-        let iPv6 = IPv6.fromHexadecimalString("ffff:ffff:ffff:ffff:ffff:ffff:ffff:fffe");
+        let iPv6 = IPv6.fromHexadecatet("ffff:ffff:ffff:ffff:ffff:ffff:ffff:fffe");
         expect(iPv6.nextIPNumber().toString()).toEqual("ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff");
     });
 
     it('should correctly return the previous value when previousIPNumber is called', () => {
-        let iPv6 = IPv6.fromHexadecimalString("ffff:ffff:ffff:ffff:ffff:ffff:ffff:fffe");
+        let iPv6 = IPv6.fromHexadecatet("ffff:ffff:ffff:ffff:ffff:ffff:ffff:fffe");
         expect(iPv6.previousIPNumber().toString()).toEqual("ffff:ffff:ffff:ffff:ffff:ffff:ffff:fffd");
     });
 
     it('should throw exception when calling next leads to an invalid IPv4', () => {
-        let value = IPv6.fromHexadecimalString("ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff");
+        let value = IPv6.fromHexadecatet("ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff");
         expect(() => {
             value.nextIPNumber();
         }).toThrowError(Error, Validator.invalidIPv6NumberMessage);
     });
 
     it('should throw exception when calling previous leads to an invalid IPv4', () => {
-        let value = IPv6.fromHexadecimalString("::000");
+        let value = IPv6.fromHexadecatet("::000");
         expect(() => {
             value.previousIPNumber();
         }).toThrowError(Error, Validator.invalidIPv6NumberMessage);
     });
 
     it('should correctly tell if there is a next value for an IPv6', () => {
-        let value: IPv6 = IPv6.fromHexadecimalString("ffff:ffff:ffff:ffff:ffff:ffff:ffff:fffe");
+        let value: IPv6 = IPv6.fromHexadecatet("ffff:ffff:ffff:ffff:ffff:ffff:ffff:fffe");
         expect(value.hasNext()).toBe(true);
         expect(value.nextIPNumber().hasNext()).toBe(false);
     });
 
     it('should correctly tell if there is a previous value for an IPv6', () => {
-        let value = IPv6.fromHexadecimalString("::001");
+        let value = IPv6.fromHexadecatet("::001");
         expect(value.hasPrevious()).toBe(true);
         expect(value.previousIPNumber().hasPrevious()).toBe(false);
     });

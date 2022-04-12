@@ -346,8 +346,8 @@ describe('Pool', () => {
 
         it('Should create from IP Numbers', () => {
             let pool = Pool
-                .fromIP([IPv6.fromHexadecimalString("2620:0:0:0:0:0:0:0"),
-                    IPv6.fromHexadecimalString("2620:0:ffff:ffff:ffff:ffff:ffff:ffff")]);
+                .fromIP([IPv6.fromHexadecatet("2620:0:0:0:0:0:0:0"),
+                    IPv6.fromHexadecatet("2620:0:ffff:ffff:ffff:ffff:ffff:ffff")]);
             let ranges = pool.getRanges();
 
             expect(ranges[0].toCidrRange().toCidrString()).toEqual("2620:0:0:0:0:0:0:0/128")

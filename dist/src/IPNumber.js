@@ -522,7 +522,7 @@ class IPv6 extends AbstractIPNum {
      * @param {string} ipString the IP number in hexadecatet
      * @returns {IPv6} the IPv6 instance
      */
-    static fromHexadecimalString(ipString) {
+    static fromHexadecatet(ipString) {
         return new IPv6(ipString);
     }
     /**
@@ -532,7 +532,7 @@ class IPv6 extends AbstractIPNum {
      * @returns {IPv6} the IPv6 instance
      */
     static fromString(ipString) {
-        return IPv6.fromHexadecimalString(ipString);
+        return IPv6.fromHexadecatet(ipString);
     }
     /**
      * A convenience method for creating an {@link IPv6} from binary string
@@ -730,7 +730,7 @@ class IPv6Mask extends IPv6 {
      * @param {string} rawValue The passed string in textual notation
      * @returns {IPv6Mask} the instance of IPv6Mask
      */
-    static fromHexadecimalString(rawValue) {
+    static fromHexadecatet(rawValue) {
         return new IPv6Mask(rawValue);
     }
     ;
