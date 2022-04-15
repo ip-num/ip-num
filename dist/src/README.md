@@ -114,10 +114,6 @@ Examples
 ------------------
 Find below, some example of the usage of `ip-num`. For a more comprehensive overview of the API, please refer to the [documentation](https://ip-num.github.io/ip-num/).
 
-`ip-num` makes use of the [BigInteger.js](https://github.com/peterolson/BigInteger.js/) library to represents numeric values. This is due to the fact that numeric 
-values that needs to be worked with when dealing with IP numbers can exceed the numeric value that can be safely represented natively within JavaScript without loosing precisions ie numbers greater than 
-[Number.MAX_SAFE_INTEGER](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/MAX_SAFE_INTEGER)
- 
 ### Overview 
 An overview covering some part of the module structure of `ip-num` is represented below:
 
@@ -173,7 +169,7 @@ import { IPv4 } from "ip-num/IPNumber";
 
 // creating
 let firstIPv4 = new IPv4("74.125.43.99") // Creating an instance using the constructor
-let secondIPv4 = IPv4.fromBigInteger(bigInt("1876843053")) // Using the fromBigInteger convenience method
+let secondIPv4 = IPv4.fromNumber(1876843053n) // Using the fromNumber convenience method
 let thirdIPv4 = IPv4.fromDecimalDottedString("111.222.90.45") // Using the fromDecimalDottedString convenience method
 let fourthIPv4 = IPv4.fromBinaryString("01001010011111010010101101100011") // using the fromBinaryString convenience method
 
@@ -194,7 +190,7 @@ import { IPv6 } from "ip-num/IPNumber";
 
 // creating
 let firstIPv6 = new IPv6("ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff") // Creating an instance using the constructor
-let secondIPv6 = IPv6.fromBigInteger(bigInt("100")) // Using the fromBigInteger convenience method
+let secondIPv6 = IPv6.fromNumber(100) // Using the fromNumber convenience method
 let thirdIPv6 = IPv6.fromHexadecimalString("::") // Using the fromDecimalDottedString convenience method. Not abbreviated representation of IPv6 string is supported
 let fourthIPv6 = IPv6.fromBinaryString("01001010011111010010101101100011") // using the fromBinaryString convenience method
    
