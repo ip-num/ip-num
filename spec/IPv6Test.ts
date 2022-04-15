@@ -121,10 +121,6 @@ describe('IPv6: ', () => {
         expect(iPv6.getValue()).toEqual(bigInt);
     });
 
-    it('should pad with :: if ', () => {
-
-    });
-
     it('should correctly return the next value when nextIPNumber is called', () => {
         let iPv6 = IPv6.fromHexadecatet("ffff:ffff:ffff:ffff:ffff:ffff:ffff:fffe");
         expect(iPv6.nextIPNumber().toString()).toEqual("ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff");
