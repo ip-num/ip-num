@@ -1,7 +1,6 @@
 'use strict';
 import {dottedDecimalNotationToBinaryString} from "./BinaryUtils";
 import {cidrPrefixToMaskBinaryString} from "./BinaryUtils";
-import * as bigInt from "big-integer";
 import {IPNumType} from "./IPNumType";
 import {expandIPv6Number} from "./IPv6Utils";
 import {colonHexadecimalNotationToBinaryString} from "./HexadecimalUtils";
