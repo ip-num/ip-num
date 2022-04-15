@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Validator = void 0;
 const BinaryUtils_1 = require("./BinaryUtils");
 const BinaryUtils_2 = require("./BinaryUtils");
-const bigInt = require("big-integer");
 const IPv6Utils_1 = require("./IPv6Utils");
 const HexadecimalUtils_1 = require("./HexadecimalUtils");
 const HexadecimalUtils_2 = require("./HexadecimalUtils");
@@ -231,19 +230,19 @@ class Validator {
         let cidrComponents = rangeString.split("/");
         let ip = cidrComponents[0];
         let range = cidrComponents[1];
-        let ipNumber = bigInt(toBinaryStringConverter(ip), 2);
-        let mask = bigInt(prefixFactory(parseInt(range)), 2);
-        let isValid = ipNumber.and(mask).equals(ipNumber);
+        let ipNumber = BigInt(`0b${toBinaryStringConverter(ip)}`);
+        let mask = BigInt(`0b${prefixFactory(parseInt(range))}`);
+        let isValid = (ipNumber & (mask)) === (ipNumber);
         return isValid ? [isValid, []] : [isValid, [Validator.InvalidIPCidrRangeMessage]];
     }
     static isValidIPv4RangeString(ipv4RangeString) {
-        let firstLastValidator = (firstIP, lastIP) => bigInt(BinaryUtils_1.dottedDecimalNotationToBinaryString(firstIP))
-            .greaterOrEquals(BinaryUtils_1.dottedDecimalNotationToBinaryString(lastIP));
+        let firstLastValidator = (firstIP, lastIP) => BigInt(`0b${BinaryUtils_1.dottedDecimalNotationToBinaryString(firstIP)}`)
+            >= BigInt(`0b${BinaryUtils_1.dottedDecimalNotationToBinaryString(lastIP)}`);
         return this.isValidRange(ipv4RangeString, Validator.isValidIPv4String, firstLastValidator);
     }
     static isValidIPv6RangeString(ipv6RangeString) {
-        let firstLastValidator = (firstIP, lastIP) => bigInt(HexadecimalUtils_2.hexadectetNotationToBinaryString(firstIP))
-            .greaterOrEquals(HexadecimalUtils_2.hexadectetNotationToBinaryString(lastIP));
+        let firstLastValidator = (firstIP, lastIP) => BigInt(`0b${HexadecimalUtils_2.hexadectetNotationToBinaryString(firstIP)}`)
+            >= BigInt(`0b${HexadecimalUtils_2.hexadectetNotationToBinaryString(lastIP)}`);
         return this.isValidRange(ipv6RangeString, Validator.isValidIPv6String, firstLastValidator);
     }
     static isValidRange(rangeString, validator, firstLastValidator) {

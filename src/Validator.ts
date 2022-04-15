@@ -299,23 +299,23 @@ export class Validator {
       let cidrComponents = rangeString.split("/");
       let ip = cidrComponents[0];
       let range = cidrComponents[1];
-      let ipNumber = bigInt(toBinaryStringConverter(ip), 2);
-      let mask = bigInt(prefixFactory(parseInt(range)), 2);
-      let isValid = ipNumber.and(mask).equals(ipNumber);
+      let ipNumber = BigInt(`0b${toBinaryStringConverter(ip)}`);
+      let mask = BigInt(`0b${prefixFactory(parseInt(range))}`);
+      let isValid = (ipNumber & (mask)) === (ipNumber);
 
       return isValid ? [isValid, []]: [isValid, [Validator.InvalidIPCidrRangeMessage]];
     }
 
     static isValidIPv4RangeString(ipv4RangeString: string): [boolean, string[]] {
-        let firstLastValidator = (firstIP: string, lastIP: string) => bigInt(dottedDecimalNotationToBinaryString(firstIP))
-            .greaterOrEquals(dottedDecimalNotationToBinaryString(lastIP));
+        let firstLastValidator = (firstIP: string, lastIP: string) => BigInt(`0b${dottedDecimalNotationToBinaryString(firstIP)}`)
+            >= BigInt(`0b${dottedDecimalNotationToBinaryString(lastIP)}`);
 
         return this.isValidRange(ipv4RangeString, Validator.isValidIPv4String, firstLastValidator);
     }
 
     static isValidIPv6RangeString(ipv6RangeString: string): [boolean, string[]] {
-        let firstLastValidator = (firstIP: string, lastIP: string) => bigInt(hexadectetNotationToBinaryString(firstIP))
-            .greaterOrEquals(hexadectetNotationToBinaryString(lastIP));
+        let firstLastValidator = (firstIP: string, lastIP: string) => BigInt(`0b${hexadectetNotationToBinaryString(firstIP)}`)
+            >= BigInt(`0b${hexadectetNotationToBinaryString(lastIP)}`);
         return this.isValidRange(ipv6RangeString, Validator.isValidIPv6String, firstLastValidator);
     }
 
