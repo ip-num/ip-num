@@ -2,8 +2,8 @@
  * Created by daderemi on 07/11/16.
  */
 
-import {Octet} from "../src/Octet";
-import {Validator} from "../src/Validator";
+import {Octet} from "../src";
+import {Validator} from "../src";
 
 describe('Octet', () => {
     it('should instantiate by calling constructor', () => {

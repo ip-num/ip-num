@@ -3,8 +3,7 @@
  */
 
 import {IPv4} from "../src/IPNumber";
-import {Validator} from "../src/Validator";
-import * as bigInt from "big-integer";
+import {Validator} from "../src";
 
 describe('IPv4: ', () => {
     it('should instantiate by calling constructor', () => {
@@ -12,7 +11,7 @@ describe('IPv4: ', () => {
     });
 
     it('should instantiate by passing big integer value of IPv4 number to constructor', () => {
-        expect(IPv4.fromBigInteger(bigInt("1876843053")).toString()).toEqual("111.222.90.45");
+        expect(IPv4.fromNumber(1876843053n).toString()).toEqual("111.222.90.45");
     });
 
     it('should instantiate by passing dot-decimal notation to fromDecimalDottedString', () => {
@@ -36,24 +35,24 @@ describe('IPv4: ', () => {
     });
 
     it('should correctly check equality related operations', () => {
-        expect(IPv4.fromBigInteger(bigInt("100")).isLessThan(IPv4.fromBigInteger(bigInt("200")))).toEqual(true);
-        expect(IPv4.fromBigInteger(bigInt("200")).isLessThan(IPv4.fromBigInteger(bigInt("100")))).toEqual(false);
-        expect(IPv4.fromBigInteger(bigInt("200")).isLessThan(IPv4.fromBigInteger(bigInt("200")))).toEqual(false);
+        expect(IPv4.fromNumber(100n).isLessThan(IPv4.fromNumber(200n))).toEqual(true);
+        expect(IPv4.fromNumber(200n).isLessThan(IPv4.fromNumber(100n))).toEqual(false);
+        expect(IPv4.fromNumber(200n).isLessThan(IPv4.fromNumber(200n))).toEqual(false);
 
-        expect(IPv4.fromBigInteger(bigInt("1234")).isLessThanOrEquals(IPv4.fromBigInteger(bigInt("12345")))).toEqual(true);
-        expect(IPv4.fromBigInteger(bigInt("12345")).isLessThanOrEquals(IPv4.fromBigInteger(bigInt("1234")))).toEqual(false);
-        expect(IPv4.fromBigInteger(bigInt("12345")).isLessThanOrEquals(IPv4.fromBigInteger(bigInt("12345")))).toEqual(true);
+        expect(IPv4.fromNumber(1234n).isLessThanOrEquals(IPv4.fromNumber(12345n))).toEqual(true);
+        expect(IPv4.fromNumber(12345n).isLessThanOrEquals(IPv4.fromNumber(1234n))).toEqual(false);
+        expect(IPv4.fromNumber(12345n).isLessThanOrEquals(IPv4.fromNumber(12345n))).toEqual(true);
 
-        expect(IPv4.fromBigInteger(bigInt("1234")).isEquals(IPv4.fromBigInteger(bigInt("1234")))).toEqual(true);
-        expect(IPv4.fromBigInteger(bigInt("1234")).isEquals(IPv4.fromBigInteger(bigInt("12345")))).toEqual(false);
+        expect(IPv4.fromNumber(1234n).isEquals(IPv4.fromNumber(1234n))).toEqual(true);
+        expect(IPv4.fromNumber(1234n).isEquals(IPv4.fromNumber(12345n))).toEqual(false);
 
-        expect(IPv4.fromBigInteger(bigInt("1234")).isGreaterThan(IPv4.fromBigInteger(bigInt("12345")))).toEqual(false);
-        expect(IPv4.fromBigInteger(bigInt("12345")).isGreaterThan(IPv4.fromBigInteger(bigInt("1234")))).toEqual(true);
-        expect(IPv4.fromBigInteger(bigInt("12345")).isGreaterThan(IPv4.fromBigInteger(bigInt("12345")))).toEqual(false);
+        expect(IPv4.fromNumber(1234n).isGreaterThan(IPv4.fromNumber(12345n))).toEqual(false);
+        expect(IPv4.fromNumber(12345n).isGreaterThan(IPv4.fromNumber(1234n))).toEqual(true);
+        expect(IPv4.fromNumber(12345n).isGreaterThan(IPv4.fromNumber(12345n))).toEqual(false);
 
-        expect(IPv4.fromBigInteger(bigInt("12345")).isGreaterThanOrEquals(IPv4.fromBigInteger(bigInt("1234")))).toEqual(true);
-        expect(IPv4.fromBigInteger(bigInt("1234")).isGreaterThanOrEquals(IPv4.fromBigInteger(bigInt("12345")))).toEqual(false);
-        expect(IPv4.fromBigInteger(bigInt("12345")).isGreaterThanOrEquals(IPv4.fromBigInteger(bigInt("12345")))).toEqual(true);
+        expect(IPv4.fromNumber(12345n).isGreaterThanOrEquals(IPv4.fromNumber(1234n))).toEqual(true);
+        expect(IPv4.fromNumber(1234n).isGreaterThanOrEquals(IPv4.fromNumber(12345n))).toEqual(false);
+        expect(IPv4.fromNumber(12345n).isGreaterThanOrEquals(IPv4.fromNumber(12345n))).toEqual(true);
     });
 
     it('should correctly get the octets', () => {
@@ -66,7 +65,7 @@ describe('IPv4: ', () => {
 
     it('should correctly get the binary value', () => {
         let value = new IPv4("111.222.90.45").getValue();
-        expect(value).toEqual(bigInt("01101111110111100101101000101101", 2))
+        expect(value).toEqual(BigInt("0b01101111110111100101101000101101"))
     });
 
     it('should throw exception if ip contains invalid number of octets', () => {

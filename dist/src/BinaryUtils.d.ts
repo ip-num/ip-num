@@ -1,4 +1,3 @@
-import * as bigInt from "big-integer/BigInteger";
 import { IPNumType } from "./IPNumType";
 /**
  * Converts a decimal number to binary string
@@ -6,13 +5,7 @@ import { IPNumType } from "./IPNumType";
  * @param num number to parse
  * @returns {string} the binary string representation of number
  */
-export declare let decimalNumberToBinaryString: (num: number) => string;
-/**
- * Converts a given BigInteger number to a binary string
- * @param num the BigInteger number
- * @returns {string} the binary string
- */
-export declare let bigIntegerNumberToBinaryString: (num: bigInt.BigInteger) => string;
+export declare let numberToBinaryString: (num: number | bigint) => string;
 /**
  * Converts a decimal number to binary octet (8 bit) string. If needed the octet will be padded with zeros
  * to make it up to 8 bits
@@ -20,14 +13,14 @@ export declare let bigIntegerNumberToBinaryString: (num: bigInt.BigInteger) => s
  * @param {number} num to convert to octet string
  * @returns {string} the octet string representation of given number
  */
-export declare let decimalNumberToOctetString: (num: number) => string;
+export declare let decimalNumberToOctetString: (num: number | bigint) => string;
 /**
- * Parses number in binary to number in BigInteger
+ * Parses number in binary to number in BigInt
  *
  * @param num binary number in string to parse
- * @returns {number} binary number in BigInteger
+ * @returns {number} binary number in BigInt
  */
-export declare let parseBinaryStringToBigInteger: (num: string) => bigInt.BigInteger;
+export declare let parseBinaryStringToBigInt: (num: string) => bigint;
 /**
  * Given an IPv4 number in dot-decimal notated string, e.g 192.168.0.1 converts it to
  * binary string, e.g. '11000000101010000000000000000001'
@@ -57,7 +50,7 @@ export declare let cidrPrefixToMaskBinaryString: (cidrPrefix: number, ipType: IP
  * @param givenNumber the number to calculate log base 2
  * @return the log base 2 of given number
  */
-export declare let intLog2: (givenNumber: bigInt.BigInteger) => number;
+export declare let intLog2: (givenNumber: bigint) => number;
 /**
  * Starting from the most significant bit (from left) returns the number of first bits from both string that are equal
  * @param firstBinaryString first binary string

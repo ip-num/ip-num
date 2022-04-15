@@ -1,8 +1,8 @@
-import {IPv4Mask} from "../src/IPNumber";
-import {Validator} from "../src/Validator";
-import {IPv4} from "../src/IPNumber";
-import {IPv6Mask} from "../src/IPNumber";
-import {IPv6} from "../src/IPNumber";
+import {IPv4Mask} from "../src";
+import {Validator} from "../src";
+import {IPv4} from "../src";
+import {IPv6Mask} from "../src";
+import {IPv6} from "../src";
 
 describe('mask test', function() {
     it('should create an instance of IPv4 mask using fromDecimalDottedString', () => {
@@ -40,7 +40,7 @@ describe('mask test', function() {
 
 // IPv6
     it('should create an instance of iPv6Mask using fromDecimalDottedString', () => {
-        let iPv6Mask = IPv6Mask.fromHexadecimalString("ffff:ffff:ffff:ffff:ffff:ffff:0:0");
+        let iPv6Mask = IPv6Mask.fromHexadecatet("ffff:ffff:ffff:ffff:ffff:ffff:0:0");
         expect(iPv6Mask.toString()).toEqual("ffff:ffff:ffff:ffff:ffff:ffff:0:0");
     });
 

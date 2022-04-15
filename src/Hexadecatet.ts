@@ -1,8 +1,7 @@
 import {Validator} from "./Validator";
-import * as bigInt from "big-integer"
 
 /**
- * A base 16 (hexadecimal) representation of a 16 bit value.
+ * A representation of a 4-digit hexadecimal number.
  *
  * It consists of four (base 16) number. ie FFFF
  *
@@ -18,7 +17,7 @@ export class Hexadecatet {
      * @param {string} rawValue the four (base 16) number
      * @returns {Hexadecatet} an instance of {@link Hexadecatet}
      */
-    static fromString(rawValue:string):Hexadecatet {
+    static fromString(rawValue: string):Hexadecatet {
         return new Hexadecatet(rawValue);
     };
 
@@ -29,7 +28,7 @@ export class Hexadecatet {
      * @param {number} rawValue decimal number representation of a 16 bit value
      * @returns {Hexadecatet} an instance of {@link Hexadecatet}
      */
-    static fromNumber(rawValue:number):Hexadecatet {
+    static fromNumber(rawValue: number):Hexadecatet {
         return new Hexadecatet(rawValue);
     };
 
@@ -48,7 +47,7 @@ export class Hexadecatet {
             hexadecatetValue = parseInt(String(givenValue), 16);
         }
 
-        let [isValid, message] = Validator.isValidIPv6Hexadecatet(bigInt(hexadecatetValue));
+        let [isValid, message] = Validator.isValidIPv6Hexadecatet(BigInt(hexadecatetValue));
 
         if (!isValid) {
             throw Error(message.filter(msg => {return msg !== '';}).toString());
@@ -61,7 +60,7 @@ export class Hexadecatet {
      *
      * @returns {number} the numeric value in base 10 (ie decimal)
      */
-    public getValue():number {
+    public getValue(): number {
         return this.value;
     }
 

@@ -1,10 +1,9 @@
-import * as bigInt from "big-integer/BigInteger";
 /**
- * Converts a given BigInteger number to a hexadecimal string
- * @param num the BigInteger number
+ * Converts a given bigint number to a hexadecimal string
+ * @param num the bigint number
  * @returns {string} the hexadeciaml string
  */
-export declare let bigIntegerNumberToHexadecimalString: (num: bigInt.BigInteger) => string;
+export declare let bigIntToHexadecimalString: (num: bigint) => string;
 /**
  * Converts a number in hexadecimal (base 16) to binary string
  * @param {string} hexadecimalString the number in base 16

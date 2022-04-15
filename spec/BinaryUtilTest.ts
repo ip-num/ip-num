@@ -1,26 +1,25 @@
 import * as BinaryUtils from "../src/BinaryUtils";
-import * as bigInt from "big-integer/BigInteger";
 import {IPNumType} from "../src";
-import {intLog2, matchingBitCount} from "../src/BinaryUtils";
+import {intLog2, matchingBitCount} from "../src";
 
 describe('Binary Utils', () => {
     it('Should correctly convert decimal to binary', () => {
-        expect(BinaryUtils.decimalNumberToBinaryString(1234) === '10011010010').toEqual(true);
+        expect(BinaryUtils.numberToBinaryString(1234) === '10011010010').toEqual(true);
     });
     it('Should correctly parse binary string to a number in BigInteger', () => {
-        expect(BinaryUtils.parseBinaryStringToBigInteger('10011010010')).toEqual(bigInt(1234));
+        expect(BinaryUtils.parseBinaryStringToBigInt('10011010010')).toEqual(1234n);
     });
     it('Should correctly convert binary to decimal', () => {
-        expect(BinaryUtils.parseBinaryStringToBigInteger('10011010010').valueOf() === 1234).toEqual(true);
+        expect(BinaryUtils.parseBinaryStringToBigInt('10011010010').valueOf() === 1234n).toEqual(true);
     });
     it('Should correctly convert a big integer number to binary string', () => {
-        expect(BinaryUtils.bigIntegerNumberToBinaryString(bigInt(1234))).toBe('10011010010');
-        expect(BinaryUtils.bigIntegerNumberToBinaryString(bigInt(4294967295))).toBe('11111111111111111111111111111111')
+        expect(BinaryUtils.numberToBinaryString(1234n)).toBe('10011010010');
+        expect(BinaryUtils.numberToBinaryString(4294967295n)).toBe('11111111111111111111111111111111')
     });
     it('Should correctly convert binary to decimal and back to binary', () => {
         let originalBinary = '10011010010';
-        let decimal = BinaryUtils.parseBinaryStringToBigInteger(originalBinary).valueOf();
-        let finalBinary = BinaryUtils.decimalNumberToBinaryString(decimal);
+        let decimal = BinaryUtils.parseBinaryStringToBigInt(originalBinary).valueOf();
+        let finalBinary = BinaryUtils.numberToBinaryString(Number(decimal));
         expect(originalBinary.toString() === finalBinary).toEqual(true);
     });
     it('Should correctly convert decimal number to octets', () => {
@@ -77,13 +76,13 @@ describe('Binary Utils', () => {
 
     describe('log2', () => {
         it('should calculate the log2 of a number', () => {
-            expect(intLog2(bigInt(8))).toBe(3);
-            expect(intLog2(bigInt(256))).toBe(8);
+            expect(intLog2(8n)).toBe(3);
+            expect(intLog2(256n)).toBe(8);
         });
 
         it('should throw an exception when no int log2', () => {
             expect(() => {
-                intLog2(bigInt(12))
+                intLog2(12n)
             }).toThrowError(Error)
         })
     })

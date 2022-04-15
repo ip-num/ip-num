@@ -8,13 +8,12 @@ import {
     RangedSet
 } from "../src";
 import {Pool} from "../src";
-import bigInt = require("big-integer");
 
 describe('Pool', () => {
     describe('IPV4', () => {
         it('Should create from IP Numbers', () => {
             let pool = Pool
-                .fromIPNumbers([IPv4.fromDecimalDottedString("10.0.0.1"), IPv4.fromDecimalDottedString("10.0.0.2")]);
+                .fromIP([IPv4.fromDecimalDottedString("10.0.0.1"), IPv4.fromDecimalDottedString("10.0.0.2")]);
             let ranges = pool.getRanges();
             expect(ranges[0].toCidrRange().toCidrString()).toEqual("10.0.0.1/32")
             expect(ranges[1].toCidrRange().toCidrString()).toEqual("10.0.0.2/32")
@@ -214,7 +213,7 @@ describe('Pool', () => {
 
             let pool = Pool.fromRangeSet(arrays);
 
-            expect(pool.getSize()).toEqual(bigInt(160));
+            expect(pool.getSize()).toEqual(160n);
         });
 
         it('it should get range by prefix', () => {
@@ -225,7 +224,7 @@ describe('Pool', () => {
             arrays.push(RangedSet.fromCidrRange(IPv4CidrRange.fromCidr("192.168.0.192/26")));
 
             let pool = Pool.fromRangeSet(arrays);
-            let range = pool.getCidrRange(IPv4Prefix.fromNumber(26));
+            let range = pool.getCidrRange(IPv4Prefix.fromNumber(26n));
             expect(range.toCidrString()).toEqual("192.168.0.0/26");
             expect(pool.getRanges().length).toEqual(2);
         });
@@ -243,7 +242,7 @@ describe('Pool', () => {
             let pool = Pool.fromRangeSet(arrays);
 
             expect(() => {
-                pool.getCidrRange(IPv4Prefix.fromNumber(25)); //128
+                pool.getCidrRange(IPv4Prefix.fromNumber(25n)); //128
             }).toThrowError(Error, "No range big enough in the pool for requested prefix: 25")
         });
 
@@ -255,7 +254,7 @@ describe('Pool', () => {
             arrays.push(RangedSet.fromCidrRange(IPv4CidrRange.fromCidr("192.168.0.192/26")));
 
             let pool = Pool.fromRangeSet(arrays);
-            let range = pool.getCidrRange(IPv4Prefix.fromNumber(28));
+            let range = pool.getCidrRange(IPv4Prefix.fromNumber(28n));
             expect(range.toCidrString()).toEqual("192.168.0.0/28");
             expect(pool.getRanges().length).toEqual(3);
             expect(pool.getRanges()[0].toRangeString()).toEqual("192.168.0.16-192.168.0.63");
@@ -271,7 +270,7 @@ describe('Pool', () => {
 
             let pool = Pool.fromRangeSet(arrays);
             expect(() => {
-                pool.getCidrRange(IPv4Prefix.fromNumber(24));
+                pool.getCidrRange(IPv4Prefix.fromNumber(24n));
             }).toThrowError(Error, "Not enough IP number in the pool for requested prefix: 24")
         });
 
@@ -291,7 +290,7 @@ describe('Pool', () => {
 
             expect(pool.getRanges().length).toEqual(2)
 
-            let cidrRanges = pool.getCidrRanges(IPv4Prefix.fromNumber(26));
+            let cidrRanges = pool.getCidrRanges(IPv4Prefix.fromNumber(26n));
 
             expect(cidrRanges[0].toCidrString()).toEqual("192.168.0.192/26")
             expect(pool.getRanges().length).toEqual(1)
@@ -311,7 +310,7 @@ describe('Pool', () => {
 
             expect(pool.getRanges().length).toEqual(4)
 
-            let cidrRanges = pool.getCidrRanges(IPv4Prefix.fromNumber(26));
+            let cidrRanges = pool.getCidrRanges(IPv4Prefix.fromNumber(26n));
 
             expect(cidrRanges[0].toCidrString()).toEqual("192.168.0.0/27")
             expect(cidrRanges[1].toCidrString()).toEqual("192.168.0.128/27")
@@ -333,7 +332,7 @@ describe('Pool', () => {
 
             expect(pool.getRanges().length).toEqual(4)
 
-            let cidrRanges = pool.getCidrRanges(IPv4Prefix.fromNumber(26));
+            let cidrRanges = pool.getCidrRanges(IPv4Prefix.fromNumber(26n));
 
             expect(cidrRanges[0].toCidrString()).toEqual("192.168.0.0/27")
             expect(cidrRanges[1].toCidrString()).toEqual("192.168.0.128/27")
@@ -347,8 +346,8 @@ describe('Pool', () => {
 
         it('Should create from IP Numbers', () => {
             let pool = Pool
-                .fromIPNumbers([IPv6.fromHexadecimalString("2620:0:0:0:0:0:0:0"),
-                    IPv6.fromHexadecimalString("2620:0:ffff:ffff:ffff:ffff:ffff:ffff")]);
+                .fromIP([IPv6.fromHexadecatet("2620:0:0:0:0:0:0:0"),
+                    IPv6.fromHexadecatet("2620:0:ffff:ffff:ffff:ffff:ffff:ffff")]);
             let ranges = pool.getRanges();
 
             expect(ranges[0].toCidrRange().toCidrString()).toEqual("2620:0:0:0:0:0:0:0/128")
@@ -547,7 +546,7 @@ describe('Pool', () => {
 
             let pool = Pool.fromRangeSet(arrays);
 
-            expect(pool.getSize()).toEqual(bigInt(3));
+            expect(pool.getSize()).toEqual(3n);
         });
 
 
@@ -559,7 +558,7 @@ describe('Pool', () => {
 
             let pool = Pool.fromRangeSet(arrays);
 
-            let range = pool.getCidrRange(IPv6Prefix.fromNumber(127));
+            let range = pool.getCidrRange(IPv6Prefix.fromNumber(127n));
             expect(range.toCidrString()).toEqual("2001:db8:0:0:0:0:0:0/127");
             expect(pool.getRanges().length).toEqual(1);
         });
@@ -574,7 +573,7 @@ describe('Pool', () => {
             let pool = Pool.fromRangeSet(arrays);
 
             expect(() => {
-                pool.getCidrRange(IPv6Prefix.fromNumber(48));
+                pool.getCidrRange(IPv6Prefix.fromNumber(48n));
             }).toThrowError(Error, "No range big enough in the pool for requested prefix: 48")
         });
 
@@ -591,7 +590,7 @@ describe('Pool', () => {
 
 
             let pool = Pool.fromRangeSet(arrays);
-            let range = pool.getCidrRange(IPv6Prefix.fromNumber(50));
+            let range = pool.getCidrRange(IPv6Prefix.fromNumber(50n));
             expect(range.toCidrString()).toEqual("2001:db8:0:0:0:0:0:0/50");
             expect(pool.getRanges().length).toEqual(4);
             expect(pool.getRanges()[0].toRangeString()).toEqual("2001:db8:0:4000:0:0:0:0-2001:db8:0:ffff:ffff:ffff:ffff:ffff");
@@ -608,7 +607,7 @@ describe('Pool', () => {
 
             let pool = Pool.fromRangeSet(arrays);
             expect(() => {
-                pool.getCidrRange(IPv6Prefix.fromNumber(47));
+                pool.getCidrRange(IPv6Prefix.fromNumber(47n));
             }).toThrowError(Error, "Not enough IP number in the pool for requested prefix: 47")
         });
 
@@ -628,7 +627,7 @@ describe('Pool', () => {
 
             expect(pool.getRanges().length).toEqual(4)
 
-            let cidrRanges = pool.getCidrRanges(IPv6Prefix.fromNumber(48));
+            let cidrRanges = pool.getCidrRanges(IPv6Prefix.fromNumber(48n));
             expect(cidrRanges[0].toCidrString()).toEqual("2001:db8:0:0:0:0:0:0/49")
             expect(cidrRanges[1].toCidrString()).toEqual("2001:db8:1:0:0:0:0:0/49")
             expect(pool.getRanges().length).toEqual(2);
@@ -651,7 +650,7 @@ describe('Pool', () => {
 
             expect(pool.getRanges().length).toEqual(4)
 
-            let cidrRanges = pool.getCidrRanges(IPv6Prefix.fromNumber(48));
+            let cidrRanges = pool.getCidrRanges(IPv6Prefix.fromNumber(48n));
             expect(cidrRanges[0].toCidrString()).toEqual("2001:db8:0:0:0:0:0:0/49")
             expect(cidrRanges[1].toCidrString()).toEqual("2001:db8:1:0:0:0:0:0/49")
             expect(pool.getRanges().length).toEqual(2);
@@ -669,7 +668,7 @@ describe('Pool', () => {
                 .aggregate()
                 .getRanges()
                 .flatMap(entry => {
-                    return (entry.toCidrRange() as IPv6CidrRange).splitInto(new IPv6Prefix(48)).map(entry => {
+                    return (entry.toCidrRange() as IPv6CidrRange).splitInto(new IPv6Prefix(48n)).map(entry => {
                         return entry.toCidrString();
                     });
                 });

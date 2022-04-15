@@ -1,5 +1,4 @@
 import {Validator} from "./Validator"
-import bigInt = require("big-integer");
 
 /**
  * A binary representation of a 8 bit value.
@@ -49,7 +48,7 @@ export class Octet {
         } else {
             octetValue = givenValue;
         }
-        let [isValid, message] = Validator.isValidIPv4Octet(bigInt(octetValue));
+        let [isValid, message] = Validator.isValidIPv4Octet(BigInt(octetValue));
         if (!isValid) {
             throw Error(message.filter(msg => {return msg !== '';}).toString());
         }

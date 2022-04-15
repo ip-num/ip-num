@@ -1,4 +1,3 @@
-import * as bigInt from "big-integer";
 import { AbstractIPNum, IPv4, IPv6 } from "./IPNumber";
 import { IPv4Prefix, IPv6Prefix } from "./Prefix";
 export declare type IP<T> = T extends IPv4CidrRange ? IPv4 : IPv6;
@@ -8,7 +7,7 @@ export declare type IP<T> = T extends IPv4CidrRange ? IPv4 : IPv6;
  * for allocating IP addresses.
  */
 export declare class RangedSet<T extends AbstractIPNum> implements Iterable<AbstractIPNum> {
-    readonly bitValue: bigInt.BigInteger;
+    readonly bitValue: bigint;
     private readonly currentValue;
     private readonly first;
     private readonly last;
@@ -54,7 +53,7 @@ export declare class RangedSet<T extends AbstractIPNum> implements Iterable<Abst
     /**
      * Returns the size, which is the number of IP numbers in the range.
      */
-    getSize(): bigInt.BigInteger;
+    getSize(): bigint;
     /**
      * Converts to a string representation of the range in the form of:
      * <first-ip>-<last-ip>
@@ -144,7 +143,7 @@ export declare class RangedSet<T extends AbstractIPNum> implements Iterable<Abst
      * @param offset offset from this range where the subrange should begin
      * @param size the size of the range
      */
-    takeSubRange(offset: bigInt.BigInteger, size: bigInt.BigInteger): RangedSet<AbstractIPNum>;
+    takeSubRange(offset: bigint, size: bigint): RangedSet<AbstractIPNum>;
     /**
      * Performs a subtraction operation, where the passed range is removed from the original range.
      *
@@ -162,12 +161,12 @@ export declare class RangedSet<T extends AbstractIPNum> implements Iterable<Abst
  * Provides the implementation of functionality that are common to {@link IPv4CidrRange} and {@link IPv6CidrRange}
  */
 export declare abstract class AbstractIPRange<T extends AbstractIPNum, P extends IPv4Prefix | IPv6Prefix> implements Iterable<AbstractIPNum> {
-    abstract readonly bitValue: bigInt.BigInteger;
+    abstract readonly bitValue: bigint;
     protected abstract newInstance(num: T, prefix: IPv4Prefix | IPv6Prefix): IPv4CidrRange | IPv6CidrRange;
     abstract getFirst(): T;
     abstract getLast(): T;
     abstract getPrefix(): P;
-    abstract getSize(): bigInt.BigInteger;
+    abstract getSize(): bigint;
     abstract toCidrString(): string | never;
     hasNextRange(): boolean;
     hasPreviousRange(): boolean;
@@ -203,7 +202,7 @@ export declare abstract class AbstractIPRange<T extends AbstractIPNum, P extends
 export declare class IPv4CidrRange extends AbstractIPRange<IPv4, IPv4Prefix> {
     private readonly ipv4;
     readonly cidrPrefix: IPv4Prefix;
-    readonly bitValue: bigInt.BigInteger;
+    readonly bitValue: bigint;
     /**
      * Convenience method for constructing an instance of an IPv4CidrRange from an IP range represented in CIDR notation
      *
@@ -226,9 +225,9 @@ export declare class IPv4CidrRange extends AbstractIPRange<IPv4, IPv4Prefix> {
     /**
      * Gets the size of IPv4 numbers contained within the IPv4 range
      *
-     * @returns {bigInt.BigInteger} the amount of IPv4 numbers in the range
+     * @returns {bigint} the amount of IPv4 numbers in the range
      */
-    getSize(): bigInt.BigInteger;
+    getSize(): bigint;
     /**
      * Method that returns the IPv4 range in CIDR (Classless Inter-Domain Routing) notation.
      *
@@ -296,10 +295,10 @@ export declare class IPv4CidrRange extends AbstractIPRange<IPv4, IPv4Prefix> {
     /**
      * Method that takes IPv4 number from within an IPv4 range, starting from the first IPv4 number
      *
-     * @param {number} count the amount of IPv4 number to take from the IPv4 range
+     * @param {bigint} count the amount of IPv4 number to take from the IPv4 range
      * @returns {Array<IPv4>} an array of IPv4 number, taken from the IPv4 range
      */
-    take(count: bigInt.BigInteger): Array<IPv4>;
+    take(count: bigint): Array<IPv4>;
     /**
      * Method that splits an IPv4 range into two halves
      *
@@ -340,7 +339,7 @@ export declare class IPv4CidrRange extends AbstractIPRange<IPv4, IPv4Prefix> {
 export declare class IPv6CidrRange extends AbstractIPRange<IPv6, IPv6Prefix> {
     private readonly ipv6;
     readonly cidrPrefix: IPv6Prefix;
-    readonly bitValue: bigInt.BigInteger;
+    readonly bitValue: bigint;
     /**
      * Convenience method for constructing an instance of an IPV6Range from an IP range represented in CIDR notation
      *
@@ -363,9 +362,9 @@ export declare class IPv6CidrRange extends AbstractIPRange<IPv6, IPv6Prefix> {
     /**
      * Gets the size of IPv6 numbers contained within the IPv6 range
      *
-     * @returns {bigInt.BigInteger} the amount of IPv6 numbers in the range
+     * @returns {bigint} the amount of IPv6 numbers in the range
      */
-    getSize(): bigInt.BigInteger;
+    getSize(): bigint;
     /**
      * Method that returns the IPv6 range in CIDR (Classless Inter-Domain Routing) notation.
      *
@@ -433,10 +432,10 @@ export declare class IPv6CidrRange extends AbstractIPRange<IPv6, IPv6Prefix> {
     /**
      * Method that takes IPv6 number from within an IPv6 range, starting from the first IPv6 number
      *
-     * @param {number} count the amount of IPv6 number to take from the IPv6 range
+     * @param {bigint} count the amount of IPv6 number to take from the IPv6 range
      * @returns {Array<IPv6>} an array of IPv6 number, taken from the IPv6 range
      */
-    take(count: bigInt.BigInteger): Array<IPv6>;
+    take(count: bigint): Array<IPv6>;
     /**
      * Method that splits an IPv6 cidr range into two halves
      *

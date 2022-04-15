@@ -1,4 +1,3 @@
-import * as bigInt from "big-integer";
 import { IPNumType } from "./IPNumType";
 export declare class Validator {
     static IPV4_PATTERN: RegExp;
@@ -7,12 +6,12 @@ export declare class Validator {
     static IPV6_RANGE_PATTERN: RegExp;
     static IPV4_CONTIGUOUS_MASK_BIT_PATTERN: RegExp;
     static IPV6_CONTIGUOUS_MASK_BIT_PATTERN: RegExp;
-    static EIGHT_BIT_SIZE: bigInt.BigInteger;
-    static SIXTEEN_BIT_SIZE: bigInt.BigInteger;
-    static THIRTY_TWO_BIT_SIZE: bigInt.BigInteger;
-    static ONE_HUNDRED_AND_TWENTY_EIGHT_BIT_SIZE: bigInt.BigInteger;
-    static IPV4_SIZE: bigInt.BigInteger;
-    static IPV6_SIZE: bigInt.BigInteger;
+    static EIGHT_BIT_SIZE: bigint;
+    static SIXTEEN_BIT_SIZE: bigint;
+    static THIRTY_TWO_BIT_SIZE: bigint;
+    static ONE_HUNDRED_AND_TWENTY_EIGHT_BIT_SIZE: bigint;
+    static IPV4_SIZE: bigint;
+    static IPV6_SIZE: bigint;
     static invalidAsnRangeMessage: string;
     static invalid16BitAsnRangeMessage: string;
     static invalidIPv4NumberMessage: string;
@@ -52,15 +51,15 @@ export declare class Validator {
      * @returns {[boolean , string]} first value is true if valid ASN, false otherwise. Second value contains
      * "valid" or an error message when value is invalid
      */
-    static isValidAsnNumber(asnNumber: bigInt.BigInteger): [boolean, string[]];
+    static isValidAsnNumber(asnNumber: bigint): [boolean, string[]];
     /**
      * Checks if the given ASN number is a 16bit ASN number
      *
-     * @param {bigInt.BigInteger} asnNumber to check if 16bit or not
+     * @param {bigint} asnNumber to check if 16bit or not
      * @returns {[boolean , string]} first value is true if valid 16bit ASN, false otherwise. Second value contains
      * "valid" or an error message when value is invalid
      */
-    static isValid16BitAsnNumber(asnNumber: bigInt.BigInteger): [boolean, string[]];
+    static isValid16BitAsnNumber(asnNumber: bigint): [boolean, string[]];
     /**
      * Checks if the number given is within the value considered valid for an IPv4 number
      *
@@ -68,7 +67,7 @@ export declare class Validator {
      * @returns {[boolean , string]} first value is true if valid IPv4 number, false otherwise. Second value contains
      * "valid" or an error message when value is invalid
      */
-    static isValidIPv4Number(ipv4Number: bigInt.BigInteger): [boolean, string[]];
+    static isValidIPv4Number(ipv4Number: bigint | number): [boolean, string[]];
     /**
      * Checks if the number given is within the value considered valid for an IPv6 number
      *
@@ -76,22 +75,22 @@ export declare class Validator {
      * @returns {[boolean , string]} first value is true if valid IPv6 number, false otherwise. Second value contains
      * "valid" or an error message when value is invalid
      */
-    static isValidIPv6Number(ipv6Number: bigInt.BigInteger): [boolean, string[]];
+    static isValidIPv6Number(ipv6Number: bigint): [boolean, string[]];
     /**
      * Checks if the number given is valid for an IPv4 octet
      *
      * @param octetNumber the octet value
      * @returns {boolean} true if valid octet, false otherwise
      */
-    static isValidIPv4Octet(octetNumber: bigInt.BigInteger): [boolean, string[]];
+    static isValidIPv4Octet(octetNumber: bigint): [boolean, string[]];
     /**
      * Checks if the number given is valid for an IPv6 hexadecatet
      *
-     * @param {bigInt.BigInteger} hexadecatetNum the hexadecatet value
+     * @param {bigint} hexadecatetNum the hexadecatet value
      * @returns {[boolean , string]} first value is true if valid hexadecatet, false otherwise. Second value contains
      * "valid" or an error message when value is invalid
      */
-    static isValidIPv6Hexadecatet(hexadecatetNum: bigInt.BigInteger): [boolean, string[]];
+    static isValidIPv6Hexadecatet(hexadecatetNum: bigint): [boolean, string[]];
     /**
      * Checks if given string is a valid IPv4 value.
      *
@@ -115,7 +114,7 @@ export declare class Validator {
      * @param ipNumType The type of IP number
      * @returns {(boolean|string)[]} a tuple representing if valid or not and corresponding message
      */
-    static isValidPrefixValue(prefixValue: number, ipNumType: IPNumType): [boolean, string[]];
+    static isValidPrefixValue(prefixValue: bigint, ipNumType: IPNumType): [boolean, string[]];
     /**
      * Checks if given string is a valid IPv4 mask
      *

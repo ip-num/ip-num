@@ -1,13 +1,12 @@
 
-import {Validator} from "../src/Validator";
-import * as bigInt from "big-integer";
-import {IPv6} from "../src/IPNumber";
+import {Validator} from "../src";
+import {IPv6} from "../src";
 import {IPv4} from "../src";
 
 describe('IPv6: ', () => {
     it('should instantiate by calling constructor', () => {
         // with big Integer
-        let iPv6 = new IPv6(bigInt("42540650421252671973913748003310542850"));
+        let iPv6 = new IPv6(BigInt("42540650421252671973913748003310542850"));
         expect(iPv6.toString()).toEqual("2001:800:0:0:0:0:0:2002");
         let hexadecatets = iPv6.getHexadecatet();
         expect(hexadecatets[0].toString()).toEqual("2001");
@@ -24,8 +23,8 @@ describe('IPv6: ', () => {
     });
 
     it('should instantiate by calling fromBigInteger', () => {
-        let bigIntegerValue = bigInt("42540766411282592856903984951653826560");
-        let iPv6 = IPv6.fromBigInteger(bigIntegerValue);
+        let bigIntegerValue = BigInt("42540766411282592856903984951653826560");
+        let iPv6 = IPv6.fromBigInt(bigIntegerValue);
         expect(iPv6.toString()).toEqual("2001:db8:0:0:0:0:0:0");
         let hexadecatets = iPv6.getHexadecatet();
 
@@ -41,7 +40,7 @@ describe('IPv6: ', () => {
     });
 
     it('should instantiate by calling fromHexadecimal', () => {
-        let iPv6 = IPv6.fromHexadecimalString("3ffe:1900:4545:0003:0200:f8ff:fe21:67cf");
+        let iPv6 = IPv6.fromHexadecatet("3ffe:1900:4545:0003:0200:f8ff:fe21:67cf");
         expect(iPv6.toString()).toEqual("3ffe:1900:4545:3:200:f8ff:fe21:67cf");
         let hexadecatets = iPv6.getHexadecatet();
         expect(hexadecatets[0].toString()).toEqual("3ffe");
@@ -88,7 +87,7 @@ describe('IPv6: ', () => {
         let IPv6String = "3ffe:1900:4545:0003:0200:f8ff:fe21:67cf";
 
         let binaryString = IPv6
-            .fromHexadecimalString(IPv6String)
+            .fromHexadecatet(IPv6String)
             .toBinaryString();
 
         let iPv6 = IPv6.fromBinaryString(binaryString);
@@ -113,13 +112,13 @@ describe('IPv6: ', () => {
 
     it('should throw an exception when invalid IPv6 string is used to construct an IPv6 instance', function() {
         expect(() => {
-            IPv6.fromHexadecimalString("3ffe:1900:4545:0003:0200");
+            IPv6.fromHexadecatet("3ffe:1900:4545:0003:0200");
         }).toThrowError(Error);
     });
 
     it('should correctly return the right value', () => {
-        let bigIntegerValue = bigInt("1".repeat(128), 2);
-        let iPv6 = IPv6.fromBigInteger(bigIntegerValue);
+        let bigIntegerValue = BigInt(`0b${"1".repeat(128)}`);
+        let iPv6 = IPv6.fromBigInt(bigIntegerValue);
         expect(iPv6.getValue()).toEqual(bigIntegerValue);
     });
 
@@ -128,65 +127,65 @@ describe('IPv6: ', () => {
     });
 
     it('should correctly return the next value when nextIPNumber is called', () => {
-        let iPv6 = IPv6.fromHexadecimalString("ffff:ffff:ffff:ffff:ffff:ffff:ffff:fffe");
+        let iPv6 = IPv6.fromHexadecatet("ffff:ffff:ffff:ffff:ffff:ffff:ffff:fffe");
         expect(iPv6.nextIPNumber().toString()).toEqual("ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff");
     });
 
     it('should correctly return the previous value when previousIPNumber is called', () => {
-        let iPv6 = IPv6.fromHexadecimalString("ffff:ffff:ffff:ffff:ffff:ffff:ffff:fffe");
+        let iPv6 = IPv6.fromHexadecatet("ffff:ffff:ffff:ffff:ffff:ffff:ffff:fffe");
         expect(iPv6.previousIPNumber().toString()).toEqual("ffff:ffff:ffff:ffff:ffff:ffff:ffff:fffd");
     });
 
     it('should throw exception when calling next leads to an invalid IPv4', () => {
-        let value = IPv6.fromHexadecimalString("ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff");
+        let value = IPv6.fromHexadecatet("ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff");
         expect(() => {
             value.nextIPNumber();
         }).toThrowError(Error, Validator.invalidIPv6NumberMessage);
     });
 
     it('should throw exception when calling previous leads to an invalid IPv4', () => {
-        let value = IPv6.fromHexadecimalString("::000");
+        let value = IPv6.fromHexadecatet("::000");
         expect(() => {
             value.previousIPNumber();
         }).toThrowError(Error, Validator.invalidIPv6NumberMessage);
     });
 
     it('should correctly tell if there is a next value for an IPv6', () => {
-        let value: IPv6 = IPv6.fromHexadecimalString("ffff:ffff:ffff:ffff:ffff:ffff:ffff:fffe");
+        let value: IPv6 = IPv6.fromHexadecatet("ffff:ffff:ffff:ffff:ffff:ffff:ffff:fffe");
         expect(value.hasNext()).toBe(true);
         expect(value.nextIPNumber().hasNext()).toBe(false);
     });
 
     it('should correctly tell if there is a previous value for an IPv6', () => {
-        let value = IPv6.fromHexadecimalString("::001");
+        let value = IPv6.fromHexadecatet("::001");
         expect(value.hasPrevious()).toBe(true);
         expect(value.previousIPNumber().hasPrevious()).toBe(false);
     });
 
     it('toString should prepend with :: if IPv6 value has leading zeros', () => {
-        let iPv6 = new IPv6(bigInt('2130706433'));
+        let iPv6 = new IPv6(BigInt('2130706433'));
         expect(iPv6.toString().startsWith('::')).toBe(true);
     });
 
     it('should correctly check equality related operations', () => {
-        expect(IPv6.fromBigInteger(bigInt("100")).isLessThan(IPv6.fromBigInteger(bigInt("200")))).toEqual(true);
-        expect(IPv6.fromBigInteger(bigInt("200")).isLessThan(IPv6.fromBigInteger(bigInt("100")))).toEqual(false);
-        expect(IPv6.fromBigInteger(bigInt("200")).isLessThan(IPv6.fromBigInteger(bigInt("200")))).toEqual(false);
+        expect(IPv6.fromBigInt(BigInt("100")).isLessThan(IPv6.fromBigInt(BigInt("200")))).toEqual(true);
+        expect(IPv6.fromBigInt(BigInt("200")).isLessThan(IPv6.fromBigInt(BigInt("100")))).toEqual(false);
+        expect(IPv6.fromBigInt(BigInt("200")).isLessThan(IPv6.fromBigInt(BigInt("200")))).toEqual(false);
 
-        expect(IPv6.fromBigInteger(bigInt("1234")).isLessThanOrEquals(IPv6.fromBigInteger(bigInt("12345")))).toEqual(true);
-        expect(IPv6.fromBigInteger(bigInt("12345")).isLessThanOrEquals(IPv6.fromBigInteger(bigInt("1234")))).toEqual(false);
-        expect(IPv6.fromBigInteger(bigInt("12345")).isLessThanOrEquals(IPv6.fromBigInteger(bigInt("12345")))).toEqual(true);
+        expect(IPv6.fromBigInt(BigInt("1234")).isLessThanOrEquals(IPv6.fromBigInt(BigInt("12345")))).toEqual(true);
+        expect(IPv6.fromBigInt(BigInt("12345")).isLessThanOrEquals(IPv6.fromBigInt(BigInt("1234")))).toEqual(false);
+        expect(IPv6.fromBigInt(BigInt("12345")).isLessThanOrEquals(IPv6.fromBigInt(BigInt("12345")))).toEqual(true);
 
-        expect(IPv6.fromBigInteger(bigInt("1234")).isEquals(IPv6.fromBigInteger(bigInt("1234")))).toEqual(true);
-        expect(IPv6.fromBigInteger(bigInt("1234")).isEquals(IPv6.fromBigInteger(bigInt("12345")))).toEqual(false);
+        expect(IPv6.fromBigInt(BigInt("1234")).isEquals(IPv6.fromBigInt(BigInt("1234")))).toEqual(true);
+        expect(IPv6.fromBigInt(BigInt("1234")).isEquals(IPv6.fromBigInt(BigInt("12345")))).toEqual(false);
 
-        expect(IPv6.fromBigInteger(bigInt("1234")).isGreaterThan(IPv6.fromBigInteger(bigInt("12345")))).toEqual(false);
-        expect(IPv6.fromBigInteger(bigInt("12345")).isGreaterThan(IPv6.fromBigInteger(bigInt("1234")))).toEqual(true);
-        expect(IPv6.fromBigInteger(bigInt("12345")).isGreaterThan(IPv6.fromBigInteger(bigInt("12345")))).toEqual(false);
+        expect(IPv6.fromBigInt(BigInt("1234")).isGreaterThan(IPv6.fromBigInt(BigInt("12345")))).toEqual(false);
+        expect(IPv6.fromBigInt(BigInt("12345")).isGreaterThan(IPv6.fromBigInt(BigInt("1234")))).toEqual(true);
+        expect(IPv6.fromBigInt(BigInt("12345")).isGreaterThan(IPv6.fromBigInt(BigInt("12345")))).toEqual(false);
 
-        expect(IPv6.fromBigInteger(bigInt("12345")).isGreaterThanOrEquals(IPv6.fromBigInteger(bigInt("1234")))).toEqual(true);
-        expect(IPv6.fromBigInteger(bigInt("1234")).isGreaterThanOrEquals(IPv6.fromBigInteger(bigInt("12345")))).toEqual(false);
-        expect(IPv6.fromBigInteger(bigInt("12345")).isGreaterThanOrEquals(IPv6.fromBigInteger(bigInt("12345")))).toEqual(true);
+        expect(IPv6.fromBigInt(BigInt("12345")).isGreaterThanOrEquals(IPv6.fromBigInt(BigInt("1234")))).toEqual(true);
+        expect(IPv6.fromBigInt(BigInt("1234")).isGreaterThanOrEquals(IPv6.fromBigInt(BigInt("12345")))).toEqual(false);
+        expect(IPv6.fromBigInt(BigInt("12345")).isGreaterThanOrEquals(IPv6.fromBigInt(BigInt("12345")))).toEqual(true);
     });
 
     it('should correctly return IP number as binary string', () => {
@@ -199,7 +198,7 @@ describe('IPv6: ', () => {
     });
 
     it('should create right IPv6 address', () => {
-        let value = new IPv6(bigInt("65536"));
+        let value = new IPv6(65536n);
         expect(value.toString()).toEqual("::1:0")
     });
 });

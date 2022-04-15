@@ -1,24 +1,12 @@
 "use strict";
-var __values = (this && this.__values) || function(o) {
-    var s = typeof Symbol === "function" && Symbol.iterator, m = s && o[s], i = 0;
-    if (m) return m.call(o);
-    if (o && typeof o.length === "number") return {
-        next: function () {
-            if (o && i >= o.length) o = void 0;
-            return { value: o && o[i++], done: !o };
-        }
-    };
-    throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Pool = void 0;
-var IPRange_1 = require("./IPRange");
-var Prefix_1 = require("./Prefix");
-var bigInt = require("big-integer");
+const IPRange_1 = require("./IPRange");
+const Prefix_1 = require("./Prefix");
 /**
  * Represents a collection of IP {@link RangedSet}'s
  */
-var Pool = /** @class */ (function () {
+class Pool {
     /**
      * Constructor for an IP pool.
      *
@@ -26,66 +14,65 @@ var Pool = /** @class */ (function () {
      *
      * @param ranges the array of IP ranges that would make up the pool.
      */
-    function Pool(ranges) {
-        var _this = this;
+    constructor(ranges) {
         this.backingSet = new SortedSet();
-        ranges.forEach(function (range) {
-            _this.backingSet.add(range);
+        ranges.forEach(range => {
+            this.backingSet.add(range);
         });
     }
     /**
      * Convenient method for creating an instance from arrays of {@link IPv4} or {@link IPv6}
      * @param ipNumbers the arrays of {@link IPv4} or {@link IPv6} that will make up the pool.
      */
-    Pool.fromIPNumbers = function (ipNumbers) {
-        var ranges = ipNumbers.map(function (ip) {
+    static fromIP(ipNumbers) {
+        let ranges = ipNumbers.map((ip) => {
             return IPRange_1.RangedSet.fromSingleIP(ip);
         });
         return new Pool(ranges);
-    };
+    }
     /**
      * Convenient method for creating an instance from arrays of {@link RangedSet}.
      *
      * @param ipRanges the arrays of {@link RangedSet}'s that will make up the pool.
      */
     // TODO: TSE: This makes it possible to create an instance containing both Range set of IPv4 and IPv6
-    Pool.fromRangeSet = function (ipRanges) {
+    static fromRangeSet(ipRanges) {
         return new Pool(ipRanges);
-    };
+    }
     /**
      * Convenient method for creating an instance from arrays of {@link IPv4CidrRange} or {@link IPv6CidrRange}.
      *
      * @param cidrRanges the arrays of {@link IPv4CidrRange} or {@link IPv6CidrRange} that will make up the pool.
      */
-    Pool.fromCidrRanges = function (cidrRanges) {
-        var cidr = cidrRanges;
-        var rangeSet = cidr.map(function (range) {
+    static fromCidrRanges(cidrRanges) {
+        let cidr = cidrRanges;
+        let rangeSet = cidr.map((range) => {
             return range.toRangeSet();
         });
         return new Pool(rangeSet);
-    };
+    }
     /**
      * Returns an array of {@link RangedSet}'s that is contained within the pool
      */
-    Pool.prototype.getRanges = function () {
+    getRanges() {
         return this.backingSet.asArray();
-    };
+    }
     /**
      * Returns an new {@link Pool} with all the IP ranges aggregated
      */
-    Pool.prototype.aggregate = function () {
-        var sortedRanges = this.backingSet.asArray();
-        var mergedRanges = sortedRanges.reduce(function (accumulator, currentRange, currentIndex, array) {
+    aggregate() {
+        let sortedRanges = this.backingSet.asArray();
+        let mergedRanges = sortedRanges.reduce((accumulator, currentRange, currentIndex, array) => {
             if (accumulator.length == 0) {
                 accumulator.push(currentRange);
                 return accumulator;
             }
             else {
-                var previous = accumulator.pop();
-                var previousCidrRange = previous.toCidrRange();
-                var currentCidrRange = currentRange.toCidrRange();
+                let previous = accumulator.pop();
+                let previousCidrRange = previous.toCidrRange();
+                let currentCidrRange = currentRange.toCidrRange();
                 if (previousCidrRange.isCidrMergeable(currentCidrRange)) {
-                    var merged = previousCidrRange.merge(currentCidrRange);
+                    let merged = previousCidrRange.merge(currentCidrRange);
                     accumulator.push(merged.toRangeSet());
                     return accumulator;
                 }
@@ -101,14 +88,14 @@ var Pool = /** @class */ (function () {
                 }
             }
         }, []);
-        var aggregatedPool = Pool.fromRangeSet(mergedRanges);
+        let aggregatedPool = Pool.fromRangeSet(mergedRanges);
         if (aggregatedPool.getRanges().length !== this.getRanges().length) {
             return aggregatedPool.aggregate();
         }
         else {
             return aggregatedPool;
         }
-    };
+    }
     /**
      * Gets a single range of size of the given prefix from pool.
      * Only returns a range if there is a single range in the pool of same size or greater than given prefix.
@@ -118,47 +105,36 @@ var Pool = /** @class */ (function () {
      * @param prefix prefix range to retrieve
      * TODO TSE
      */
-    Pool.prototype.getCidrRange = function (prefix) {
-        var e_1, _a;
-        if (prefix.toRangeSize().gt(this.getSize())) {
-            throw new Error("Not enough IP number in the pool for requested prefix: " + prefix);
+    getCidrRange(prefix) {
+        if (prefix.toRangeSize() > (this.getSize())) {
+            throw new Error(`Not enough IP number in the pool for requested prefix: ${prefix}`);
         }
-        var selectedCidrRange;
-        var error;
-        try {
-            loop: for (var _b = __values(this.getRanges()), _c = _b.next(); !_c.done; _c = _b.next()) {
-                var range = _c.value;
-                for (var offset = bigInt.zero; offset.plus(prefix.toRangeSize()).lesserOrEquals(range.getSize()); offset = offset.plus(bigInt.one))
-                    try {
-                        var selectedRange = range.takeSubRange(offset, prefix.toRangeSize());
-                        selectedCidrRange = selectedRange.toCidrRange();
-                        var remaining = range.difference(selectedRange);
-                        this.removeExact(range);
-                        this.add(remaining);
-                        break loop;
+        let selectedCidrRange;
+        let error;
+        loop: for (let range of this.getRanges()) {
+            for (let offset = 0n; offset + (prefix.toRangeSize()) <= (range.getSize()); offset = offset + 1n)
+                try {
+                    let selectedRange = range.takeSubRange(offset, prefix.toRangeSize());
+                    selectedCidrRange = selectedRange.toCidrRange();
+                    let remaining = range.difference(selectedRange);
+                    this.removeExact(range);
+                    this.add(remaining);
+                    break loop;
+                }
+                catch (e) {
+                    if (e instanceof RangeError) {
+                        continue loop;
                     }
-                    catch (e) {
-                        if (e instanceof RangeError) {
-                            continue loop;
-                        }
-                        error = e;
-                    }
-            }
-        }
-        catch (e_1_1) { e_1 = { error: e_1_1 }; }
-        finally {
-            try {
-                if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
-            }
-            finally { if (e_1) throw e_1.error; }
+                    error = e;
+                }
         }
         if (selectedCidrRange) {
             return selectedCidrRange;
         }
         else {
-            throw (error === undefined ? new Error("No range big enough in the pool for requested prefix: " + prefix) : error);
+            throw (error === undefined ? new Error(`No range big enough in the pool for requested prefix: ${prefix}`) : error);
         }
-    };
+    }
     /**
      * Gets a single or multiple ranges that fulfils the given prefix from the pool.
      *
@@ -166,19 +142,18 @@ var Pool = /** @class */ (function () {
      *
      * @param reqprefix prefix range to retrieve
      */
-    Pool.prototype.getCidrRanges = function (reqprefix) {
-        var _this = this;
-        if (reqprefix.toRangeSize().greater(this.getSize())) {
+    getCidrRanges(reqprefix) {
+        if (reqprefix.toRangeSize() > (this.getSize())) {
             throw new Error("Prefix greater than pool");
         }
-        var go = function (reqprefix, prefix, accummulated) {
+        let go = (reqprefix, prefix, accummulated) => {
             try {
-                var singleCidrRange = _this.getCidrRange(prefix);
+                let singleCidrRange = this.getCidrRange(prefix);
                 accummulated.push(singleCidrRange);
-                var currentSize = accummulated.reduce(function (previous, current) {
-                    return previous.plus(current.getSize());
-                }, bigInt.zero);
-                if (reqprefix.toRangeSize().equals(currentSize)) {
+                let currentSize = accummulated.reduce((previous, current) => {
+                    return previous + (current.getSize());
+                }, 0n);
+                if (reqprefix.toRangeSize() === (currentSize)) {
                     return accummulated;
                 }
                 else {
@@ -186,76 +161,75 @@ var Pool = /** @class */ (function () {
                 }
             }
             catch (e) {
-                var lowerPrefix = Prefix_1.isIPv4Prefix(prefix) ?
-                    Prefix_1.IPv4Prefix.fromNumber(prefix.getValue() + 1) : Prefix_1.IPv6Prefix.fromNumber(prefix.getValue() + 1);
+                let lowerPrefix = Prefix_1.isIPv4Prefix(prefix) ?
+                    Prefix_1.IPv4Prefix.fromNumber(prefix.getValue() + 1n) : Prefix_1.IPv6Prefix.fromNumber(prefix.getValue() + 1n);
                 return go(reqprefix, lowerPrefix, accummulated);
             }
         };
         return go(reqprefix, reqprefix, []);
-    };
+    }
     /**
      * Returns the size of IP numbers in the pool
      */
-    Pool.prototype.getSize = function () {
+    getSize() {
         return this
             .aggregate()
             .getRanges()
-            .reduce(function (previous, current) {
-            return previous.plus(current.getSize());
-        }, bigInt.zero);
-    };
+            .reduce((previous, current) => {
+            return previous + current.getSize();
+        }, 0n);
+    }
     /**
      * Empties the pool and fill it with given ranges
      *
      * @param ipRanges the range to fill the pool with after emptying
      */
-    Pool.prototype.resetWith = function (ipRanges) {
+    resetWith(ipRanges) {
         this.backingSet.clear();
         this.backingSet = this.backingSet.add(ipRanges);
-    };
+    }
     /**
      * Removes the given range from the pool. It only removes if the exact range exist in the pool.
      * It is a Noop and returns false, if the given range does not exist in the pool. Returns true otherwise
      *
      * @param rangeToRemove range to remove from ppol
      */
-    Pool.prototype.removeExact = function (rangeToRemove) {
-        var updatedSet = this.backingSet.removeExact(rangeToRemove);
-        var isUpdated = !this.backingSet.isEquals(updatedSet);
+    removeExact(rangeToRemove) {
+        let updatedSet = this.backingSet.removeExact(rangeToRemove);
+        let isUpdated = !this.backingSet.isEquals(updatedSet);
         this.backingSet = updatedSet;
         return isUpdated;
-    };
+    }
     /**
      * Removes the given range from the pool. If the given range overlaps, then it removes the overlapping portion.
      * It is a Noop and returns false, if the given range does not exist in the pool. Returns true otherwise
      *
      * @param rangeToRemove range to remove from ppol
      */
-    Pool.prototype.removeOverlapping = function (rangeToRemove) {
-        var updatedSet = this.backingSet.removeOverlapping(rangeToRemove);
-        var isUpdated = !this.backingSet.isEquals(updatedSet);
+    removeOverlapping(rangeToRemove) {
+        let updatedSet = this.backingSet.removeOverlapping(rangeToRemove);
+        let isUpdated = !this.backingSet.isEquals(updatedSet);
         this.backingSet = updatedSet;
         return isUpdated;
-    };
+    }
     /**
      * Adds the given range to the pool.
      *
      * @param range to add to pool.
      */
-    Pool.prototype.add = function (range) {
+    add(range) {
         this.backingSet = this.backingSet.add(range);
-    };
+    }
     /**
      * Removes all ranges from pool
      */
-    Pool.prototype.clear = function () {
+    clear() {
         this.backingSet.clear();
-    };
-    return Pool;
-}());
+    }
+}
 exports.Pool = Pool;
-var SortedSet = /** @class */ (function () {
-    function SortedSet(array) {
+class SortedSet {
+    constructor(array) {
         if (array) {
             this.backingArray = this.sortArray(array);
         }
@@ -263,8 +237,8 @@ var SortedSet = /** @class */ (function () {
             this.backingArray = new Array();
         }
     }
-    SortedSet.prototype.sortArray = function (array) {
-        array.sort(function (a, b) {
+    sortArray(array) {
+        array.sort((a, b) => {
             if (a.isLessThan(b)) {
                 return -1;
             }
@@ -274,20 +248,20 @@ var SortedSet = /** @class */ (function () {
             return 0;
         });
         return array;
-    };
-    SortedSet.prototype.asArray = function () {
+    }
+    asArray() {
         return this.backingArray;
-    };
-    SortedSet.prototype.isEquals = function (other) {
+    }
+    isEquals(other) {
         if (this.backingArray.length !== other.asArray().length) {
             return false;
         }
-        return this.backingArray.every(function (value, index) {
-            return value.getSize().equals(other.asArray()[index].getSize());
+        return this.backingArray.every((value, index) => {
+            return value.getSize() === (other.asArray()[index].getSize());
         });
-    };
-    SortedSet.prototype.add = function (item) {
-        var array = this.backingArray;
+    }
+    add(item) {
+        let array = this.backingArray;
         if ("push" in item) {
             array = array.concat(item);
         }
@@ -295,24 +269,24 @@ var SortedSet = /** @class */ (function () {
             array.push(item);
         }
         return new SortedSet(this.sortArray(array));
-    };
-    SortedSet.prototype.removeExact = function (items) {
-        var filtered = this.backingArray
-            .filter(function (currentItem) {
+    }
+    removeExact(items) {
+        let filtered = this.backingArray
+            .filter(currentItem => {
             if ("push" in items) {
-                return items.find(function (item) { return item.isEquals(currentItem); }) !== undefined;
+                return items.find(item => item.isEquals(currentItem)) !== undefined;
             }
             else {
                 return !items.isEquals(currentItem);
             }
         });
         return new SortedSet(this.sortArray(filtered));
-    };
-    SortedSet.prototype.removeOverlapping = function (items) {
-        var filtered = this.backingArray
-            .flatMap(function (backingItem) {
+    }
+    removeOverlapping(items) {
+        let filtered = this.backingArray
+            .flatMap(backingItem => {
             if ("push" in items) {
-                return items.flatMap(function (item) {
+                return items.flatMap(item => {
                     if (backingItem.contains(item)) {
                         return backingItem.difference(item);
                     }
@@ -337,10 +311,9 @@ var SortedSet = /** @class */ (function () {
             }
         });
         return new SortedSet(this.sortArray(filtered));
-    };
-    SortedSet.prototype.clear = function () {
+    }
+    clear() {
         this.backingArray = [];
-    };
-    return SortedSet;
-}());
+    }
+}
 //# sourceMappingURL=IPPool.js.map

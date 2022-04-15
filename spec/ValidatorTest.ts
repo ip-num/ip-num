@@ -57,8 +57,8 @@ describe('Validator: ', () => {
 
     describe('isValidPrefixValue', () => {
         it('validate invalid IPNumType', () => {
-            expect(Validator.isValidPrefixValue(3, IPNumType.ASN)[0]).toBe(false);
-            expect(Validator.isValidPrefixValue(3, IPNumType.ASN)[1].some(errorMessage => {return errorMessage === Validator.invalidInetNumType})).toBe(true);
+            expect(Validator.isValidPrefixValue(3n, IPNumType.ASN)[0]).toBe(false);
+            expect(Validator.isValidPrefixValue(3n, IPNumType.ASN)[1].some(errorMessage => {return errorMessage === Validator.invalidInetNumType})).toBe(true);
         });
     });
 

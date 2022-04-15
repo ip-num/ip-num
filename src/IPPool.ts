@@ -1,7 +1,6 @@
 import {AbstractIPRange, IPv4CidrRange, IPv6CidrRange, RangedSet} from "./IPRange";
 import {AbstractIPNum, IPv4, IPv6} from "./IPNumber";
 import {IPv4Prefix, IPv6Prefix, isIPv4Prefix, Prefix} from "./Prefix";
-import * as bigInt from "big-integer";
 
 type RangeType = RangedSet<IPv4> | RangedSet<IPv6>;
 export type IPCidrRange<T> = T extends IPv4Prefix ? IPv4CidrRange : IPv6CidrRange;
@@ -16,7 +15,7 @@ export class Pool<T extends RangeType> {
      * Convenient method for creating an instance from arrays of {@link IPv4} or {@link IPv6}
      * @param ipNumbers the arrays of {@link IPv4} or {@link IPv6} that will make up the pool.
      */
-    public static fromIPNumbers(ipNumbers: Array<IPv4> | Array<IPv6>): Pool<RangeType> {
+    public static fromIP(ipNumbers: Array<IPv4> | Array<IPv6>): Pool<RangeType> {
         let ranges: Array<RangedSet<AbstractIPNum>> = (ipNumbers as Array<AbstractIPNum>).map((ip:(AbstractIPNum)) => {
             return RangedSet.fromSingleIP(ip);
         });
@@ -117,7 +116,7 @@ export class Pool<T extends RangeType> {
      * TODO TSE
      */
     public getCidrRange<T extends IPv4Prefix | IPv6Prefix>(prefix: T): IPCidrRange<T> {
-        if (prefix.toRangeSize().gt(this.getSize())) {
+        if (prefix.toRangeSize() > (this.getSize())) {
             throw new Error(`Not enough IP number in the pool for requested prefix: ${prefix}`);
         }
         let selectedCidrRange: IPv4CidrRange | IPv6CidrRange | undefined;
@@ -125,7 +124,7 @@ export class Pool<T extends RangeType> {
 
         loop:
         for (let range of this.getRanges()) {
-            for (var offset = bigInt.zero; offset.plus(prefix.toRangeSize()).lesserOrEquals(range.getSize()); offset = offset.plus(bigInt.one)) try {
+            for (let offset = 0n; offset + (prefix.toRangeSize()) <= (range.getSize()); offset = offset + 1n) try {
                 let selectedRange = range.takeSubRange(offset, prefix.toRangeSize());
                 selectedCidrRange = selectedRange.toCidrRange();
                 let remaining = range.difference(selectedRange);
@@ -155,7 +154,7 @@ export class Pool<T extends RangeType> {
      * @param reqprefix prefix range to retrieve
      */
     public getCidrRanges<T extends IPv4Prefix | IPv6Prefix>(reqprefix: T): IPCidrRangeArray<T>  {
-        if (reqprefix.toRangeSize().greater(this.getSize())) {
+        if (reqprefix.toRangeSize() > (this.getSize())) {
             throw new Error("Prefix greater than pool");
         }
         let go = (reqprefix: IPv4Prefix | IPv6Prefix,
@@ -165,16 +164,16 @@ export class Pool<T extends RangeType> {
                 let singleCidrRange = this.getCidrRange(prefix);
                 accummulated.push(singleCidrRange);
                 let currentSize = accummulated.reduce((previous, current) => {
-                    return previous.plus(current.getSize());
-                }, bigInt.zero);
-                if (reqprefix.toRangeSize().equals(currentSize)) {
+                    return previous + (current.getSize());
+                }, 0n);
+                if (reqprefix.toRangeSize() === (currentSize)) {
                     return accummulated as IPCidrRangeArray<T>;
                 } else {
                     return go(reqprefix, prefix, accummulated)
                 }
             } catch (e) {
                 let lowerPrefix = isIPv4Prefix(prefix) ?
-                    IPv4Prefix.fromNumber(prefix.getValue() + 1) : IPv6Prefix.fromNumber(prefix.getValue() + 1)
+                    IPv4Prefix.fromNumber(prefix.getValue() + 1n) : IPv6Prefix.fromNumber(prefix.getValue() + 1n)
                 return go(reqprefix, lowerPrefix, accummulated);
             }
         }
@@ -184,13 +183,13 @@ export class Pool<T extends RangeType> {
     /**
      * Returns the size of IP numbers in the pool
      */
-    public getSize():  bigInt.BigInteger {
+    public getSize():  bigint {
         return this
             .aggregate()
             .getRanges()
             .reduce((previous, current) => {
-            return previous.plus(current.getSize());
-        }, bigInt.zero);
+            return previous + current.getSize();
+        }, 0n);
     }
 
     /**
@@ -284,7 +283,7 @@ class SortedSet {
             return false;
         }
         return this.backingArray.every((value, index) => {
-            return value.getSize().equals(other.asArray()[index].getSize())
+            return value.getSize() === (other.asArray()[index].getSize())
         })
     }
 

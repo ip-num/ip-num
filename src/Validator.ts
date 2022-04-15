@@ -16,12 +16,12 @@ export class Validator {
     static IPV4_CONTIGUOUS_MASK_BIT_PATTERN: RegExp = new RegExp(/^(1){0,32}(0){0,32}$/);
     static IPV6_CONTIGUOUS_MASK_BIT_PATTERN: RegExp = new RegExp(/^(1){0,128}(0){0,128}$/);
 
-    static EIGHT_BIT_SIZE: bigInt.BigInteger = bigInt("1".repeat(8), 2);
-    static SIXTEEN_BIT_SIZE: bigInt.BigInteger = bigInt("1".repeat(16), 2);
-    static THIRTY_TWO_BIT_SIZE: bigInt.BigInteger = bigInt("1".repeat(32), 2);
-    static ONE_HUNDRED_AND_TWENTY_EIGHT_BIT_SIZE: bigInt.BigInteger = bigInt("1".repeat(128), 2);
-    static IPV4_SIZE = bigInt("4294967296");
-    static IPV6_SIZE = bigInt("340282366920938463463374607431768211456");
+    static EIGHT_BIT_SIZE: bigint = BigInt(`0b${"1".repeat(8)}`);
+    static SIXTEEN_BIT_SIZE: bigint = BigInt(`0b${"1".repeat(16)}`);
+    static THIRTY_TWO_BIT_SIZE: bigint = BigInt(`0b${"1".repeat(32)}`);
+    static ONE_HUNDRED_AND_TWENTY_EIGHT_BIT_SIZE: bigint = BigInt(`0b${"1".repeat(128)}`);
+    static IPV4_SIZE = BigInt("4294967296");
+    static IPV6_SIZE = BigInt("340282366920938463463374607431768211456");
 
     static invalidAsnRangeMessage = "ASN number given less than zero or is greater than 32bit";
     static invalid16BitAsnRangeMessage = "ASN number given less than zero or is greater than 16bit";
@@ -55,8 +55,8 @@ export class Validator {
      * @param upperBound upper bound
      * @returns {boolean} true if ipNumber is between lower and upper bound
      */
-    private static isWithinRange(ipNumber: bigInt.BigInteger, lowerBound: bigInt.BigInteger, upperBound: bigInt.BigInteger) : boolean {
-        return ipNumber.greaterOrEquals(lowerBound) && ipNumber.lesserOrEquals(upperBound);
+    private static isWithinRange(ipNumber: bigint, lowerBound: bigint, upperBound: bigint) : boolean {
+        return ipNumber >= lowerBound && ipNumber <= upperBound;
     }
 
     /**
@@ -66,20 +66,20 @@ export class Validator {
      * @returns {[boolean , string]} first value is true if valid ASN, false otherwise. Second value contains
      * "valid" or an error message when value is invalid
      */
-    static isValidAsnNumber(asnNumber: bigInt.BigInteger): [boolean, string[]] {
-        let isValid = this.isWithinRange(asnNumber, bigInt.zero, this.THIRTY_TWO_BIT_SIZE);
+    static isValidAsnNumber(asnNumber: bigint): [boolean, string[]] {
+        let isValid = this.isWithinRange(asnNumber, 0n, this.THIRTY_TWO_BIT_SIZE);
         return [isValid, isValid ? []: [Validator.invalidAsnRangeMessage]];
     }
 
     /**
      * Checks if the given ASN number is a 16bit ASN number
      *
-     * @param {bigInt.BigInteger} asnNumber to check if 16bit or not
+     * @param {bigint} asnNumber to check if 16bit or not
      * @returns {[boolean , string]} first value is true if valid 16bit ASN, false otherwise. Second value contains
      * "valid" or an error message when value is invalid
      */
-    static isValid16BitAsnNumber(asnNumber: bigInt.BigInteger): [boolean, string[]] {
-        let isValid = Validator.isWithinRange(asnNumber, bigInt.zero, Validator.SIXTEEN_BIT_SIZE);
+    static isValid16BitAsnNumber(asnNumber: bigint): [boolean, string[]] {
+        let isValid = Validator.isWithinRange(asnNumber, 0n, Validator.SIXTEEN_BIT_SIZE);
         return [isValid, isValid ? []: [Validator.invalid16BitAsnRangeMessage]];
     }
 
@@ -90,8 +90,9 @@ export class Validator {
      * @returns {[boolean , string]} first value is true if valid IPv4 number, false otherwise. Second value contains
      * "valid" or an error message when value is invalid
      */
-    static isValidIPv4Number(ipv4Number: bigInt.BigInteger): [boolean, string[]]  {
-        let isValid = this.isWithinRange(ipv4Number, bigInt.zero, this.THIRTY_TWO_BIT_SIZE);
+    static isValidIPv4Number(ipv4Number: bigint | number): [boolean, string[]]  {
+        ipv4Number = typeof ipv4Number === "bigint" ? ipv4Number : BigInt(ipv4Number);
+        let isValid = this.isWithinRange(ipv4Number, 0n, this.THIRTY_TWO_BIT_SIZE);
         return isValid ? [isValid, []]: [isValid, [Validator.invalidIPv4NumberMessage]];
     }
 
@@ -102,8 +103,8 @@ export class Validator {
      * @returns {[boolean , string]} first value is true if valid IPv6 number, false otherwise. Second value contains
      * "valid" or an error message when value is invalid
      */
-    static isValidIPv6Number(ipv6Number: bigInt.BigInteger): [boolean, string[]] {
-        let isValid = this.isWithinRange(ipv6Number, bigInt.zero, this.ONE_HUNDRED_AND_TWENTY_EIGHT_BIT_SIZE);
+    static isValidIPv6Number(ipv6Number: bigint): [boolean, string[]] {
+        let isValid = this.isWithinRange(ipv6Number, 0n, this.ONE_HUNDRED_AND_TWENTY_EIGHT_BIT_SIZE);
         return isValid ? [isValid, []]: [isValid, [Validator.invalidIPv6NumberMessage]];
     }
 
@@ -113,20 +114,20 @@ export class Validator {
      * @param octetNumber the octet value
      * @returns {boolean} true if valid octet, false otherwise
      */
-    static isValidIPv4Octet(octetNumber: bigInt.BigInteger): [boolean, string[]] {
-        let withinRange = this.isWithinRange(octetNumber, bigInt.zero, this.EIGHT_BIT_SIZE);
+    static isValidIPv4Octet(octetNumber: bigint): [boolean, string[]] {
+        let withinRange = this.isWithinRange(octetNumber, 0n, this.EIGHT_BIT_SIZE);
         return [withinRange, withinRange ? []: [Validator.invalidOctetRangeMessage]];
     }
 
     /**
      * Checks if the number given is valid for an IPv6 hexadecatet
      *
-     * @param {bigInt.BigInteger} hexadecatetNum the hexadecatet value
+     * @param {bigint} hexadecatetNum the hexadecatet value
      * @returns {[boolean , string]} first value is true if valid hexadecatet, false otherwise. Second value contains
      * "valid" or an error message when value is invalid
      */
-    static isValidIPv6Hexadecatet(hexadecatetNum: bigInt.BigInteger): [boolean, string[]] {
-        let isValid = this.isWithinRange(hexadecatetNum, bigInt.zero, this.SIXTEEN_BIT_SIZE);
+    static isValidIPv6Hexadecatet(hexadecatetNum: bigint): [boolean, string[]] {
+        let isValid = this.isWithinRange(hexadecatetNum, 0n, this.SIXTEEN_BIT_SIZE);
         return isValid ? [isValid, []]: [isValid, [Validator.invalidHexadecatetMessage]];
     }
 
@@ -145,7 +146,7 @@ export class Validator {
         }
 
         let isValid = rawOctets.every(octet => {
-            return Validator.isNumeric(octet) ? Validator.isValidIPv4Octet(bigInt(octet))[0] : false;
+            return Validator.isNumeric(octet) ? Validator.isValidIPv4Octet(BigInt(octet))[0] : false;
         });
         if (!isValid) {
             return [false, [Validator.invalidOctetRangeMessage]]
@@ -171,7 +172,7 @@ export class Validator {
 
             let isValid = hexadecimals.every(hexadecimal => {
                 return Validator.isHexadecatet(hexadecimal) ?
-                    Validator.isValidIPv6Hexadecatet(bigInt(parseInt(hexadecimal, 16)))[0] : false;
+                    Validator.isValidIPv6Hexadecatet(BigInt(`0x${hexadecimal}`))[0] : false;
             });
             if (!isValid) {
                 return [false, [Validator.invalidHexadecatetMessage]]
@@ -191,13 +192,13 @@ export class Validator {
      * @param ipNumType The type of IP number
      * @returns {(boolean|string)[]} a tuple representing if valid or not and corresponding message
      */
-    static isValidPrefixValue(prefixValue: number, ipNumType: IPNumType): [boolean, string[]] {
+    static isValidPrefixValue(prefixValue: bigint, ipNumType: IPNumType): [boolean, string[]] {
         if (IPNumType.IPv4 === ipNumType) {
-            let withinRange = Validator.isWithinRange(bigInt(prefixValue), bigInt.zero, bigInt(32));
+            let withinRange = Validator.isWithinRange(BigInt(prefixValue), 0n, 32n);
             return [withinRange, withinRange ? []: [Validator.invalidPrefixValueMessage]];
         }
         if (IPNumType.IPv6 === ipNumType) {
-            let withinRange = Validator.isWithinRange(bigInt(prefixValue), bigInt.zero, bigInt(128));
+            let withinRange = Validator.isWithinRange(BigInt(prefixValue), 0n, 128n);
             return [withinRange, withinRange ? []: [Validator.invalidPrefixValueMessage]];
         }
         return [false, [Validator.invalidInetNumType]]
@@ -251,7 +252,7 @@ export class Validator {
         }
 
         let [validIpv4, invalidIpv4Message] = Validator.isValidIPv4String(ip);
-        let [validPrefix, invalidPrefixMessage] = Validator.isValidPrefixValue(Number(range), IPNumType.IPv4);
+        let [validPrefix, invalidPrefixMessage] = Validator.isValidPrefixValue(BigInt(range), IPNumType.IPv4);
 
         let isValid = validIpv4 && validPrefix;
         let invalidMessage = invalidIpv4Message.concat(invalidPrefixMessage);
