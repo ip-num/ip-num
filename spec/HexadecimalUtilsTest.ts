@@ -2,7 +2,7 @@
 import * as HexadecimalUtils from "../src/HexadecimalUtils";
 
 describe('Hexadecimal Utils: ', () => {
-    it('Should convert bigIntegerNumber to Hexadecimal String', () => {
+    it('Should convert big int number to Hexadecimal String', () => {
         expect(HexadecimalUtils.bigIntToHexadecimalString(BigInt('2323'))).toEqual('913');
         expect(HexadecimalUtils.bigIntToHexadecimalString(BigInt('151515'))).toEqual('24fdb');
         expect(HexadecimalUtils.bigIntToHexadecimalString(BigInt('9223372036854776'))).toEqual('20c49ba5e353f8');

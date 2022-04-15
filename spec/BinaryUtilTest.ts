@@ -6,13 +6,13 @@ describe('Binary Utils', () => {
     it('Should correctly convert decimal to binary', () => {
         expect(BinaryUtils.numberToBinaryString(1234) === '10011010010').toEqual(true);
     });
-    it('Should correctly parse binary string to a number in BigInteger', () => {
+    it('Should correctly parse binary string to a number in BigInt', () => {
         expect(BinaryUtils.parseBinaryStringToBigInt('10011010010')).toEqual(1234n);
     });
     it('Should correctly convert binary to decimal', () => {
         expect(BinaryUtils.parseBinaryStringToBigInt('10011010010').valueOf() === 1234n).toEqual(true);
     });
-    it('Should correctly convert a big integer number to binary string', () => {
+    it('Should correctly convert a big int number to binary string', () => {
         expect(BinaryUtils.numberToBinaryString(1234n)).toBe('10011010010');
         expect(BinaryUtils.numberToBinaryString(4294967295n)).toBe('11111111111111111111111111111111')
     });

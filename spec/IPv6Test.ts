@@ -5,7 +5,6 @@ import {IPv4} from "../src";
 
 describe('IPv6: ', () => {
     it('should instantiate by calling constructor', () => {
-        // with big Integer
         let iPv6 = new IPv6(BigInt("42540650421252671973913748003310542850"));
         expect(iPv6.toString()).toEqual("2001:800:0:0:0:0:0:2002");
         let hexadecatets = iPv6.getHexadecatet();
@@ -22,9 +21,9 @@ describe('IPv6: ', () => {
         expect(iPv6Value.toString()).toEqual("ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff");
     });
 
-    it('should instantiate by calling fromBigInteger', () => {
-        let bigIntegerValue = BigInt("42540766411282592856903984951653826560");
-        let iPv6 = IPv6.fromBigInt(bigIntegerValue);
+    it('should instantiate by calling fromBigInt', () => {
+        let bigInt = BigInt("42540766411282592856903984951653826560");
+        let iPv6 = IPv6.fromBigInt(bigInt);
         expect(iPv6.toString()).toEqual("2001:db8:0:0:0:0:0:0");
         let hexadecatets = iPv6.getHexadecatet();
 
@@ -117,9 +116,9 @@ describe('IPv6: ', () => {
     });
 
     it('should correctly return the right value', () => {
-        let bigIntegerValue = BigInt(`0b${"1".repeat(128)}`);
-        let iPv6 = IPv6.fromBigInt(bigIntegerValue);
-        expect(iPv6.getValue()).toEqual(bigIntegerValue);
+        let bigInt = BigInt(`0b${"1".repeat(128)}`);
+        let iPv6 = IPv6.fromBigInt(bigInt);
+        expect(iPv6.getValue()).toEqual(bigInt);
     });
 
     it('should pad with :: if ', () => {

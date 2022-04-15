@@ -10,7 +10,7 @@ describe('IPv4: ', () => {
         expect(new IPv4("111.222.90.45").toString()).toEqual("111.222.90.45");
     });
 
-    it('should instantiate by passing big integer value of IPv4 number to constructor', () => {
+    it('should instantiate by passing big int value of IPv4 number to constructor', () => {
         expect(IPv4.fromNumber(1876843053n).toString()).toEqual("111.222.90.45");
     });
 
