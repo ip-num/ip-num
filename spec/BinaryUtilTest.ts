@@ -1,31 +1,51 @@
 import * as BinaryUtils from "../src/BinaryUtils";
 import {IPNumType} from "../src";
-import {intLog2, matchingBitCount} from "../src";
+import {intLog2, leftPadWithZeroBit, matchingBitCount, numberToBinaryString} from "../src/BinaryUtils";
+import fc from "fast-check"
+import {positiveIntegersAndBinary, ipv4DecimalNotation} from "./abitraries/BinaryArbitraries";
+
 
 describe('Binary Utils', () => {
     it('Should correctly convert decimal to binary', () => {
-        expect(BinaryUtils.numberToBinaryString(1234) === '10011010010').toEqual(true);
+        fc.assert(fc.property(positiveIntegersAndBinary, (value) => {
+            expect(BinaryUtils.numberToBinaryString(value.value)).toEqual(value.binary);
+        }));
     });
-    it('Should correctly parse binary string to a number in BigInt', () => {
-        expect(BinaryUtils.parseBinaryStringToBigInt('10011010010')).toEqual(1234n);
+    it('Should correctly parse binary string to a number in BigInteger', () => {
+        fc.assert(fc.property(positiveIntegersAndBinary, (value) => {
+            expect(BinaryUtils.parseBinaryStringToBigInt(value.binary)).toEqual(BigInt(value.value));
+        }));
     });
     it('Should correctly convert binary to decimal', () => {
-        expect(BinaryUtils.parseBinaryStringToBigInt('10011010010').valueOf() === 1234n).toEqual(true);
+        fc.assert(fc.property(positiveIntegersAndBinary, (value) => {
+            expect(BinaryUtils.parseBinaryStringToBigInt(value.binary).valueOf()).toEqual(BigInt(value.value));
+        }));
     });
-    it('Should correctly convert a big int number to binary string', () => {
-        expect(BinaryUtils.numberToBinaryString(1234n)).toBe('10011010010');
-        expect(BinaryUtils.numberToBinaryString(4294967295n)).toBe('11111111111111111111111111111111')
+    it('Should correctly convert a big integer number to binary string', () => {
+        fc.assert(fc.property(positiveIntegersAndBinary, (value) => {
+            expect(BinaryUtils.numberToBinaryString(BigInt(value.value))).toEqual(value.binary);
+        }));
     });
     it('Should correctly convert binary to decimal and back to binary', () => {
-        let originalBinary = '10011010010';
-        let decimal = BinaryUtils.parseBinaryStringToBigInt(originalBinary).valueOf();
-        let finalBinary = BinaryUtils.numberToBinaryString(Number(decimal));
-        expect(originalBinary.toString() === finalBinary).toEqual(true);
+        fc.assert(fc.property(positiveIntegersAndBinary, (value) => {
+            expect(
+                BinaryUtils.numberToBinaryString(
+                    BinaryUtils.parseBinaryStringToBigInt(value.binary).valueOf()
+                )
+            ).toEqual(value.binary);
+        }));
     });
     it('Should correctly convert decimal number to octets', () => {
-        let decimalValue = 10;
-        let octet = BinaryUtils.decimalNumberToOctetString(decimalValue);
-        expect(octet).toEqual('00001010')
+        fc.assert(fc.property(positiveIntegersAndBinary.filter(value => {
+            return value.binary.length <= 8;
+        }).map(value => {
+            return {
+                binary: leftPadWithZeroBit(value.binary, 8),
+                value: value.value
+            }
+        }), (value) => {
+            expect(BinaryUtils.decimalNumberToOctetString(value.value)).toEqual(value.binary);
+        }));
     });
     it('Should throw an exception when converting to octet and value is larger than an octet', () => {
         expect(() => {
@@ -33,12 +53,19 @@ describe('Binary Utils', () => {
         }).toThrowError(Error, 'Given decimal in binary contains digits greater than an octet');
     });
     it('Should correctly convert IP number in dotted decimal notation to binary string', () => {
-        expect(BinaryUtils.dottedDecimalNotationToBinaryString('2.16.217.69')).toEqual('00000010000100001101100101000101');
-        expect(BinaryUtils.dottedDecimalNotationToBinaryString('0.0.0.0')).toEqual('00000000000000000000000000000000');
-        expect(BinaryUtils.dottedDecimalNotationToBinaryString('255.255.255.255')).toEqual('11111111111111111111111111111111');
-        expect(BinaryUtils.dottedDecimalNotationToBinaryString('254.198.20.255')).toEqual('11111110110001100001010011111111');
+        fc.assert(fc.property(ipv4DecimalNotation, (value) => {
+            expect(BinaryUtils.dottedDecimalNotationToBinaryString(value.decimalNotation)).toEqual(value.binary);
+        }));
     });
     it('Should pad given string with zeros to become given length', () => {
+        fc.assert(fc.property(fc.tuple(fc.integer({min:0}).map((value: number) => {
+            return value.toString(2)
+        }), fc.integer({min:0, max:20})).filter(values => {
+            return values[1] > values[0].length
+        }), (value) => {
+            expect(BinaryUtils.leftPadWithZeroBit(value[0], value[1]).length).toEqual(value[1]);
+            expect(BinaryUtils.leftPadWithZeroBit(value[0], value[1]).endsWith(value[0])).toEqual(true);
+        }));
         expect(BinaryUtils.leftPadWithZeroBit('10', 5)).toEqual('00010');
         expect(BinaryUtils.leftPadWithZeroBit('00010', 5)).toEqual('00010');
     });
@@ -48,41 +75,49 @@ describe('Binary Utils', () => {
         }).toThrowError(Error, 'Given string is already longer than given final length after padding: 5');
     });
     describe('IPv4 cidr prefix to binary string', () => {
-      it('should convert a 24 prefix', () => {
-        expect(BinaryUtils.cidrPrefixToMaskBinaryString(24, IPNumType.IPv4)).toBe(`${"1".repeat(24)}${"0".repeat(8)}`)
-      });
-      it('should convert a 32 prefix', () => {
-        expect(BinaryUtils.cidrPrefixToMaskBinaryString(32, IPNumType.IPv4)).toBe(`${"1".repeat(32)}`)
-      });
-      it('should throw an exception when converting 33 prefix', () => {
-        expect(() => {
-          BinaryUtils.cidrPrefixToMaskBinaryString(33, IPNumType.IPv4);
-        }).toThrowError(Error, 'Value is greater than 32');
-      });
+        it('should convert prefix to mask binary string', () => {
+            fc.assert(fc.property(fc.integer(1,32), (value) => {
+                let maskString = BinaryUtils.cidrPrefixToMaskBinaryString(value, IPNumType.IPv4)
+                expect(new RegExp(`^1{${value}}0{${32-value}}$`).test(maskString)).toBeTrue()
+            }))
+        });
+        it('should throw an exception when converting 33 prefix', () => {
+            expect(() => {
+                BinaryUtils.cidrPrefixToMaskBinaryString(33, IPNumType.IPv4);
+            }).toThrowError(Error, 'Value is greater than 32');
+        });
     });
     describe('IPv6 cidr prefix to binary string', () => {
-      it('should convert a 64 prefix', () => {
-      expect(BinaryUtils.cidrPrefixToMaskBinaryString(64, IPNumType.IPv6)).toBe(`${"1".repeat(64)}${"0".repeat(64)}`)
-      });
-      it('should convert a 128 prefix', () => {
-        expect(BinaryUtils.cidrPrefixToMaskBinaryString(128, IPNumType.IPv6)).toBe(`${"1".repeat(128)}`)
-      });
-      it('should throw an exception when converting 130 prefix', () => {
-        expect(() => {
-        BinaryUtils.cidrPrefixToMaskBinaryString(130, IPNumType.IPv6);
-        }).toThrowError(Error, 'Value is greater than 128');
-      });
+
+        it('should convert prefix to mask binary string', () => {
+            fc.assert(fc.property(fc.integer(1, 128), (value) => {
+                let maskString = BinaryUtils.cidrPrefixToMaskBinaryString(value, IPNumType.IPv6)
+                expect(new RegExp(`^1{${value}}0{${128-value}}$`).test(maskString)).toBeTrue()
+            }))
+        });
+
+        it('should throw an exception when converting 130 prefix', () => {
+            expect(() => {
+                BinaryUtils.cidrPrefixToMaskBinaryString(130, IPNumType.IPv6);
+            }).toThrowError(Error, 'Value is greater than 128');
+        });
     });
 
     describe('log2', () => {
         it('should calculate the log2 of a number', () => {
-            expect(intLog2(8n)).toBe(3);
-            expect(intLog2(256n)).toBe(8);
+
+            fc.assert(fc.property(fc.integer(2, 100).map(value => {
+                return Math.pow(2, value);
+            }), (value) => {
+                let exponent = intLog2(BigInt(value));
+                expect(Math.pow(2, exponent)).toEqual(value)
+            }))
+
         });
 
         it('should throw an exception when no int log2', () => {
             expect(() => {
-                intLog2(12n)
+                intLog2(BigInt(12))
             }).toThrowError(Error)
         })
     })

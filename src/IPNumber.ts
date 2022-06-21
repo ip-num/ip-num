@@ -447,8 +447,8 @@ export class Asn extends AbstractIPNum {
      *
      */
     toASDotPlus():string {
-        let high = this.value.valueOf() / 65535n;
-        let low = (this.value.valueOf() % 65535n) - high;
+        let high = this.value.valueOf() / 65536n;
+        let low = (this.value.valueOf() % 65536n);
         return `${high}.${low}`;
     }
 
