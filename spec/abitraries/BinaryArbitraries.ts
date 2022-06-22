@@ -8,6 +8,13 @@ export const positiveIntegersAndBinary = fc.integer({min:0}).map((value: number)
     }
 })
 
+export const hexadecatetValue = fc.integer({min:0, max:65535}).map((value: number) => {
+    return {
+        value: value.toString(16),
+        decimalValue: value
+    }
+})
+
 export const ipv4DecimalNotation = fc.array(fc.integer({
     min:0,
     max:255

@@ -3,9 +3,12 @@ import {Validator} from "./Validator";
 /**
  * A representation of a 4-digit hexadecimal number.
  *
- * It consists of four (base 16) number. ie FFFF
+ * An IPv6 number contains 128 digits, split into 8 grouping of 16 bits.
  *
- * It is used to represents the components of an IPv6 address
+ * This data structure represents a 16 bit grouping
+ *
+ * That is for example FFFF is 16 bit grouping with all 1s
+ *
  */
 export class Hexadecatet {
     private readonly value: number;
@@ -29,23 +32,17 @@ export class Hexadecatet {
      * @returns {Hexadecatet} an instance of {@link Hexadecatet}
      */
     static fromNumber(rawValue: number):Hexadecatet {
-        return new Hexadecatet(rawValue);
+        return new Hexadecatet(rawValue.toString(16));
     };
 
     /**
      * Constructor for creating an instance of {@link Hexadecatet}
      *
-     * @param {string | number} givenValue a string or numeric value. If given value is a string then it should be a
-     * four (base 16) number representation of a 16bit value. If it is a number, then it should be a decimal number
-     * representation of a 16 bit value
+     * @param {string} givenValue a string a four (base 16) number representation of a 16bit value.
      */
-    constructor(givenValue: string | number) {
+    constructor(givenValue: string) {
         let hexadecatetValue: number;
-        if (typeof givenValue === 'string') {
-            hexadecatetValue = parseInt(givenValue, 16);
-        } else {
-            hexadecatetValue = parseInt(String(givenValue), 16);
-        }
+        hexadecatetValue = parseInt(givenValue, 16);
 
         let [isValid, message] = Validator.isValidIPv6Hexadecatet(BigInt(hexadecatetValue));
 
