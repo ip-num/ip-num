@@ -1,25 +1,25 @@
 
 import * as HexadecimalUtils from "../src/HexadecimalUtils";
+import fc from "fast-check";
+import {positiveIntegersAndHex} from "./abitraries/BinaryArbitraries";
+
 
 describe('Hexadecimal Utils: ', () => {
     it('Should convert big int number to Hexadecimal String', () => {
-        expect(HexadecimalUtils.bigIntToHexadecimalString(BigInt('2323'))).toEqual('913');
-        expect(HexadecimalUtils.bigIntToHexadecimalString(BigInt('151515'))).toEqual('24fdb');
-        expect(HexadecimalUtils.bigIntToHexadecimalString(BigInt('9223372036854776'))).toEqual('20c49ba5e353f8');
-        expect(HexadecimalUtils.bigIntToHexadecimalString(BigInt('92233720368547760000'))).toEqual('50000000000000780');
+        fc.assert(fc.property(positiveIntegersAndHex, (value) => {
+            expect(HexadecimalUtils.bigIntToHexadecimalString(BigInt(value.value))).toEqual(value.hex);
+        }))
     });
 
     it('Should convert hexadecimal string to binary string', () => {
-        expect(HexadecimalUtils.hexadecimalStringToBinaryString('2323')).toEqual('10001100100011');
-        expect(HexadecimalUtils.hexadecimalStringToBinaryString('24fdb')).toEqual('100100111111011011');
-        expect(HexadecimalUtils.hexadecimalStringToBinaryString('20c49ba5e353f8')).toEqual('100000110001001001101110100101111000110101001111111000');
-        expect(HexadecimalUtils.hexadecimalStringToBinaryString('50000000000000780')).toEqual('1010000000000000000000000000000000000000000000000000000011110000000');
+        fc.assert(fc.property(positiveIntegersAndHex, (value) => {
+            expect(HexadecimalUtils.hexadecimalStringToBinaryString(value.hex)).toEqual(value.value.toString(2));
+        }))
     });
 
     it('Should convert binary string To hexadecimal string', () => {
-        expect(HexadecimalUtils.binaryStringToHexadecimalString('10001100100011')).toEqual('2323');
-        expect(HexadecimalUtils.binaryStringToHexadecimalString('100100111111011011')).toEqual('24fdb');
-        expect(HexadecimalUtils.binaryStringToHexadecimalString('100000110001001001101110100101111000110101001111111000')).toEqual('20c49ba5e353f8');
-        expect(HexadecimalUtils.binaryStringToHexadecimalString('1010000000000000000000000000000000000000000000000000000011110000000')).toEqual('50000000000000780');
+        fc.assert(fc.property(positiveIntegersAndHex, (value) => {
+            expect(HexadecimalUtils.binaryStringToHexadecimalString(value.value.toString(2))).toEqual(value.hex);
+        }))
     });
 });

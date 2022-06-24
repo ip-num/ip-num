@@ -8,6 +8,13 @@ export const positiveIntegersAndBinary = fc.integer({min:0}).map((value: number)
     }
 })
 
+export const positiveIntegersAndHex = fc.integer({min:0}).map((value: number) => {
+    return {
+        value,
+        hex: value.toString(16)
+    }
+})
+
 export const hexadecatetValue = fc.integer({min:0, max:65535}).map((value: number) => {
     return {
         value: value.toString(16),
