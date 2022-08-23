@@ -469,9 +469,7 @@ export abstract class AbstractIPRange<T extends AbstractIPNum, P extends IPv4Pre
             return false;
         }
 
-        return this.isConsecutive(otherRange)
-            && this.getSize() === (otherRange.getSize());
-
+        return this.isConsecutive(otherRange) && this.getSize() === (otherRange.getSize());
     }
 
     public isMergeable(otherRange: IPv6CidrRange | IPv4CidrRange): boolean {
