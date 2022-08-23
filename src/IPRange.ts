@@ -463,7 +463,7 @@ export abstract class AbstractIPRange<T extends AbstractIPNum, P extends IPv4Pre
     }
 
     public isCidrMergeable(otherRange: IPv6CidrRange | IPv4CidrRange): boolean {
-        let count = BigInt(matchingBitCount(this.getFirst().toBinaryString(), otherRange.getFirst().toBinaryString()));
+        const count = BigInt(matchingBitCount(this.getFirst().toBinaryString(), otherRange.getFirst().toBinaryString()));
 
         if (this.getPrefix().value - count !== 1n) {
             return false;
