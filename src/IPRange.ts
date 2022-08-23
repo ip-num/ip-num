@@ -470,8 +470,7 @@ export abstract class AbstractIPRange<T extends AbstractIPNum, P extends IPv4Pre
         }
 
         return this.isConsecutive(otherRange)
-            && this.getSize() === (otherRange.getSize())
-            && (this.getFirst().getValue() & (count)) === ((otherRange.getFirst().getValue()) & (count));
+            && this.getSize() === (otherRange.getSize());
 
     }
 
