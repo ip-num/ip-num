@@ -44,6 +44,76 @@ describe('Pool', () => {
             expect(aggregatedPool.getRanges().length).toEqual(1);
         });
 
+        it('should aggregate after split of non-consecutive', () => {
+            let arrays: RangedSet<IPv4>[] = new Array<RangedSet<IPv4>>();
+
+            arrays.push(...IPv4CidrRange.fromCidr("192.168.0.0/24").splitInto(new IPv4Prefix(32n)).map(range => {
+                return RangedSet.fromCidrRange(range);
+            }));
+            arrays.push(...IPv4CidrRange.fromCidr("192.168.2.0/24").splitInto(new IPv4Prefix(32n)).map(range => {
+                return RangedSet.fromCidrRange(range);
+            }));
+
+            let pool = Pool.fromRangeSet(arrays);
+            let aggregatedPool = pool.aggregate();
+
+            expect(aggregatedPool.getRanges()[0].toRangeString()).toEqual("192.168.0.0-192.168.0.255");
+            expect(aggregatedPool.getRanges()[1].toRangeString()).toEqual("192.168.2.0-192.168.2.255");
+            expect(aggregatedPool.getRanges().length).toEqual(2);
+        });
+
+        it('should aggregate after split of consecutive', () => {
+            let arrays: RangedSet<IPv4>[] = new Array<RangedSet<IPv4>>();
+
+            arrays.push(...IPv4CidrRange.fromCidr("192.168.0.0/24").splitInto(new IPv4Prefix(32n)).map(range => {
+                return RangedSet.fromCidrRange(range);
+            }));
+            arrays.push(...IPv4CidrRange.fromCidr("192.168.1.0/24").splitInto(new IPv4Prefix(32n)).map(range => {
+                return RangedSet.fromCidrRange(range);
+            }));
+
+            let pool = Pool.fromRangeSet(arrays);
+            let aggregatedPool = pool.aggregate();
+
+            expect(aggregatedPool.getRanges()[0].toRangeString()).toEqual("192.168.0.0-192.168.1.255");
+            expect(aggregatedPool.getRanges().length).toEqual(1);
+        });
+
+        it('should aggregate after split of the combination of consecutive and non-consecutive', () => {
+            let arrays: RangedSet<IPv4>[] = new Array<RangedSet<IPv4>>();
+
+            arrays.push(...IPv4CidrRange.fromCidr("192.168.0.0/24").splitInto(new IPv4Prefix(32n)).map(range => {
+                return RangedSet.fromCidrRange(range);
+            }));
+            arrays.push(...IPv4CidrRange.fromCidr("192.168.1.0/24").splitInto(new IPv4Prefix(32n)).map(range => {
+                return RangedSet.fromCidrRange(range);
+            }));
+            arrays.push(...IPv4CidrRange.fromCidr("192.168.2.0/24").splitInto(new IPv4Prefix(32n)).map(range => {
+                return RangedSet.fromCidrRange(range);
+            }));
+
+            let pool = Pool.fromRangeSet(arrays);
+            let aggregatedPool = pool.aggregate();
+
+            expect(aggregatedPool.getRanges()[0].toRangeString()).toEqual("192.168.0.0-192.168.1.255");
+            expect(aggregatedPool.getRanges()[1].toRangeString()).toEqual("192.168.2.0-192.168.2.255");
+            expect(aggregatedPool.getRanges().length).toEqual(2);
+        });
+
+        it('should aggregate after split', () => {
+            let arrays: RangedSet<IPv4>[] = new Array<RangedSet<IPv4>>();
+
+            arrays.push(...IPv4CidrRange.fromCidr("192.168.0.0/23").splitInto(new IPv4Prefix(32n)).map(range => {
+                return RangedSet.fromCidrRange(range);
+            }));
+
+            let pool = Pool.fromRangeSet(arrays);
+            let aggregatedPool = pool.aggregate();
+
+            expect(aggregatedPool.getRanges()[0].toRangeString()).toEqual("192.168.0.0-192.168.1.255");
+            expect(aggregatedPool.getRanges().length).toEqual(1);
+        });
+
         it('should aggregate with hole', () => {
             let arrays: RangedSet<IPv4>[] = new Array<RangedSet<IPv4>>();
 
