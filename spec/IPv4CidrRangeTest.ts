@@ -158,6 +158,8 @@ describe('IPv4CidrRange: ', () => {
     it('should correctly merge mergeable ranges', () => {
         let firstRange = IPv4CidrRange.fromCidr("192.168.208.0/25");
         let secondRange = IPv4CidrRange.fromCidr("192.168.208.128/25");
+
+        expect(firstRange.merge(secondRange).toRangeString()).toBe("192.168.208.0-192.168.208.255");
     });
     it('should correctly tell when ranges are equal', () => {
         let firstRange = IPv4CidrRange.fromCidr("192.168.0.0/25");
