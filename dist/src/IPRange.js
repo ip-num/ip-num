@@ -392,13 +392,11 @@ class AbstractIPRange {
         return this.toRangeSet().isConsecutive(otherRange.toRangeSet());
     }
     isCidrMergeable(otherRange) {
-        let count = BinaryUtils_1.matchingBitCount(this.getFirst().toBinaryString(), otherRange.getFirst().toBinaryString());
-        if (this.getPrefix().value - BigInt(count) !== 1n) {
+        const count = BigInt(BinaryUtils_1.matchingBitCount(this.getFirst().toBinaryString(), otherRange.getFirst().toBinaryString()));
+        if (this.getPrefix().value - count !== 1n) {
             return false;
         }
-        return this.isConsecutive(otherRange)
-            && this.getSize() === (otherRange.getSize())
-            && (this.getFirst().getValue() & (BigInt(count))) === ((otherRange.getFirst().getValue()) & (BigInt(count)));
+        return this.isConsecutive(otherRange) && this.getSize() === (otherRange.getSize());
     }
     isMergeable(otherRange) {
         return this.isCidrMergeable(otherRange)
