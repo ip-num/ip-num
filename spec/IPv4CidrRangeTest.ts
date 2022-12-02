@@ -11,6 +11,11 @@ describe('IPv4CidrRange: ', () => {
     it('should instantiate from string in cidr notation', () => {
         let ipv4CidrRange = IPv4CidrRange.fromCidr("192.198.0.0/24");
         expect(ipv4CidrRange.toCidrString()).toEqual("192.198.0.0/24");
+
+        let iPv4CidrRange = IPv4CidrRange.fromCidr("1.2.3.4/5");
+        expect(iPv4CidrRange.toCidrString()).toEqual("1.2.3.4/5");
+        expect(iPv4CidrRange.getFirst().toString()).toEqual("0.0.0.0");
+
     });
 
     it('should throw exception when passed in a malformed range', () => {

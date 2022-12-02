@@ -569,7 +569,7 @@ export class IPv4CidrRange extends AbstractIPRange<IPv4, IPv4Prefix> {
      * @returns {string} the IPv4 range in CIDR (Classless Inter-Domain Routing) notation
      */
     public toCidrString(): string {
-        let first = this.getFirst();
+        let first = this.ipv4.toString();
         return `${first.toString()}/${this.cidrPrefix.toString()}`
     }
 
@@ -824,7 +824,7 @@ export class IPv6CidrRange extends AbstractIPRange<IPv6, IPv6Prefix> {
      * @returns {string} the IPv6 range in CIDR (Classless Inter-Domain Routing) notation
      */
     public toCidrString(): string {
-        let first = this.getFirst();
+        let first = this.ipv6.toString();
         return `${first.toString()}/${this.cidrPrefix.toString()}`
     }
 

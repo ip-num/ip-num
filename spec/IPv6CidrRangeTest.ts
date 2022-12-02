@@ -6,7 +6,7 @@ import {Validator} from "../src";
 describe('IPv6CidrRange: ', () => {
     it('should instantiate by calling constructor with IPv4 and prefix', () => {
         let ipv6CidrRange = new IPv6CidrRange(new IPv6("::"), new IPv6Prefix(0n));
-        expect(ipv6CidrRange.toCidrString()).toEqual("::0/0");
+        expect(ipv6CidrRange.toCidrString()).toEqual("0:0:0:0:0:0:0:0/0");
     });
     it('should instantiate from string in cidr notation', () => {
          let ipv6CidrRange = IPv6CidrRange.fromCidr("2001:db8::/33");
