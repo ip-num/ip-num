@@ -14,6 +14,7 @@ describe('IPv4CidrRange: ', () => {
 
         let iPv4CidrRange = IPv4CidrRange.fromCidr("1.2.3.4/5");
         expect(iPv4CidrRange.toCidrString()).toEqual("1.2.3.4/5");
+        expect(iPv4CidrRange.getFirst().toString()).toEqual("0.0.0.0");
 
     });
 
