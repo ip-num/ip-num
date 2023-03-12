@@ -783,7 +783,7 @@ export class IPv4Mask extends IPv4 {
 /**
  * The IPv6Mask can be seen as a specialized IPv4 number where, in a 128 bit number, starting from the left,
  * you have continuous bits turned on (with 1 value) followed by bits turned off (with 0 value). In networking, it
- * is used to to demarcate which bits are used to identify a network, and the ones that are used to identify hosts
+ * is used to demarcate which bits are used to identify a network, and the ones that are used to identify hosts
  * on the network
  */
 export class IPv6Mask extends IPv6 {
@@ -826,22 +826,23 @@ export class IPv6Mask extends IPv6 {
         super(ipString);
         let isValid: boolean;
         let message: string[];
-        [isValid, message] = Validator.isValidIPv6Mask(ipString);
+        let expandedIPv6 = expandIPv6Number(ipString);
+        [isValid, message] = Validator.isValidIPv6Mask(expandedIPv6);
 
         if (!isValid) {
             throw new Error(message.filter(msg => {return msg !== '';}).toString());
         }
 
-        let stringHexadecimals = ipString.split(":");
+        let stringHexadecimals = expandedIPv6.split(":");
         this.hexadecatet = stringHexadecimals.map((stringHexadecatet) => {
             return Hexadecatet.fromString(stringHexadecatet)
         });
 
-        let binaryString = hexadectetNotationToBinaryString(ipString);
+        let binaryString = hexadectetNotationToBinaryString(expandedIPv6);
         this.prefix  = (binaryString.match(/1/g) || []).length;
         this.value = BigInt(`0b${binaryString}`);
 
-        this.value = BigInt(`0b${hexadectetNotationToBinaryString(ipString)}`);
+        this.value = BigInt(`0b${hexadectetNotationToBinaryString(expandedIPv6)}`);
     }
 }
 
