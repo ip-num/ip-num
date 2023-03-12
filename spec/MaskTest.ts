@@ -44,9 +44,14 @@ describe('mask test', function() {
         expect(iPv6Mask.toString()).toEqual("ffff:ffff:ffff:ffff:ffff:ffff:0:0");
     });
 
-    it('should create an instance using consturctor', () => {
+    it('should create an instance using constructor', () => {
         let iPv6Mask = new IPv6Mask("ffff:ffff:ffff:ffff:ffff:ffff:0:0");
         expect(iPv6Mask.toString()).toEqual("ffff:ffff:ffff:ffff:ffff:ffff:0:0");
+    });
+
+    it('should create an instance using constructor with compressed string notation', () => {
+        let iPv6Mask = new IPv6Mask("ffff:ffff:ffff:ffff::");
+        expect(iPv6Mask.toString()).toEqual("ffff:ffff:ffff:ffff:0:0:0:0");
     });
 
     it('should create throw an exception when invalid mask string is given', () => {
