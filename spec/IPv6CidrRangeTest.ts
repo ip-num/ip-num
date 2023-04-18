@@ -129,7 +129,7 @@ describe('IPv6CidrRange: ', () => {
         expect(firstRange.isOverlapping(secondRange)).toBe(false);
 
     });
-    it('should correctly tell that containing ranges are not overlapping', () => {
+    it('should correctly tell that containing ranges are overlapping', () => {
         let containerRange = new IPv6CidrRange(new IPv6("2001:db8::"), new IPv6Prefix(47n));
         let firstRange = new IPv6CidrRange(new IPv6("2001:db8::"), new IPv6Prefix(48n));
         let secondRange = new IPv6CidrRange(new IPv6("2001:db8:1::"), new IPv6Prefix(48n));
@@ -137,8 +137,8 @@ describe('IPv6CidrRange: ', () => {
         expect(firstRange.isOverlapping(secondRange)).toBe(false);
         expect(secondRange.isOverlapping(firstRange)).toBe(false);
 
-        expect(containerRange.isOverlapping(firstRange)).toBe(false);
-        expect(firstRange.isOverlapping(containerRange)).toBe(false);
+        expect(containerRange.isOverlapping(firstRange)).toBe(true);
+        expect(firstRange.isOverlapping(containerRange)).toBe(true);
 
     });
     it('should correctly tell if ranges can be merged', () => {
