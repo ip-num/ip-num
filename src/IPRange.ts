@@ -207,6 +207,10 @@ export class RangedSet<T extends AbstractIPNum> implements Iterable<AbstractIPNu
             thisLast.isGreaterThan(otherFirst) && thisLast.isLessThanOrEquals(otherLast) && thisFirst.isLessThan(otherFirst)
             ||
             otherLast.isGreaterThan(thisFirst) && otherLast.isLessThanOrEquals(thisLast) && otherFirst.isLessThan(thisFirst)
+            ||
+            this.contains(otherRange)
+            ||
+            otherRange.contains(this)
         );
     }
 
