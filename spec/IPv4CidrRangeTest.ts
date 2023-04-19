@@ -136,7 +136,7 @@ describe('IPv4CidrRange: ', () => {
         expect(firstRange.isOverlapping(secondRange)).toBe(false);
 
     });
-    it('should correctly tell that containing ranges are not overlapping', () => {
+    it('should correctly tell that containing ranges are overlapping', () => {
         let containerRange = IPv4CidrRange.fromCidr("192.168.0.0/24");
         let firstRange = IPv4CidrRange.fromCidr("192.168.0.0/25");
         let secondRange = IPv4CidrRange.fromCidr("192.168.0.128/25");
@@ -144,8 +144,8 @@ describe('IPv4CidrRange: ', () => {
         expect(firstRange.isOverlapping(secondRange)).toBe(false);
         expect(secondRange.isOverlapping(firstRange)).toBe(false);
 
-        expect(containerRange.isOverlapping(firstRange)).toBe(false);
-        expect(firstRange.isOverlapping(containerRange)).toBe(false);
+        expect(containerRange.isOverlapping(firstRange)).toBe(true);
+        expect(firstRange.isOverlapping(containerRange)).toBe(true);
 
     });
     it('should correctly tell if ranges can be merged', () => {

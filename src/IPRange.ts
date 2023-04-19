@@ -207,6 +207,10 @@ export class RangedSet<T extends AbstractIPNum> implements Iterable<AbstractIPNu
             thisLast.isGreaterThan(otherFirst) && thisLast.isLessThanOrEquals(otherLast) && thisFirst.isLessThan(otherFirst)
             ||
             otherLast.isGreaterThan(thisFirst) && otherLast.isLessThanOrEquals(thisLast) && otherFirst.isLessThan(thisFirst)
+            ||
+            this.contains(otherRange)
+            ||
+            otherRange.contains(this)
         );
     }
 
@@ -270,18 +274,18 @@ export class RangedSet<T extends AbstractIPNum> implements Iterable<AbstractIPNu
             return new RangedSet(otherRange.getFirst(), otherRange.getLast());
         }
 
+        if (this.contains(otherRange)) {
+            return new RangedSet(this.getFirst(), this.getLast());
+        } else if(otherRange.contains(this)) {
+            return new RangedSet(otherRange.getFirst(), otherRange.getLast());
+        }
+
         if (this.isOverlapping(otherRange)) {
             if (this.getFirst().isLessThan(otherRange.getFirst())) {
                 return new RangedSet(this.getFirst(), otherRange.getLast());
             } else {
                 return new RangedSet(otherRange.getFirst(), this.getLast());
             }
-        }
-
-        if (this.contains(otherRange)) {
-            return new RangedSet(this.getFirst(), this.getLast());
-        } else if(otherRange.contains(this)) {
-            return new RangedSet(otherRange.getFirst(), otherRange.getLast());
         }
 
         throw new Error("Ranges do not overlap nor are equal")
