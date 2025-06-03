@@ -61,5 +61,41 @@ describe('IPv6 Utils', () => {
         expect(IPv6Utils.collapseIPv6Number("2001:555:1:800::/128")).toBe("2001:555:1:800::/128");
         expect(IPv6Utils.collapseIPv6Number("2001:0555:0001:0800::/50")).toBe("2001:555:1:800::/50");
         expect(IPv6Utils.collapseIPv6Number("2001:555:1:800::/50")).toBe("2001:555:1:800::/50");
+
+        // GitHub Issue Cases:
+        expect(IPv6Utils.collapseIPv6Number("2001:550:0:1000:0:0:9a1a:2187")).toBe("2001:550:0:1000::9a1a:2187");
+        expect(IPv6Utils.collapseIPv6Number("2001:4457:0:371a:0:0:0:0")).toBe("2001:4457:0:371a::");
+        expect(IPv6Utils.collapseIPv6Number("2001:550:0:1000:0:0:9a18:3c58")).toBe("2001:550:0:1000::9a18:3c58");
+
+        // Addresses with multiple zero sequences (longest chosen, then first if tie):
+        expect(IPv6Utils.collapseIPv6Number("0:0:1:2:0:0:0:3")).toBe("0:0:1:2::3");
+        expect(IPv6Utils.collapseIPv6Number("1:0:0:2:0:0:0:3")).toBe("1:0:0:2::3");
+        expect(IPv6Utils.collapseIPv6Number("1:0:0:0:2:0:0:3")).toBe("1::2:0:0:3");
+        expect(IPv6Utils.collapseIPv6Number("0:1:0:0:0:2:0:0")).toBe("0:1::2:0:0");
+        expect(IPv6Utils.collapseIPv6Number("0:0:0:1:0:0:0:2")).toBe("::1:0:0:0:2"); // Tie length 3, first chosen
+        expect(IPv6Utils.collapseIPv6Number("1:0:0:0:2:3:0:0")).toBe("1::2:3:0:0");   // Longest 0:0:0 chosen
+        expect(IPv6Utils.collapseIPv6Number("0:0:1:0:0:2:0:0")).toBe("::1:0:0:2:0:0"); // Tie length 2, first chosen
+
+        // Addresses starting or ending with zero sequences:
+        expect(IPv6Utils.collapseIPv6Number("0:0:0:1:2:3:4:5")).toBe("::1:2:3:4:5");
+        expect(IPv6Utils.collapseIPv6Number("1:2:3:4:5:0:0:0")).toBe("1:2:3:4:5::");
+
+        // All zeros:
+        expect(IPv6Utils.collapseIPv6Number("0:0:0:0:0:0:0:0")).toBe("::");
+
+        // No compressible zeros (single zero blocks not compressible by :: as per RFC 5952):
+        expect(IPv6Utils.collapseIPv6Number("2001:db8:0:1:2:3:4:5")).toBe("2001:db8:0:1:2:3:4:5");
+        expect(IPv6Utils.collapseIPv6Number("0:db8:1:2:3:4:5:6")).toBe("0:db8:1:2:3:4:5:6");
+        expect(IPv6Utils.collapseIPv6Number("1:db8:2:3:4:5:6:0")).toBe("1:db8:2:3:4:5:6:0");
+
+        // Already optimally collapsed (idempotency check):
+        expect(IPv6Utils.collapseIPv6Number("2001:db8::1")).toBe("2001:db8::1");
+        expect(IPv6Utils.collapseIPv6Number("1::")).toBe("1::");
+        expect(IPv6Utils.collapseIPv6Number("2001:0:0:1::2")).toBe("2001:0:0:1::2");
+
+        // Addresses with prefix:
+        expect(IPv6Utils.collapseIPv6Number("2001:db8:0:0:0:0:0:0/64")).toBe("2001:db8::/64");
+        expect(IPv6Utils.collapseIPv6Number("0:0:0:0:0:0:0:0/128")).toBe("::/128");
+        expect(IPv6Utils.collapseIPv6Number("2001:550:0:1000:0:0:9a1a:2187/48")).toBe("2001:550:0:1000::9a1a:2187/48");
     });
 });
