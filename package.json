@@ -12,21 +12,19 @@
   "scripts": {
     "clean": "rm -rf ./dist/spec ./dist/src ip-num-*.tgz && git checkout -- .",
     "compile": "tsc -p tsconfig.json",
-    "test": "nyc -e .ts jasmine-ts spec/**/*.ts --config=jasmine.json",
+    "test": "nyc -e .ts ts-node node_modules/jasmine/bin/jasmine.js --config=jasmine.json",
     "test:watch": "npm run test -- -w",
     "test:without-coverage": "jasmine-ts spec/**/*.ts",
-    "ipnum-testrelease": "npm run ipnum-build && npm pack ./dist/src",
-    "ipnum-gendoc": "typedoc --out ./docs ./src/ --exclude '**/spec/*.ts' && touch ./docs/.nojekyll",
-    "ipnum-build": "npm run clean && npm run compile && rm -rf ./dist/spec && cp package.json README.md ./dist/src && webpack --config ./webpack.config.js",
-    "ipnum-releasecommit": "git add . && git commit -m 'updating documentation and dist for release'",
-    "ipnum-release-dry-run": "npm run ipnum-gendoc && npm run ipnum-build && npm run ipnum-releasecommit && npm publish ./dist/src --dry-run && npm run clean",
-    "ipnum-release": "npm run ipnum-gendoc && npm run ipnum-build && npm run ipnum-releasecommit && npm publish ./dist/src && npm run clean",
-    "ipnum-release-major": "npm version major && npm run ipnum-release",
-    "ipnum-release-minor": "npm version minor && npm run ipnum-release",
-    "ipnum-release-patch": "npm version patch && npm run ipnum-release",
-    "ipnum-release-preminor": "npm version preminor && npm run ipnum-release",
-    "ipnum-release-prepatch": "npm version prepatch && npm run ipnum-release",
-    "ipnum-release-prerelease": "npm version prerelease && npm run ipnum-release"
+    "ipnum-testrelease": "npm run prepublishOnly && npm pack ./dist/src",
+    "prepublishOnly": "npm run clean && npm run compile && rm -rf ./dist/spec && cp package.json README.md ./dist/src && webpack --config ./webpack.config.js && typedoc --out ./docs ./src/ --exclude '**/spec/*.ts' && touch ./docs/.nojekyll && git add . && git commit -m 'updating documentation and dist for release'",
+    "ipnum-release-dry-run": "npm run prepublishOnly && npm publish ./dist/src --dry-run && npm run clean",
+    "ipnum-release": "npm run prepublishOnly && npm publish ./dist/src && npm run clean",
+    "ipnum-release-major": "npm version major && npm publish ./dist/src && npm run clean",
+    "ipnum-release-minor": "npm version minor && npm publish ./dist/src && npm run clean",
+    "ipnum-release-patch": "npm version patch && npm publish ./dist/src && npm run clean",
+    "ipnum-release-preminor": "npm version preminor && npm publish ./dist/src && npm run clean",
+    "ipnum-release-prepatch": "npm version prepatch && npm publish ./dist/src && npm run clean",
+    "ipnum-release-prerelease": "npm version prerelease && npm publish ./dist/src && npm run clean"
   },
   "nyc": {
     "exclude": [
@@ -51,20 +49,23 @@
   "devDependencies": {
     "@types/jasmine": "3.5.11",
     "@types/node": "^14.0.20",
-    "awesome-typescript-loader": "5.2.1",
-    "coveralls": "3.1.0",
-    "jasmine-node": "3.0.0",
+    "awesome-typescript-loader": "^3.1.3",
+    "jasmine": "3.5.0",
+    "jasmine-node": "^1.16.0",
     "jasmine-spec-reporter": "^5.0.2",
-    "jasmine-ts": "0.3.0",
+    "jasmine-ts": "^0.3.3",
     "nyc": "15.1.0",
     "source-map-loader": "1.0.1",
-    "tsunit.external": "2.1.1",
-    "typedoc": "0.17.8",
-    "typescript": "3.9.6",
-    "webpack": "4.43.0",
-    "webpack-auto-inject-version": "1.2.2",
-    "webpack-cli": "3.3.12",
     "ts-node": "8.10.2",
-    "jasmine": "3.5.0"
+    "tsunit.external": "2.1.1",
+    "typedoc": "^0.28.5",
+    "typescript": "^5.8.3",
+    "webpack": "^5.99.9",
+    "webpack-auto-inject-version": "1.2.2",
+    "webpack-cli": "^6.0.1"
+  },
+  "dependencies": {
+    "axios": "^1.9.0",
+    "tough-cookie": "^5.1.2"
   }
 }
