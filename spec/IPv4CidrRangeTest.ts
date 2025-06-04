@@ -298,3 +298,29 @@ describe('IPv4CidrRange: ', () => {
         expect(secondRange.isCidrMergeable(firstRange)).toBe(false);
     })
 });
+
+describe('IPv4CidrRange.contains with IPv4 argument', () => {
+    it('should return true for an IPv4 address that is within the range', () => {
+        const range = new IPv4CidrRange(new IPv4('192.168.0.0'), new IPv4Prefix(24n));
+        const ip = new IPv4('192.168.0.1');
+        expect(range.contains(ip)).toBe(true);
+    });
+
+    it('should return false for an IPv4 address that is outside the range', () => {
+        const range = new IPv4CidrRange(new IPv4('192.168.0.0'), new IPv4Prefix(24n));
+        const ip = new IPv4('192.168.1.1');
+        expect(range.contains(ip)).toBe(false);
+    });
+
+    it('should return true for an IPv4 address that is the first address in the range', () => {
+        const range = new IPv4CidrRange(new IPv4('192.168.0.0'), new IPv4Prefix(24n));
+        const ip = new IPv4('192.168.0.0');
+        expect(range.contains(ip)).toBe(true);
+    });
+
+    it('should return true for an IPv4 address that is the last address in the range', () => {
+        const range = new IPv4CidrRange(new IPv4('192.168.0.0'), new IPv4Prefix(30n));
+        const ip = new IPv4('192.168.0.3');
+        expect(range.contains(ip)).toBe(true);
+    });
+});
