@@ -135,7 +135,7 @@ export class Pool<T extends RangeType> {
                 if (e instanceof RangeError) {
                     continue loop;
                 }
-                error = e
+                error = e instanceof Error ? e : new Error(String(e));
             }
         }
 

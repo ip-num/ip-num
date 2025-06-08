@@ -466,7 +466,7 @@ export declare class IPv4Mask extends IPv4 {
 /**
  * The IPv6Mask can be seen as a specialized IPv4 number where, in a 128 bit number, starting from the left,
  * you have continuous bits turned on (with 1 value) followed by bits turned off (with 0 value). In networking, it
- * is used to to demarcate which bits are used to identify a network, and the ones that are used to identify hosts
+ * is used to demarcate which bits are used to identify a network, and the ones that are used to identify hosts
  * on the network
  */
 export declare class IPv6Mask extends IPv6 {
