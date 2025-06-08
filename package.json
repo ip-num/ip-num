@@ -21,7 +21,7 @@
     "ipnum-release": "npm run prepublishOnly && npm publish ./dist/src && npm run clean",
     "ipnum-release-major": "npm version major && npm publish ./dist/src && npm run clean",
     "ipnum-release-minor": "npm version minor && npm publish ./dist/src && npm run clean",
-    "ipnum-release-patch": "npm version patch && npm publish ./dist/src && npm run clean",
+    "ipnum-release-patch": "npm version patch && npm run ipnum-release",
     "ipnum-release-preminor": "npm version preminor && npm publish ./dist/src && npm run clean",
     "ipnum-release-prepatch": "npm version prepatch && npm publish ./dist/src && npm run clean",
     "ipnum-release-prerelease": "npm version prerelease && npm publish ./dist/src && npm run clean"
