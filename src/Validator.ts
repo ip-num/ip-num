@@ -180,7 +180,7 @@ export class Validator {
             isValid = Validator.IPV6_PATTERN.test(ipv6String);
             return [isValid, isValid? []: [Validator.invalidIPv6PatternMessage]];
         } catch (error) {
-            return [false, [error]]
+            return [false, [String(error)]]
         }
     }
 
