@@ -1,12 +1,10 @@
 import {leftPadWithZeroBit} from "./BinaryUtils";
 import {Validator} from "./Validator";
 
-// extractPrefix function (should be kept as is from the original file)
 let extractPrefix = (ipv6String: string): string => {
     return ipv6String.includes("/") ? `/${ipv6String.split("/")[1]}` : ""
 }
 
-// expandIPv6Number function (should be kept as is from the original file)
 export let expandIPv6Number = (ipv6String:string):string => {
     let expandWithZero = (hexadecimalArray: string[]): string => {
         let paddedArray = hexadecimalArray.map((hexadecimal) => {

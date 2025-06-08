@@ -62,7 +62,6 @@ describe('IPv6 Utils', () => {
         expect(IPv6Utils.collapseIPv6Number("2001:0555:0001:0800::/50")).toBe("2001:555:1:800::/50");
         expect(IPv6Utils.collapseIPv6Number("2001:555:1:800::/50")).toBe("2001:555:1:800::/50");
 
-        // GitHub Issue Cases:
         expect(IPv6Utils.collapseIPv6Number("2001:550:0:1000:0:0:9a1a:2187")).toBe("2001:550:0:1000::9a1a:2187");
         expect(IPv6Utils.collapseIPv6Number("2001:4457:0:371a:0:0:0:0")).toBe("2001:4457:0:371a::");
         expect(IPv6Utils.collapseIPv6Number("2001:550:0:1000:0:0:9a18:3c58")).toBe("2001:550:0:1000::9a18:3c58");
