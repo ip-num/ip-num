@@ -8,19 +8,6 @@ const Prefix_1 = require("./Prefix");
  */
 class Pool {
     /**
-     * Constructor for an IP pool.
-     *
-     * Creates a Pool of IP ranges from supplied {@link RangedSet}'s
-     *
-     * @param ranges the array of IP ranges that would make up the pool.
-     */
-    constructor(ranges) {
-        this.backingSet = new SortedSet();
-        ranges.forEach(range => {
-            this.backingSet.add(range);
-        });
-    }
-    /**
      * Convenient method for creating an instance from arrays of {@link IPv4} or {@link IPv6}
      * @param ipNumbers the arrays of {@link IPv4} or {@link IPv6} that will make up the pool.
      */
@@ -50,6 +37,19 @@ class Pool {
             return range.toRangeSet();
         });
         return new Pool(rangeSet);
+    }
+    /**
+     * Constructor for an IP pool.
+     *
+     * Creates a Pool of IP ranges from supplied {@link RangedSet}'s
+     *
+     * @param ranges the array of IP ranges that would make up the pool.
+     */
+    constructor(ranges) {
+        this.backingSet = new SortedSet();
+        ranges.forEach(range => {
+            this.backingSet.add(range);
+        });
     }
     /**
      * Returns an array of {@link RangedSet}'s that is contained within the pool
@@ -125,7 +125,7 @@ class Pool {
                     if (e instanceof RangeError) {
                         continue loop;
                     }
-                    error = e;
+                    error = e instanceof Error ? e : new Error(String(e));
                 }
         }
         if (selectedCidrRange) {
@@ -161,7 +161,7 @@ class Pool {
                 }
             }
             catch (e) {
-                let lowerPrefix = Prefix_1.isIPv4Prefix(prefix) ?
+                let lowerPrefix = (0, Prefix_1.isIPv4Prefix)(prefix) ?
                     Prefix_1.IPv4Prefix.fromNumber(prefix.getValue() + 1n) : Prefix_1.IPv6Prefix.fromNumber(prefix.getValue() + 1n);
                 return go(reqprefix, lowerPrefix, accummulated);
             }
@@ -229,14 +229,6 @@ class Pool {
 }
 exports.Pool = Pool;
 class SortedSet {
-    constructor(array) {
-        if (array) {
-            this.backingArray = this.sortArray(array);
-        }
-        else {
-            this.backingArray = new Array();
-        }
-    }
     sortArray(array) {
         array.sort((a, b) => {
             if (a.isLessThan(b)) {
@@ -248,6 +240,14 @@ class SortedSet {
             return 0;
         });
         return array;
+    }
+    constructor(array) {
+        if (array) {
+            this.backingArray = this.sortArray(array);
+        }
+        else {
+            this.backingArray = new Array();
+        }
     }
     asArray() {
         return this.backingArray;

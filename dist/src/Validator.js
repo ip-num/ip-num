@@ -114,7 +114,7 @@ class Validator {
      */
     static isValidIPv6String(ipv6String) {
         try {
-            let hexadecimals = IPv6Utils_1.expandIPv6Number(ipv6String).split(":");
+            let hexadecimals = (0, IPv6Utils_1.expandIPv6Number)(ipv6String).split(":");
             if (hexadecimals.length != 8) {
                 return [false, [Validator.invalidHexadecatetCountMessage]];
             }
@@ -129,7 +129,7 @@ class Validator {
             return [isValid, isValid ? [] : [Validator.invalidIPv6PatternMessage]];
         }
         catch (error) {
-            return [false, [error]];
+            return [false, [String(error)]];
         }
     }
     /**
@@ -140,11 +140,11 @@ class Validator {
      * @returns {(boolean|string)[]} a tuple representing if valid or not and corresponding message
      */
     static isValidPrefixValue(prefixValue, ipNumType) {
-        if ("IPv4" /* IPv4 */ === ipNumType) {
+        if ("IPv4" /* IPNumType.IPv4 */ === ipNumType) {
             let withinRange = Validator.isWithinRange(BigInt(prefixValue), 0n, 32n);
             return [withinRange, withinRange ? [] : [Validator.invalidPrefixValueMessage]];
         }
-        if ("IPv6" /* IPv6 */ === ipNumType) {
+        if ("IPv6" /* IPNumType.IPv6 */ === ipNumType) {
             let withinRange = Validator.isWithinRange(BigInt(prefixValue), 0n, 128n);
             return [withinRange, withinRange ? [] : [Validator.invalidPrefixValueMessage]];
         }
@@ -158,7 +158,7 @@ class Validator {
      * contains "valid" or an error message when value is invalid
      */
     static isValidIPv4Mask(ipv4MaskString) {
-        let ipv4InBinary = BinaryUtils_1.dottedDecimalNotationToBinaryString(ipv4MaskString);
+        let ipv4InBinary = (0, BinaryUtils_1.dottedDecimalNotationToBinaryString)(ipv4MaskString);
         let isValid = Validator.IPV4_CONTIGUOUS_MASK_BIT_PATTERN.test(ipv4InBinary);
         return isValid ? [isValid, []] : [isValid, [Validator.invalidMaskMessage]];
     }
@@ -170,7 +170,7 @@ class Validator {
      * contains "valid" or an error message when value is invalid
      */
     static isValidIPv6Mask(ipv6MaskString) {
-        let ipv6InBinary = HexadecimalUtils_2.hexadectetNotationToBinaryString(ipv6MaskString);
+        let ipv6InBinary = (0, HexadecimalUtils_2.hexadectetNotationToBinaryString)(ipv6MaskString);
         let isValid = Validator.IPV6_CONTIGUOUS_MASK_BIT_PATTERN.test(ipv6InBinary);
         return isValid ? [isValid, []] : [isValid, [Validator.invalidMaskMessage]];
     }
@@ -189,11 +189,14 @@ class Validator {
         }
         let ip = cidrComponents[0];
         let range = cidrComponents[1];
+        if (!/^\d+$/.test(range)) {
+            return [false, [Validator.invalidIPv4CidrNotationMessage]];
+        }
         if (isNaN(Number(range))) {
             return [false, [Validator.invalidIPv4CidrNotationMessage]];
         }
         let [validIpv4, invalidIpv4Message] = Validator.isValidIPv4String(ip);
-        let [validPrefix, invalidPrefixMessage] = Validator.isValidPrefixValue(BigInt(range), "IPv4" /* IPv4 */);
+        let [validPrefix, invalidPrefixMessage] = Validator.isValidPrefixValue(BigInt(range), "IPv4" /* IPNumType.IPv4 */);
         let isValid = validIpv4 && validPrefix;
         let invalidMessage = invalidIpv4Message.concat(invalidPrefixMessage);
         return isValid ? [isValid, []] : [isValid, invalidMessage];
@@ -208,7 +211,7 @@ class Validator {
      * value contains [] or an array of error message when invalid
      */
     static isValidIPv4CidrRange(ipv4CidrNotation) {
-        return Validator.isValidCidrRange(ipv4CidrNotation, Validator.isValidIPv4CidrNotation, BinaryUtils_1.dottedDecimalNotationToBinaryString, (value) => BinaryUtils_2.cidrPrefixToMaskBinaryString(value, "IPv4" /* IPv4 */));
+        return Validator.isValidCidrRange(ipv4CidrNotation, Validator.isValidIPv4CidrNotation, BinaryUtils_1.dottedDecimalNotationToBinaryString, (value) => (0, BinaryUtils_2.cidrPrefixToMaskBinaryString)(value, "IPv4" /* IPNumType.IPv4 */));
     }
     /**
      *  Checks if the given string is a valid IPv6 range in Cidr notation, with the ip number in the cidr notation
@@ -220,7 +223,7 @@ class Validator {
      * value contains [] or an array of error message when invalid
      */
     static isValidIPv6CidrRange(ipv6CidrNotation) {
-        return Validator.isValidCidrRange(ipv6CidrNotation, Validator.isValidIPv6CidrNotation, HexadecimalUtils_1.colonHexadecimalNotationToBinaryString, (value) => BinaryUtils_2.cidrPrefixToMaskBinaryString(value, "IPv6" /* IPv6 */));
+        return Validator.isValidCidrRange(ipv6CidrNotation, Validator.isValidIPv6CidrNotation, HexadecimalUtils_1.colonHexadecimalNotationToBinaryString, (value) => (0, BinaryUtils_2.cidrPrefixToMaskBinaryString)(value, "IPv6" /* IPNumType.IPv6 */));
     }
     static isValidCidrRange(rangeString, cidrNotationValidator, toBinaryStringConverter, prefixFactory) {
         let validationResult = cidrNotationValidator(rangeString);
@@ -236,13 +239,13 @@ class Validator {
         return isValid ? [isValid, []] : [isValid, [Validator.InvalidIPCidrRangeMessage]];
     }
     static isValidIPv4RangeString(ipv4RangeString) {
-        let firstLastValidator = (firstIP, lastIP) => BigInt(`0b${BinaryUtils_1.dottedDecimalNotationToBinaryString(firstIP)}`)
-            >= BigInt(`0b${BinaryUtils_1.dottedDecimalNotationToBinaryString(lastIP)}`);
+        let firstLastValidator = (firstIP, lastIP) => BigInt(`0b${(0, BinaryUtils_1.dottedDecimalNotationToBinaryString)(firstIP)}`)
+            >= BigInt(`0b${(0, BinaryUtils_1.dottedDecimalNotationToBinaryString)(lastIP)}`);
         return this.isValidRange(ipv4RangeString, Validator.isValidIPv4String, firstLastValidator);
     }
     static isValidIPv6RangeString(ipv6RangeString) {
-        let firstLastValidator = (firstIP, lastIP) => BigInt(`0b${HexadecimalUtils_2.hexadectetNotationToBinaryString(firstIP)}`)
-            >= BigInt(`0b${HexadecimalUtils_2.hexadectetNotationToBinaryString(lastIP)}`);
+        let firstLastValidator = (firstIP, lastIP) => BigInt(`0b${(0, HexadecimalUtils_2.hexadectetNotationToBinaryString)(firstIP)}`)
+            >= BigInt(`0b${(0, HexadecimalUtils_2.hexadectetNotationToBinaryString)(lastIP)}`);
         return this.isValidRange(ipv6RangeString, Validator.isValidIPv6String, firstLastValidator);
     }
     static isValidRange(rangeString, validator, firstLastValidator) {

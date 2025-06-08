@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.isIPv4Prefix = exports.IPv6Prefix = exports.IPv4Prefix = void 0;
+exports.IPv6Prefix = exports.IPv4Prefix = void 0;
+exports.isIPv4Prefix = isIPv4Prefix;
 const Validator_1 = require("./Validator");
 const IPNumber_1 = require("./IPNumber");
 const BinaryUtils_1 = require("./BinaryUtils");
@@ -16,23 +17,6 @@ const Hexadecatet_1 = require("./Hexadecatet");
  */
 class IPv4Prefix {
     /**
-     * Constructor for an instance of IPv4 prefix from a decimal number
-     *
-     * @param {number} rawValue the decimal value to construct the IPv4 prefix from.
-     * @returns {IPv4Prefix} the instance of an IPv4 prefix
-     */
-    constructor(rawValue) {
-        this.type = "IPv4";
-        this.bitValue = 32n;
-        let isValid;
-        let message;
-        [isValid, message] = Validator_1.Validator.isValidPrefixValue(rawValue, "IPv4" /* IPv4 */);
-        if (!isValid) {
-            throw new Error(message.filter(msg => { return msg !== ''; }).toString());
-        }
-        this.value = rawValue;
-    }
-    /**
      * Convenience method for constructing an instance of IPv4 prefix from a decimal number
      *
      * @param {number} rawValue the decimal value to construct the IPv4 prefix from.
@@ -47,6 +31,23 @@ class IPv4Prefix {
         return IPv4Prefix.fromNumber(BigInt(prefixNumber));
     }
     ;
+    /**
+     * Constructor for an instance of IPv4 prefix from a decimal number
+     *
+     * @param {number} rawValue the decimal value to construct the IPv4 prefix from.
+     * @returns {IPv4Prefix} the instance of an IPv4 prefix
+     */
+    constructor(rawValue) {
+        this.type = "IPv4";
+        this.bitValue = 32n;
+        let isValid;
+        let message;
+        [isValid, message] = Validator_1.Validator.isValidPrefixValue(rawValue, "IPv4" /* IPNumType.IPv4 */);
+        if (!isValid) {
+            throw new Error(message.filter(msg => { return msg !== ''; }).toString());
+        }
+        this.value = rawValue;
+    }
     /**
      * Gets the decimal value of the IPv4 prefix
      *
@@ -103,7 +104,7 @@ class IPv4Prefix {
         return new IPv4Prefix(this.value + 1n);
     }
     toDecimalNotation(bits) {
-        return `${BinaryUtils_1.parseBinaryStringToBigInt(bits.substr(0, 8))}.${BinaryUtils_1.parseBinaryStringToBigInt(bits.substr(8, 8))}.${BinaryUtils_1.parseBinaryStringToBigInt(bits.substr(16, 8))}.${BinaryUtils_1.parseBinaryStringToBigInt(bits.substr(24, 8))}`;
+        return `${(0, BinaryUtils_1.parseBinaryStringToBigInt)(bits.substr(0, 8))}.${(0, BinaryUtils_1.parseBinaryStringToBigInt)(bits.substr(8, 8))}.${(0, BinaryUtils_1.parseBinaryStringToBigInt)(bits.substr(16, 8))}.${(0, BinaryUtils_1.parseBinaryStringToBigInt)(bits.substr(24, 8))}`;
     }
 }
 exports.IPv4Prefix = IPv4Prefix;
@@ -117,23 +118,6 @@ exports.IPv4Prefix = IPv4Prefix;
  */
 class IPv6Prefix {
     /**
-     * Constructor for an instance of IPv6 prefix from a decimal number
-     *
-     * @param {number} rawValue the decimal value to construct the IPv6 prefix from.
-     * @returns {IPv4Prefix} the instance of an IPv6 prefix
-     */
-    constructor(rawValue) {
-        this.type = "IPv6";
-        this.bitValue = 128n;
-        let isValid;
-        let message;
-        [isValid, message] = Validator_1.Validator.isValidPrefixValue(rawValue, "IPv6" /* IPv6 */);
-        if (!isValid) {
-            throw new Error(message.filter(msg => { return msg !== ''; }).toString());
-        }
-        this.value = rawValue;
-    }
-    /**
      * Convenience method for constructing an instance of IPv46 prefix from a decimal number
      *
      * @param {number} rawValue the decimal value to construct the IPv6 prefix from.
@@ -146,6 +130,23 @@ class IPv6Prefix {
     static fromRangeSize(rangeSize) {
         let prefixNumber = rangeSize === (1n) ? 128 : 128 - rangeSizeToPrefix(rangeSize, Validator_1.Validator.IPV6_SIZE);
         return IPv6Prefix.fromNumber(BigInt(prefixNumber));
+    }
+    /**
+     * Constructor for an instance of IPv6 prefix from a decimal number
+     *
+     * @param {number} rawValue the decimal value to construct the IPv6 prefix from.
+     * @returns {IPv4Prefix} the instance of an IPv6 prefix
+     */
+    constructor(rawValue) {
+        this.type = "IPv6";
+        this.bitValue = 128n;
+        let isValid;
+        let message;
+        [isValid, message] = Validator_1.Validator.isValidPrefixValue(rawValue, "IPv6" /* IPNumType.IPv6 */);
+        if (!isValid) {
+            throw new Error(message.filter(msg => { return msg !== ''; }).toString());
+        }
+        this.value = rawValue;
     }
     /**
      * Gets the decimal value of the IPv6 prefix
@@ -205,7 +206,7 @@ class IPv6Prefix {
     toHexadecatetNotation(bits) {
         let binaryStrings = bits.match(/.{1,16}/g);
         let hexadecimalStrings = binaryStrings.map((binaryString) => {
-            return Hexadecatet_1.Hexadecatet.fromString(HexadecimalUtils_1.binaryStringToHexadecimalString(binaryString));
+            return Hexadecatet_1.Hexadecatet.fromString((0, HexadecimalUtils_1.binaryStringToHexadecimalString)(binaryString));
         });
         return hexadecimalStrings.map((value) => { return value.toString(); }).join(":");
     }
@@ -217,7 +218,7 @@ function rangeSizeToPrefix(rangeSize, rangeMaxSize) {
         throw new Error(Validator_1.Validator.invalidIPRangeSizeMessage.replace("$iptype", ipType));
     }
     try {
-        return BinaryUtils_1.intLog2(rangeSize);
+        return (0, BinaryUtils_1.intLog2)(rangeSize);
     }
     catch (e) {
         throw new Error(Validator_1.Validator.invalidIPRangeSizeForCidrMessage);
@@ -230,7 +231,6 @@ function rangeSizeToPrefix(rangeSize, rangeMaxSize) {
 function isIPv4Prefix(prefix) {
     return prefix.type === "IPv4";
 }
-exports.isIPv4Prefix = isIPv4Prefix;
 /**
  * Check is the given Prefix is an {@link IPv4Prefix} or not
  * @param prefix the IP prefix to check if it is IPv4Prefix.

@@ -12,6 +12,26 @@ const Validator_1 = require("./Validator");
  */
 class Octet {
     /**
+     * Convenience method for creating an Octet out of a string value representing the value of the octet
+     *
+     * @param {string} rawValue the octet value in string
+     * @returns {Octet} the Octet instance
+     */
+    static fromString(rawValue) {
+        return new Octet(rawValue);
+    }
+    ;
+    /**
+     * Convenience method for creating an Octet out of a numeric value representing the value of the octet
+     *
+     * @param {number} rawValue the octet value in number
+     * @returns {Octet} the Octet instance
+     */
+    static fromNumber(rawValue) {
+        return new Octet(rawValue);
+    }
+    ;
+    /**
      * Constructor for creating an instance of an Octet.
      *
      * The constructor parameter given could either be a string or number.
@@ -35,26 +55,6 @@ class Octet {
         }
         this.value = octetValue;
     }
-    /**
-     * Convenience method for creating an Octet out of a string value representing the value of the octet
-     *
-     * @param {string} rawValue the octet value in string
-     * @returns {Octet} the Octet instance
-     */
-    static fromString(rawValue) {
-        return new Octet(rawValue);
-    }
-    ;
-    /**
-     * Convenience method for creating an Octet out of a numeric value representing the value of the octet
-     *
-     * @param {number} rawValue the octet value in number
-     * @returns {Octet} the Octet instance
-     */
-    static fromNumber(rawValue) {
-        return new Octet(rawValue);
-    }
-    ;
     /**
      * Method to get the numeric value of the octet
      *

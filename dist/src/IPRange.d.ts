@@ -1,6 +1,6 @@
 import { AbstractIPNum, IPv4, IPv6 } from "./IPNumber";
 import { IPv4Prefix, IPv6Prefix } from "./Prefix";
-export declare type IP<T> = T extends IPv4CidrRange ? IPv4 : IPv6;
+export type IP<T> = T extends IPv4CidrRange ? IPv4 : IPv6;
 /**
  * Represents a continuous segment of either IPv4 or IPv6 numbers
  * without adhering to classless inter-domain routing scheme
@@ -172,7 +172,7 @@ export declare abstract class AbstractIPRange<T extends AbstractIPNum, P extends
     hasPreviousRange(): boolean;
     toRangeSet(): RangedSet<AbstractIPNum>;
     inside(otherRange: IPv6CidrRange | IPv4CidrRange): boolean;
-    contains(otherRange: IPv6CidrRange | IPv4CidrRange): boolean;
+    contains(otherRange: IPv6CidrRange | IPv4CidrRange | AbstractIPNum): boolean;
     toRangeString(): string;
     isOverlapping(otherRange: IPv6CidrRange | IPv4CidrRange): boolean;
     isConsecutive(otherRange: IPv6CidrRange | IPv4CidrRange): boolean;
@@ -276,7 +276,7 @@ export declare class IPv4CidrRange extends AbstractIPRange<IPv4, IPv4Prefix> {
      * @param {IPv4CidrRange} otherRange the other IPv4 range
      * @returns {boolean} true if the other Ipv4 range is a subset. False otherwise.
      */
-    contains(otherRange: IPv4CidrRange): boolean;
+    contains(otherRange: IPv4CidrRange | AbstractIPNum): boolean;
     /**
      * Indicate if the given range is a container range.
      *
@@ -413,7 +413,7 @@ export declare class IPv6CidrRange extends AbstractIPRange<IPv6, IPv6Prefix> {
      * @param {IPv6CidrRange} otherRange the other IPv6 range
      * @returns {boolean} true if the other Ipv6 range is a subset. False otherwise.
      */
-    contains(otherRange: IPv6CidrRange): boolean;
+    contains(otherRange: IPv6CidrRange | AbstractIPNum): boolean;
     /**
      * Indicate if the given range is a container range.
      *

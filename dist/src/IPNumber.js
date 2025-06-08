@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.isIPv4 = exports.IPv6Mask = exports.IPv4Mask = exports.IPv6 = exports.Asn = exports.IPv4 = exports.AbstractIPNum = void 0;
+exports.IPv6Mask = exports.IPv4Mask = exports.IPv6 = exports.Asn = exports.IPv4 = exports.AbstractIPNum = void 0;
+exports.isIPv4 = isIPv4;
 const Octet_1 = require("./Octet");
 const Validator_1 = require("./Validator");
 const BinaryUtils_1 = require("./BinaryUtils");
@@ -30,7 +31,7 @@ class AbstractIPNum {
      * @returns {string} the string binary representation.
      */
     toBinaryString() {
-        return BinaryUtils_3.leftPadWithZeroBit(this.value.toString(2), this.bitSize);
+        return (0, BinaryUtils_3.leftPadWithZeroBit)(this.value.toString(2), this.bitSize);
     }
     /**
      * Checks if an IP number has a value greater than the present value
@@ -103,50 +104,6 @@ exports.AbstractIPNum = AbstractIPNum;
  */
 class IPv4 extends AbstractIPNum {
     /**
-     * Constructor for an IPv4 number.
-     *
-     * @param {string | bigint} ipValue value to construct an IPv4 from. The given value can either be
-     * numeric or string. If a string is given then it needs to be in dot-decimal notation
-     */
-    constructor(ipValue) {
-        super();
-        /**
-         * The number of bits needed to represents the value of the IPv4 number
-         */
-        this.bitSize = 32;
-        /**
-         * The maximum bit size (i.e. binary value) of the IPv4 number in BigInt
-         */
-        this.maximumBitSize = Validator_1.Validator.THIRTY_TWO_BIT_SIZE;
-        /**
-         * The type of IP number. Value is one of the values of the {@link IPNumType} enum
-         * @type {IPNumType} the type of IP number
-         */
-        this.type = "IPv4" /* IPv4 */;
-        /**
-         * An array of {@link Octet}'s
-         *
-         * @type {Array} the octets that makes up the IPv4 number
-         */
-        this.octets = [];
-        /**
-         * The string character used to separate the individual octets when the IPv4 is rendered as strings
-         *
-         * @type {string} The string character used to separate the individual octets when rendered as strings
-         */
-        this.separator = ".";
-        if (typeof ipValue === "string") {
-            let [value, octets] = this.constructFromDecimalDottedString(ipValue);
-            this.value = value;
-            this.octets = octets;
-        }
-        else {
-            let [value, octets] = this.constructFromBigIntValue(ipValue);
-            this.value = value;
-            this.octets = octets;
-        }
-    }
-    /**
      * A convenience method for creating an {@link IPv4} by providing the decimal value of the IP number in BigInt
      *
      * @param {bigint} bigIntValue the decimal value of the IP number in BigInt
@@ -185,10 +142,54 @@ class IPv4 extends AbstractIPNum {
     static fromBinaryString(ipBinaryString) {
         let validationResult = Validator_1.Validator.isValidBinaryString(ipBinaryString);
         if (validationResult[0]) {
-            return new IPv4(BinaryUtils_2.parseBinaryStringToBigInt(ipBinaryString));
+            return new IPv4((0, BinaryUtils_2.parseBinaryStringToBigInt)(ipBinaryString));
         }
         else {
             throw Error(validationResult[1].join(','));
+        }
+    }
+    /**
+     * Constructor for an IPv4 number.
+     *
+     * @param {string | bigint} ipValue value to construct an IPv4 from. The given value can either be
+     * numeric or string. If a string is given then it needs to be in dot-decimal notation
+     */
+    constructor(ipValue) {
+        super();
+        /**
+         * The number of bits needed to represents the value of the IPv4 number
+         */
+        this.bitSize = 32;
+        /**
+         * The maximum bit size (i.e. binary value) of the IPv4 number in BigInt
+         */
+        this.maximumBitSize = Validator_1.Validator.THIRTY_TWO_BIT_SIZE;
+        /**
+         * The type of IP number. Value is one of the values of the {@link IPNumType} enum
+         * @type {IPNumType} the type of IP number
+         */
+        this.type = "IPv4" /* IPNumType.IPv4 */;
+        /**
+         * An array of {@link Octet}'s
+         *
+         * @type {Array} the octets that makes up the IPv4 number
+         */
+        this.octets = [];
+        /**
+         * The string character used to separate the individual octets when the IPv4 is rendered as strings
+         *
+         * @type {string} The string character used to separate the individual octets when rendered as strings
+         */
+        this.separator = ".";
+        if (typeof ipValue === "string") {
+            let [value, octets] = this.constructFromDecimalDottedString(ipValue);
+            this.value = value;
+            this.octets = octets;
+        }
+        else {
+            let [value, octets] = this.constructFromBigIntValue(ipValue);
+            this.value = value;
+            this.octets = octets;
         }
     }
     /**
@@ -247,7 +248,7 @@ class IPv4 extends AbstractIPNum {
         octets = stringOctets.map((rawOctet) => {
             return Octet_1.Octet.fromString(rawOctet);
         });
-        value = BigInt(`0b${BinaryUtils_1.dottedDecimalNotationToBinaryString(ipString)}`);
+        value = BigInt(`0b${(0, BinaryUtils_1.dottedDecimalNotationToBinaryString)(ipString)}`);
         return [value, octets];
     }
     constructFromBigIntValue(ipv4Number) {
@@ -255,17 +256,17 @@ class IPv4 extends AbstractIPNum {
         if (!isValid) {
             throw new Error(message.filter(msg => { return msg !== ''; }).toString());
         }
-        let binaryString = BinaryUtils_4.numberToBinaryString(ipv4Number);
+        let binaryString = (0, BinaryUtils_4.numberToBinaryString)(ipv4Number);
         ipv4Number = typeof ipv4Number === "bigint" ? ipv4Number : BigInt(ipv4Number);
         return [ipv4Number, this.binaryStringToDecimalOctets(binaryString)];
     }
     binaryStringToDecimalOctets(ipv4BinaryString) {
         if (ipv4BinaryString.length < 32) {
-            ipv4BinaryString = BinaryUtils_3.leftPadWithZeroBit(ipv4BinaryString, 32);
+            ipv4BinaryString = (0, BinaryUtils_3.leftPadWithZeroBit)(ipv4BinaryString, 32);
         }
         let octets = ipv4BinaryString.match(/.{1,8}/g);
         return octets.map((octet) => {
-            return Octet_1.Octet.fromString(BinaryUtils_2.parseBinaryStringToBigInt(octet).toString());
+            return Octet_1.Octet.fromString((0, BinaryUtils_2.parseBinaryStringToBigInt)(octet).toString());
         });
     }
 }
@@ -278,43 +279,6 @@ exports.IPv4 = IPv4;
  * @see https://tools.ietf.org/html/rfc5396
  */
 class Asn extends AbstractIPNum {
-    /**
-     * Constructor for an instance of {@link ASN}
-     *
-     * @param {string | number} rawValue value to construct an ASN from. The given value can either be numeric or
-     * string. If in string then it can be in asplain, asdot or asdot+ string representation format
-     */
-    constructor(rawValue) {
-        super();
-        /**
-         * The number of bits needed to represents the value of the ASN number
-         */
-        this.bitSize = 32;
-        /**
-         * The maximum bit size (i.e. binary value) of the ASN number in BigInt
-         */
-        this.maximumBitSize = Validator_1.Validator.THIRTY_TWO_BIT_SIZE;
-        this.type = "ASN" /* ASN */;
-        if (typeof rawValue === 'string') {
-            if (Asn.startWithASPrefix(rawValue)) {
-                this.value = BigInt(parseInt(rawValue.substring(2)));
-            }
-            else if (rawValue.indexOf(".") != -1) {
-                this.value = BigInt(this.parseFromDotNotation(rawValue));
-            }
-            else {
-                this.value = BigInt(parseInt(rawValue));
-            }
-        }
-        else {
-            let valueAsBigInt = BigInt(rawValue);
-            let [isValid, message] = Validator_1.Validator.isValidAsnNumber(valueAsBigInt);
-            if (!isValid) {
-                throw Error(message.filter(msg => { return msg !== ''; }).toString());
-            }
-            this.value = valueAsBigInt;
-        }
-    }
     /**
      * A convenience method for creating an instance of {@link Asn} from a string
      *
@@ -352,6 +316,43 @@ class Asn extends AbstractIPNum {
         }
         else {
             throw Error(validationResult[1].join(','));
+        }
+    }
+    /**
+     * Constructor for an instance of {@link ASN}
+     *
+     * @param {string | number} rawValue value to construct an ASN from. The given value can either be numeric or
+     * string. If in string then it can be in asplain, asdot or asdot+ string representation format
+     */
+    constructor(rawValue) {
+        super();
+        /**
+         * The number of bits needed to represents the value of the ASN number
+         */
+        this.bitSize = 32;
+        /**
+         * The maximum bit size (i.e. binary value) of the ASN number in BigInt
+         */
+        this.maximumBitSize = Validator_1.Validator.THIRTY_TWO_BIT_SIZE;
+        this.type = "ASN" /* IPNumType.ASN */;
+        if (typeof rawValue === 'string') {
+            if (Asn.startWithASPrefix(rawValue)) {
+                this.value = BigInt(parseInt(rawValue.substring(2)));
+            }
+            else if (rawValue.indexOf(".") != -1) {
+                this.value = BigInt(this.parseFromDotNotation(rawValue));
+            }
+            else {
+                this.value = BigInt(parseInt(rawValue));
+            }
+        }
+        else {
+            let valueAsBigInt = BigInt(rawValue);
+            let [isValid, message] = Validator_1.Validator.isValidAsnNumber(valueAsBigInt);
+            if (!isValid) {
+                throw Error(message.filter(msg => { return msg !== ''; }).toString());
+            }
+            this.value = valueAsBigInt;
         }
     }
     /**
@@ -404,7 +405,7 @@ class Asn extends AbstractIPNum {
      * @returns {string} a binary string representation of the value of the ASN number
      */
     toBinaryString() {
-        return BinaryUtils_4.numberToBinaryString(this.value);
+        return (0, BinaryUtils_4.numberToBinaryString)(this.value);
     }
     /**
      * Checks if the ASN value is 16bit
@@ -460,51 +461,6 @@ Asn.AS_PREFIX = "AS";
  */
 class IPv6 extends AbstractIPNum {
     /**
-     * Constructor for an IPv6 number.
-     *
-     * @param {string | bigint} ipValue value to construct an IPv6 from. The given value can either be
-     * numeric or string. If a string is given then it needs to be in hexadecatet string notation
-     */
-    constructor(ipValue) {
-        super();
-        /**
-         * The number of bits needed to represents the value of the IPv6 number
-         */
-        this.bitSize = 128;
-        /**
-         * The maximum bit size (i.e. binary value) of the IPv6 number in BigInt
-         */
-        this.maximumBitSize = Validator_1.Validator.ONE_HUNDRED_AND_TWENTY_EIGHT_BIT_SIZE;
-        /**
-         * The type of IP number. Value is one of the values of the {@link IPNumType} enum
-         * @type {IPNumType} the type of IP number
-         */
-        this.type = "IPv6" /* IPv6 */;
-        /**
-         * An array of {@link Hexadecatet}'s
-         *
-         * @type {Array} the hexadecatet that makes up the IPv6 number
-         */
-        this.hexadecatet = [];
-        /**
-         * The string character used to separate the individual hexadecatet when the IPv6 is rendered as strings
-         *
-         * @type {string} The string character used to separate the individual hexadecatet when rendered as strings
-         */
-        this.separator = ":";
-        if (typeof ipValue === "string") {
-            let expandedIPv6 = IPv6Utils_1.expandIPv6Number(ipValue);
-            let [value, hexadecatet] = this.constructFromHexadecimalDottedString(expandedIPv6);
-            this.value = value;
-            this.hexadecatet = hexadecatet;
-        }
-        else {
-            let [value, hexadecatet] = this.constructFromBigIntValue(ipValue);
-            this.value = value;
-            this.hexadecatet = hexadecatet;
-        }
-    }
-    /**
      * A convenience method for creating an {@link IPv6} by providing the decimal value of the IP number in BigInt
      *
      * @param {bigint} bigIntValue the decimal value of the IP number in BigInt
@@ -543,8 +499,8 @@ class IPv6 extends AbstractIPNum {
     static fromBinaryString(ipBinaryString) {
         let validationResult = Validator_1.Validator.isValidBinaryString(ipBinaryString);
         if (validationResult[0]) {
-            let paddedBinaryString = BinaryUtils_3.leftPadWithZeroBit(ipBinaryString, 128);
-            return new IPv6(BinaryUtils_2.parseBinaryStringToBigInt(paddedBinaryString));
+            let paddedBinaryString = (0, BinaryUtils_3.leftPadWithZeroBit)(ipBinaryString, 128);
+            return new IPv6((0, BinaryUtils_2.parseBinaryStringToBigInt)(paddedBinaryString));
         }
         else {
             throw Error(validationResult[1].join(','));
@@ -568,6 +524,51 @@ class IPv6 extends AbstractIPNum {
      */
     static fromIPv4DotDecimalString(ip4DotDecimalString) {
         return new IPv4(ip4DotDecimalString).toIPv4MappedIPv6();
+    }
+    /**
+     * Constructor for an IPv6 number.
+     *
+     * @param {string | bigint} ipValue value to construct an IPv6 from. The given value can either be
+     * numeric or string. If a string is given then it needs to be in hexadecatet string notation
+     */
+    constructor(ipValue) {
+        super();
+        /**
+         * The number of bits needed to represents the value of the IPv6 number
+         */
+        this.bitSize = 128;
+        /**
+         * The maximum bit size (i.e. binary value) of the IPv6 number in BigInt
+         */
+        this.maximumBitSize = Validator_1.Validator.ONE_HUNDRED_AND_TWENTY_EIGHT_BIT_SIZE;
+        /**
+         * The type of IP number. Value is one of the values of the {@link IPNumType} enum
+         * @type {IPNumType} the type of IP number
+         */
+        this.type = "IPv6" /* IPNumType.IPv6 */;
+        /**
+         * An array of {@link Hexadecatet}'s
+         *
+         * @type {Array} the hexadecatet that makes up the IPv6 number
+         */
+        this.hexadecatet = [];
+        /**
+         * The string character used to separate the individual hexadecatet when the IPv6 is rendered as strings
+         *
+         * @type {string} The string character used to separate the individual hexadecatet when rendered as strings
+         */
+        this.separator = ":";
+        if (typeof ipValue === "string") {
+            let expandedIPv6 = (0, IPv6Utils_1.expandIPv6Number)(ipValue);
+            let [value, hexadecatet] = this.constructFromHexadecimalDottedString(expandedIPv6);
+            this.value = value;
+            this.hexadecatet = hexadecatet;
+        }
+        else {
+            let [value, hexadecatet] = this.constructFromBigIntValue(ipValue);
+            this.value = value;
+            this.hexadecatet = hexadecatet;
+        }
     }
     /**
      * A string representation of the IPv6 number.
@@ -613,7 +614,7 @@ class IPv6 extends AbstractIPNum {
         if (!isValid) {
             throw new Error(message.filter(msg => { return msg !== ''; }).toString());
         }
-        let binaryString = BinaryUtils_4.numberToBinaryString(ipv6Number);
+        let binaryString = (0, BinaryUtils_4.numberToBinaryString)(ipv6Number);
         return [ipv6Number, this.binaryStringToHexadecatets(binaryString)];
     }
     constructFromHexadecimalDottedString(expandedIPv6) {
@@ -625,11 +626,11 @@ class IPv6 extends AbstractIPNum {
         let hexadecatet = stringHexadecimals.map((stringHexadecatet) => {
             return Hexadecatet_1.Hexadecatet.fromString(stringHexadecatet);
         });
-        let value = BigInt(`0b${HexadecimalUtils_2.hexadectetNotationToBinaryString(expandedIPv6)}`);
+        let value = BigInt(`0b${(0, HexadecimalUtils_2.hexadectetNotationToBinaryString)(expandedIPv6)}`);
         return [value, hexadecatet];
     }
     binaryStringToHexadecatets(binaryString) {
-        let hexadecimalString = HexadecimalUtils_1.binaryStringToHexadecimalString(binaryString);
+        let hexadecimalString = (0, HexadecimalUtils_1.binaryStringToHexadecimalString)(binaryString);
         while (hexadecimalString.length % 4 != 0) {
             hexadecimalString = '0' + hexadecimalString;
         }
@@ -646,6 +647,17 @@ exports.IPv6 = IPv6;
  * to demarcate which bits are used to identify a network, and the ones that are used to identify hosts on the network
  */
 class IPv4Mask extends IPv4 {
+    /**
+     * A convenience method for creating an instance of IPv4Mask. The passed strings need to be a valid IPv4
+     * number in dot-decimal notation.
+     *
+     * @param {string} rawValue The passed string in dot-decimal notation
+     * @returns {IPv4Mask} the instance of IPv4Mask
+     */
+    static fromDecimalDottedString(rawValue) {
+        return new IPv4Mask(rawValue);
+    }
+    ;
     /**
      * Constructor for creating an instance of IPv4Mask.
      * The passed strings need to be a valid IPv4 mask number in dot-decimal notation.
@@ -670,21 +682,10 @@ class IPv4Mask extends IPv4 {
         this.octets = stringOctets.map((rawOctet) => {
             return Octet_1.Octet.fromString(rawOctet);
         });
-        let binaryString = BinaryUtils_1.dottedDecimalNotationToBinaryString(ipString);
+        let binaryString = (0, BinaryUtils_1.dottedDecimalNotationToBinaryString)(ipString);
         this.prefix = (binaryString.match(/1/g) || []).length;
         this.value = BigInt(`0b${binaryString}`);
     }
-    /**
-     * A convenience method for creating an instance of IPv4Mask. The passed strings need to be a valid IPv4
-     * number in dot-decimal notation.
-     *
-     * @param {string} rawValue The passed string in dot-decimal notation
-     * @returns {IPv4Mask} the instance of IPv4Mask
-     */
-    static fromDecimalDottedString(rawValue) {
-        return new IPv4Mask(rawValue);
-    }
-    ;
 }
 exports.IPv4Mask = IPv4Mask;
 /**
@@ -694,6 +695,17 @@ exports.IPv4Mask = IPv4Mask;
  * on the network
  */
 class IPv6Mask extends IPv6 {
+    /**
+     * A convenience method for creating an instance of IPv6Mask.
+     * The passed strings need to be a valid IPv4 mask number in dot-decimal notation.
+     *
+     * @param {string} rawValue The passed string in textual notation
+     * @returns {IPv6Mask} the instance of IPv6Mask
+     */
+    static fromHexadecatet(rawValue) {
+        return new IPv6Mask(rawValue);
+    }
+    ;
     /**
      * Constructor for creating an instance of IPv6Mask.
      * The passed strings need to be a valid IPv6 mask number in dot-decimal notation
@@ -710,7 +722,7 @@ class IPv6Mask extends IPv6 {
         this.hexadecatet = [];
         let isValid;
         let message;
-        let expandedIPv6 = IPv6Utils_1.expandIPv6Number(ipString);
+        let expandedIPv6 = (0, IPv6Utils_1.expandIPv6Number)(ipString);
         [isValid, message] = Validator_1.Validator.isValidIPv6Mask(expandedIPv6);
         if (!isValid) {
             throw new Error(message.filter(msg => { return msg !== ''; }).toString());
@@ -719,22 +731,11 @@ class IPv6Mask extends IPv6 {
         this.hexadecatet = stringHexadecimals.map((stringHexadecatet) => {
             return Hexadecatet_1.Hexadecatet.fromString(stringHexadecatet);
         });
-        let binaryString = HexadecimalUtils_2.hexadectetNotationToBinaryString(expandedIPv6);
+        let binaryString = (0, HexadecimalUtils_2.hexadectetNotationToBinaryString)(expandedIPv6);
         this.prefix = (binaryString.match(/1/g) || []).length;
         this.value = BigInt(`0b${binaryString}`);
-        this.value = BigInt(`0b${HexadecimalUtils_2.hexadectetNotationToBinaryString(expandedIPv6)}`);
+        this.value = BigInt(`0b${(0, HexadecimalUtils_2.hexadectetNotationToBinaryString)(expandedIPv6)}`);
     }
-    /**
-     * A convenience method for creating an instance of IPv6Mask.
-     * The passed strings need to be a valid IPv4 mask number in dot-decimal notation.
-     *
-     * @param {string} rawValue The passed string in textual notation
-     * @returns {IPv6Mask} the instance of IPv6Mask
-     */
-    static fromHexadecatet(rawValue) {
-        return new IPv6Mask(rawValue);
-    }
-    ;
 }
 exports.IPv6Mask = IPv6Mask;
 /**
@@ -744,5 +745,4 @@ exports.IPv6Mask = IPv6Mask;
 function isIPv4(ip) {
     return ip.bitSize === 32;
 }
-exports.isIPv4 = isIPv4;
 //# sourceMappingURL=IPNumber.js.map
