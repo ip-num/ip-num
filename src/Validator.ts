@@ -246,7 +246,7 @@ export class Validator {
         let ip = cidrComponents[0];
         let range = cidrComponents[1];
 
-        if (!/^\d+$/.test(range)) { // Add this check
+        if (!/^\d+$/.test(range)) {
             return [false, [Validator.invalidIPv4CidrNotationMessage]];
         }
 
