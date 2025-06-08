@@ -3,6 +3,9 @@
   "spec_files": [
     "*.ts"
   ],
+  "helpers": [
+    "ts-node/register"
+  ],
   "stopSpecOnExpectationFailure": false,
   "random": true
 }

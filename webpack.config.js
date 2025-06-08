@@ -1,5 +1,5 @@
-var webpack = require("webpack");
-var WebpackAutoInject = require('webpack-auto-inject-version');
+const webpack = require("webpack");
+const pkg = require("./package.json");
 
 module.exports = {
   entry: './dist/src/index.js',
@@ -13,24 +13,24 @@ module.exports = {
   },
   target: "web",
   plugins: [
-    new WebpackAutoInject({
-      SHORT: 'ip-num',
-      components: {
-        InjectAsComment: true,
-        AutoIncreaseVersion: false
-      },
-      componentsOptions: {
-        InjectAsComment: {
-          tag: 'Version: {version}. Released on: {date}',
-          dateFormat: 'dddd, mmmm dS, yyyy, h:MM:ss TT'
-          }
-      }
+    new webpack.BannerPlugin({
+      banner: `Version: ${pkg.version}. Released on: ${new Date().toUTCString()}`,
+      raw: false,
+      entryOnly: true
     })
   ],
   module: {
     rules: [
-      { test: /\.ts$/, loader: 'awesome-typescript-loader' },
-      { enforce: "pre", test: /\.js$/, loader: "source-map-loader" }
+      {
+        test: /\.ts$/,
+        use: 'ts-loader',
+        exclude: /node_modules/
+      },
+      {
+        enforce: "pre",
+        test: /\.js$/,
+        loader: "source-map-loader"
+      }
     ]
   }
 };
