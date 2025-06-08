@@ -180,7 +180,7 @@ export class Validator {
             isValid = Validator.IPV6_PATTERN.test(ipv6String);
             return [isValid, isValid? []: [Validator.invalidIPv6PatternMessage]];
         } catch (error) {
-            return [false, [error]]
+            return [false, [String(error)]]
         }
     }
 
@@ -245,6 +245,10 @@ export class Validator {
 
         let ip = cidrComponents[0];
         let range = cidrComponents[1];
+
+        if (!/^\d+$/.test(range)) {
+            return [false, [Validator.invalidIPv4CidrNotationMessage]];
+        }
 
         if (isNaN(Number(range))) {
             return [false, [Validator.invalidIPv4CidrNotationMessage]];
