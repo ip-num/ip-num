@@ -17,7 +17,7 @@
     "test:without-coverage": "jasmine-ts spec/**/*.ts",
     "ipnum-testrelease": "npm run prepublishOnly && npm pack ./dist/src",
     "prepublishOnly": "npm run clean && npm run compile && rm -rf ./dist/spec && cp package.json README.md ./dist/src && webpack --config ./webpack.config.js && typedoc --out ./docs ./src/ --exclude '**/spec/*.ts' && touch ./docs/.nojekyll && git add . && git commit -m 'updating documentation and dist for release'",
-    "ipnum-release-dry-run": "npm run prepublishOnly && npm publish ./dist/src --dry-run && npm run clean",
+    "ipnum-release-dry-run": "npm run prepublishOnly && npm publish ./dist/src --dry-run && git reset --hard HEAD~1 && git clean -fd",
     "ipnum-release": "npm run prepublishOnly && npm publish ./dist/src && npm run clean",
     "ipnum-release-major": "npm version major && npm publish ./dist/src && npm run clean",
     "ipnum-release-minor": "npm version minor && npm publish ./dist/src && npm run clean",
