@@ -176,11 +176,7 @@ class RangedSet {
         let otherLast = otherRange.getLast();
         return (thisLast.isGreaterThan(otherFirst) && thisLast.isLessThanOrEquals(otherLast) && thisFirst.isLessThan(otherFirst)
             ||
-                otherLast.isGreaterThan(thisFirst) && otherLast.isLessThanOrEquals(thisLast) && otherFirst.isLessThan(thisFirst)
-            ||
-                this.contains(otherRange)
-            ||
-                otherRange.contains(this));
+                otherLast.isGreaterThan(thisFirst) && otherLast.isLessThanOrEquals(thisLast) && otherFirst.isLessThan(thisFirst));
     }
     /**
      * Check if this range can be converted to a CIDR range.
@@ -236,12 +232,6 @@ class RangedSet {
         if (this.isEquals(otherRange)) {
             return new RangedSet(otherRange.getFirst(), otherRange.getLast());
         }
-        if (this.contains(otherRange)) {
-            return new RangedSet(this.getFirst(), this.getLast());
-        }
-        else if (otherRange.contains(this)) {
-            return new RangedSet(otherRange.getFirst(), otherRange.getLast());
-        }
         if (this.isOverlapping(otherRange)) {
             if (this.getFirst().isLessThan(otherRange.getFirst())) {
                 return new RangedSet(this.getFirst(), otherRange.getLast());
@@ -249,6 +239,12 @@ class RangedSet {
             else {
                 return new RangedSet(otherRange.getFirst(), this.getLast());
             }
+        }
+        if (this.contains(otherRange)) {
+            return new RangedSet(this.getFirst(), this.getLast());
+        }
+        else if (otherRange.contains(this)) {
+            return new RangedSet(otherRange.getFirst(), otherRange.getLast());
         }
         throw new Error("Ranges do not overlap nor are equal");
     }
@@ -384,12 +380,6 @@ class AbstractIPRange {
         return this.toRangeSet().inside(otherRange.toRangeSet());
     }
     contains(otherRange) {
-        if (otherRange instanceof IPNumber_1.AbstractIPNum) {
-            const firstValue = this.getFirst().getValue();
-            const lastValue = this.getLast().getValue();
-            const otherValue = otherRange.getValue();
-            return otherValue >= firstValue && otherValue <= lastValue;
-        }
         return this.toRangeSet().contains(otherRange.toRangeSet());
     }
     toRangeString() {

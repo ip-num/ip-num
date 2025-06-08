@@ -172,7 +172,7 @@ export declare abstract class AbstractIPRange<T extends AbstractIPNum, P extends
     hasPreviousRange(): boolean;
     toRangeSet(): RangedSet<AbstractIPNum>;
     inside(otherRange: IPv6CidrRange | IPv4CidrRange): boolean;
-    contains(otherRange: IPv6CidrRange | IPv4CidrRange | AbstractIPNum): boolean;
+    contains(otherRange: IPv6CidrRange | IPv4CidrRange): boolean;
     toRangeString(): string;
     isOverlapping(otherRange: IPv6CidrRange | IPv4CidrRange): boolean;
     isConsecutive(otherRange: IPv6CidrRange | IPv4CidrRange): boolean;
@@ -276,7 +276,7 @@ export declare class IPv4CidrRange extends AbstractIPRange<IPv4, IPv4Prefix> {
      * @param {IPv4CidrRange} otherRange the other IPv4 range
      * @returns {boolean} true if the other Ipv4 range is a subset. False otherwise.
      */
-    contains(otherRange: IPv4CidrRange | AbstractIPNum): boolean;
+    contains(otherRange: IPv4CidrRange): boolean;
     /**
      * Indicate if the given range is a container range.
      *
@@ -413,7 +413,7 @@ export declare class IPv6CidrRange extends AbstractIPRange<IPv6, IPv6Prefix> {
      * @param {IPv6CidrRange} otherRange the other IPv6 range
      * @returns {boolean} true if the other Ipv6 range is a subset. False otherwise.
      */
-    contains(otherRange: IPv6CidrRange | AbstractIPNum): boolean;
+    contains(otherRange: IPv6CidrRange): boolean;
     /**
      * Indicate if the given range is a container range.
      *

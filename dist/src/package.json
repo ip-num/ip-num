@@ -17,7 +17,7 @@
     "test:without-coverage": "jasmine-ts spec/**/*.ts",
     "ipnum-testrelease": "npm run ipnum-build && npm pack ./dist/src",
     "ipnum-gendoc": "typedoc --out ./docs ./src/ --exclude '**/spec/*.ts' && touch ./docs/.nojekyll",
-    "ipnum-build": "npm run clean && npm run compile && rm -rf ./dist/spec && cp package.json README.md ./dist/src && NODE_OPTIONS=--openssl-legacy-provider webpack --config ./webpack.config.js",
+    "ipnum-build": "npm run clean && npm run compile && rm -rf ./dist/spec && cp package.json README.md ./dist/src && webpack --config ./webpack.config.js",
     "ipnum-releasecommit": "git add . && git commit -m 'updating documentation and dist for release'",
     "ipnum-release-dry-run": "npm run ipnum-gendoc && npm run ipnum-build && npm run ipnum-releasecommit && npm publish ./dist/src --dry-run && npm run clean",
     "ipnum-release": "npm run ipnum-gendoc && npm run ipnum-build && npm run ipnum-releasecommit && npm publish ./dist/src && npm run clean",
