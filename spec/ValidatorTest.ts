@@ -53,6 +53,15 @@ describe('Validator: ', () => {
             expect(Validator.isValidIPv4CidrNotation('1.1.1.x/28')[0]).toBe(false);
             expect(Validator.isValidIPv4CidrNotation("123.234.334.0/3x")[0]).toBe(false);
         });
+
+        it('should return false for CIDR range with period', () => {
+            expect(Validator.isValidIPv4CidrNotation("192.168.10.0/.1")[0]).toBe(false);
+            expect(Validator.isValidIPv4CidrNotation("192.168.10.0/.1")[1]).toContain(Validator.invalidIPv4CidrNotationMessage);
+            expect(Validator.isValidIPv4CidrNotation("192.168.10.0/1.0")[0]).toBe(false);
+            expect(Validator.isValidIPv4CidrNotation("192.168.10.0/1.0")[1]).toContain(Validator.invalidIPv4CidrNotationMessage);
+            expect(Validator.isValidIPv4CidrNotation("192.168.10.0/1.2.3")[0]).toBe(false);
+            expect(Validator.isValidIPv4CidrNotation("192.168.10.0/1.2.3")[1]).toContain(Validator.invalidIPv4CidrNotationMessage);
+        });
     });
 
     describe('isValidPrefixValue', () => {

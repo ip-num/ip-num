@@ -246,6 +246,10 @@ export class Validator {
         let ip = cidrComponents[0];
         let range = cidrComponents[1];
 
+        if (!/^\d+$/.test(range)) {
+            return [false, [Validator.invalidIPv4CidrNotationMessage]];
+        }
+
         if (isNaN(Number(range))) {
             return [false, [Validator.invalidIPv4CidrNotationMessage]];
         }
