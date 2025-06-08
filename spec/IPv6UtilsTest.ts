@@ -96,5 +96,35 @@ describe('IPv6 Utils', () => {
         expect(IPv6Utils.collapseIPv6Number("2001:db8:0:0:0:0:0:0/64")).toBe("2001:db8::/64");
         expect(IPv6Utils.collapseIPv6Number("0:0:0:0:0:0:0:0/128")).toBe("::/128");
         expect(IPv6Utils.collapseIPv6Number("2001:550:0:1000:0:0:9a1a:2187/48")).toBe("2001:550:0:1000::9a1a:2187/48");
+
+        // One zero block
+        expect(IPv6Utils.collapseIPv6Number("1:1:1:1:1:1:0:1")).toBe("1:1:1:1:1:1:0:1");
+        expect(IPv6Utils.collapseIPv6Number("1:1:1:1:1:0:1:1")).toBe("1:1:1:1:1:0:1:1");
+        expect(IPv6Utils.collapseIPv6Number("1:1:1:1:0:1:1:1")).toBe("1:1:1:1:0:1:1:1");
+        expect(IPv6Utils.collapseIPv6Number("1:1:1:0:1:1:1:1")).toBe("1:1:1:0:1:1:1:1");
+        expect(IPv6Utils.collapseIPv6Number("1:1:0:1:1:1:1:1")).toBe("1:1:0:1:1:1:1:1");
+        expect(IPv6Utils.collapseIPv6Number("1:0:1:1:1:1:1:1")).toBe("1:0:1:1:1:1:1:1");
+
+        // Two or more zero blocks:
+        expect(IPv6Utils.collapseIPv6Number("0:0:0:0:0:1:0:0")).toBe("::1:0:0");
+        expect(IPv6Utils.collapseIPv6Number("0:0:0:0:1:0:0:0")).toBe("::1:0:0:0");
+        expect(IPv6Utils.collapseIPv6Number("0:0:0:1:0:0:0:0")).toBe("0:0:0:1::");
+        expect(IPv6Utils.collapseIPv6Number("0:0:1:0:0:0:0:0")).toBe("0:0:1::");
+        expect(IPv6Utils.collapseIPv6Number("0:1:0:0:0:0:0:0")).toBe("0:1::");
+        expect(IPv6Utils.collapseIPv6Number("1:0:0:0:0:1:0:0")).toBe("1::1:0:0");
+        expect(IPv6Utils.collapseIPv6Number("1:0:0:0:1:0:0:0")).toBe("1::1:0:0:0");
+        expect(IPv6Utils.collapseIPv6Number("1:0:0:1:0:0:0:0")).toBe("1:0:0:1::");
+        expect(IPv6Utils.collapseIPv6Number("0:1:0:0:0:1:0:0")).toBe("0:1::1:0:0");
+        expect(IPv6Utils.collapseIPv6Number("0:1:0:0:1:0:0:0")).toBe("0:1:0:0:1::");
+        expect(IPv6Utils.collapseIPv6Number("0:0:1:1:0:0:0:0")).toBe("0:0:1:1::");
+        expect(IPv6Utils.collapseIPv6Number("0:0:1:0:1:0:0:0")).toBe("0:0:1:0:1::");
+        expect(IPv6Utils.collapseIPv6Number("0:0:1:0:0:1:0:0")).toBe("::1:0:0:1:0:0");
+        expect(IPv6Utils.collapseIPv6Number("0:0:1:0:0:0:1:0")).toBe("0:0:1::1:0");
+        expect(IPv6Utils.collapseIPv6Number("0:0:1:0:0:0:0:1")).toBe("0:0:1::1");
+        expect(IPv6Utils.collapseIPv6Number("0:0:0:1:0:0:0:1")).toBe("::1:0:0:0:1");
+        expect(IPv6Utils.collapseIPv6Number("0:0:0:1:0:0:1:0")).toBe("::1:0:0:1:0");
+        expect(IPv6Utils.collapseIPv6Number("0:0:0:1:0:1:0:0")).toBe("::1:0:1:0:0");
+        expect(IPv6Utils.collapseIPv6Number("0:0:0:1:1:0:0:0")).toBe("::1:1:0:0:0");
+        expect(IPv6Utils.collapseIPv6Number("0:0:1:1:1:1:0:0")).toBe("::1:1:1:1:0:0");
     });
 });
