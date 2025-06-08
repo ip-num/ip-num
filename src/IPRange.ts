@@ -450,7 +450,13 @@ export abstract class AbstractIPRange<T extends AbstractIPNum, P extends IPv4Pre
         return this.toRangeSet().inside(otherRange.toRangeSet())
     }
 
-    public contains(otherRange: IPv6CidrRange | IPv4CidrRange): boolean {
+    public contains(otherRange: IPv6CidrRange | IPv4CidrRange | AbstractIPNum): boolean {
+        if (otherRange instanceof AbstractIPNum) {
+            const firstValue = this.getFirst().getValue();
+            const lastValue = this.getLast().getValue();
+            const otherValue = otherRange.getValue();
+            return otherValue >= firstValue && otherValue <= lastValue;
+        }
         return this.toRangeSet().contains(otherRange.toRangeSet());
     }
 
@@ -635,7 +641,7 @@ export class IPv4CidrRange extends AbstractIPRange<IPv4, IPv4Prefix> {
      * @param {IPv4CidrRange} otherRange the other IPv4 range
      * @returns {boolean} true if the other Ipv4 range is a subset. False otherwise.
      */
-    public contains(otherRange: IPv4CidrRange): boolean {
+    public contains(otherRange: IPv4CidrRange | AbstractIPNum): boolean {
         return super.contains(otherRange);
     }
 
@@ -889,7 +895,7 @@ export class IPv6CidrRange extends AbstractIPRange<IPv6, IPv6Prefix> {
      * @param {IPv6CidrRange} otherRange the other IPv6 range
      * @returns {boolean} true if the other Ipv6 range is a subset. False otherwise.
      */
-    public contains(otherRange: IPv6CidrRange): boolean {
+    public contains(otherRange: IPv6CidrRange | AbstractIPNum): boolean {
         return super.contains(otherRange);
     }
 

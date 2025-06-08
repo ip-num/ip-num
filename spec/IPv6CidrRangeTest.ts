@@ -257,3 +257,29 @@ describe('IPv6CidrRange: ', () => {
       expect(IPv6CidrRange.fromCidr("c000:0:0:2:0:0:0:0/64").previousRange()).toEqual(IPv6CidrRange.fromCidr("c000:0:0:1:0:0:0:0/64"))
     })
 });
+
+describe('IPv6CidrRange.contains with IPv6 argument', () => {
+    it('should return true for an IPv6 address that is within the range', () => {
+        const range = IPv6CidrRange.fromCidr('fd5e:ea00::/24');
+        const ip = new IPv6('fd5e:ea00:0:0:0:0:0:1');
+        expect(range.contains(ip)).toBe(true);
+    });
+
+    it('should return false for an IPv6 address that is outside the range', () => {
+        const range = IPv6CidrRange.fromCidr('fd5e:ea00::/24');
+        const ip = new IPv6('fd5e:eb00::1');
+        expect(range.contains(ip)).toBe(false);
+    });
+
+    it('should return true for an IPv6 address that is the first address in the range', () => {
+        const range = IPv6CidrRange.fromCidr('fd5e:ea00::/24');
+        const ip = new IPv6('fd5e:ea00::');
+        expect(range.contains(ip)).toBe(true);
+    });
+
+    it('should return true for an IPv6 address that is the last address in the range', () => {
+        const range = IPv6CidrRange.fromCidr('fd5e:ea00::/120');
+        const ip = new IPv6('fd5e:ea00:0:0:0:0:0:ff');
+        expect(range.contains(ip)).toBe(true);
+    });
+});
