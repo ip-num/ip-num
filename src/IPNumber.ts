@@ -662,17 +662,14 @@ export class IPv6 extends AbstractIPNum {
      * @returns {string} The string representation of IPv6
      */
     public toString(): string {
-        let ipv6String = this.hexadecatet.map((value) => { return value.toString()}).join(":");
+        let ipv6String = this.hexadecatet.map(v => v.toString()).join(":");
         if (this.hexadecatet.length < 8) {
-            return "::" + ipv6String;
-        } else {
-            return ipv6String
+            ipv6String = `::${ipv6String}`;
         }
-    }
-
-    public toCollapsedString(): string {
-        let ipv6String = collapseIPv6Number(this.toString());
-        return `${ipv6String}${this.zoneId ? '%' + this.zoneId : ''}`
+        if (this.zoneId) {
+            ipv6String = `${collapseIPv6Number(ipv6String)}%${this.zoneId}`;
+        }
+        return ipv6String;
     }
 
     /**
