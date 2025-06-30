@@ -1005,7 +1005,7 @@ export class IPv6CidrRange extends AbstractIPRange<IPv6, IPv6Prefix> {
         if (this.hasNextRange()) {
             let sizeOfCurrentRange = this.getSize();
             let startOfNextRange = this.getFirst().getValue() + (sizeOfCurrentRange);
-            return new IPv6CidrRange(new IPv6(startOfNextRange), this.cidrPrefix)
+            return new IPv6CidrRange(new IPv6(startOfNextRange, this.ipv6.zoneId), this.cidrPrefix)
         }
         return;
     }
@@ -1017,7 +1017,7 @@ export class IPv6CidrRange extends AbstractIPRange<IPv6, IPv6Prefix> {
         if (this.hasPreviousRange()) {
             let sizeOfCurrentRange = this.getSize();
             let startOfPreviousRange = this.getFirst().getValue() - sizeOfCurrentRange;
-            return new IPv6CidrRange(new IPv6(startOfPreviousRange), this.cidrPrefix)
+            return new IPv6CidrRange(new IPv6(startOfPreviousRange, this.ipv6.zoneId), this.cidrPrefix)
         }
         return;
     }
