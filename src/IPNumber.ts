@@ -7,7 +7,7 @@ import {IPNumType} from "./IPNumType";
 import {numberToBinaryString} from "./BinaryUtils";
 import {Hexadecatet} from "./Hexadecatet";
 import {binaryStringToHexadecimalString} from "./HexadecimalUtils";
-import {expandIPv6Number} from "./IPv6Utils";
+import {expandIPv6Number, collapseIPv6Number} from "./IPv6Utils";
 import {hexadectetNotationToBinaryString} from "./HexadecimalUtils";
 
 
@@ -544,6 +544,13 @@ export class IPv6 extends AbstractIPNum {
     readonly hexadecatet: Array<Hexadecatet> = [];
 
     /**
+     * The zone identifier of the IPv6 number
+     *
+     * @type {string} the zone identifier of the IPv6 number
+     */
+    readonly zoneId: string | undefined;
+
+    /**
      * The string character used to separate the individual hexadecatet when the IPv6 is rendered as strings
      *
      * @type {string} The string character used to separate the individual hexadecatet when rendered as strings
@@ -626,18 +633,26 @@ export class IPv6 extends AbstractIPNum {
      * @param {string | bigint} ipValue value to construct an IPv6 from. The given value can either be
      * numeric or string. If a string is given then it needs to be in hexadecatet string notation
      */
-    constructor(ipValue: string | bigint) {
+    constructor(ipValue: string | bigint, zoneId?: string) {
         super();
         if (typeof ipValue === "string" ) {
-            let expandedIPv6 = expandIPv6Number(ipValue);
+            let [isValid, message] = Validator.isValidIPv6String(ipValue);
+            if (!isValid) {
+                throw new Error(message.filter(msg => {return msg !== '';}).toString());
+            }
+
+            let [ipv6, zId] = ipValue.split('%');
+            this.zoneId = zId ? zId : zoneId;
+
+            let expandedIPv6 = expandIPv6Number(ipv6);
             let [value, hexadecatet] = this.constructFromHexadecimalDottedString(expandedIPv6);
             this.value = value;
             this.hexadecatet = hexadecatet;
-
         } else {
             let [value, hexadecatet] = this.constructFromBigIntValue(ipValue);
             this.value = value;
             this.hexadecatet = hexadecatet;
+            this.zoneId = zoneId;
         }
     }
 
@@ -653,6 +668,11 @@ export class IPv6 extends AbstractIPNum {
         } else {
             return ipv6String
         }
+    }
+
+    public toCollapsedString(): string {
+        let ipv6String = collapseIPv6Number(this.toString());
+        return `${ipv6String}${this.zoneId ? '%' + this.zoneId : ''}`
     }
 
     /**
