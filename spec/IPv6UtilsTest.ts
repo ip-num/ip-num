@@ -37,6 +37,8 @@ describe('IPv6 Utils', () => {
 
         expect(IPv6Utils.expandIPv6Number("2001:0555:0001:0800:0:0:0:0/50")).toBe("2001:0555:0001:0800:0000:0000:0000:0000/50");
         expect(IPv6Utils.expandIPv6Number("2001:0555:0001:0800:0000:0000:0000:0000/50")).toBe("2001:0555:0001:0800:0000:0000:0000:0000/50");
+
+        expect(IPv6Utils.expandIPv6Number("::ffff:127.0.0.1")).toBe("0000:0000:0000:0000:0000:ffff:7f00:0001");
     });
 
     it('Should correctly collapse long ipv6 number', () => {

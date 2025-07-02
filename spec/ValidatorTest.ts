@@ -29,6 +29,7 @@ describe('Validator: ', () => {
             expect(Validator.isValidIPv6String('123.234.10.10')[0]).toBe(false);
             expect(Validator.isValidIPv6String('::123::')[0]).toBe(false);
             expect(Validator.isValidIPv6String('12::123::')[0]).toBe(false);
+            expect(Validator.isValidIPv6String('::ffff:127.0.0.1')[0]).toBe(true);
         });
     });
 

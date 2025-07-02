@@ -82,6 +82,11 @@ describe('IPv6: ', () => {
         expect(iPv61.toString()).toEqual('::ffff:4a7d:2b63');
     });
 
+    it('should instantiate IPv6 from IPv4-mapped string', () => {
+        let ip = new IPv6("::ffff:127.0.0.1");
+        expect(ip.toString()).toEqual('0:0:0:0:0:ffff:7f00:1');
+    });
+
     it('should instantiate by calling fromBinaryString', () => {
         let IPv6String = "3ffe:1900:4545:0003:0200:f8ff:fe21:67cf";
 
