@@ -1,4 +1,4 @@
-import {leftPadWithZeroBit} from "./BinaryUtils";
+import {leftPadWithZeroBit, dottedDecimalNotationToBinaryString, parseBinaryStringToBigInt} from "./BinaryUtils";
 import {Validator} from "./Validator";
 
 let extractPrefix = (ipv6String: string): string => {
@@ -7,11 +7,20 @@ let extractPrefix = (ipv6String: string): string => {
 
 export let expandIPv6Number = (ipv6String:string):string => {
     let expandWithZero = (hexadecimalArray: string[]): string => {
-        let paddedArray = hexadecimalArray.map((hexadecimal) => {
-            return leftPadWithZeroBit(hexadecimal, 4);
+        let paddedArray: string[] = [];
+        hexadecimalArray.forEach(hexadecimal => {
+            if (hexadecimal.includes('.')) {
+                const [v4part1, v4part2] = dottedDecimalNotationToBinaryString(hexadecimal)
+                    .match(/.{1,16}/g)!
+                    .map(bin => parseBinaryStringToBigInt(bin).toString(16));
+                paddedArray.push(leftPadWithZeroBit(v4part1, 4));
+                paddedArray.push(leftPadWithZeroBit(v4part2, 4));
+            } else {
+                paddedArray.push(leftPadWithZeroBit(hexadecimal, 4));
+            }
         });
 
-        return paddedArray.join(":")
+        return paddedArray.join(":");
     };
 
     let expandDoubleColon = (gapCount: number): string => {
@@ -42,7 +51,8 @@ export let expandIPv6Number = (ipv6String:string):string => {
 
         let leftPortionSplit = leftPortion.split(":").filter(hexadecimal => {return hexadecimal !== ""});
         let rightPortionSplit = rightPortion.split(":").filter(hexadecimal => {return hexadecimal !== ""});
-        let doublePortion = expandDoubleColon(8 - (leftPortionSplit.length + rightPortionSplit.length));
+        let extra = leftPortionSplit.concat(rightPortionSplit).filter(part => part.includes('.')).length;
+        let doublePortion = expandDoubleColon(8 - (leftPortionSplit.length + rightPortionSplit.length + extra));
 
 
         let leftString = expandWithZero(leftPortionSplit);
