@@ -131,4 +131,11 @@ describe('Validator: ', () => {
         expect(Validator.isValidIPv6CidrRange("2001:8a2e:370Q:733464")[0]).toBe(false)
       });
     })
+
+    describe('isValidIPv6Mask', () => {
+      it('should return false for invalid IPv6 mask string without throwing', () => {
+        expect(() => { Validator.isValidIPv6Mask(""); }).not.toThrow()
+        expect(Validator.isValidIPv6Mask("")[0]).toBe(false)
+      })
+    })
 });

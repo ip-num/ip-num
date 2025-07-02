@@ -238,9 +238,13 @@ export class Validator {
      * contains "valid" or an error message when value is invalid
      */
     static isValidIPv6Mask(ipv6MaskString: string) : [boolean, string[]] {
-        let ipv6InBinary = hexadectetNotationToBinaryString(ipv6MaskString);
-        let isValid = Validator.IPV6_CONTIGUOUS_MASK_BIT_PATTERN.test(ipv6InBinary);
-        return isValid ? [isValid, []]: [isValid, [Validator.invalidMaskMessage]];
+        try {
+            let ipv6InBinary = hexadectetNotationToBinaryString(ipv6MaskString);
+            let isValid = Validator.IPV6_CONTIGUOUS_MASK_BIT_PATTERN.test(ipv6InBinary);
+            return isValid ? [isValid, []]: [isValid, [Validator.invalidMaskMessage]];
+        } catch (error) {
+            return [false, [String(error)]];
+        }
     }
 
     /**
