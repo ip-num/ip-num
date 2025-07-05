@@ -483,6 +483,10 @@ To discuss a new feature or ask a question, open an issue. Find the issue tracke
 
 Found a bug and you want to provide a fix for it? Then feel free to submit a pull request. It will be appreciated if the changes made are backed with tests.
 
+Releasing
+------------------
+Create and push a git tag starting with `v` (for example `v1.6.0`). The tag triggers a GitHub Actions workflow which runs tests and publishes the package to npm using the `NPM_TOKEN` secret.
+
 Change log
 ------------------
 
