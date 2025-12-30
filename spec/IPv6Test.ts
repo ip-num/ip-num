@@ -265,4 +265,84 @@ describe('IPv6: ', () => {
             });
         });
     });
+
+    describe('isDocumentation() - RFC 3849 documentation address detection', () => {
+        describe('2001:db8::/32 range', () => {
+            it('should return true for 2001:db8::', () => {
+                expect(new IPv6("2001:db8::").isDocumentation()).toBe(true);
+            });
+
+            it('should return true for 2001:db8::1', () => {
+                expect(new IPv6("2001:db8::1").isDocumentation()).toBe(true);
+            });
+
+            it('should return true for 2001:db8:ffff:ffff:ffff:ffff:ffff:ffff', () => {
+                expect(new IPv6("2001:db8:ffff:ffff:ffff:ffff:ffff:ffff").isDocumentation()).toBe(true);
+            });
+
+            it('should return true for 2001:db8:1234:5678:9abc:def0:1234:5678', () => {
+                expect(new IPv6("2001:db8:1234:5678:9abc:def0:1234:5678").isDocumentation()).toBe(true);
+            });
+
+            it('should return true for 2001:db8:0:0:0:0:0:1', () => {
+                expect(new IPv6("2001:db8:0:0:0:0:0:1").isDocumentation()).toBe(true);
+            });
+
+            it('should return true for 2001:db8:abcd::1234', () => {
+                expect(new IPv6("2001:db8:abcd::1234").isDocumentation()).toBe(true);
+            });
+        });
+
+        describe('non-documentation IPv6 addresses', () => {
+            it('should return false for 2001:800:0:0:0:0:0:2002', () => {
+                expect(new IPv6("2001:800:0:0:0:0:0:2002").isDocumentation()).toBe(false);
+            });
+
+            it('should return false for ::1 (loopback)', () => {
+                expect(new IPv6("::1").isDocumentation()).toBe(false);
+            });
+
+            it('should return false for fe80::1 (link-local)', () => {
+                expect(new IPv6("fe80::1").isDocumentation()).toBe(false);
+            });
+
+            it('should return false for fd00::1 (private)', () => {
+                expect(new IPv6("fd00::1").isDocumentation()).toBe(false);
+            });
+
+            it('should return false for 3ffe:1900:4545:3:200:f8ff:fe21:67cf', () => {
+                expect(new IPv6("3ffe:1900:4545:3:200:f8ff:fe21:67cf").isDocumentation()).toBe(false);
+            });
+
+            it('should return false for 2001:db9::1 (just after 2001:db8::/32)', () => {
+                expect(new IPv6("2001:db9::1").isDocumentation()).toBe(false);
+            });
+
+            it('should return false for 2001:db7:ffff:ffff:ffff:ffff:ffff:ffff (just before 2001:db8::/32)', () => {
+                expect(new IPv6("2001:db7:ffff:ffff:ffff:ffff:ffff:ffff").isDocumentation()).toBe(false);
+            });
+        });
+
+        describe('boundary cases', () => {
+            it('should return false for 2001:db7:ffff:ffff:ffff:ffff:ffff:ffff (just before 2001:db8::/32)', () => {
+                expect(new IPv6("2001:db7:ffff:ffff:ffff:ffff:ffff:ffff").isDocumentation()).toBe(false);
+            });
+
+            it('should return false for 2001:db9:: (just after 2001:db8::/32)', () => {
+                expect(new IPv6("2001:db9::").isDocumentation()).toBe(false);
+            });
+
+            it('should return false for 2001:db8:0:0:0:0:0:0 (first address in range)', () => {
+                expect(new IPv6("2001:db8:0:0:0:0:0:0").isDocumentation()).toBe(true);
+            });
+
+            it('should return true for 2001:db8:ffff:ffff:ffff:ffff:ffff:ffff (last address in range)', () => {
+                expect(new IPv6("2001:db8:ffff:ffff:ffff:ffff:ffff:ffff").isDocumentation()).toBe(true);
+            });
+
+            it('should return false for 2001:db9:0:0:0:0:0:0 (first address after range)', () => {
+                expect(new IPv6("2001:db9:0:0:0:0:0:0").isDocumentation()).toBe(false);
+            });
+        });
+    });
 });

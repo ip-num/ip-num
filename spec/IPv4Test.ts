@@ -233,4 +233,132 @@ describe('IPv4: ', () => {
             });
         });
     });
+
+    describe('isDocumentation() - RFC 5737 documentation address detection', () => {
+        describe('192.0.2.0/24 range (TEST-NET-1)', () => {
+            it('should return true for 192.0.2.0', () => {
+                expect(new IPv4("192.0.2.0").isDocumentation()).toBe(true);
+            });
+
+            it('should return true for 192.0.2.255', () => {
+                expect(new IPv4("192.0.2.255").isDocumentation()).toBe(true);
+            });
+
+            it('should return true for 192.0.2.1', () => {
+                expect(new IPv4("192.0.2.1").isDocumentation()).toBe(true);
+            });
+
+            it('should return true for 192.0.2.128', () => {
+                expect(new IPv4("192.0.2.128").isDocumentation()).toBe(true);
+            });
+        });
+
+        describe('198.51.100.0/24 range (TEST-NET-2)', () => {
+            it('should return true for 198.51.100.0', () => {
+                expect(new IPv4("198.51.100.0").isDocumentation()).toBe(true);
+            });
+
+            it('should return true for 198.51.100.255', () => {
+                expect(new IPv4("198.51.100.255").isDocumentation()).toBe(true);
+            });
+
+            it('should return true for 198.51.100.1', () => {
+                expect(new IPv4("198.51.100.1").isDocumentation()).toBe(true);
+            });
+
+            it('should return true for 198.51.100.128', () => {
+                expect(new IPv4("198.51.100.128").isDocumentation()).toBe(true);
+            });
+        });
+
+        describe('203.0.113.0/24 range (TEST-NET-3)', () => {
+            it('should return true for 203.0.113.0', () => {
+                expect(new IPv4("203.0.113.0").isDocumentation()).toBe(true);
+            });
+
+            it('should return true for 203.0.113.255', () => {
+                expect(new IPv4("203.0.113.255").isDocumentation()).toBe(true);
+            });
+
+            it('should return true for 203.0.113.1', () => {
+                expect(new IPv4("203.0.113.1").isDocumentation()).toBe(true);
+            });
+
+            it('should return true for 203.0.113.128', () => {
+                expect(new IPv4("203.0.113.128").isDocumentation()).toBe(true);
+            });
+        });
+
+        describe('non-documentation addresses', () => {
+            it('should return false for 8.8.8.8', () => {
+                expect(new IPv4("8.8.8.8").isDocumentation()).toBe(false);
+            });
+
+            it('should return false for 1.1.1.1', () => {
+                expect(new IPv4("1.1.1.1").isDocumentation()).toBe(false);
+            });
+
+            it('should return false for 192.0.1.255 (just before 192.0.2.0/24)', () => {
+                expect(new IPv4("192.0.1.255").isDocumentation()).toBe(false);
+            });
+
+            it('should return false for 192.0.3.0 (just after 192.0.2.0/24)', () => {
+                expect(new IPv4("192.0.3.0").isDocumentation()).toBe(false);
+            });
+
+            it('should return false for 198.51.99.255 (just before 198.51.100.0/24)', () => {
+                expect(new IPv4("198.51.99.255").isDocumentation()).toBe(false);
+            });
+
+            it('should return false for 198.51.101.0 (just after 198.51.100.0/24)', () => {
+                expect(new IPv4("198.51.101.0").isDocumentation()).toBe(false);
+            });
+
+            it('should return false for 203.0.112.255 (just before 203.0.113.0/24)', () => {
+                expect(new IPv4("203.0.112.255").isDocumentation()).toBe(false);
+            });
+
+            it('should return false for 203.0.114.0 (just after 203.0.113.0/24)', () => {
+                expect(new IPv4("203.0.114.0").isDocumentation()).toBe(false);
+            });
+
+            it('should return false for 10.0.0.1', () => {
+                expect(new IPv4("10.0.0.1").isDocumentation()).toBe(false);
+            });
+
+            it('should return false for 192.168.1.1', () => {
+                expect(new IPv4("192.168.1.1").isDocumentation()).toBe(false);
+            });
+        });
+
+        describe('boundary cases', () => {
+            it('should return false for 191.255.255.255 (just before 192.0.2.0/24)', () => {
+                expect(new IPv4("191.255.255.255").isDocumentation()).toBe(false);
+            });
+
+            it('should return false for 192.0.1.255 (just before 192.0.2.0/24)', () => {
+                expect(new IPv4("192.0.1.255").isDocumentation()).toBe(false);
+            });
+
+            it('should return false for 192.0.3.0 (just after 192.0.2.0/24)', () => {
+                expect(new IPv4("192.0.3.0").isDocumentation()).toBe(false);
+            });
+
+            it('should return false for 198.51.99.255 (just before 198.51.100.0/24)', () => {
+                expect(new IPv4("198.51.99.255").isDocumentation()).toBe(false);
+            });
+
+            it('should return false for 198.51.101.0 (just after 198.51.100.0/24)', () => {
+                expect(new IPv4("198.51.101.0").isDocumentation()).toBe(false);
+            });
+
+            it('should return false for 203.0.112.255 (just before 203.0.113.0/24)', () => {
+                expect(new IPv4("203.0.112.255").isDocumentation()).toBe(false);
+            });
+
+            it('should return false for 203.0.114.0 (just after 203.0.113.0/24)', () => {
+                expect(new IPv4("203.0.114.0").isDocumentation()).toBe(false);
+            });
+        });
+    });
 });
