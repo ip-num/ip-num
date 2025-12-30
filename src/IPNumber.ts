@@ -172,6 +172,17 @@ export class IPv4 extends AbstractIPNum {
     ];
 
     /**
+     * RFC 5737 documentation address ranges. These ranges are constant and reused for performance.
+     *
+     * @see https://datatracker.ietf.org/doc/html/rfc5737
+     */
+    private static readonly DOCUMENTATION_RANGES: Array<IPv4CidrRange> = [
+        IPv4CidrRange.fromCidr("192.0.2.0/24"),
+        IPv4CidrRange.fromCidr("198.51.100.0/24"),
+        IPv4CidrRange.fromCidr("203.0.113.0/24")
+    ];
+
+    /**
      * A convenience method for creating an {@link IPv4} by providing the decimal value of the IP number in BigInt
      *
      * @param {bigint} bigIntValue the decimal value of the IP number in BigInt
@@ -287,6 +298,21 @@ export class IPv4 extends AbstractIPNum {
      */
     public isPrivate(): boolean {
         return IPv4.PRIVATE_RANGES.some(range => range.contains(this));
+    }
+
+    /**
+     * Checks if this IPv4 address is a documentation address according to RFC 5737.
+     *
+     * Documentation IPv4 address ranges:
+     * - 192.0.2.0/24 (TEST-NET-1)
+     * - 198.51.100.0/24 (TEST-NET-2)
+     * - 203.0.113.0/24 (TEST-NET-3)
+     *
+     * @see https://datatracker.ietf.org/doc/html/rfc5737
+     * @returns {boolean} true if this IPv4 address is reserved for documentation, false otherwise
+     */
+    public isDocumentation(): boolean {
+        return IPv4.DOCUMENTATION_RANGES.some(range => range.contains(this));
     }
 
     /**
@@ -593,6 +619,13 @@ export class IPv6 extends AbstractIPNum {
     private static readonly PRIVATE_RANGE: IPv6CidrRange = IPv6CidrRange.fromCidr("fd00::/8");
 
     /**
+     * RFC 3849 documentation address range (2001:db8::/32). This range is constant and reused for performance.
+     *
+     * @see https://datatracker.ietf.org/doc/html/rfc3849
+     */
+    private static readonly DOCUMENTATION_RANGE: IPv6CidrRange = IPv6CidrRange.fromCidr("2001:db8::/32");
+
+    /**
      * A convenience method for creating an {@link IPv6} by providing the decimal value of the IP number in BigInt
      *
      * @param {bigint} bigIntValue the decimal value of the IP number in BigInt
@@ -746,6 +779,19 @@ export class IPv6 extends AbstractIPNum {
      */
     public isPrivate(): boolean {
         return IPv6.PRIVATE_RANGE.contains(this);
+    }
+
+    /**
+     * Checks if this IPv6 address is a documentation address according to RFC 3849.
+     *
+     * Documentation IPv6 address range:
+     * - 2001:db8::/32
+     *
+     * @see https://datatracker.ietf.org/doc/html/rfc3849
+     * @returns {boolean} true if this IPv6 address is reserved for documentation, false otherwise
+     */
+    public isDocumentation(): boolean {
+        return IPv6.DOCUMENTATION_RANGE.contains(this);
     }
 
     private constructFromBigIntValue(ipv6Number: bigint): [bigint, Array<Hexadecatet>]  {
