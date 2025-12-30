@@ -9,6 +9,8 @@ import {Hexadecatet} from "./Hexadecatet";
 import {binaryStringToHexadecimalString} from "./HexadecimalUtils";
 import {expandIPv6Number, collapseIPv6Number} from "./IPv6Utils";
 import {hexadectetNotationToBinaryString} from "./HexadecimalUtils";
+import {IPv4CidrRange} from "./IPRange";
+import {IPv6CidrRange} from "./IPRange";
 
 
 /**
@@ -159,6 +161,17 @@ export class IPv4 extends AbstractIPNum {
     readonly separator: string = ".";
 
     /**
+     * RFC 1918 private address ranges. These ranges are constant and reused for performance.
+     *
+     * @see https://datatracker.ietf.org/doc/html/rfc1918
+     */
+    private static readonly PRIVATE_RANGES: Array<IPv4CidrRange> = [
+        IPv4CidrRange.fromCidr("10.0.0.0/8"),
+        IPv4CidrRange.fromCidr("172.16.0.0/12"),
+        IPv4CidrRange.fromCidr("192.168.0.0/16")
+    ];
+
+    /**
      * A convenience method for creating an {@link IPv4} by providing the decimal value of the IP number in BigInt
      *
      * @param {bigint} bigIntValue the decimal value of the IP number in BigInt
@@ -259,6 +272,21 @@ export class IPv4 extends AbstractIPNum {
      */
     public previousIPNumber(): IPv4 {
         return IPv4.fromNumber(this.getValue() - 1n)
+    }
+
+    /**
+     * Checks if this IPv4 address is a private address according to RFC 1918.
+     *
+     * Private IPv4 address ranges:
+     * - 10.0.0.0/8 (10.0.0.0 to 10.255.255.255)
+     * - 172.16.0.0/12 (172.16.0.0 to 172.31.255.255)
+     * - 192.168.0.0/16 (192.168.0.0 to 192.168.255.255)
+     *
+     * @see https://datatracker.ietf.org/doc/html/rfc1918
+     * @returns {boolean} true if this IPv4 address is private, false otherwise
+     */
+    public isPrivate(): boolean {
+        return IPv4.PRIVATE_RANGES.some(range => range.contains(this));
     }
 
     /**
@@ -558,6 +586,13 @@ export class IPv6 extends AbstractIPNum {
     readonly separator: string = ":";
 
     /**
+     * RFC 4193 private address range (fd00::/8 - Unique Local Addresses). This range is constant and reused for performance.
+     *
+     * @see https://datatracker.ietf.org/doc/html/rfc4193
+     */
+    private static readonly PRIVATE_RANGE: IPv6CidrRange = IPv6CidrRange.fromCidr("fd00::/8");
+
+    /**
      * A convenience method for creating an {@link IPv6} by providing the decimal value of the IP number in BigInt
      *
      * @param {bigint} bigIntValue the decimal value of the IP number in BigInt
@@ -698,6 +733,19 @@ export class IPv6 extends AbstractIPNum {
      */
     public previousIPNumber(): IPv6 {
         return IPv6.fromBigInt(this.getValue() - 1n)
+    }
+
+    /**
+     * Checks if this IPv6 address is a private address according to RFC 4193.
+     *
+     * Private IPv6 address range:
+     * - fd00::/8 (Unique Local Addresses)
+     *
+     * @see https://datatracker.ietf.org/doc/html/rfc4193
+     * @returns {boolean} true if this IPv6 address is private, false otherwise
+     */
+    public isPrivate(): boolean {
+        return IPv6.PRIVATE_RANGE.contains(this);
     }
 
     private constructFromBigIntValue(ipv6Number: bigint): [bigint, Array<Hexadecatet>]  {
