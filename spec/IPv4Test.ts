@@ -132,5 +132,105 @@ describe('IPv4: ', () => {
         let value1 = new IPv4("127.0.0.1");
         let iPv61 = value1.toIPv4MappedIPv6();
         expect(iPv61.toString()).toEqual('::ffff:7f00:1');
-    })
+    });
+
+    describe('isPrivate() - RFC 1918 private address detection', () => {
+        describe('10.0.0.0/8 range', () => {
+            it('should return true for 10.0.0.0', () => {
+                expect(new IPv4("10.0.0.0").isPrivate()).toBe(true);
+            });
+
+            it('should return true for 10.255.255.255', () => {
+                expect(new IPv4("10.255.255.255").isPrivate()).toBe(true);
+            });
+
+            it('should return true for 10.1.1.1', () => {
+                expect(new IPv4("10.1.1.1").isPrivate()).toBe(true);
+            });
+
+            it('should return true for 10.128.64.32', () => {
+                expect(new IPv4("10.128.64.32").isPrivate()).toBe(true);
+            });
+        });
+
+        describe('172.16.0.0/12 range', () => {
+            it('should return true for 172.16.0.0', () => {
+                expect(new IPv4("172.16.0.0").isPrivate()).toBe(true);
+            });
+
+            it('should return true for 172.31.255.255', () => {
+                expect(new IPv4("172.31.255.255").isPrivate()).toBe(true);
+            });
+
+            it('should return true for 172.20.1.1', () => {
+                expect(new IPv4("172.20.1.1").isPrivate()).toBe(true);
+            });
+
+            it('should return true for 172.24.128.64', () => {
+                expect(new IPv4("172.24.128.64").isPrivate()).toBe(true);
+            });
+        });
+
+        describe('192.168.0.0/16 range', () => {
+            it('should return true for 192.168.0.0', () => {
+                expect(new IPv4("192.168.0.0").isPrivate()).toBe(true);
+            });
+
+            it('should return true for 192.168.255.255', () => {
+                expect(new IPv4("192.168.255.255").isPrivate()).toBe(true);
+            });
+
+            it('should return true for 192.168.1.1', () => {
+                expect(new IPv4("192.168.1.1").isPrivate()).toBe(true);
+            });
+
+            it('should return true for 192.168.100.50', () => {
+                expect(new IPv4("192.168.100.50").isPrivate()).toBe(true);
+            });
+        });
+
+        describe('public addresses', () => {
+            it('should return false for 8.8.8.8', () => {
+                expect(new IPv4("8.8.8.8").isPrivate()).toBe(false);
+            });
+
+            it('should return false for 1.1.1.1', () => {
+                expect(new IPv4("1.1.1.1").isPrivate()).toBe(false);
+            });
+
+            it('should return false for 203.0.113.1', () => {
+                expect(new IPv4("203.0.113.1").isPrivate()).toBe(false);
+            });
+
+            it('should return false for 74.125.43.99', () => {
+                expect(new IPv4("74.125.43.99").isPrivate()).toBe(false);
+            });
+        });
+
+        describe('boundary cases', () => {
+            it('should return false for 9.255.255.255 (just before 10.0.0.0/8)', () => {
+                expect(new IPv4("9.255.255.255").isPrivate()).toBe(false);
+            });
+
+            it('should return false for 11.0.0.0 (just after 10.0.0.0/8)', () => {
+                expect(new IPv4("11.0.0.0").isPrivate()).toBe(false);
+            });
+
+            it('should return false for 172.15.255.255 (just before 172.16.0.0/12)', () => {
+                expect(new IPv4("172.15.255.255").isPrivate()).toBe(false);
+            });
+
+            it('should return false for 172.32.0.0 (just after 172.16.0.0/12)', () => {
+                expect(new IPv4("172.32.0.0").isPrivate()).toBe(false);
+            });
+
+            it('should return false for 192.167.255.255 (just before 192.168.0.0/16)', () => {
+                expect(new IPv4("192.167.255.255").isPrivate()).toBe(false);
+            });
+
+            it('should return false for 192.169.0.0 (just after 192.168.0.0/16)', () => {
+                expect(new IPv4("192.169.0.0").isPrivate()).toBe(false);
+            });
+        });
+    });
 });
