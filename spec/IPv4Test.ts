@@ -3,6 +3,7 @@
  */
 
 import {IPv4} from "../src/IPNumber";
+import {IPv4CidrRange} from "../src/IPRange";
 import {Validator} from "../src";
 
 describe('IPv4: ', () => {
@@ -358,6 +359,63 @@ describe('IPv4: ', () => {
 
             it('should return false for 203.0.114.0 (just after 203.0.113.0/24)', () => {
                 expect(new IPv4("203.0.114.0").isDocumentation()).toBe(false);
+            });
+        });
+    });
+
+    describe('isBroadcast() - broadcast address detection', () => {
+        describe('limited broadcast (255.255.255.255)', () => {
+            it('should return true for 255.255.255.255', () => {
+                expect(new IPv4("255.255.255.255").isBroadcast()).toBe(true);
+            });
+
+            it('should return false for 255.255.255.254', () => {
+                expect(new IPv4("255.255.255.254").isBroadcast()).toBe(false);
+            });
+
+            it('should return false for 0.0.0.0', () => {
+                expect(new IPv4("0.0.0.0").isBroadcast()).toBe(false);
+            });
+
+            it('should return false for regular address 192.168.1.1', () => {
+                expect(new IPv4("192.168.1.1").isBroadcast()).toBe(false);
+            });
+        });
+
+        describe('directed broadcast with subnet', () => {
+            it('should return true for 192.168.1.255 in 192.168.1.0/24', () => {
+                const subnet = IPv4CidrRange.fromCidr("192.168.1.0/24");
+                expect(new IPv4("192.168.1.255").isBroadcast(subnet)).toBe(true);
+            });
+
+            it('should return false for 192.168.1.254 in 192.168.1.0/24', () => {
+                const subnet = IPv4CidrRange.fromCidr("192.168.1.0/24");
+                expect(new IPv4("192.168.1.254").isBroadcast(subnet)).toBe(false);
+            });
+
+            it('should return true for 10.0.0.255 in 10.0.0.0/24', () => {
+                const subnet = IPv4CidrRange.fromCidr("10.0.0.0/24");
+                expect(new IPv4("10.0.0.255").isBroadcast(subnet)).toBe(true);
+            });
+
+            it('should return true for 172.16.15.255 in 172.16.0.0/20', () => {
+                const subnet = IPv4CidrRange.fromCidr("172.16.0.0/20");
+                expect(new IPv4("172.16.15.255").isBroadcast(subnet)).toBe(true);
+            });
+
+            it('should return false for 172.16.0.1 in 172.16.0.0/20', () => {
+                const subnet = IPv4CidrRange.fromCidr("172.16.0.0/20");
+                expect(new IPv4("172.16.0.1").isBroadcast(subnet)).toBe(false);
+            });
+
+            it('should return true for 255.255.255.255 in 0.0.0.0/0', () => {
+                const subnet = IPv4CidrRange.fromCidr("0.0.0.0/0");
+                expect(new IPv4("255.255.255.255").isBroadcast(subnet)).toBe(true);
+            });
+
+            it('should return true for single host /32 subnet', () => {
+                const subnet = IPv4CidrRange.fromCidr("192.168.1.1/32");
+                expect(new IPv4("192.168.1.1").isBroadcast(subnet)).toBe(true);
             });
         });
     });

@@ -183,6 +183,11 @@ export class IPv4 extends AbstractIPNum {
     ];
 
     /**
+     * The limited broadcast address (255.255.255.255). This is constant and reused for performance.
+     */
+    private static readonly LIMITED_BROADCAST: IPv4 = IPv4.fromDecimalDottedString("255.255.255.255");
+
+    /**
      * A convenience method for creating an {@link IPv4} by providing the decimal value of the IP number in BigInt
      *
      * @param {bigint} bigIntValue the decimal value of the IP number in BigInt
@@ -313,6 +318,22 @@ export class IPv4 extends AbstractIPNum {
      */
     public isDocumentation(): boolean {
         return IPv4.DOCUMENTATION_RANGES.some(range => range.contains(this));
+    }
+
+    /**
+     * Checks if this IPv4 address is a broadcast address.
+     *
+     * When called without arguments, checks for the limited broadcast address (255.255.255.255).
+     * When a subnet is provided, checks if this address is the directed broadcast for that subnet.
+     *
+     * @param subnet Optional CIDR range to check for directed broadcast
+     * @returns {boolean} true if this is a broadcast address, false otherwise
+     */
+    public isBroadcast(subnet?: IPv4CidrRange): boolean {
+        if (subnet) {
+            return this.isEquals(subnet.getLast());
+        }
+        return this.isEquals(IPv4.LIMITED_BROADCAST);
     }
 
     /**
