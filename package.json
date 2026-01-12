@@ -13,6 +13,7 @@
     "dist/src"
   ],
   "scripts": {
+    "preinstall": "npx only-allow npm",
     "clean": "rm -rf ./dist/spec ./dist/src ip-num-*.tgz && git checkout -- .",
     "compile": "tsc -p tsconfig.json",
     "test": "nyc -e .ts ts-node node_modules/jasmine/bin/jasmine.js --config=jasmine.json",
