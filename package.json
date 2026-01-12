@@ -53,7 +53,6 @@
     "@types/jasmine": "^5.1.8",
     "@types/node": "^22.15.30",
     "jasmine": "^5.8.0",
-    "jasmine-node": "^3.0.0",
     "jasmine-spec-reporter": "^7.0.0",
     "jasmine-ts": "^0.4.0",
     "nyc": "^17.1.0",
