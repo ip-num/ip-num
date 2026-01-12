@@ -363,6 +363,66 @@ describe('IPv4: ', () => {
         });
     });
 
+    describe('isMulticast() - RFC 1112 multicast address detection', () => {
+        describe('224.0.0.0/4 range', () => {
+            it('should return true for 224.0.0.0', () => {
+                expect(new IPv4("224.0.0.0").isMulticast()).toBe(true);
+            });
+
+            it('should return true for 239.255.255.255', () => {
+                expect(new IPv4("239.255.255.255").isMulticast()).toBe(true);
+            });
+
+            it('should return true for 224.0.0.1', () => {
+                expect(new IPv4("224.0.0.1").isMulticast()).toBe(true);
+            });
+
+            it('should return true for 239.128.64.32', () => {
+                expect(new IPv4("239.128.64.32").isMulticast()).toBe(true);
+            });
+        });
+
+        describe('non-multicast IPv4 addresses', () => {
+            it('should return false for 223.255.255.255 (just before multicast range)', () => {
+                expect(new IPv4("223.255.255.255").isMulticast()).toBe(false);
+            });
+
+            it('should return false for 240.0.0.0 (just after multicast range)', () => {
+                expect(new IPv4("240.0.0.0").isMulticast()).toBe(false);
+            });
+
+            it('should return false for 8.8.8.8', () => {
+                expect(new IPv4("8.8.8.8").isMulticast()).toBe(false);
+            });
+
+            it('should return false for 192.168.1.1 (private)', () => {
+                expect(new IPv4("192.168.1.1").isMulticast()).toBe(false);
+            });
+
+            it('should return false for 127.0.0.1 (loopback)', () => {
+                expect(new IPv4("127.0.0.1").isMulticast()).toBe(false);
+            });
+        });
+
+        describe('boundary cases', () => {
+            it('should return false for 223.255.255.255', () => {
+                expect(new IPv4("223.255.255.255").isMulticast()).toBe(false);
+            });
+
+            it('should return true for 224.0.0.0', () => {
+                expect(new IPv4("224.0.0.0").isMulticast()).toBe(true);
+            });
+
+            it('should return true for 239.255.255.255', () => {
+                expect(new IPv4("239.255.255.255").isMulticast()).toBe(true);
+            });
+
+            it('should return false for 240.0.0.0', () => {
+                expect(new IPv4("240.0.0.0").isMulticast()).toBe(false);
+            });
+        });
+    });
+
     describe('isBroadcast() - broadcast address detection', () => {
         describe('limited broadcast (255.255.255.255)', () => {
             it('should return true for 255.255.255.255', () => {

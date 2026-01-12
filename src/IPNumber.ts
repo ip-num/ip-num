@@ -35,6 +35,13 @@ export abstract class AbstractIPNum {
     abstract previousIPNumber(): AbstractIPNum;
 
     /**
+     * Checks if this IP address is a multicast address.
+     * 
+     * @returns {boolean} true if this IP address is multicast, false otherwise
+     */
+    abstract isMulticast(): boolean;
+
+    /**
      * Gets the numeric value of an IP number as {@link BigInt}
      *
      * @returns bigInt the numeric value of an IP number.
@@ -183,6 +190,17 @@ export class IPv4 extends AbstractIPNum {
     ];
 
     /**
+     * RFC 1112 multicast address range. This range is constant and reused for performance.
+     *
+     * Multicast IPv4 address range:
+     * - 224.0.0.0/4 (224.0.0.0 to 239.255.255.255)
+     *
+     * @see https://datatracker.ietf.org/doc/html/rfc1112
+     */
+    private static readonly MULTICAST_RANGE: IPv4CidrRange = 
+        IPv4CidrRange.fromCidr("224.0.0.0/4");
+
+    /**
      * The limited broadcast address (255.255.255.255). This is constant and reused for performance.
      */
     private static readonly LIMITED_BROADCAST: IPv4 = IPv4.fromDecimalDottedString("255.255.255.255");
@@ -318,6 +336,19 @@ export class IPv4 extends AbstractIPNum {
      */
     public isDocumentation(): boolean {
         return IPv4.DOCUMENTATION_RANGES.some(range => range.contains(this));
+    }
+
+    /**
+     * Checks if this IPv4 address is a multicast address according to RFC 1112.
+     *
+     * Multicast IPv4 address range:
+     * - 224.0.0.0/4 (224.0.0.0 to 239.255.255.255)
+     *
+     * @see https://datatracker.ietf.org/doc/html/rfc1112
+     * @returns {boolean} true if this IPv4 address is multicast, false otherwise
+     */
+    public isMulticast(): boolean {
+        return IPv4.MULTICAST_RANGE.contains(this);
     }
 
     /**
@@ -573,6 +604,17 @@ export class Asn extends AbstractIPNum {
         return new Asn(this.value.valueOf() - 1n)
     }
 
+    /**
+     * Checks if this ASN is a multicast address.
+     * 
+     * ASNs are not IP addresses, so this always returns false.
+     * 
+     * @returns {boolean} always returns false for ASN
+     */
+    public isMulticast(): boolean {
+        return false;
+    }
+
     private static startWithASPrefix(word:string):boolean {
         return word.indexOf(Asn.AS_PREFIX) === 0;
     }
@@ -813,6 +855,19 @@ export class IPv6 extends AbstractIPNum {
      */
     public isDocumentation(): boolean {
         return IPv6.DOCUMENTATION_RANGE.contains(this);
+    }
+
+    /**
+     * Checks if this IPv6 address is a multicast address.
+     * 
+     * IPv6 multicast implementation will follow (RFC 4291: ff00::/8).
+     * 
+     * @returns {boolean} true if this IPv6 address is multicast, false otherwise
+     */
+    public isMulticast(): boolean {
+        // TODO: Implement IPv6 multicast check (RFC 4291: ff00::/8)
+        // For now, return false as placeholder
+        return false;
     }
 
     private constructFromBigIntValue(ipv6Number: bigint): [bigint, Array<Hexadecatet>]  {
