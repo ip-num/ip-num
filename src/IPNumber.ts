@@ -689,6 +689,16 @@ export class IPv6 extends AbstractIPNum {
     private static readonly DOCUMENTATION_RANGE: IPv6CidrRange = IPv6CidrRange.fromCidr("2001:db8::/32");
 
     /**
+     * RFC 4291 multicast address range (ff00::/8). This range is constant and reused for performance.
+     *
+     * Multicast IPv6 address range:
+     * - ff00::/8 (ff00:: to ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff)
+     *
+     * @see https://datatracker.ietf.org/doc/html/rfc4291
+     */
+    private static readonly MULTICAST_RANGE: IPv6CidrRange = IPv6CidrRange.fromCidr("ff00::/8");
+
+    /**
      * A convenience method for creating an {@link IPv6} by providing the decimal value of the IP number in BigInt
      *
      * @param {bigint} bigIntValue the decimal value of the IP number in BigInt
@@ -859,15 +869,15 @@ export class IPv6 extends AbstractIPNum {
 
     /**
      * Checks if this IPv6 address is a multicast address.
-     * 
-     * IPv6 multicast implementation will follow (RFC 4291: ff00::/8).
-     * 
+     *
+     * Multicast IPv6 address range:
+     * - ff00::/8 (ff00:: to ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff)
+     *
+     * @see https://datatracker.ietf.org/doc/html/rfc4291
      * @returns {boolean} true if this IPv6 address is multicast, false otherwise
      */
     public isMulticast(): boolean {
-        // TODO: Implement IPv6 multicast check (RFC 4291: ff00::/8)
-        // For now, return false as placeholder
-        return false;
+        return IPv6.MULTICAST_RANGE.contains(this);
     }
 
     private constructFromBigIntValue(ipv6Number: bigint): [bigint, Array<Hexadecatet>]  {
