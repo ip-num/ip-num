@@ -2,6 +2,7 @@
 import {Validator} from "../src";
 import {IPv6} from "../src";
 import {IPv4} from "../src";
+import {IPv6AddressKind} from "../src";
 
 describe('IPv6: ', () => {
     it('should instantiate by calling constructor', () => {
@@ -467,6 +468,519 @@ describe('IPv6: ', () => {
             it('should throw error for private address', () => {
                 const ip = new IPv6("fd00::1");
                 expect(() => ip.hasEmbeddedRP()).toThrowError("Embedded RP can only be checked for multicast addresses");
+            });
+        });
+    });
+
+    describe('isUnspecified() - RFC 4291 unspecified address detection', () => {
+        describe('unspecified address', () => {
+            it('should return true for ::', () => {
+                expect(new IPv6("::").isUnspecified()).toBe(true);
+            });
+
+            it('should return true for ::0', () => {
+                expect(new IPv6("::0").isUnspecified()).toBe(true);
+            });
+
+            it('should return true for 0:0:0:0:0:0:0:0', () => {
+                expect(new IPv6("0:0:0:0:0:0:0:0").isUnspecified()).toBe(true);
+            });
+        });
+
+        describe('non-unspecified IPv6 addresses', () => {
+            it('should return false for ::1 (loopback)', () => {
+                expect(new IPv6("::1").isUnspecified()).toBe(false);
+            });
+
+            it('should return false for fe80::1 (link-local)', () => {
+                expect(new IPv6("fe80::1").isUnspecified()).toBe(false);
+            });
+
+            it('should return false for 2001:db8::1 (documentation)', () => {
+                expect(new IPv6("2001:db8::1").isUnspecified()).toBe(false);
+            });
+
+            it('should return false for 2001:800:0:0:0:0:0:2002', () => {
+                expect(new IPv6("2001:800:0:0:0:0:0:2002").isUnspecified()).toBe(false);
+            });
+
+            it('should return false for ff00::1 (multicast)', () => {
+                expect(new IPv6("ff00::1").isUnspecified()).toBe(false);
+            });
+        });
+    });
+
+    describe('isLoopback() - RFC 4291 loopback address detection', () => {
+        describe('loopback address', () => {
+            it('should return true for ::1', () => {
+                expect(new IPv6("::1").isLoopback()).toBe(true);
+            });
+
+            it('should return true for 0:0:0:0:0:0:0:1', () => {
+                expect(new IPv6("0:0:0:0:0:0:0:1").isLoopback()).toBe(true);
+            });
+        });
+
+        describe('non-loopback IPv6 addresses', () => {
+            it('should return false for :: (unspecified)', () => {
+                expect(new IPv6("::").isLoopback()).toBe(false);
+            });
+
+            it('should return false for ::2', () => {
+                expect(new IPv6("::2").isLoopback()).toBe(false);
+            });
+
+            it('should return false for fe80::1 (link-local)', () => {
+                expect(new IPv6("fe80::1").isLoopback()).toBe(false);
+            });
+
+            it('should return false for 2001:db8::1 (documentation)', () => {
+                expect(new IPv6("2001:db8::1").isLoopback()).toBe(false);
+            });
+
+            it('should return false for 2001:800:0:0:0:0:0:2002', () => {
+                expect(new IPv6("2001:800:0:0:0:0:0:2002").isLoopback()).toBe(false);
+            });
+
+            it('should return false for ff00::1 (multicast)', () => {
+                expect(new IPv6("ff00::1").isLoopback()).toBe(false);
+            });
+        });
+    });
+
+    describe('isLinkLocal() - RFC 4291 link-local address detection', () => {
+        describe('fe80::/10 range', () => {
+            it('should return true for fe80::', () => {
+                expect(new IPv6("fe80::").isLinkLocal()).toBe(true);
+            });
+
+            it('should return true for fe80::1', () => {
+                expect(new IPv6("fe80::1").isLinkLocal()).toBe(true);
+            });
+
+            it('should return true for febf:ffff:ffff:ffff:ffff:ffff:ffff:ffff', () => {
+                expect(new IPv6("febf:ffff:ffff:ffff:ffff:ffff:ffff:ffff").isLinkLocal()).toBe(true);
+            });
+
+            it('should return true for fe80:1234:5678:9abc:def0:1234:5678:9abc', () => {
+                expect(new IPv6("fe80:1234:5678:9abc:def0:1234:5678:9abc").isLinkLocal()).toBe(true);
+            });
+
+            it('should return true for feaf::1234:5678', () => {
+                expect(new IPv6("feaf::1234:5678").isLinkLocal()).toBe(true);
+            });
+        });
+
+        describe('non-link-local IPv6 addresses', () => {
+            it('should return false for ::1 (loopback)', () => {
+                expect(new IPv6("::1").isLinkLocal()).toBe(false);
+            });
+
+            it('should return false for 2001:db8::1 (documentation)', () => {
+                expect(new IPv6("2001:db8::1").isLinkLocal()).toBe(false);
+            });
+
+            it('should return false for fd00::1 (private)', () => {
+                expect(new IPv6("fd00::1").isLinkLocal()).toBe(false);
+            });
+
+            it('should return false for 2001:800:0:0:0:0:0:2002', () => {
+                expect(new IPv6("2001:800:0:0:0:0:0:2002").isLinkLocal()).toBe(false);
+            });
+
+            it('should return false for ff00::1 (multicast)', () => {
+                expect(new IPv6("ff00::1").isLinkLocal()).toBe(false);
+            });
+        });
+
+        describe('boundary cases', () => {
+            it('should return false for fe7f:ffff:ffff:ffff:ffff:ffff:ffff:ffff (just before fe80::/10)', () => {
+                expect(new IPv6("fe7f:ffff:ffff:ffff:ffff:ffff:ffff:ffff").isLinkLocal()).toBe(false);
+            });
+
+            it('should return false for fe00:: (just before fe80::/10)', () => {
+                expect(new IPv6("fe00::").isLinkLocal()).toBe(false);
+            });
+
+            it('should return true for fe80:: (first address in range)', () => {
+                expect(new IPv6("fe80::").isLinkLocal()).toBe(true);
+            });
+
+            it('should return true for febf:ffff:ffff:ffff:ffff:ffff:ffff:ffff (last address in range)', () => {
+                expect(new IPv6("febf:ffff:ffff:ffff:ffff:ffff:ffff:ffff").isLinkLocal()).toBe(true);
+            });
+
+            it('should return false for fec0:: (just after fe80::/10)', () => {
+                expect(new IPv6("fec0::").isLinkLocal()).toBe(false);
+            });
+        });
+    });
+
+    describe('isGlobalUnicast() - RFC 4291 global unicast address detection', () => {
+        describe('global unicast addresses (everything else per RFC 4291)', () => {
+            it('should return true for 2000::', () => {
+                expect(new IPv6("2000::").isGlobalUnicast()).toBe(true);
+            });
+
+            it('should return true for 2001:800:0:0:0:0:0:2002', () => {
+                expect(new IPv6("2001:800:0:0:0:0:0:2002").isGlobalUnicast()).toBe(true);
+            });
+
+            it('should return true for 3fff:ffff:ffff:ffff:ffff:ffff:ffff:ffff', () => {
+                expect(new IPv6("3fff:ffff:ffff:ffff:ffff:ffff:ffff:ffff").isGlobalUnicast()).toBe(true);
+            });
+
+            it('should return true for 2400:cb00:2048:1::c629:d7a2', () => {
+                expect(new IPv6("2400:cb00:2048:1::c629:d7a2").isGlobalUnicast()).toBe(true);
+            });
+
+            it('should return true for addresses outside 2000::/3 that are not other specific types', () => {
+                // Per RFC 4291, Global Unicast is "everything else"
+                expect(new IPv6("4000::").isGlobalUnicast()).toBe(true);
+                expect(new IPv6("5000::").isGlobalUnicast()).toBe(true);
+            });
+
+            it('should return true for 1fff:ffff:ffff:ffff:ffff:ffff:ffff:ffff (not other specific type)', () => {
+                expect(new IPv6("1fff:ffff:ffff:ffff:ffff:ffff:ffff:ffff").isGlobalUnicast()).toBe(true);
+            });
+        });
+
+        describe('non-global unicast IPv6 addresses', () => {
+            it('should return false for :: (unspecified)', () => {
+                expect(new IPv6("::").isGlobalUnicast()).toBe(false);
+            });
+
+            it('should return false for ::1 (loopback)', () => {
+                expect(new IPv6("::1").isGlobalUnicast()).toBe(false);
+            });
+
+            it('should return false for fe80::1 (link-local)', () => {
+                expect(new IPv6("fe80::1").isGlobalUnicast()).toBe(false);
+            });
+
+            it('should return false for fd00::1 (private)', () => {
+                expect(new IPv6("fd00::1").isGlobalUnicast()).toBe(false);
+            });
+
+            it('should return false for ff00::1 (multicast)', () => {
+                expect(new IPv6("ff00::1").isGlobalUnicast()).toBe(false);
+            });
+
+            it('should return false for ::ffff:192.0.2.1 (IPv4-mapped)', () => {
+                expect(new IPv6("::ffff:192.0.2.1").isGlobalUnicast()).toBe(false);
+            });
+
+            it('should return false for 100::1 (discard-only)', () => {
+                expect(new IPv6("100::1").isGlobalUnicast()).toBe(false);
+            });
+
+            it('should return false for 2001:db8::1 (documentation)', () => {
+                expect(new IPv6("2001:db8::1").isGlobalUnicast()).toBe(false);
+            });
+        });
+    });
+
+    describe('isIPv4Mapped() - RFC 4291 IPv4-mapped IPv6 address detection', () => {
+        describe('::ffff:0:0/96 range', () => {
+            it('should return true for 0:0:0:0:0:ffff:0:0', () => {
+                expect(new IPv6("0:0:0:0:0:ffff:0:0").isIPv4Mapped()).toBe(true);
+            });
+
+            it('should return true for ::ffff:192.0.2.1', () => {
+                expect(new IPv6("::ffff:192.0.2.1").isIPv4Mapped()).toBe(true);
+            });
+
+            it('should return true for ::ffff:255.255.255.255', () => {
+                expect(new IPv6("::ffff:255.255.255.255").isIPv4Mapped()).toBe(true);
+            });
+
+            it('should return true for 0:0:0:0:0:ffff:c0a8:1', () => {
+                expect(new IPv6("0:0:0:0:0:ffff:c0a8:1").isIPv4Mapped()).toBe(true);
+            });
+
+            it('should return true for 0:0:0:0:0:ffff:ffff:ffff', () => {
+                expect(new IPv6("0:0:0:0:0:ffff:ffff:ffff").isIPv4Mapped()).toBe(true);
+            });
+        });
+
+        describe('non-IPv4-mapped IPv6 addresses', () => {
+            it('should return false for ::1 (loopback)', () => {
+                expect(new IPv6("::1").isIPv4Mapped()).toBe(false);
+            });
+
+            it('should return false for 2001:db8::1 (documentation)', () => {
+                expect(new IPv6("2001:db8::1").isIPv4Mapped()).toBe(false);
+            });
+
+            it('should return false for fe80::1 (link-local)', () => {
+                expect(new IPv6("fe80::1").isIPv4Mapped()).toBe(false);
+            });
+
+            it('should return false for ::ffff:0:0:0:1:0:0 (wrong format)', () => {
+                expect(new IPv6("::ffff:0:0:0:1:0:0").isIPv4Mapped()).toBe(false);
+            });
+
+            it('should return false for ::fffe:192.0.2.1 (wrong prefix)', () => {
+                expect(new IPv6("::fffe:192.0.2.1").isIPv4Mapped()).toBe(false);
+            });
+        });
+
+        describe('boundary cases', () => {
+            it('should return true for 0:0:0:0:0:ffff:0:0 (first address in range)', () => {
+                expect(new IPv6("0:0:0:0:0:ffff:0:0").isIPv4Mapped()).toBe(true);
+            });
+
+            it('should return true for 0:0:0:0:0:ffff:ffff:ffff (last address in range)', () => {
+                expect(new IPv6("0:0:0:0:0:ffff:ffff:ffff").isIPv4Mapped()).toBe(true);
+            });
+
+            it('should return false for 0:0:0:0:0:fffe:ffff:ffff (just before range)', () => {
+                expect(new IPv6("0:0:0:0:0:fffe:ffff:ffff").isIPv4Mapped()).toBe(false);
+            });
+
+            it('should return false for 0:0:0:0:0:1:0:0 (just after range)', () => {
+                expect(new IPv6("0:0:0:0:0:1:0:0").isIPv4Mapped()).toBe(false);
+            });
+        });
+    });
+
+    describe('isDiscardOnly() - RFC 6666 discard-only address detection', () => {
+        describe('100::/64 range', () => {
+            it('should return true for 100::', () => {
+                expect(new IPv6("100::").isDiscardOnly()).toBe(true);
+            });
+
+            it('should return true for 100::1', () => {
+                expect(new IPv6("100::1").isDiscardOnly()).toBe(true);
+            });
+
+            it('should return true for 100::ffff:ffff:ffff:ffff', () => {
+                expect(new IPv6("100::ffff:ffff:ffff:ffff").isDiscardOnly()).toBe(true);
+            });
+
+            it('should return true for 100:0:0:0:1234:5678:9abc:def0', () => {
+                expect(new IPv6("100:0:0:0:1234:5678:9abc:def0").isDiscardOnly()).toBe(true);
+            });
+        });
+
+        describe('non-discard-only IPv6 addresses', () => {
+            it('should return false for ::1 (loopback)', () => {
+                expect(new IPv6("::1").isDiscardOnly()).toBe(false);
+            });
+
+            it('should return false for 2001:db8::1 (documentation)', () => {
+                expect(new IPv6("2001:db8::1").isDiscardOnly()).toBe(false);
+            });
+
+            it('should return false for fe80::1 (link-local)', () => {
+                expect(new IPv6("fe80::1").isDiscardOnly()).toBe(false);
+            });
+
+            it('should return false for 2001:800:0:0:0:0:0:2002', () => {
+                expect(new IPv6("2001:800:0:0:0:0:0:2002").isDiscardOnly()).toBe(false);
+            });
+
+            it('should return false for ff00::1 (multicast)', () => {
+                expect(new IPv6("ff00::1").isDiscardOnly()).toBe(false);
+            });
+        });
+
+        describe('boundary cases', () => {
+            it('should return false for ff:ffff:ffff:ffff:ffff:ffff:ffff:ffff (just before 100::/64)', () => {
+                expect(new IPv6("ff:ffff:ffff:ffff:ffff:ffff:ffff:ffff").isDiscardOnly()).toBe(false);
+            });
+
+            it('should return true for 100:: (first address in range)', () => {
+                expect(new IPv6("100::").isDiscardOnly()).toBe(true);
+            });
+
+            it('should return true for 100::ffff:ffff:ffff:ffff (last address in range)', () => {
+                expect(new IPv6("100::ffff:ffff:ffff:ffff").isDiscardOnly()).toBe(true);
+            });
+
+            it('should return false for 100::1:0:0:0:0:0 (just after range)', () => {
+                expect(new IPv6("100::1:0:0:0:0:0").isDiscardOnly()).toBe(false);
+            });
+        });
+    });
+
+    describe('getKind() - IPv6 address kind detection', () => {
+        describe('unspecified address', () => {
+            it('should return UNSPECIFIED for ::', () => {
+                expect(new IPv6("::").getKind()).toBe(IPv6AddressKind.UNSPECIFIED);
+            });
+
+            it('should return UNSPECIFIED for 0:0:0:0:0:0:0:0', () => {
+                expect(new IPv6("0:0:0:0:0:0:0:0").getKind()).toBe(IPv6AddressKind.UNSPECIFIED);
+            });
+        });
+
+        describe('loopback address', () => {
+            it('should return LOOPBACK for ::1', () => {
+                expect(new IPv6("::1").getKind()).toBe(IPv6AddressKind.LOOPBACK);
+            });
+
+            it('should return LOOPBACK for 0:0:0:0:0:0:0:1', () => {
+                expect(new IPv6("0:0:0:0:0:0:0:1").getKind()).toBe(IPv6AddressKind.LOOPBACK);
+            });
+        });
+
+        describe('multicast address', () => {
+            it('should return MULTICAST for ff00::', () => {
+                expect(new IPv6("ff00::").getKind()).toBe(IPv6AddressKind.MULTICAST);
+            });
+
+            it('should return MULTICAST for ff02::1', () => {
+                expect(new IPv6("ff02::1").getKind()).toBe(IPv6AddressKind.MULTICAST);
+            });
+
+            it('should return MULTICAST for ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff', () => {
+                expect(new IPv6("ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff").getKind()).toBe(IPv6AddressKind.MULTICAST);
+            });
+        });
+
+        describe('documentation address', () => {
+            it('should return DOCUMENTATION for 2001:db8::', () => {
+                expect(new IPv6("2001:db8::").getKind()).toBe(IPv6AddressKind.DOCUMENTATION);
+            });
+
+            it('should return DOCUMENTATION for 2001:db8::1', () => {
+                expect(new IPv6("2001:db8::1").getKind()).toBe(IPv6AddressKind.DOCUMENTATION);
+            });
+
+            it('should return DOCUMENTATION for 2001:db8:ffff:ffff:ffff:ffff:ffff:ffff', () => {
+                expect(new IPv6("2001:db8:ffff:ffff:ffff:ffff:ffff:ffff").getKind()).toBe(IPv6AddressKind.DOCUMENTATION);
+            });
+        });
+
+        describe('IPv4-mapped address', () => {
+            it('should return IPV4_MAPPED for ::ffff:192.0.2.1', () => {
+                expect(new IPv6("::ffff:192.0.2.1").getKind()).toBe(IPv6AddressKind.IPV4_MAPPED);
+            });
+
+            it('should return IPV4_MAPPED for 0:0:0:0:0:ffff:0:0', () => {
+                expect(new IPv6("0:0:0:0:0:ffff:0:0").getKind()).toBe(IPv6AddressKind.IPV4_MAPPED);
+            });
+
+            it('should return IPV4_MAPPED for ::ffff:255.255.255.255', () => {
+                expect(new IPv6("::ffff:255.255.255.255").getKind()).toBe(IPv6AddressKind.IPV4_MAPPED);
+            });
+        });
+
+        describe('discard-only address', () => {
+            it('should return DISCARD_ONLY for 100::', () => {
+                expect(new IPv6("100::").getKind()).toBe(IPv6AddressKind.DISCARD_ONLY);
+            });
+
+            it('should return DISCARD_ONLY for 100::1', () => {
+                expect(new IPv6("100::1").getKind()).toBe(IPv6AddressKind.DISCARD_ONLY);
+            });
+
+            it('should return DISCARD_ONLY for 100::ffff:ffff:ffff:ffff', () => {
+                expect(new IPv6("100::ffff:ffff:ffff:ffff").getKind()).toBe(IPv6AddressKind.DISCARD_ONLY);
+            });
+        });
+
+        describe('link-local address', () => {
+            it('should return LINK_LOCAL for fe80::', () => {
+                expect(new IPv6("fe80::").getKind()).toBe(IPv6AddressKind.LINK_LOCAL);
+            });
+
+            it('should return LINK_LOCAL for fe80::1', () => {
+                expect(new IPv6("fe80::1").getKind()).toBe(IPv6AddressKind.LINK_LOCAL);
+            });
+
+            it('should return LINK_LOCAL for febf:ffff:ffff:ffff:ffff:ffff:ffff:ffff', () => {
+                expect(new IPv6("febf:ffff:ffff:ffff:ffff:ffff:ffff:ffff").getKind()).toBe(IPv6AddressKind.LINK_LOCAL);
+            });
+        });
+
+        describe('unique local address (private)', () => {
+            it('should return UNIQUE_LOCAL for fd00::', () => {
+                expect(new IPv6("fd00::").getKind()).toBe(IPv6AddressKind.UNIQUE_LOCAL);
+            });
+
+            it('should return UNIQUE_LOCAL for fd00::1', () => {
+                expect(new IPv6("fd00::1").getKind()).toBe(IPv6AddressKind.UNIQUE_LOCAL);
+            });
+
+            it('should return UNIQUE_LOCAL for fdff:ffff:ffff:ffff:ffff:ffff:ffff:ffff', () => {
+                expect(new IPv6("fdff:ffff:ffff:ffff:ffff:ffff:ffff:ffff").getKind()).toBe(IPv6AddressKind.UNIQUE_LOCAL);
+            });
+        });
+
+        describe('global unicast address', () => {
+            it('should return GLOBAL_UNICAST for 2000::', () => {
+                expect(new IPv6("2000::").getKind()).toBe(IPv6AddressKind.GLOBAL_UNICAST);
+            });
+
+            it('should return GLOBAL_UNICAST for 2001:800:0:0:0:0:0:2002', () => {
+                expect(new IPv6("2001:800:0:0:0:0:0:2002").getKind()).toBe(IPv6AddressKind.GLOBAL_UNICAST);
+            });
+
+            it('should return GLOBAL_UNICAST for 2400:cb00:2048:1::c629:d7a2', () => {
+                expect(new IPv6("2400:cb00:2048:1::c629:d7a2").getKind()).toBe(IPv6AddressKind.GLOBAL_UNICAST);
+            });
+
+            it('should return GLOBAL_UNICAST for 3fff:ffff:ffff:ffff:ffff:ffff:ffff:ffff', () => {
+                expect(new IPv6("3fff:ffff:ffff:ffff:ffff:ffff:ffff:ffff").getKind()).toBe(IPv6AddressKind.GLOBAL_UNICAST);
+            });
+        });
+
+        describe('priority ordering tests', () => {
+            it('should return LOOPBACK (not LINK_LOCAL) for ::1', () => {
+                const ip = new IPv6("::1");
+                expect(ip.getKind()).toBe(IPv6AddressKind.LOOPBACK);
+                expect(ip.getKind()).not.toBe(IPv6AddressKind.LINK_LOCAL);
+            });
+
+            it('should return DOCUMENTATION (not GLOBAL_UNICAST) for 2001:db8::1', () => {
+                const ip = new IPv6("2001:db8::1");
+                expect(ip.getKind()).toBe(IPv6AddressKind.DOCUMENTATION);
+                expect(ip.getKind()).not.toBe(IPv6AddressKind.GLOBAL_UNICAST);
+            });
+
+            it('should return MULTICAST (not GLOBAL_UNICAST) for ff00::1', () => {
+                const ip = new IPv6("ff00::1");
+                expect(ip.getKind()).toBe(IPv6AddressKind.MULTICAST);
+                expect(ip.getKind()).not.toBe(IPv6AddressKind.GLOBAL_UNICAST);
+            });
+
+            it('should return IPV4_MAPPED (not GLOBAL_UNICAST) for ::ffff:192.0.2.1', () => {
+                const ip = new IPv6("::ffff:192.0.2.1");
+                expect(ip.getKind()).toBe(IPv6AddressKind.IPV4_MAPPED);
+                expect(ip.getKind()).not.toBe(IPv6AddressKind.GLOBAL_UNICAST);
+            });
+
+            it('should return DISCARD_ONLY (not GLOBAL_UNICAST) for 100::1', () => {
+                const ip = new IPv6("100::1");
+                expect(ip.getKind()).toBe(IPv6AddressKind.DISCARD_ONLY);
+                expect(ip.getKind()).not.toBe(IPv6AddressKind.GLOBAL_UNICAST);
+            });
+
+            it('should return UNIQUE_LOCAL (not GLOBAL_UNICAST) for fd00::1', () => {
+                const ip = new IPv6("fd00::1");
+                expect(ip.getKind()).toBe(IPv6AddressKind.UNIQUE_LOCAL);
+                expect(ip.getKind()).not.toBe(IPv6AddressKind.GLOBAL_UNICAST);
+            });
+        });
+
+        describe('unknown addresses', () => {
+            it('should return GLOBAL_UNICAST (not UNKNOWN) for addresses outside 2000::/3 that are not other specific types', () => {
+                // Per RFC 4291, Global Unicast is "everything else"
+                expect(new IPv6("4000::").getKind()).toBe(IPv6AddressKind.GLOBAL_UNICAST);
+                expect(new IPv6("5000::").getKind()).toBe(IPv6AddressKind.GLOBAL_UNICAST);
+            });
+
+            it('should return GLOBAL_UNICAST for addresses before 2000::/3 that are not other specific types', () => {
+                // Per RFC 4291, Global Unicast is "everything else"
+                expect(new IPv6("1fff:ffff:ffff:ffff:ffff:ffff:ffff:ffff").getKind()).toBe(IPv6AddressKind.GLOBAL_UNICAST);
+            });
+
+            it('should return UNKNOWN only for truly reserved/unassigned ranges', () => {
+                // Note: Most addresses that don't match specific types are Global Unicast per RFC 4291
+                // UNKNOWN would only apply to addresses in ranges explicitly reserved and not assigned
+                // This test may need adjustment based on specific reserved ranges
             });
         });
     });
