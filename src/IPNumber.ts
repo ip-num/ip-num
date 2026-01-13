@@ -880,6 +880,33 @@ export class IPv6 extends AbstractIPNum {
         return IPv6.MULTICAST_RANGE.contains(this);
     }
 
+    /**
+     * Checks if this IPv6 multicast address has an embedded Rendezvous Point (RP).
+     * 
+     * For an embedded RP to be present, the R, P, and T flags must all be set to 1.
+     * The R flag (bit 9) indicates RP embedded, P flag (bit 10) indicates prefix-based,
+     * and T flag (bit 11) indicates transient address.
+     * 
+     * @see https://datatracker.ietf.org/doc/html/rfc3956
+     * @returns {boolean} true if embedded RP is present (R, P, T flags all set), false otherwise
+     * @throws {Error} if this is not a multicast address
+     */
+    public hasEmbeddedRP(): boolean {
+        if (!this.isMulticast()) {
+            throw new Error("Embedded RP can only be checked for multicast addresses");
+        }
+        
+        // Extract second octet (bits 8-15, 0-indexed)
+        // Shift right by 112 bits to get bits 8-15, then mask to get second octet
+        const secondOctet = Number((this.value >> 112n) & 0xFFn);
+        
+        // Check R flag (bit 1 of second octet = 0x40)
+        // Check P flag (bit 2 of second octet = 0x20)
+        // Check T flag (bit 3 of second octet = 0x10)
+        // All three flags must be set: (R & P & T) = 0x70
+        return (secondOctet & 0x70) === 0x70;
+    }
+
     private constructFromBigIntValue(ipv6Number: bigint): [bigint, Array<Hexadecatet>]  {
         let [isValid, message] = Validator.isValidIPv6Number(ipv6Number);
         if (!isValid) {

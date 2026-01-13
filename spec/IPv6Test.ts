@@ -425,4 +425,49 @@ describe('IPv6: ', () => {
             });
         });
     });
+
+    describe('hasEmbeddedRP() - RFC 3956 embedded RP detection', () => {
+        describe('multicast addresses with embedded RP', () => {
+            it('should return true for ff7e:240:2001:db8::1 (RPT flags all set)', () => {
+                // ff7e = ff (multicast) + 7 (R=1, P=1, T=1) + e (scope)
+                const ip = new IPv6("ff7e:240:2001:db8::1");
+                expect(ip.hasEmbeddedRP()).toBe(true);
+            });
+            
+            it('should return true for valid embedded RP address', () => {
+                // Construct a valid embedded RP address
+                const ip = new IPv6("ff7e:240:2001:db8::1234");
+                expect(ip.hasEmbeddedRP()).toBe(true);
+            });
+        });
+        
+        describe('multicast addresses without embedded RP', () => {
+            it('should return false for ff02::1 (all nodes, R flag not set)', () => {
+                const ip = new IPv6("ff02::1");
+                expect(ip.hasEmbeddedRP()).toBe(false);
+            });
+            
+            it('should return false for ff05::1 (R flag not set)', () => {
+                const ip = new IPv6("ff05::1");
+                expect(ip.hasEmbeddedRP()).toBe(false);
+            });
+            
+            it('should return false for ff0e::1 (R flag not set)', () => {
+                const ip = new IPv6("ff0e::1");
+                expect(ip.hasEmbeddedRP()).toBe(false);
+            });
+        });
+        
+        describe('error cases', () => {
+            it('should throw error for non-multicast address', () => {
+                const ip = new IPv6("2001:db8::1");
+                expect(() => ip.hasEmbeddedRP()).toThrowError("Embedded RP can only be checked for multicast addresses");
+            });
+            
+            it('should throw error for private address', () => {
+                const ip = new IPv6("fd00::1");
+                expect(() => ip.hasEmbeddedRP()).toThrowError("Embedded RP can only be checked for multicast addresses");
+            });
+        });
+    });
 });
