@@ -345,4 +345,129 @@ describe('IPv6: ', () => {
             });
         });
     });
+
+    describe('isMulticast() - RFC 4291 multicast address detection', () => {
+        describe('ff00::/8 range', () => {
+            it('should return true for ff00::', () => {
+                expect(new IPv6("ff00::").isMulticast()).toBe(true);
+            });
+
+            it('should return true for ff00::1', () => {
+                expect(new IPv6("ff00::1").isMulticast()).toBe(true);
+            });
+
+            it('should return true for ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff', () => {
+                expect(new IPv6("ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff").isMulticast()).toBe(true);
+            });
+
+            it('should return true for ff02::1 (all nodes multicast)', () => {
+                expect(new IPv6("ff02::1").isMulticast()).toBe(true);
+            });
+
+            it('should return true for ff02::2 (all routers multicast)', () => {
+                expect(new IPv6("ff02::2").isMulticast()).toBe(true);
+            });
+
+            it('should return true for ff12:3456:7890:abcd:ef01:2345:6789:abcd', () => {
+                expect(new IPv6("ff12:3456:7890:abcd:ef01:2345:6789:abcd").isMulticast()).toBe(true);
+            });
+
+            it('should return true for ff80::1234:5678', () => {
+                expect(new IPv6("ff80::1234:5678").isMulticast()).toBe(true);
+            });
+        });
+
+        describe('non-multicast IPv6 addresses', () => {
+            it('should return false for feff:ffff:ffff:ffff:ffff:ffff:ffff:ffff (just before ff00::/8)', () => {
+                expect(new IPv6("feff:ffff:ffff:ffff:ffff:ffff:ffff:ffff").isMulticast()).toBe(false);
+            });
+
+            it('should return false for 2001:db8::1 (documentation)', () => {
+                expect(new IPv6("2001:db8::1").isMulticast()).toBe(false);
+            });
+
+            it('should return false for ::1 (loopback)', () => {
+                expect(new IPv6("::1").isMulticast()).toBe(false);
+            });
+
+            it('should return false for fe80::1 (link-local)', () => {
+                expect(new IPv6("fe80::1").isMulticast()).toBe(false);
+            });
+
+            it('should return false for fd00::1 (private)', () => {
+                expect(new IPv6("fd00::1").isMulticast()).toBe(false);
+            });
+
+            it('should return false for 2001:800:0:0:0:0:0:2002', () => {
+                expect(new IPv6("2001:800:0:0:0:0:0:2002").isMulticast()).toBe(false);
+            });
+
+            it('should return false for 3ffe:1900:4545:3:200:f8ff:fe21:67cf', () => {
+                expect(new IPv6("3ffe:1900:4545:3:200:f8ff:fe21:67cf").isMulticast()).toBe(false);
+            });
+        });
+
+        describe('boundary cases', () => {
+            it('should return false for feff:ffff:ffff:ffff:ffff:ffff:ffff:ffff (just before ff00::/8)', () => {
+                expect(new IPv6("feff:ffff:ffff:ffff:ffff:ffff:ffff:ffff").isMulticast()).toBe(false);
+            });
+
+            it('should return true for ff00:: (first address in range)', () => {
+                expect(new IPv6("ff00::").isMulticast()).toBe(true);
+            });
+
+            it('should return true for ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff (last address in range)', () => {
+                expect(new IPv6("ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff").isMulticast()).toBe(true);
+            });
+
+            it('should return false for fe00:: (just before ff00::/8)', () => {
+                expect(new IPv6("fe00::").isMulticast()).toBe(false);
+            });
+        });
+    });
+
+    describe('hasEmbeddedRP() - RFC 3956 embedded RP detection', () => {
+        describe('multicast addresses with embedded RP', () => {
+            it('should return true for ff7e:240:2001:db8::1 (RPT flags all set)', () => {
+                // ff7e = ff (multicast) + 7 (R=1, P=1, T=1) + e (scope)
+                const ip = new IPv6("ff7e:240:2001:db8::1");
+                expect(ip.hasEmbeddedRP()).toBe(true);
+            });
+            
+            it('should return true for valid embedded RP address', () => {
+                // Construct a valid embedded RP address
+                const ip = new IPv6("ff7e:240:2001:db8::1234");
+                expect(ip.hasEmbeddedRP()).toBe(true);
+            });
+        });
+        
+        describe('multicast addresses without embedded RP', () => {
+            it('should return false for ff02::1 (all nodes, R flag not set)', () => {
+                const ip = new IPv6("ff02::1");
+                expect(ip.hasEmbeddedRP()).toBe(false);
+            });
+            
+            it('should return false for ff05::1 (R flag not set)', () => {
+                const ip = new IPv6("ff05::1");
+                expect(ip.hasEmbeddedRP()).toBe(false);
+            });
+            
+            it('should return false for ff0e::1 (R flag not set)', () => {
+                const ip = new IPv6("ff0e::1");
+                expect(ip.hasEmbeddedRP()).toBe(false);
+            });
+        });
+        
+        describe('error cases', () => {
+            it('should throw error for non-multicast address', () => {
+                const ip = new IPv6("2001:db8::1");
+                expect(() => ip.hasEmbeddedRP()).toThrowError("Embedded RP can only be checked for multicast addresses");
+            });
+            
+            it('should throw error for private address', () => {
+                const ip = new IPv6("fd00::1");
+                expect(() => ip.hasEmbeddedRP()).toThrowError("Embedded RP can only be checked for multicast addresses");
+            });
+        });
+    });
 });

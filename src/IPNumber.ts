@@ -35,6 +35,13 @@ export abstract class AbstractIPNum {
     abstract previousIPNumber(): AbstractIPNum;
 
     /**
+     * Checks if this IP address is a multicast address.
+     * 
+     * @returns {boolean} true if this IP address is multicast, false otherwise
+     */
+    abstract isMulticast(): boolean;
+
+    /**
      * Gets the numeric value of an IP number as {@link BigInt}
      *
      * @returns bigInt the numeric value of an IP number.
@@ -183,6 +190,17 @@ export class IPv4 extends AbstractIPNum {
     ];
 
     /**
+     * RFC 1112 multicast address range. This range is constant and reused for performance.
+     *
+     * Multicast IPv4 address range:
+     * - 224.0.0.0/4 (224.0.0.0 to 239.255.255.255)
+     *
+     * @see https://datatracker.ietf.org/doc/html/rfc1112
+     */
+    private static readonly MULTICAST_RANGE: IPv4CidrRange = 
+        IPv4CidrRange.fromCidr("224.0.0.0/4");
+
+    /**
      * The limited broadcast address (255.255.255.255). This is constant and reused for performance.
      */
     private static readonly LIMITED_BROADCAST: IPv4 = IPv4.fromDecimalDottedString("255.255.255.255");
@@ -318,6 +336,19 @@ export class IPv4 extends AbstractIPNum {
      */
     public isDocumentation(): boolean {
         return IPv4.DOCUMENTATION_RANGES.some(range => range.contains(this));
+    }
+
+    /**
+     * Checks if this IPv4 address is a multicast address according to RFC 1112.
+     *
+     * Multicast IPv4 address range:
+     * - 224.0.0.0/4 (224.0.0.0 to 239.255.255.255)
+     *
+     * @see https://datatracker.ietf.org/doc/html/rfc1112
+     * @returns {boolean} true if this IPv4 address is multicast, false otherwise
+     */
+    public isMulticast(): boolean {
+        return IPv4.MULTICAST_RANGE.contains(this);
     }
 
     /**
@@ -573,6 +604,17 @@ export class Asn extends AbstractIPNum {
         return new Asn(this.value.valueOf() - 1n)
     }
 
+    /**
+     * Checks if this ASN is a multicast address.
+     * 
+     * ASNs are not IP addresses, so this always returns false.
+     * 
+     * @returns {boolean} always returns false for ASN
+     */
+    public isMulticast(): boolean {
+        return false;
+    }
+
     private static startWithASPrefix(word:string):boolean {
         return word.indexOf(Asn.AS_PREFIX) === 0;
     }
@@ -645,6 +687,16 @@ export class IPv6 extends AbstractIPNum {
      * @see https://datatracker.ietf.org/doc/html/rfc3849
      */
     private static readonly DOCUMENTATION_RANGE: IPv6CidrRange = IPv6CidrRange.fromCidr("2001:db8::/32");
+
+    /**
+     * RFC 4291 multicast address range (ff00::/8). This range is constant and reused for performance.
+     *
+     * Multicast IPv6 address range:
+     * - ff00::/8 (ff00:: to ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff)
+     *
+     * @see https://datatracker.ietf.org/doc/html/rfc4291
+     */
+    private static readonly MULTICAST_RANGE: IPv6CidrRange = IPv6CidrRange.fromCidr("ff00::/8");
 
     /**
      * A convenience method for creating an {@link IPv6} by providing the decimal value of the IP number in BigInt
@@ -813,6 +865,46 @@ export class IPv6 extends AbstractIPNum {
      */
     public isDocumentation(): boolean {
         return IPv6.DOCUMENTATION_RANGE.contains(this);
+    }
+
+    /**
+     * Checks if this IPv6 address is a multicast address.
+     *
+     * Multicast IPv6 address range:
+     * - ff00::/8 (ff00:: to ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff)
+     *
+     * @see https://datatracker.ietf.org/doc/html/rfc4291
+     * @returns {boolean} true if this IPv6 address is multicast, false otherwise
+     */
+    public isMulticast(): boolean {
+        return IPv6.MULTICAST_RANGE.contains(this);
+    }
+
+    /**
+     * Checks if this IPv6 multicast address has an embedded Rendezvous Point (RP).
+     * 
+     * For an embedded RP to be present, the R, P, and T flags must all be set to 1.
+     * The R flag (bit 9) indicates RP embedded, P flag (bit 10) indicates prefix-based,
+     * and T flag (bit 11) indicates transient address.
+     * 
+     * @see https://datatracker.ietf.org/doc/html/rfc3956
+     * @returns {boolean} true if embedded RP is present (R, P, T flags all set), false otherwise
+     * @throws {Error} if this is not a multicast address
+     */
+    public hasEmbeddedRP(): boolean {
+        if (!this.isMulticast()) {
+            throw new Error("Embedded RP can only be checked for multicast addresses");
+        }
+        
+        // Extract second octet (bits 8-15, 0-indexed)
+        // Shift right by 112 bits to get bits 8-15, then mask to get second octet
+        const secondOctet = Number((this.value >> 112n) & 0xFFn);
+        
+        // Check R flag (bit 1 of second octet = 0x40)
+        // Check P flag (bit 2 of second octet = 0x20)
+        // Check T flag (bit 3 of second octet = 0x10)
+        // All three flags must be set: (R & P & T) = 0x70
+        return (secondOctet & 0x70) === 0x70;
     }
 
     private constructFromBigIntValue(ipv6Number: bigint): [bigint, Array<Hexadecatet>]  {
