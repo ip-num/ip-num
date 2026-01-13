@@ -11,6 +11,7 @@ import {expandIPv6Number, collapseIPv6Number} from "./IPv6Utils";
 import {hexadectetNotationToBinaryString} from "./HexadecimalUtils";
 import {IPv4CidrRange} from "./IPRange";
 import {IPv6CidrRange} from "./IPRange";
+import {IPv6AddressKind} from "./IPv6AddressKind";
 
 
 /**
@@ -699,6 +700,35 @@ export class IPv6 extends AbstractIPNum {
     private static readonly MULTICAST_RANGE: IPv6CidrRange = IPv6CidrRange.fromCidr("ff00::/8");
 
     /**
+     * RFC 4291 unspecified address range (::/128). This range is constant and reused for performance.
+     *
+     * @see https://datatracker.ietf.org/doc/html/rfc4291
+     */
+    private static readonly UNSPECIFIED_RANGE: IPv6CidrRange = IPv6CidrRange.fromCidr("::/128");
+
+    /**
+     * RFC 4291 loopback address range (::1/128). This range is constant and reused for performance.
+     *
+     * @see https://datatracker.ietf.org/doc/html/rfc4291
+     */
+    private static readonly LOOPBACK_RANGE: IPv6CidrRange = IPv6CidrRange.fromCidr("::1/128");
+
+    /**
+     * RFC 4291 link-local address range (fe80::/10). This range is constant and reused for performance.
+     *
+     * @see https://datatracker.ietf.org/doc/html/rfc4291
+     */
+    private static readonly LINK_LOCAL_RANGE: IPv6CidrRange = IPv6CidrRange.fromCidr("fe80::/10");
+
+
+    /**
+     * RFC 6666 discard-only address range (100::/64). This range is constant and reused for performance.
+     *
+     * @see https://datatracker.ietf.org/doc/html/rfc6666
+     */
+    private static readonly DISCARD_ONLY_RANGE: IPv6CidrRange = IPv6CidrRange.fromCidr("100::/64");
+
+    /**
      * A convenience method for creating an {@link IPv6} by providing the decimal value of the IP number in BigInt
      *
      * @param {bigint} bigIntValue the decimal value of the IP number in BigInt
@@ -905,6 +935,166 @@ export class IPv6 extends AbstractIPNum {
         // Check T flag (bit 3 of second octet = 0x10)
         // All three flags must be set: (R & P & T) = 0x70
         return (secondOctet & 0x70) === 0x70;
+    }
+
+    /**
+     * Checks if this IPv6 address is an unspecified address according to RFC 4291.
+     *
+     * Unspecified IPv6 address:
+     * - ::/128 (all zeros)
+     *
+     * @see https://datatracker.ietf.org/doc/html/rfc4291
+     * @returns {boolean} true if this IPv6 address is unspecified, false otherwise
+     */
+    public isUnspecified(): boolean {
+        return this.value === 0n;
+    }
+
+    /**
+     * Checks if this IPv6 address is a loopback address according to RFC 4291.
+     *
+     * Loopback IPv6 address:
+     * - ::1/128
+     *
+     * @see https://datatracker.ietf.org/doc/html/rfc4291
+     * @returns {boolean} true if this IPv6 address is loopback, false otherwise
+     */
+    public isLoopback(): boolean {
+        return this.value === 1n;
+    }
+
+    /**
+     * Checks if this IPv6 address is a link-local address according to RFC 4291.
+     *
+     * Link-local IPv6 address range:
+     * - fe80::/10 (fe80:: to febf:ffff:ffff:ffff:ffff:ffff:ffff:ffff)
+     *
+     * @see https://datatracker.ietf.org/doc/html/rfc4291
+     * @returns {boolean} true if this IPv6 address is link-local, false otherwise
+     */
+    public isLinkLocal(): boolean {
+        return IPv6.LINK_LOCAL_RANGE.contains(this);
+    }
+
+    /**
+     * Checks if this IPv6 address is a global unicast address according to RFC 4291.
+     *
+     * According to RFC 4291, global unicast addresses are defined as "everything else" -
+     * any address that does not match the other specific address types (Unspecified,
+     * Loopback, Multicast, Link-Local, IPv4-Mapped, Discard-Only, Documentation, or Private).
+     *
+     * @see https://datatracker.ietf.org/doc/html/rfc4291
+     * @returns {boolean} true if this IPv6 address is global unicast, false otherwise
+     */
+    public isGlobalUnicast(): boolean {
+        // Global Unicast is "everything else" - not any of the other specific types
+        return !this.isUnspecified() &&
+               !this.isLoopback() &&
+               !this.isMulticast() &&
+               !this.isLinkLocal() &&
+               !this.isIPv4Mapped() &&
+               !this.isDiscardOnly() &&
+               !this.isDocumentation() &&
+               !this.isPrivate();
+    }
+
+    /**
+     * Checks if this IPv6 address is an IPv4-mapped IPv6 address according to RFC 4291.
+     *
+     * IPv4-mapped IPv6 addresses have a specific format:
+     * - First 80 bits: all zeros
+     * - Next 16 bits: 0xffff
+     * - Last 32 bits: IPv4 address
+     *
+     * This corresponds to the format ::ffff:x.x.x.x where x.x.x.x is an IPv4 address.
+     *
+     * @see https://datatracker.ietf.org/doc/html/rfc4291
+     * @returns {boolean} true if this IPv6 address is IPv4-mapped, false otherwise
+     */
+    public isIPv4Mapped(): boolean {
+        // Check if first 5 hexadecatets (80 bits) are all zeros
+        // and 6th hexadecatet (16 bits) is ffff
+        if (this.hexadecatet.length !== 8) {
+            return false;
+        }
+        
+        // First 5 hexadecatets must be 0
+        for (let i = 0; i < 5; i++) {
+            if (this.hexadecatet[i].getValue() !== 0) {
+                return false;
+            }
+        }
+        
+        // 6th hexadecatet must be ffff (65535)
+        return this.hexadecatet[5].getValue() === 0xffff;
+    }
+
+    /**
+     * Checks if this IPv6 address is a discard-only address according to RFC 6666.
+     *
+     * Discard-only IPv6 address range:
+     * - 100::/64 (100:: to 100::ffff:ffff:ffff:ffff)
+     *
+     * @see https://datatracker.ietf.org/doc/html/rfc6666
+     * @returns {boolean} true if this IPv6 address is discard-only, false otherwise
+     */
+    public isDiscardOnly(): boolean {
+        return IPv6.DISCARD_ONLY_RANGE.contains(this);
+    }
+
+    /**
+     * Gets the kind/category of this IPv6 address.
+     *
+     * Returns the most specific kind that matches this address. The check order ensures
+     * correct classification when address ranges overlap:
+     * 1. Unspecified (::)
+     * 2. Loopback (::1)
+     * 3. Multicast (ff00::/8)
+     * 4. Documentation (2001:db8::/32)
+     * 5. IPv4-Mapped (::ffff:0:0/96)
+     * 6. Discard-Only (100::/64)
+     * 7. Link-Local (fe80::/10)
+     * 8. Unique Local Address/Private (fd00::/8)
+     * 9. Global Unicast (everything else, per RFC 4291)
+     * 10. Unknown (fallback for reserved/unassigned ranges)
+     *
+     * According to RFC 4291, Global Unicast addresses are defined as "everything else" -
+     * any address that does not match the other specific address types.
+     *
+     * @see https://datatracker.ietf.org/doc/html/rfc4291
+     * @returns {IPv6AddressKind} the kind of this IPv6 address
+     */
+    public getKind(): IPv6AddressKind {
+        // Check in order of specificity (more specific first)
+        if (this.isUnspecified()) {
+            return IPv6AddressKind.UNSPECIFIED;
+        }
+        if (this.isLoopback()) {
+            return IPv6AddressKind.LOOPBACK;
+        }
+        if (this.isMulticast()) {
+            return IPv6AddressKind.MULTICAST;
+        }
+        if (this.isDocumentation()) {
+            return IPv6AddressKind.DOCUMENTATION;
+        }
+        if (this.isIPv4Mapped()) {
+            return IPv6AddressKind.IPV4_MAPPED;
+        }
+        if (this.isDiscardOnly()) {
+            return IPv6AddressKind.DISCARD_ONLY;
+        }
+        if (this.isLinkLocal()) {
+            return IPv6AddressKind.LINK_LOCAL;
+        }
+        if (this.isPrivate()) {
+            return IPv6AddressKind.UNIQUE_LOCAL;
+        }
+        if (this.isGlobalUnicast()) {
+            return IPv6AddressKind.GLOBAL_UNICAST;
+        }
+        
+        return IPv6AddressKind.UNKNOWN;
     }
 
     private constructFromBigIntValue(ipv6Number: bigint): [bigint, Array<Hexadecatet>]  {
