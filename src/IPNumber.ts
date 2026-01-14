@@ -43,6 +43,13 @@ export abstract class AbstractIPNum {
     abstract isMulticast(): boolean;
 
     /**
+     * Checks if this IP address is a private address.
+     * 
+     * @returns {boolean} true if this IP address is private, false otherwise
+     */
+    abstract isPrivate(): boolean;
+
+    /**
      * Gets the numeric value of an IP number as {@link BigInt}
      *
      * @returns bigInt the numeric value of an IP number.
@@ -613,6 +620,17 @@ export class Asn extends AbstractIPNum {
      * @returns {boolean} always returns false for ASN
      */
     public isMulticast(): boolean {
+        return false;
+    }
+
+    /**
+     * Checks if this ASN is a private address.
+     * 
+     * ASNs are not IP addresses, so this always returns false.
+     * 
+     * @returns {boolean} always returns false for ASN
+     */
+    public isPrivate(): boolean {
         return false;
     }
 
