@@ -209,6 +209,28 @@ export class IPv4 extends AbstractIPNum {
         IPv4CidrRange.fromCidr("224.0.0.0/4");
 
     /**
+     * RFC 5735 loopback address range. This range is constant and reused for performance.
+     *
+     * Loopback IPv4 address range:
+     * - 127.0.0.0/8 (127.0.0.0 to 127.255.255.255)
+     *
+     * @see https://datatracker.ietf.org/doc/html/rfc5735
+     */
+    private static readonly LOOPBACK_RANGE: IPv4CidrRange = 
+        IPv4CidrRange.fromCidr("127.0.0.0/8");
+
+    /**
+     * RFC 6890 link-local address range. This range is constant and reused for performance.
+     *
+     * Link-local IPv4 address range:
+     * - 169.254.0.0/16 (169.254.0.0 to 169.254.255.255)
+     *
+     * @see https://datatracker.ietf.org/doc/html/rfc6890
+     */
+    private static readonly LINK_LOCAL_RANGE: IPv4CidrRange = 
+        IPv4CidrRange.fromCidr("169.254.0.0/16");
+
+    /**
      * The limited broadcast address (255.255.255.255). This is constant and reused for performance.
      */
     private static readonly LIMITED_BROADCAST: IPv4 = IPv4.fromDecimalDottedString("255.255.255.255");
@@ -373,6 +395,85 @@ export class IPv4 extends AbstractIPNum {
             return this.isEquals(subnet.getLast());
         }
         return this.isEquals(IPv4.LIMITED_BROADCAST);
+    }
+
+    /**
+     * Checks if this IPv4 address is a loopback address according to RFC 5735.
+     *
+     * Loopback IPv4 address range:
+     * - 127.0.0.0/8 (127.0.0.0 to 127.255.255.255)
+     *
+     * @see https://datatracker.ietf.org/doc/html/rfc5735
+     * @returns {boolean} true if this IPv4 address is loopback, false otherwise
+     */
+    public isLoopback(): boolean {
+        return IPv4.LOOPBACK_RANGE.contains(this);
+    }
+
+    /**
+     * Checks if this IPv4 address is an unspecified address according to RFC 6890.
+     *
+     * Unspecified IPv4 address:
+     * - 0.0.0.0/32 (all zeros)
+     *
+     * @see https://datatracker.ietf.org/doc/html/rfc6890
+     * @returns {boolean} true if this IPv4 address is unspecified, false otherwise
+     */
+    public isUnspecified(): boolean {
+        return this.value === 0n;
+    }
+
+    /**
+     * Checks if this IPv4 address is a link-local address according to RFC 6890.
+     *
+     * Link-local IPv4 address range:
+     * - 169.254.0.0/16 (169.254.0.0 to 169.254.255.255)
+     *
+     * @see https://datatracker.ietf.org/doc/html/rfc6890
+     * @returns {boolean} true if this IPv4 address is link-local, false otherwise
+     */
+    public isLinkLocal(): boolean {
+        return IPv4.LINK_LOCAL_RANGE.contains(this);
+    }
+
+    /**
+     * Checks if this IPv4 address is a global unicast (publicly routable) address according to RFC 6890.
+     *
+     * According to RFC 6890, global unicast addresses are defined as "everything else" -
+     * any address that does not match the other specific address types (Unspecified,
+     * Loopback, Private, Link-Local, Documentation, Multicast, Reserved, or Broadcast).
+     *
+     * @see https://datatracker.ietf.org/doc/html/rfc6890
+     * @returns {boolean} true if this IPv4 address is global unicast, false otherwise
+     */
+    public isGlobalUnicast(): boolean {
+        // Global Unicast is "everything else" - not any of the other specific types
+        return !this.isUnspecified() &&
+               !this.isLoopback() &&
+               !this.isPrivate() &&
+               !this.isLinkLocal() &&
+               !this.isDocumentation() &&
+               !this.isMulticast() &&
+               !this.isReserved() &&
+               !this.isBroadcast();
+    }
+
+    /**
+     * Checks if this IPv4 address is in a reserved range according to RFC 6890.
+     *
+     * Reserved IPv4 address range:
+     * - 240.0.0.0/4 (240.0.0.0 to 255.255.255.254)
+     *
+     * Note: 255.255.255.255 is the limited broadcast address, not reserved.
+     *
+     * @see https://datatracker.ietf.org/doc/html/rfc6890
+     * @returns {boolean} true if this IPv4 address is reserved, false otherwise
+     */
+    public isReserved(): boolean {
+        // Reserved range is 240.0.0.0/4, but exclude 255.255.255.255 (broadcast)
+        const reservedStart = IPv4.fromDecimalDottedString("240.0.0.0").value;
+        const reservedEnd = IPv4.fromDecimalDottedString("255.255.255.254").value;
+        return this.value >= reservedStart && this.value <= reservedEnd;
     }
 
     /**

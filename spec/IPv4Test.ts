@@ -423,6 +423,242 @@ describe('IPv4: ', () => {
         });
     });
 
+    describe('isLoopback() - RFC 5735 loopback address detection', () => {
+        describe('127.0.0.0/8 range', () => {
+            it('should return true for 127.0.0.0', () => {
+                expect(new IPv4("127.0.0.0").isLoopback()).toBe(true);
+            });
+
+            it('should return true for 127.255.255.255', () => {
+                expect(new IPv4("127.255.255.255").isLoopback()).toBe(true);
+            });
+
+            it('should return true for 127.0.0.1', () => {
+                expect(new IPv4("127.0.0.1").isLoopback()).toBe(true);
+            });
+
+            it('should return true for 127.128.64.32', () => {
+                expect(new IPv4("127.128.64.32").isLoopback()).toBe(true);
+            });
+
+            it('should return true for 127.1.1.1', () => {
+                expect(new IPv4("127.1.1.1").isLoopback()).toBe(true);
+            });
+
+            it('should return true for 127.255.0.0', () => {
+                expect(new IPv4("127.255.0.0").isLoopback()).toBe(true);
+            });
+        });
+
+        describe('non-loopback IPv4 addresses', () => {
+            it('should return false for 126.255.255.255 (just before loopback range)', () => {
+                expect(new IPv4("126.255.255.255").isLoopback()).toBe(false);
+            });
+
+            it('should return false for 128.0.0.0 (just after loopback range)', () => {
+                expect(new IPv4("128.0.0.0").isLoopback()).toBe(false);
+            });
+
+            it('should return false for 8.8.8.8', () => {
+                expect(new IPv4("8.8.8.8").isLoopback()).toBe(false);
+            });
+
+            it('should return false for 192.168.1.1 (private)', () => {
+                expect(new IPv4("192.168.1.1").isLoopback()).toBe(false);
+            });
+
+            it('should return false for 224.0.0.1 (multicast)', () => {
+                expect(new IPv4("224.0.0.1").isLoopback()).toBe(false);
+            });
+
+            it('should return false for 0.0.0.0', () => {
+                expect(new IPv4("0.0.0.0").isLoopback()).toBe(false);
+            });
+        });
+
+        describe('boundary cases', () => {
+            it('should return false for 126.255.255.255', () => {
+                expect(new IPv4("126.255.255.255").isLoopback()).toBe(false);
+            });
+
+            it('should return true for 127.0.0.0', () => {
+                expect(new IPv4("127.0.0.0").isLoopback()).toBe(true);
+            });
+
+            it('should return true for 127.255.255.255', () => {
+                expect(new IPv4("127.255.255.255").isLoopback()).toBe(true);
+            });
+
+            it('should return false for 128.0.0.0', () => {
+                expect(new IPv4("128.0.0.0").isLoopback()).toBe(false);
+            });
+        });
+    });
+
+    describe('isUnspecified() - RFC 6890 unspecified address detection', () => {
+        describe('unspecified address', () => {
+            it('should return true for 0.0.0.0', () => {
+                expect(new IPv4("0.0.0.0").isUnspecified()).toBe(true);
+            });
+        });
+
+        describe('non-unspecified IPv4 addresses', () => {
+            it('should return false for 0.0.0.1', () => {
+                expect(new IPv4("0.0.0.1").isUnspecified()).toBe(false);
+            });
+
+            it('should return false for 127.0.0.1 (loopback)', () => {
+                expect(new IPv4("127.0.0.1").isUnspecified()).toBe(false);
+            });
+
+            it('should return false for 192.168.1.1 (private)', () => {
+                expect(new IPv4("192.168.1.1").isUnspecified()).toBe(false);
+            });
+
+            it('should return false for 8.8.8.8', () => {
+                expect(new IPv4("8.8.8.8").isUnspecified()).toBe(false);
+            });
+
+            it('should return false for 255.255.255.255 (broadcast)', () => {
+                expect(new IPv4("255.255.255.255").isUnspecified()).toBe(false);
+            });
+
+            it('should return false for 224.0.0.1 (multicast)', () => {
+                expect(new IPv4("224.0.0.1").isUnspecified()).toBe(false);
+            });
+        });
+    });
+
+    describe('isLinkLocal() - RFC 6890 link-local address detection', () => {
+        describe('169.254.0.0/16 range', () => {
+            it('should return true for 169.254.0.0', () => {
+                expect(new IPv4("169.254.0.0").isLinkLocal()).toBe(true);
+            });
+
+            it('should return true for 169.254.255.255', () => {
+                expect(new IPv4("169.254.255.255").isLinkLocal()).toBe(true);
+            });
+
+            it('should return true for 169.254.0.1', () => {
+                expect(new IPv4("169.254.0.1").isLinkLocal()).toBe(true);
+            });
+
+            it('should return true for 169.254.128.64', () => {
+                expect(new IPv4("169.254.128.64").isLinkLocal()).toBe(true);
+            });
+
+            it('should return true for 169.254.1.1', () => {
+                expect(new IPv4("169.254.1.1").isLinkLocal()).toBe(true);
+            });
+        });
+
+        describe('non-link-local IPv4 addresses', () => {
+            it('should return false for 169.253.255.255 (just before link-local range)', () => {
+                expect(new IPv4("169.253.255.255").isLinkLocal()).toBe(false);
+            });
+
+            it('should return false for 169.255.0.0 (just after link-local range)', () => {
+                expect(new IPv4("169.255.0.0").isLinkLocal()).toBe(false);
+            });
+
+            it('should return false for 8.8.8.8', () => {
+                expect(new IPv4("8.8.8.8").isLinkLocal()).toBe(false);
+            });
+
+            it('should return false for 192.168.1.1 (private)', () => {
+                expect(new IPv4("192.168.1.1").isLinkLocal()).toBe(false);
+            });
+
+            it('should return false for 127.0.0.1 (loopback)', () => {
+                expect(new IPv4("127.0.0.1").isLinkLocal()).toBe(false);
+            });
+
+            it('should return false for 224.0.0.1 (multicast)', () => {
+                expect(new IPv4("224.0.0.1").isLinkLocal()).toBe(false);
+            });
+        });
+
+        describe('boundary cases', () => {
+            it('should return false for 169.253.255.255', () => {
+                expect(new IPv4("169.253.255.255").isLinkLocal()).toBe(false);
+            });
+
+            it('should return true for 169.254.0.0', () => {
+                expect(new IPv4("169.254.0.0").isLinkLocal()).toBe(true);
+            });
+
+            it('should return true for 169.254.255.255', () => {
+                expect(new IPv4("169.254.255.255").isLinkLocal()).toBe(true);
+            });
+
+            it('should return false for 169.255.0.0', () => {
+                expect(new IPv4("169.255.0.0").isLinkLocal()).toBe(false);
+            });
+        });
+    });
+
+    describe('isGlobalUnicast() - RFC 6890 global unicast address detection', () => {
+        describe('global unicast addresses', () => {
+            it('should return true for 8.8.8.8', () => {
+                expect(new IPv4("8.8.8.8").isGlobalUnicast()).toBe(true);
+            });
+
+            it('should return true for 1.1.1.1', () => {
+                expect(new IPv4("1.1.1.1").isGlobalUnicast()).toBe(true);
+            });
+
+            it('should return true for 74.125.43.99', () => {
+                expect(new IPv4("74.125.43.99").isGlobalUnicast()).toBe(true);
+            });
+
+            it('should return true for 172.32.0.1 (not in private range)', () => {
+                expect(new IPv4("172.32.0.1").isGlobalUnicast()).toBe(true);
+            });
+
+            it('should return true for 192.169.0.1 (not in private range)', () => {
+                expect(new IPv4("192.169.0.1").isGlobalUnicast()).toBe(true);
+            });
+        });
+
+        describe('non-global unicast IPv4 addresses', () => {
+            it('should return false for 0.0.0.0 (unspecified)', () => {
+                expect(new IPv4("0.0.0.0").isGlobalUnicast()).toBe(false);
+            });
+
+            it('should return false for 127.0.0.1 (loopback)', () => {
+                expect(new IPv4("127.0.0.1").isGlobalUnicast()).toBe(false);
+            });
+
+            it('should return false for 10.0.0.1 (private)', () => {
+                expect(new IPv4("10.0.0.1").isGlobalUnicast()).toBe(false);
+            });
+
+            it('should return false for 192.168.1.1 (private)', () => {
+                expect(new IPv4("192.168.1.1").isGlobalUnicast()).toBe(false);
+            });
+
+            it('should return false for 169.254.0.1 (link-local)', () => {
+                expect(new IPv4("169.254.0.1").isGlobalUnicast()).toBe(false);
+            });
+
+            it('should return false for 192.0.2.1 (documentation)', () => {
+                expect(new IPv4("192.0.2.1").isGlobalUnicast()).toBe(false);
+            });
+
+            it('should return false for 224.0.0.1 (multicast)', () => {
+                expect(new IPv4("224.0.0.1").isGlobalUnicast()).toBe(false);
+            });
+
+            it('should return false for 240.0.0.1 (reserved)', () => {
+                expect(new IPv4("240.0.0.1").isGlobalUnicast()).toBe(false);
+            });
+
+            it('should return false for 255.255.255.255 (broadcast)', () => {
+                expect(new IPv4("255.255.255.255").isGlobalUnicast()).toBe(false);
+            });
+        });
+    });
+
     describe('isBroadcast() - broadcast address detection', () => {
         describe('limited broadcast (255.255.255.255)', () => {
             it('should return true for 255.255.255.255', () => {
