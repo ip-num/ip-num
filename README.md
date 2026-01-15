@@ -8,8 +8,6 @@ ip-num
 
 `ip-num`'s source can be found on [GitHub](https://github.com/ip-num/ip-num)
 
-You can have a play at `ip-num`'s API via the Runkit at [http://bit.ly/ipnum-repl](http://bit.ly/ipnum-repl)
-
 Installation
 ----------------
 
@@ -17,8 +15,6 @@ Installation
 If you want to use `ip-num` from within a Node.js environment, you can install it via [npm](https://npmjs.org/).
 
 ```npm install ip-num```
-
-check the `.travis.yml` file for the versions of Node.js `ip-num` is being built and tested with.
 
 ### Browser
 If you are using a browser, you would have to use a module bundler like [browserify](http://browserify.org/), 
