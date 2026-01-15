@@ -220,6 +220,17 @@ export class IPv4 extends AbstractIPNum {
         IPv4CidrRange.fromCidr("127.0.0.0/8");
 
     /**
+     * RFC 6890 link-local address range. This range is constant and reused for performance.
+     *
+     * Link-local IPv4 address range:
+     * - 169.254.0.0/16 (169.254.0.0 to 169.254.255.255)
+     *
+     * @see https://datatracker.ietf.org/doc/html/rfc6890
+     */
+    private static readonly LINK_LOCAL_RANGE: IPv4CidrRange = 
+        IPv4CidrRange.fromCidr("169.254.0.0/16");
+
+    /**
      * The limited broadcast address (255.255.255.255). This is constant and reused for performance.
      */
     private static readonly LIMITED_BROADCAST: IPv4 = IPv4.fromDecimalDottedString("255.255.255.255");
@@ -410,6 +421,19 @@ export class IPv4 extends AbstractIPNum {
      */
     public isUnspecified(): boolean {
         return this.value === 0n;
+    }
+
+    /**
+     * Checks if this IPv4 address is a link-local address according to RFC 6890.
+     *
+     * Link-local IPv4 address range:
+     * - 169.254.0.0/16 (169.254.0.0 to 169.254.255.255)
+     *
+     * @see https://datatracker.ietf.org/doc/html/rfc6890
+     * @returns {boolean} true if this IPv4 address is link-local, false otherwise
+     */
+    public isLinkLocal(): boolean {
+        return IPv4.LINK_LOCAL_RANGE.contains(this);
     }
 
     /**

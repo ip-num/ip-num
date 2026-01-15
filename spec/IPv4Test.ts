@@ -529,6 +529,74 @@ describe('IPv4: ', () => {
         });
     });
 
+    describe('isLinkLocal() - RFC 6890 link-local address detection', () => {
+        describe('169.254.0.0/16 range', () => {
+            it('should return true for 169.254.0.0', () => {
+                expect(new IPv4("169.254.0.0").isLinkLocal()).toBe(true);
+            });
+
+            it('should return true for 169.254.255.255', () => {
+                expect(new IPv4("169.254.255.255").isLinkLocal()).toBe(true);
+            });
+
+            it('should return true for 169.254.0.1', () => {
+                expect(new IPv4("169.254.0.1").isLinkLocal()).toBe(true);
+            });
+
+            it('should return true for 169.254.128.64', () => {
+                expect(new IPv4("169.254.128.64").isLinkLocal()).toBe(true);
+            });
+
+            it('should return true for 169.254.1.1', () => {
+                expect(new IPv4("169.254.1.1").isLinkLocal()).toBe(true);
+            });
+        });
+
+        describe('non-link-local IPv4 addresses', () => {
+            it('should return false for 169.253.255.255 (just before link-local range)', () => {
+                expect(new IPv4("169.253.255.255").isLinkLocal()).toBe(false);
+            });
+
+            it('should return false for 169.255.0.0 (just after link-local range)', () => {
+                expect(new IPv4("169.255.0.0").isLinkLocal()).toBe(false);
+            });
+
+            it('should return false for 8.8.8.8', () => {
+                expect(new IPv4("8.8.8.8").isLinkLocal()).toBe(false);
+            });
+
+            it('should return false for 192.168.1.1 (private)', () => {
+                expect(new IPv4("192.168.1.1").isLinkLocal()).toBe(false);
+            });
+
+            it('should return false for 127.0.0.1 (loopback)', () => {
+                expect(new IPv4("127.0.0.1").isLinkLocal()).toBe(false);
+            });
+
+            it('should return false for 224.0.0.1 (multicast)', () => {
+                expect(new IPv4("224.0.0.1").isLinkLocal()).toBe(false);
+            });
+        });
+
+        describe('boundary cases', () => {
+            it('should return false for 169.253.255.255', () => {
+                expect(new IPv4("169.253.255.255").isLinkLocal()).toBe(false);
+            });
+
+            it('should return true for 169.254.0.0', () => {
+                expect(new IPv4("169.254.0.0").isLinkLocal()).toBe(true);
+            });
+
+            it('should return true for 169.254.255.255', () => {
+                expect(new IPv4("169.254.255.255").isLinkLocal()).toBe(true);
+            });
+
+            it('should return false for 169.255.0.0', () => {
+                expect(new IPv4("169.255.0.0").isLinkLocal()).toBe(false);
+            });
+        });
+    });
+
     describe('isBroadcast() - broadcast address detection', () => {
         describe('limited broadcast (255.255.255.255)', () => {
             it('should return true for 255.255.255.255', () => {
