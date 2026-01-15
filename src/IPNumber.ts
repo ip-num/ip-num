@@ -400,6 +400,19 @@ export class IPv4 extends AbstractIPNum {
     }
 
     /**
+     * Checks if this IPv4 address is an unspecified address according to RFC 6890.
+     *
+     * Unspecified IPv4 address:
+     * - 0.0.0.0/32 (all zeros)
+     *
+     * @see https://datatracker.ietf.org/doc/html/rfc6890
+     * @returns {boolean} true if this IPv4 address is unspecified, false otherwise
+     */
+    public isUnspecified(): boolean {
+        return this.value === 0n;
+    }
+
+    /**
      * Returns this IPv4 number as a IPv4-Mapped IPv6 Address
      *
      * The IPv4-Mapped IPv6 Address allows an IPv4 number to be embedded within an IPv6 number
