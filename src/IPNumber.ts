@@ -209,6 +209,17 @@ export class IPv4 extends AbstractIPNum {
         IPv4CidrRange.fromCidr("224.0.0.0/4");
 
     /**
+     * RFC 5735 loopback address range. This range is constant and reused for performance.
+     *
+     * Loopback IPv4 address range:
+     * - 127.0.0.0/8 (127.0.0.0 to 127.255.255.255)
+     *
+     * @see https://datatracker.ietf.org/doc/html/rfc5735
+     */
+    private static readonly LOOPBACK_RANGE: IPv4CidrRange = 
+        IPv4CidrRange.fromCidr("127.0.0.0/8");
+
+    /**
      * The limited broadcast address (255.255.255.255). This is constant and reused for performance.
      */
     private static readonly LIMITED_BROADCAST: IPv4 = IPv4.fromDecimalDottedString("255.255.255.255");
@@ -373,6 +384,19 @@ export class IPv4 extends AbstractIPNum {
             return this.isEquals(subnet.getLast());
         }
         return this.isEquals(IPv4.LIMITED_BROADCAST);
+    }
+
+    /**
+     * Checks if this IPv4 address is a loopback address according to RFC 5735.
+     *
+     * Loopback IPv4 address range:
+     * - 127.0.0.0/8 (127.0.0.0 to 127.255.255.255)
+     *
+     * @see https://datatracker.ietf.org/doc/html/rfc5735
+     * @returns {boolean} true if this IPv4 address is loopback, false otherwise
+     */
+    public isLoopback(): boolean {
+        return IPv4.LOOPBACK_RANGE.contains(this);
     }
 
     /**
