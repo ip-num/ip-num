@@ -54,6 +54,10 @@ describe('ASN', () => {
     it('should correctly parse to asdotplus', () => {
         expect(Asn.fromNumber(65546).toASDotPlus()).toEqual("1.10");
         expect(Asn.fromNumber(65526).toASDotPlus()).toEqual("0.65526");
+        // 16-bit max: high = floor(65535 / 65536) = 0, low = 65535
+        expect(Asn.fromNumber(65535).toASDotPlus()).toEqual("0.65535");
+        // 32-bit max: high = floor(4294967295 / 65536) = 65535, low = 65535
+        expect(Asn.fromNumber(4294967295).toASDotPlus()).toEqual("65535.65535");
     });
     it('should correctly parse to asdot', () => {
         // when value is less than 65536
