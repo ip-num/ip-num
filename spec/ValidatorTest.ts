@@ -130,6 +130,13 @@ describe('Validator: ', () => {
       it('validate invalid ipv6 cidr notation', () => {
         expect(Validator.isValidIPv6CidrRange("2001:8a2e:370Q:733464")[0]).toBe(false)
       });
+
+      it('rejects an IPv6 address with no prefix instead of throwing', () => {
+        expect(() => { Validator.isValidIPv6CidrNotation("2001:db8::"); }).not.toThrow()
+        expect(Validator.isValidIPv6CidrNotation("2001:db8::")[0]).toBe(false)
+        expect(() => { Validator.isValidIPv6CidrRange("2001:db8::"); }).not.toThrow()
+        expect(Validator.isValidIPv6CidrRange("2001:db8::")[0]).toBe(false)
+      });
     })
 
     describe('isValidIPv6Mask', () => {

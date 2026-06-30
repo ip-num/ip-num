@@ -377,6 +377,11 @@ export class Validator {
     // TODO change to be like isValidIPv4CidrNotation where validation is done on the component of the cidr notation
     // instead of a single regex check
     static isValidIPv6CidrNotation(ipv6RangeAsCidrString: string): [boolean, string[]] {
+        let cidrComponents = ipv6RangeAsCidrString.split("/");
+        if(cidrComponents.length !== 2 || (cidrComponents[0].length === 0 || cidrComponents[1].length === 0)) {
+            return [false, [Validator.invalidIPv6CidrNotationString]];
+        }
+
         let isValid = Validator.IPV6_RANGE_PATTERN.test(ipv6RangeAsCidrString);
         return isValid ? [isValid, []]: [isValid, [Validator.invalidIPv6CidrNotationString]];
     }

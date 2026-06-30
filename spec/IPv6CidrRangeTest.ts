@@ -83,6 +83,12 @@ describe('IPv6CidrRange: ', () => {
         }).toThrowError(Error, Validator.invalidIPv6CidrNotationString);
     });
 
+    it('should throw a descriptive error when fromCidr is given an address with no prefix', function() {
+        expect(() => {
+            IPv6CidrRange.fromCidr("2001:db8::");
+        }).toThrowError(Error, Validator.invalidIPv6CidrNotationString);
+    });
+
     it('should throw an exception when asked to take a value bigger than the size of range', function() {
         let ipv6CidrRange = new IPv6CidrRange(new IPv6("2001:db8::"), new IPv6Prefix(46n));
         let errMessage = Validator.takeOutOfRangeSizeMessage
