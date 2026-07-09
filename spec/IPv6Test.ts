@@ -742,6 +742,20 @@ describe('IPv6: ', () => {
                 expect(new IPv6("0:0:0:0:0:1:0:0").isIPv4Mapped()).toBe(false);
             });
         });
+
+        describe('constructed from bigint', () => {
+            it('should return true for ::ffff:0.0.0.1 built via fromBigInt', () => {
+                expect(IPv6.fromBigInt(BigInt("0xffff00000001")).isIPv4Mapped()).toBe(true);
+            });
+
+            it('should return true for ::ffff:192.168.1.1 built via fromBigInt', () => {
+                expect(IPv6.fromBigInt(BigInt("0xffffc0a80101")).isIPv4Mapped()).toBe(true);
+            });
+
+            it('should return false for ::1 built via fromBigInt', () => {
+                expect(IPv6.fromBigInt(BigInt("1")).isIPv4Mapped()).toBe(false);
+            });
+        });
     });
 
     describe('isDiscardOnly() - RFC 6666 discard-only address detection', () => {
