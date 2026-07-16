@@ -1131,21 +1131,8 @@ export class IPv6 extends AbstractIPNum {
      * @returns {boolean} true if this IPv6 address is IPv4-mapped, false otherwise
      */
     public isIPv4Mapped(): boolean {
-        // Check if first 5 hexadecatets (80 bits) are all zeros
-        // and 6th hexadecatet (16 bits) is ffff
-        if (this.hexadecatet.length !== 8) {
-            return false;
-        }
-        
-        // First 5 hexadecatets must be 0
-        for (let i = 0; i < 5; i++) {
-            if (this.hexadecatet[i].getValue() !== 0) {
-                return false;
-            }
-        }
-        
-        // 6th hexadecatet must be ffff (65535)
-        return this.hexadecatet[5].getValue() === 0xffff;
+        // Top 96 bits must be 0x0000...0000ffff (80 zero bits followed by ffff)
+        return (this.value >> 32n) === 0xffffn;
     }
 
     /**
