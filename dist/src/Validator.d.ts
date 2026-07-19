@@ -2,6 +2,7 @@ import { IPNumType } from "./IPNumType";
 export declare class Validator {
     static IPV4_PATTERN: RegExp;
     static IPV6_PATTERN: RegExp;
+    static ZONE_INDEX_PATTERN: RegExp;
     static IPV4_RANGE_PATTERN: RegExp;
     static IPV6_RANGE_PATTERN: RegExp;
     static IPV4_CONTIGUOUS_MASK_BIT_PATTERN: RegExp;

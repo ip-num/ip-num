@@ -1,1 +1,1 @@
-/*! Version: 1.5.2. Released on: Sun, 08 Jun 2025 21:55:40 GMT */
+/*! Version: 1.6.0. Released on: Sun, 19 Jul 2026 08:26:58 GMT */

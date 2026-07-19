@@ -8,8 +8,18 @@ let extractPrefix = (ipv6String) => {
 };
 let expandIPv6Number = (ipv6String) => {
     let expandWithZero = (hexadecimalArray) => {
-        let paddedArray = hexadecimalArray.map((hexadecimal) => {
-            return (0, BinaryUtils_1.leftPadWithZeroBit)(hexadecimal, 4);
+        let paddedArray = [];
+        hexadecimalArray.forEach(hexadecimal => {
+            if (hexadecimal.includes('.')) {
+                const [v4part1, v4part2] = (0, BinaryUtils_1.dottedDecimalNotationToBinaryString)(hexadecimal)
+                    .match(/.{1,16}/g)
+                    .map(bin => (0, BinaryUtils_1.parseBinaryStringToBigInt)(bin).toString(16));
+                paddedArray.push((0, BinaryUtils_1.leftPadWithZeroBit)(v4part1, 4));
+                paddedArray.push((0, BinaryUtils_1.leftPadWithZeroBit)(v4part2, 4));
+            }
+            else {
+                paddedArray.push((0, BinaryUtils_1.leftPadWithZeroBit)(hexadecimal, 4));
+            }
         });
         return paddedArray.join(":");
     };
@@ -36,7 +46,8 @@ let expandIPv6Number = (ipv6String) => {
         let rightPortion = split[1];
         let leftPortionSplit = leftPortion.split(":").filter(hexadecimal => { return hexadecimal !== ""; });
         let rightPortionSplit = rightPortion.split(":").filter(hexadecimal => { return hexadecimal !== ""; });
-        let doublePortion = expandDoubleColon(8 - (leftPortionSplit.length + rightPortionSplit.length));
+        let extra = leftPortionSplit.concat(rightPortionSplit).filter(part => part.includes('.')).length;
+        let doublePortion = expandDoubleColon(8 - (leftPortionSplit.length + rightPortionSplit.length + extra));
         let leftString = expandWithZero(leftPortionSplit);
         if (leftString !== "") {
             leftString += ":";

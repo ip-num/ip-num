@@ -30,6 +30,7 @@ __exportStar(require("./IPNumber"), exports);
 __exportStar(require("./IPNumType"), exports);
 __exportStar(require("./IPPool"), exports);
 __exportStar(require("./IPRange"), exports);
+__exportStar(require("./IPv6AddressKind"), exports);
 __exportStar(require("./IPv6Utils"), exports);
 __exportStar(require("./Octet"), exports);
 __exportStar(require("./Prefix"), exports);

@@ -891,7 +891,7 @@ class IPv6CidrRange extends AbstractIPRange {
         if (this.hasNextRange()) {
             let sizeOfCurrentRange = this.getSize();
             let startOfNextRange = this.getFirst().getValue() + (sizeOfCurrentRange);
-            return new IPv6CidrRange(new IPNumber_1.IPv6(startOfNextRange), this.cidrPrefix);
+            return new IPv6CidrRange(new IPNumber_1.IPv6(startOfNextRange, this.ipv6.zoneId), this.cidrPrefix);
         }
         return;
     }
@@ -902,7 +902,7 @@ class IPv6CidrRange extends AbstractIPRange {
         if (this.hasPreviousRange()) {
             let sizeOfCurrentRange = this.getSize();
             let startOfPreviousRange = this.getFirst().getValue() - sizeOfCurrentRange;
-            return new IPv6CidrRange(new IPNumber_1.IPv6(startOfPreviousRange), this.cidrPrefix);
+            return new IPv6CidrRange(new IPNumber_1.IPv6(startOfPreviousRange, this.ipv6.zoneId), this.cidrPrefix);
         }
         return;
     }
