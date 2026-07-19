@@ -7,7 +7,7 @@
   "homepage": "https://ip-num.github.io/ip-num/",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ip-num/ip-num"
+    "url": "git+https://github.com/ip-num/ip-num.git"
   },
   "files": [
     "dist/src"
