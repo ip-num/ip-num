@@ -204,7 +204,7 @@ describe('IPv6: ', () => {
     });
 
     describe('isPrivate() - RFC 4193 private address detection', () => {
-        describe('fd00::/8 range (Unique Local Addresses)', () => {
+        describe('fc00::/7 range (Unique Local Addresses)', () => {
             it('should return true for fd00::', () => {
                 expect(new IPv6("fd00::").isPrivate()).toBe(true);
             });
@@ -249,20 +249,28 @@ describe('IPv6: ', () => {
         });
 
         describe('boundary cases', () => {
-            it('should return false for fcff:ffff:ffff:ffff:ffff:ffff:ffff:ffff (just before fd00::/8)', () => {
-                expect(new IPv6("fcff:ffff:ffff:ffff:ffff:ffff:ffff:ffff").isPrivate()).toBe(false);
+            it('should return true for fc00:: (start of fc00::/7)', () => {
+                expect(new IPv6("fc00::").isPrivate()).toBe(true);
             });
 
-            it('should return false for fe00:: (just after fd00::/8)', () => {
+            it('should return true for fc00::1', () => {
+                expect(new IPv6("fc00::1").isPrivate()).toBe(true);
+            });
+
+            it('should return true for fcff:ffff:ffff:ffff:ffff:ffff:ffff:ffff', () => {
+                expect(new IPv6("fcff:ffff:ffff:ffff:ffff:ffff:ffff:ffff").isPrivate()).toBe(true);
+            });
+
+            it('should return true for fdff:ffff:ffff:ffff:ffff:ffff:ffff:ffff (end of fc00::/7)', () => {
+                expect(new IPv6("fdff:ffff:ffff:ffff:ffff:ffff:ffff:ffff").isPrivate()).toBe(true);
+            });
+
+            it('should return false for fbff:ffff:ffff:ffff:ffff:ffff:ffff:ffff (just before fc00::/7)', () => {
+                expect(new IPv6("fbff:ffff:ffff:ffff:ffff:ffff:ffff:ffff").isPrivate()).toBe(false);
+            });
+
+            it('should return false for fe00:: (just after fc00::/7)', () => {
                 expect(new IPv6("fe00::").isPrivate()).toBe(false);
-            });
-
-            it('should return false for fc00:: (reserved range, not assigned)', () => {
-                expect(new IPv6("fc00::").isPrivate()).toBe(false);
-            });
-
-            it('should return false for fcff::ffff', () => {
-                expect(new IPv6("fcff::ffff").isPrivate()).toBe(false);
             });
         });
     });
@@ -662,6 +670,10 @@ describe('IPv6: ', () => {
                 expect(new IPv6("fd00::1").isGlobalUnicast()).toBe(false);
             });
 
+            it('should return false for fc00::1 (unique local)', () => {
+                expect(new IPv6("fc00::1").isGlobalUnicast()).toBe(false);
+            });
+
             it('should return false for ff00::1 (multicast)', () => {
                 expect(new IPv6("ff00::1").isGlobalUnicast()).toBe(false);
             });
@@ -910,6 +922,14 @@ describe('IPv6: ', () => {
         });
 
         describe('unique local address (private)', () => {
+            it('should return UNIQUE_LOCAL for fc00::', () => {
+                expect(new IPv6("fc00::").getKind()).toBe(IPv6AddressKind.UNIQUE_LOCAL);
+            });
+
+            it('should return UNIQUE_LOCAL for fc00::1', () => {
+                expect(new IPv6("fc00::1").getKind()).toBe(IPv6AddressKind.UNIQUE_LOCAL);
+            });
+
             it('should return UNIQUE_LOCAL for fd00::', () => {
                 expect(new IPv6("fd00::").getKind()).toBe(IPv6AddressKind.UNIQUE_LOCAL);
             });
