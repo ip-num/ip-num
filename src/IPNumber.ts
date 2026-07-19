@@ -437,11 +437,16 @@ export class IPv4 extends AbstractIPNum {
     }
 
     /**
-     * Checks if this IPv4 address is a global unicast (publicly routable) address according to RFC 6890.
+     * Checks if this IPv4 address is a global unicast address.
      *
-     * According to RFC 6890, global unicast addresses are defined as "everything else" -
-     * any address that does not match the other specific address types (Unspecified,
-     * Loopback, Private, Link-Local, Documentation, Multicast, Reserved, or Broadcast).
+     * Global unicast is defined here as "everything else" - any address that does not
+     * match the other specific address types (Unspecified, Loopback, Private, Link-Local,
+     * Documentation, Multicast, Reserved, or Broadcast).
+     *
+     * Note that this is not a strict "publicly routable" check: it does not consult the
+     * full IANA special-purpose address registry (RFC 6890), so special-purpose ranges
+     * not covered by the checks above - such as shared address space 100.64.0.0/10
+     * (RFC 6598) and benchmarking space 198.18.0.0/15 (RFC 2544) - still return true.
      *
      * @see https://datatracker.ietf.org/doc/html/rfc6890
      * @returns {boolean} true if this IPv4 address is global unicast, false otherwise
@@ -1101,6 +1106,10 @@ export class IPv6 extends AbstractIPNum {
      * According to RFC 4291, global unicast addresses are defined as "everything else" -
      * any address that does not match the other specific address types (Unspecified,
      * Loopback, Multicast, Link-Local, IPv4-Mapped, Discard-Only, Documentation, or Private).
+     *
+     * Note that this is not a strict "publicly routable" check: it does not consult the
+     * full IANA special-purpose address registry, so special-purpose ranges not covered
+     * by the checks above still return true.
      *
      * @see https://datatracker.ietf.org/doc/html/rfc4291
      * @returns {boolean} true if this IPv6 address is global unicast, false otherwise
