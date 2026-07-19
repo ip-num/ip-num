@@ -795,11 +795,11 @@ export class IPv6 extends AbstractIPNum {
     readonly separator: string = ":";
 
     /**
-     * RFC 4193 private address range (fd00::/8 - Unique Local Addresses). This range is constant and reused for performance.
+     * RFC 4193 private address range (fc00::/7 - Unique Local Addresses). This range is constant and reused for performance.
      *
      * @see https://datatracker.ietf.org/doc/html/rfc4193
      */
-    private static readonly PRIVATE_RANGE: IPv6CidrRange = IPv6CidrRange.fromCidr("fd00::/8");
+    private static readonly PRIVATE_RANGE: IPv6CidrRange = IPv6CidrRange.fromCidr("fc00::/7");
 
     /**
      * RFC 3849 documentation address range (2001:db8::/32). This range is constant and reused for performance.
@@ -994,7 +994,7 @@ export class IPv6 extends AbstractIPNum {
      * Checks if this IPv6 address is a private address according to RFC 4193.
      *
      * Private IPv6 address range:
-     * - fd00::/8 (Unique Local Addresses)
+     * - fc00::/7 (Unique Local Addresses)
      *
      * @see https://datatracker.ietf.org/doc/html/rfc4193
      * @returns {boolean} true if this IPv6 address is private, false otherwise
@@ -1160,7 +1160,7 @@ export class IPv6 extends AbstractIPNum {
      * 5. IPv4-Mapped (::ffff:0:0/96)
      * 6. Discard-Only (100::/64)
      * 7. Link-Local (fe80::/10)
-     * 8. Unique Local Address/Private (fd00::/8)
+     * 8. Unique Local Address/Private (fc00::/7)
      * 9. Global Unicast (everything else, per RFC 4291)
      * 10. Unknown (fallback for reserved/unassigned ranges)
      *
