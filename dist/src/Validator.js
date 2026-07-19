@@ -113,14 +113,17 @@ class Validator {
      * contains error message if invalid IPv6
      */
     static isValidIPv6String(ipv6String) {
-        let [ipv6, zoneId] = ipv6String.split('%');
+        let [ipv6, zoneId, ...rest] = ipv6String.split('%');
+        if (rest.length > 0) {
+            return [false, [Validator.invalidIPv6PatternMessage]];
+        }
         if (zoneId && !Validator.ZONE_INDEX_PATTERN.test(zoneId)) {
-            throw new Error(Validator.invalidIPv6PatternMessage);
+            return [false, [Validator.invalidIPv6PatternMessage]];
+        }
+        if (ipv6String.includes('%') && !zoneId) {
+            return [false, [Validator.invalidIPv6PatternMessage]];
         }
         try {
-            if (ipv6String.includes('%') && !zoneId) {
-                throw new Error(Validator.invalidIPv6PatternMessage);
-            }
             let hexadecimals = (0, IPv6Utils_1.expandIPv6Number)(ipv6).split(":");
             if (hexadecimals.length != 8) {
                 return [false, [Validator.invalidHexadecatetCountMessage]];

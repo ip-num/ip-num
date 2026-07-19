@@ -37,8 +37,9 @@ export declare const enum IPv6AddressKind {
      */
     GLOBAL_UNICAST = "Global Unicast",
     /**
-     * Documentation address (2001:db8::/32)
+     * Documentation address (2001:db8::/32 and 3fff::/20)
      * @see https://datatracker.ietf.org/doc/html/rfc3849
+     * @see https://datatracker.ietf.org/doc/html/rfc9637
      */
     DOCUMENTATION = "Documentation",
     /**
