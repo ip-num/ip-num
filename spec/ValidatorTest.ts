@@ -41,6 +41,14 @@ describe('Validator: ', () => {
             expect(Validator.isValidIPv6String('fe80::1%')[1]).toEqual([Validator.invalidIPv6PatternMessage]);
             expect(Validator.isValidIPv6String('fe80::1%eth0')[0]).toBe(true);
         });
+
+        it('rejects multiple zone id separators', () => {
+            expect(() => { Validator.isValidIPv6String('fe80::1%eth0%foo'); }).not.toThrow();
+            expect(Validator.isValidIPv6String('fe80::1%eth0%foo')[0]).toBe(false);
+            expect(Validator.isValidIPv6String('fe80::1%eth0%foo')[1]).toEqual([Validator.invalidIPv6PatternMessage]);
+            expect(Validator.isValidIPv6String('fe80::1%%')[0]).toBe(false);
+            expect(Validator.isValidIPv6String('fe80::1%%eth0')[0]).toBe(false);
+        });
     });
 
     describe('isValidIPv4CidrNotation ', () => {

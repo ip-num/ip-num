@@ -164,7 +164,11 @@ export class Validator {
      * contains error message if invalid IPv6
      */
     static isValidIPv6String(ipv6String: string): [boolean, string[]] {
-        let [ipv6, zoneId] = ipv6String.split('%');
+        let [ipv6, zoneId, ...rest] = ipv6String.split('%');
+
+        if (rest.length > 0) {
+            return [false, [Validator.invalidIPv6PatternMessage]];
+        }
 
         if (zoneId && !Validator.ZONE_INDEX_PATTERN.test(zoneId)) {
             return [false, [Validator.invalidIPv6PatternMessage]];
