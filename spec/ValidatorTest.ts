@@ -31,6 +31,16 @@ describe('Validator: ', () => {
             expect(Validator.isValidIPv6String('12::123::')[0]).toBe(false);
             expect(Validator.isValidIPv6String('::ffff:127.0.0.1')[0]).toBe(true);
         });
+
+        it('rejects an invalid zone id instead of throwing', () => {
+            expect(() => { Validator.isValidIPv6String('fe80::1%eth-0'); }).not.toThrow();
+            expect(Validator.isValidIPv6String('fe80::1%eth-0')[0]).toBe(false);
+            expect(Validator.isValidIPv6String('fe80::1%eth-0')[1]).toEqual([Validator.invalidIPv6PatternMessage]);
+            expect(() => { Validator.isValidIPv6String('fe80::1%'); }).not.toThrow();
+            expect(Validator.isValidIPv6String('fe80::1%')[0]).toBe(false);
+            expect(Validator.isValidIPv6String('fe80::1%')[1]).toEqual([Validator.invalidIPv6PatternMessage]);
+            expect(Validator.isValidIPv6String('fe80::1%eth0')[0]).toBe(true);
+        });
     });
 
     describe('isValidIPv4CidrNotation ', () => {
