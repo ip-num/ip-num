@@ -18,4 +18,10 @@ describe('IPv6 with Zone ID', () => {
             new IPv6('fe80::a505:4c3:dc6f:409c%invalid-zone-id!');
         }).toThrowError('Given IPv6 is not confirm to a valid IPv6 address');
     });
+
+    it('should throw an error for an IPv6 address with multiple zone ID separators', () => {
+        expect(() => {
+            new IPv6('fe80::a505:4c3:dc6f:409c%eth0%foo');
+        }).toThrowError('Given IPv6 is not confirm to a valid IPv6 address');
+    });
 });
