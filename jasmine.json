@@ -6,6 +6,7 @@
   "helpers": [
     "ts-node/register"
   ],
+  "jsLoader": "require",
   "stopSpecOnExpectationFailure": false,
   "random": true
 }
