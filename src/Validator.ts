@@ -167,14 +167,14 @@ export class Validator {
         let [ipv6, zoneId] = ipv6String.split('%');
 
         if (zoneId && !Validator.ZONE_INDEX_PATTERN.test(zoneId)) {
-            throw new Error(Validator.invalidIPv6PatternMessage);
+            return [false, [Validator.invalidIPv6PatternMessage]];
+        }
+
+        if (ipv6String.includes('%') && !zoneId) {
+            return [false, [Validator.invalidIPv6PatternMessage]];
         }
 
         try {
-            if (ipv6String.includes('%') && !zoneId) {
-                throw new Error(Validator.invalidIPv6PatternMessage);
-            }
-
             let hexadecimals = expandIPv6Number(ipv6).split(":");
             if (hexadecimals.length != 8 ) {
                 return [false, [Validator.invalidHexadecatetCountMessage]]
