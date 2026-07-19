@@ -807,11 +807,15 @@ export class IPv6 extends AbstractIPNum {
     private static readonly PRIVATE_RANGE: IPv6CidrRange = IPv6CidrRange.fromCidr("fc00::/7");
 
     /**
-     * RFC 3849 documentation address range (2001:db8::/32). This range is constant and reused for performance.
+     * RFC 3849 and RFC 9637 documentation address ranges. These ranges are constant and reused for performance.
      *
      * @see https://datatracker.ietf.org/doc/html/rfc3849
+     * @see https://datatracker.ietf.org/doc/html/rfc9637
      */
-    private static readonly DOCUMENTATION_RANGE: IPv6CidrRange = IPv6CidrRange.fromCidr("2001:db8::/32");
+    private static readonly DOCUMENTATION_RANGES: Array<IPv6CidrRange> = [
+        IPv6CidrRange.fromCidr("2001:db8::/32"),
+        IPv6CidrRange.fromCidr("3fff::/20")
+    ];
 
     /**
      * RFC 4291 multicast address range (ff00::/8). This range is constant and reused for performance.
@@ -1009,16 +1013,18 @@ export class IPv6 extends AbstractIPNum {
     }
 
     /**
-     * Checks if this IPv6 address is a documentation address according to RFC 3849.
+     * Checks if this IPv6 address is a documentation address according to RFC 3849 and RFC 9637.
      *
-     * Documentation IPv6 address range:
-     * - 2001:db8::/32
+     * Documentation IPv6 address ranges:
+     * - 2001:db8::/32 (RFC 3849)
+     * - 3fff::/20 (RFC 9637)
      *
      * @see https://datatracker.ietf.org/doc/html/rfc3849
+     * @see https://datatracker.ietf.org/doc/html/rfc9637
      * @returns {boolean} true if this IPv6 address is reserved for documentation, false otherwise
      */
     public isDocumentation(): boolean {
-        return IPv6.DOCUMENTATION_RANGE.contains(this);
+        return IPv6.DOCUMENTATION_RANGES.some(range => range.contains(this));
     }
 
     /**
@@ -1165,7 +1171,7 @@ export class IPv6 extends AbstractIPNum {
      * 1. Unspecified (::)
      * 2. Loopback (::1)
      * 3. Multicast (ff00::/8)
-     * 4. Documentation (2001:db8::/32)
+     * 4. Documentation (2001:db8::/32 and 3fff::/20)
      * 5. IPv4-Mapped (::ffff:0:0/96)
      * 6. Discard-Only (100::/64)
      * 7. Link-Local (fe80::/10)

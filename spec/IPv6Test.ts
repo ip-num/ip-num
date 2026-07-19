@@ -302,6 +302,28 @@ describe('IPv6: ', () => {
             });
         });
 
+        describe('3fff::/20 range (RFC 9637)', () => {
+            it('should return true for 3fff:: (start of 3fff::/20)', () => {
+                expect(new IPv6("3fff::").isDocumentation()).toBe(true);
+            });
+
+            it('should return true for 3fff::1', () => {
+                expect(new IPv6("3fff::1").isDocumentation()).toBe(true);
+            });
+
+            it('should return true for 3fff:fff:ffff:ffff:ffff:ffff:ffff:ffff (end of 3fff::/20)', () => {
+                expect(new IPv6("3fff:fff:ffff:ffff:ffff:ffff:ffff:ffff").isDocumentation()).toBe(true);
+            });
+
+            it('should return false for 3ffe:ffff:ffff:ffff:ffff:ffff:ffff:ffff (just before 3fff::/20)', () => {
+                expect(new IPv6("3ffe:ffff:ffff:ffff:ffff:ffff:ffff:ffff").isDocumentation()).toBe(false);
+            });
+
+            it('should return false for 3fff:1000:: (just after 3fff::/20)', () => {
+                expect(new IPv6("3fff:1000::").isDocumentation()).toBe(false);
+            });
+        });
+
         describe('non-documentation IPv6 addresses', () => {
             it('should return false for 2001:800:0:0:0:0:0:2002', () => {
                 expect(new IPv6("2001:800:0:0:0:0:0:2002").isDocumentation()).toBe(false);
@@ -674,6 +696,10 @@ describe('IPv6: ', () => {
                 expect(new IPv6("fc00::1").isGlobalUnicast()).toBe(false);
             });
 
+            it('should return false for 3fff::1 (documentation)', () => {
+                expect(new IPv6("3fff::1").isGlobalUnicast()).toBe(false);
+            });
+
             it('should return false for ff00::1 (multicast)', () => {
                 expect(new IPv6("ff00::1").isGlobalUnicast()).toBe(false);
             });
@@ -876,6 +902,10 @@ describe('IPv6: ', () => {
 
             it('should return DOCUMENTATION for 2001:db8:ffff:ffff:ffff:ffff:ffff:ffff', () => {
                 expect(new IPv6("2001:db8:ffff:ffff:ffff:ffff:ffff:ffff").getKind()).toBe(IPv6AddressKind.DOCUMENTATION);
+            });
+
+            it('should return DOCUMENTATION for 3fff::1', () => {
+                expect(new IPv6("3fff::1").getKind()).toBe(IPv6AddressKind.DOCUMENTATION);
             });
         });
 
