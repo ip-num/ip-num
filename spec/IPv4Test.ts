@@ -87,6 +87,18 @@ describe('IPv4: ', () => {
         }).toThrowError(Error, Validator.invalidOctetRangeMessage);
     });
 
+    it('should throw exception if an octet has a leading zero (CVE-2021-29921)', () => {
+        expect(() => {
+            IPv4.fromString("010.0.0.1");
+        }).toThrowError(Error, Validator.invalidOctetRangeMessage);
+        expect(() => {
+            IPv4.fromDecimalDottedString("1.2.3.099");
+        }).toThrowError(Error, Validator.invalidOctetRangeMessage);
+        // canonical forms are unaffected
+        expect(IPv4.fromString("10.0.0.1").toString()).toEqual("10.0.0.1");
+        expect(IPv4.fromString("0.0.0.0").toString()).toEqual("0.0.0.0");
+    });
+
     it('should return next IPv4 value', () => {
         let value = new IPv4("111.222.90.255");
         expect(value.nextIPNumber().toString()).toEqual("111.222.91.0");

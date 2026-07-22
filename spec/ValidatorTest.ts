@@ -14,6 +14,21 @@ describe('Validator: ', () => {
             expect(Validator.isValidIPv4String('1..3.4xyz')[0]).toBe(false);
             expect(Validator.isValidIPv4String('1.2.3.')[0]).toBe(false);
         });
+
+        it('rejects octets with leading zeros (CVE-2021-29921)', () => {
+            // '010' is decimal here but octal in inet_aton, so accepting it is an SSRF/allow-list bypass
+            expect(Validator.isValidIPv4String('010.0.0.1')[0]).toBe(false);
+            expect(Validator.isValidIPv4String('01.2.3.4')[0]).toBe(false);
+            expect(Validator.isValidIPv4String('00.0.0.0')[0]).toBe(false);
+            expect(Validator.isValidIPv4String('1.2.3.099')[0]).toBe(false);
+            expect(Validator.isValidIPv4String('1.02.3.4')[0]).toBe(false);
+            expect(Validator.isValidIPv4String('1.2.3.09')[0]).toBe(false);
+            // a single zero octet is still a valid address
+            expect(Validator.isValidIPv4String('0.0.0.0')[0]).toBe(true);
+            expect(Validator.isValidIPv4String('10.0.0.1')[0]).toBe(true);
+            expect(Validator.isValidIPv4String('192.168.0.1')[0]).toBe(true);
+            expect(Validator.isValidIPv4String('255.255.255.255')[0]).toBe(true);
+        });
     });
 
     describe('isValidIPv6String ', () => {
@@ -81,6 +96,12 @@ describe('Validator: ', () => {
             expect(Validator.isValidIPv4CidrNotation("192.168.10.0/1.2.3")[0]).toBe(false);
             expect(Validator.isValidIPv4CidrNotation("192.168.10.0/1.2.3")[1]).toContain(Validator.invalidIPv4CidrNotationMessage);
         });
+
+        it('rejects leading-zero octets in the ip portion (CVE-2021-29921)', () => {
+            expect(Validator.isValidIPv4CidrNotation("010.0.0.1/24")[0]).toBe(false);
+            expect(Validator.isValidIPv4CidrNotation("192.168.010.0/24")[0]).toBe(false);
+            expect(Validator.isValidIPv4CidrNotation("10.0.0.0/24")[0]).toBe(true);
+        });
     });
 
     describe('isValidPrefixValue', () => {
@@ -103,6 +124,8 @@ describe('Validator: ', () => {
             expect(Validator.isValidIPv4RangeString("10.0.0.0-10.0.0.255.0")[0]).toBe(false);
             expect(Validator.isValidIPv4RangeString("10.0.0.0")[0]).toBe(false);
             expect(Validator.isValidIPv4RangeString("10.0.0.255-10.0.0.0")[0]).toBe(false);
+            expect(Validator.isValidIPv4RangeString("010.0.0.0-010.0.0.255")[0]).toBe(false);
+            expect(Validator.isValidIPv4RangeString("10.0.0.0-10.0.0.0255")[0]).toBe(false);
         });
     });
 
