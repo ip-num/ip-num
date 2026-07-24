@@ -93,7 +93,11 @@ export let cidrPrefixToMaskBinaryString = (cidrPrefix: number, ipType: IPNumType
  */
 export let intLog2 = (givenNumber: bigint): number => {
     let result = 0;
-
+    
+    if (givenNumber <= 0n) {
+        throw new Error(`The value of log2 for ${givenNumber.toString()} is not an integer`)
+    }
+    
     while (givenNumber % 2n === 0n) {
         if (givenNumber === 2n) {
             result++;
