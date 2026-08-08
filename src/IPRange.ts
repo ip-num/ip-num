@@ -222,7 +222,7 @@ export class RangedSet<T extends AbstractIPNum> implements Iterable<AbstractIPNu
             return true;
         }
         try {
-            let prefix = intLog2(this.getSize());
+            let prefix = Number(this.bitValue) - intLog2(this.getSize());
             let netmask = parseBinaryStringToBigInt(
                 cidrPrefixToMaskBinaryString(prefix, isIPv4(this.currentValue) ? IPNumType.IPv4: IPNumType.IPv6)
             );

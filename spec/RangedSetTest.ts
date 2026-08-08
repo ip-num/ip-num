@@ -37,6 +37,12 @@ describe('RangedSet: ', () => {
         expect(rangedSet.isCidrAble()).toBeFalse();
     });
 
+    it("returns true for byte-aligned ipv4 blocks that are cidr-able", () => {
+        expect(RangedSet.fromRangeString("192.168.1.0-192.168.1.255").isCidrAble()).toBeTrue();
+        expect(RangedSet.fromRangeString("192.168.1.0-192.168.1.127").isCidrAble()).toBeTrue();
+        expect(RangedSet.fromRangeString("10.0.0.0-10.255.255.255").isCidrAble()).toBeTrue();
+    });
+
     it("returns if ipv6 ranged set sized 1 is cidr-able", () => {
         let rangedSet= RangedSet.fromRangeString("2001:db8:0:0:0:0:0:0-2001:db8:0:0:0:0:0:0");
         expect(rangedSet.isCidrAble()).toBeTrue();
