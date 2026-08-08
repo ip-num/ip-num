@@ -111,6 +111,27 @@ describe('Validator: ', () => {
         });
     });
 
+    describe('isValidIPv4Mask', () => {
+        it('rejects masks with leading-zero octets', () => {
+            expect(Validator.isValidIPv4Mask("255.255.255.000")[0]).toBe(false);
+            expect(Validator.isValidIPv4Mask("255.255.000.0")[0]).toBe(false);
+            expect(Validator.isValidIPv4Mask("255.255.0.00")[0]).toBe(false);
+            expect(Validator.isValidIPv4Mask("255.255.255.000")[1]).toContain(Validator.invalidOctetRangeMessage);
+        });
+
+        it('still validates canonical contiguous masks', () => {
+            expect(Validator.isValidIPv4Mask("255.255.255.0")[0]).toBe(true);
+            expect(Validator.isValidIPv4Mask("255.255.0.0")[0]).toBe(true);
+            expect(Validator.isValidIPv4Mask("255.0.0.0")[0]).toBe(true);
+            expect(Validator.isValidIPv4Mask("0.0.0.0")[0]).toBe(true);
+        });
+
+        it('still rejects non-contiguous masks', () => {
+            expect(Validator.isValidIPv4Mask("255.0.255.0")[0]).toBe(false);
+            expect(Validator.isValidIPv4Mask("10.255.10.3")[0]).toBe(false);
+        });
+    });
+
 
     describe('isValidIPv4RangeString', () => {
         it('validate valid range string', () => {

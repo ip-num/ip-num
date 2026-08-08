@@ -23,6 +23,12 @@ describe('mask test', function() {
         }).toThrowError(Error, Validator.invalidMaskMessage);
     });
 
+    it('should throw an exception when an IPv4 mask octet has a leading zero', () => {
+        expect(() => {
+            new IPv4Mask("255.255.255.000");
+        }).toThrowError(Error, Validator.invalidOctetRangeMessage);
+    });
+
     it('should return value', () => {
         let iPv4Mask = new IPv4Mask("255.0.0.0");
         expect(iPv4Mask.getValue()).toEqual(new IPv4("255.0.0.0").getValue());
