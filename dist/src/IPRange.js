@@ -191,7 +191,7 @@ class RangedSet {
             return true;
         }
         try {
-            let prefix = (0, BinaryUtils_1.intLog2)(this.getSize());
+            let prefix = Number(this.bitValue) - (0, BinaryUtils_1.intLog2)(this.getSize());
             let netmask = (0, BinaryUtils_1.parseBinaryStringToBigInt)((0, BinaryUtils_1.cidrPrefixToMaskBinaryString)(prefix, (0, IPNumber_1.isIPv4)(this.currentValue) ? "IPv4" /* IPNumType.IPv4 */ : "IPv6" /* IPNumType.IPv6 */));
             return (this.first.getValue()) === (netmask & (this.first.getValue()));
         }
