@@ -234,6 +234,11 @@ export class Validator {
      * contains "valid" or an error message when value is invalid
      */
     static isValidIPv4Mask(ipv4MaskString: string) : [boolean, string[]] {
+        let [isValidIPv4, invalidIPv4Messages] = Validator.isValidIPv4String(ipv4MaskString);
+        if (!isValidIPv4) {
+            return [false, invalidIPv4Messages];
+        }
+
         let ipv4InBinary = dottedDecimalNotationToBinaryString(ipv4MaskString);
         let isValid = Validator.IPV4_CONTIGUOUS_MASK_BIT_PATTERN.test(ipv4InBinary);
         return isValid ? [isValid, []]: [isValid, [Validator.invalidMaskMessage]];
@@ -417,4 +422,3 @@ export class Validator {
     }
 
 }
-
