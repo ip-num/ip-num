@@ -97,6 +97,10 @@ export let intLog2 = (givenNumber: bigint): number => {
     if (givenNumber <= 0n) {
         throw new Error(`The value of log2 for ${givenNumber.toString()} is not an integer`)
     }
+
+    if (givenNumber === 1n) {
+        return 0;
+    }
     
     while (givenNumber % 2n === 0n) {
         if (givenNumber === 2n) {
