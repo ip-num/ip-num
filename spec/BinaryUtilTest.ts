@@ -76,6 +76,7 @@ describe('Binary Utils', () => {
 
     describe('log2', () => {
         it('should calculate the log2 of a number', () => {
+            expect(intLog2(1n)).toBe(0);
             expect(intLog2(8n)).toBe(3);
             expect(intLog2(256n)).toBe(8);
         });
@@ -84,6 +85,16 @@ describe('Binary Utils', () => {
             expect(() => {
                 intLog2(12n)
             }).toThrowError(Error)
+        })
+
+        it('should throw an exception for non-positive input', () => {
+            expect(() => {
+                intLog2(0n)
+            }).toThrowError(Error, 'The value of log2 for 0 is not an integer')
+
+            expect(() => {
+                intLog2(-2n)
+            }).toThrowError(Error, 'The value of log2 for -2 is not an integer')
         })
     })
 
