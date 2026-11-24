@@ -54,6 +54,11 @@ describe('IPv6CidrRange: ', () => {
       expect(third.toString()).toBe("2001:db8:0:0:0:0:0:2");
     });
 
+    it('should return the IPv6 numbers when takeStream is called on the CIDR range', () => {
+        let ipv6CidrRange = IPv6CidrRange.fromCidr("2001:db8::/127");
+        expect(Array.from(ipv6CidrRange.takeStream()).join()).toBe("2001:db8:0:0:0:0:0:0,2001:db8:0:0:0:0:0:1");
+    });
+
     it('should return all list of IPv6 number when takeStream is called without passing in a count', () => {
         let ipv6CidrRange = new IPv6CidrRange(new IPv6("2001:db8::"), new IPv6Prefix(126n));
         let ranges = ipv6CidrRange.toRangeSet().take();

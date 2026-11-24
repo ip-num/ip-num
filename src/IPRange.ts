@@ -388,7 +388,9 @@ export class RangedSet<T extends AbstractIPNum> implements Iterable<AbstractIPNu
         while(returnCount > 0) {
             returnCount--;
             yield computed;
-            computed = computed.nextIPNumber();
+            if (returnCount > 0) {
+                computed = computed.nextIPNumber();
+            }
         }
     }
 
@@ -511,7 +513,7 @@ export abstract class AbstractIPRange<T extends AbstractIPNum, P extends IPv4Pre
      * If none is given, the whole IP range is lazily returned.
      */
     public *takeStream(count?: number): Iterable<AbstractIPNum> {
-        return this.toRangeSet().take(count);
+        yield* this.toRangeSet().take(count);
     }
 
     *[Symbol.iterator](): Iterator<AbstractIPNum> {

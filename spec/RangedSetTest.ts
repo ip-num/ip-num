@@ -119,6 +119,16 @@ describe('RangedSet: ', () => {
         }
     });
 
+    it('take up to the last IPv4 and IPv6 number', () => {
+        let ipv4Range = new RangedSet(new IPv4("255.255.255.254"), new IPv4("255.255.255.255"));
+        expect(Array.from(ipv4Range.take()).join()).toBe("255.255.255.254,255.255.255.255");
+        expect(Array.from(ipv4Range.take(2)).join()).toBe("255.255.255.254,255.255.255.255");
+        expect(Array.from(ipv4Range).join()).toBe("255.255.255.254,255.255.255.255");
+
+        let lastIPv6 = new IPv6("ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff");
+        expect(Array.from(RangedSet.fromSingleIP(lastIPv6)).join()).toBe(lastIPv6.toString());
+    });
+
     it("fromCidr static constructor for IPv4", () => {
         let range = RangedSet
             .fromCidrRange(
