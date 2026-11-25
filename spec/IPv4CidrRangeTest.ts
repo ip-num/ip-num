@@ -68,6 +68,13 @@ describe('IPv4CidrRange: ', () => {
       expect(third.toString()).toBe("0.0.0.2");
     });
 
+    it('should return the IPv4 numbers when takeStream is called on the CIDR range', () => {
+        let ipv4CidrRange = IPv4CidrRange.fromCidr("255.255.255.252/30");
+        expect(Array.from(ipv4CidrRange.takeStream(2)).join()).toBe("255.255.255.252,255.255.255.253");
+        expect(Array.from(ipv4CidrRange.takeStream()).join())
+            .toBe("255.255.255.252,255.255.255.253,255.255.255.254,255.255.255.255");
+    });
+
     it('should return all list of IPv4 numbers when takeStream is called without passing in a count', () => {
         let ipv4CidrRange = new IPv4CidrRange(new IPv4("0.0.0.0"), new IPv4Prefix(30n));
         let ranges = ipv4CidrRange.toRangeSet().take();
